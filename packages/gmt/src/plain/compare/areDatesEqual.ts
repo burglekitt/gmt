@@ -1,9 +1,13 @@
 import { Temporal } from "@js-temporal/polyfill";
 
-import { isValidDate } from "../validate";
+import { isValidDate, isValidDateTime } from "../validate";
+
+function isIsoDateLike(v: string): boolean {
+  return isValidDate(v) || isValidDateTime(v);
+}
 
 export function areDatesEqual(value1: string, value2: string): boolean {
-  if (!isValidDate(value1) || !isValidDate(value2)) {
+  if (!isIsoDateLike(value1) || !isIsoDateLike(value2)) {
     return false;
   }
 

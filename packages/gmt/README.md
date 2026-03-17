@@ -1,8 +1,18 @@
 # @burglekitt/gmt
 
-**Give Me Temporal!** — The date and time library JavaScript deserved from the start.
+# Give Me Temporal!
 
-`gmt` wraps the [Temporal API](https://tc39.es/proposal-temporal/) in a clean, ergonomic interface that keeps you out of `Date` hell forever. No mutation. No timezone guessing. No 2-AM DST surprises. Just ISO strings in, ISO strings out, and Temporal doing the heavy lifting underneath.
+> `@burglekitt/gmt`
+
+<p align="center">
+  <a href="https://giphy.com/gifs/aint-nobody-got-time-for-that-oh-lord-jesus-its-a-fire-njAjh98E1PUha">
+    <img src="https://media.giphy.com/media/njAjh98E1PUha/giphy.gif" alt="Ain't nobody got time for new Date()" width="480" />
+  </a>
+  <br><br>
+  <em>Ain't nobody got time for <code>new Date()</code>.</em>
+</p>
+
+The date and time library JavaScript deserved from the start. `gmt` wraps the [Temporal API](https://tc39.es/proposal-temporal/) in a clean, ergonomic interface that keeps you out of `Date` hell forever. No mutation. No timezone guessing. No 2-AM DST surprises. Just ISO strings in, ISO strings out, and Temporal doing the heavy lifting underneath.
 
 **Status:** Pre-alpha. APIs may change. But the vibes are immaculate.
 
@@ -43,33 +53,87 @@ bun add @burglekitt/gmt
 
 ## Quick Start
 
+### Date arithmetic
+
 ```typescript
-import * as plain from "@burglekitt/gmt/plain";
-import * as zoned from "@burglekitt/gmt/zoned";
+import { addDate, subtractDate } from "@burglekitt/gmt/plain/math";
 
-// Add 90 days to a date
-plain.math.addDate("2026-01-01", 90, "day");
-// => "2026-04-01"
+addDate("2026-01-01", 90, "day");         // "2026-04-01"
+addDate("2026-01-01", 1, "year");          // "2027-01-01"
+subtractDate("2026-03-31", 1, "month");   // "2026-02-28"
+```
 
-// List every day in February 2024 (leap year)
-plain.map.mapDaysInMonth("2024-02");
-// => ["2024-02-01", "2024-02-02", ..., "2024-02-29"]
+### Comparisons
 
-// Check if a date is before another
-plain.compare.isBeforeDate("2026-01-01", "2026-06-15");
-// => true
+```typescript
+import { isBeforeDate, isAfterDate, areDatesEqual } from "@burglekitt/gmt/plain/compare";
 
-// Convert a ZonedDateTime to a readable string
-zoned.format.formatZonedDateTime(
-  "2026-03-17T09:00:00+00:00[UTC]",
-  "en-US",
-  { dateStyle: "full", timeStyle: "short" }
+isBeforeDate("2026-01-01", "2026-06-15");             // true
+isAfterDate("2026-12-31", "2026-01-01");              // true
+areDatesEqual("2026-03-17", "2026-03-17T09:00:00");   // true — date part is extracted
+```
+
+### Mapping
+
+```typescript
+import { mapDaysInMonth, mapDatesInRange } from "@burglekitt/gmt/plain/map";
+
+// Every day in February 2024 — leap year, 29 days
+mapDaysInMonth("2024-02");
+// ["2024-02-01", "2024-02-02", ..., "2024-02-29"]
+
+// Every Monday between two dates (stepDays: 7)
+mapDatesInRange("2026-03-02", "2026-03-30", 7);
+// ["2026-03-02", "2026-03-09", "2026-03-16", "2026-03-23", "2026-03-30"]
+```
+
+### Formatting
+
+```typescript
+import { formatDate, formatDateTime } from "@burglekitt/gmt/plain/format";
+import { formatZonedDateTime } from "@burglekitt/gmt/zoned/format";
+
+formatDate("2026-03-17", "en-US", { dateStyle: "full" });
+// "Tuesday, March 17, 2026"
+
+formatZonedDateTime("2026-03-17T09:00:00+00:00[UTC]", "en-US", { dateStyle: "full", timeStyle: "short" });
+// "Tuesday, March 17, 2026 at 9:00 AM"
+```
+
+### Timezone-aware operations
+
+```typescript
+import { addZoned, subtractZoned } from "@burglekitt/gmt/zoned/math";
+import { isAfterZoned } from "@burglekitt/gmt/zoned/compare";
+import { mapZonedHoursInDay } from "@burglekitt/gmt/zoned/map";
+
+// Add across a DST boundary — Temporal handles the offset change for you
+addZoned("2026-03-07T23:00:00-05:00[America/New_York]", 2, "hour");
+// "2026-03-08T02:00:00-04:00[America/New_York]" — note offset changed to -04:00
+
+// Compare across timezones — compared at the Instant level, no offset confusion
+isAfterZoned(
+  "2026-03-17T10:00:00+05:30[Asia/Kolkata]",
+  "2026-03-17T09:00:00+00:00[UTC]"
 );
-// => "Tuesday, March 17, 2026 at 9:00 AM"
+// false — both resolve to the same instant
 
-// Get all hours in a New York day — DST-aware (23 on spring forward, 25 on fall back)
-zoned.map.mapZonedHoursInDay("2026-03-08T12:00:00-05:00[America/New_York]");
-// => ["2026-03-08T00:00:00-05:00[America/New_York]", ..., 23 entries]
+// Every hour in a New York day during DST spring-forward — only 23 entries
+mapZonedHoursInDay("2026-03-08T12:00:00-05:00[America/New_York]");
+// ["2026-03-08T00:00:00-05:00[...]", ..., 23 entries — 2 AM never happens]
+```
+
+### Parsing & validation
+
+```typescript
+import { parseDateUnit } from "@burglekitt/gmt/plain/parse";
+import { isValidDate, isValidDateRange } from "@burglekitt/gmt/plain/validate";
+import { isValidZonedDateTime } from "@burglekitt/gmt/zoned/validate";
+
+parseDateUnit("2026-03-17", "month");                                    // 3
+isValidDate("2026-13-01");                                               // false
+isValidDateRange("2026-01-01", "2026-12-31");                            // true
+isValidZonedDateTime("2026-03-17T09:00:00+00:00[UTC]");                  // true
 ```
 
 ---
@@ -88,116 +152,94 @@ zoned.map.mapZonedHoursInDay("2026-03-08T12:00:00-05:00[America/New_York]");
 
 ## API Reference
 
-### `@burglekitt/gmt/plain`
-
-Plain operations are for date and time values with no timezone. Use these when you need to represent a calendar date, a clock time, or a local datetime that should not shift when someone crosses a timezone boundary.
-
-#### `plain.compare`
+### `@burglekitt/gmt/plain/compare`
 
 ```typescript
-areDatesEqual(a: string, b: string): boolean
-areTimesEqual(a: string, b: string): boolean
-areDateTimesEqual(a: string, b: string): boolean
-isAfterDate(a: string, b: string): boolean
-isBeforeDate(a: string, b: string): boolean
-isAfterTime(a: string, b: string): boolean
-isBeforeTime(a: string, b: string): boolean
-isAfterDateTime(a: string, b: string): boolean
-isBeforeDateTime(a: string, b: string): boolean
+import { areDatesEqual, areTimesEqual, areDateTimesEqual } from "@burglekitt/gmt/plain/compare";
+import { isAfterDate, isBeforeDate } from "@burglekitt/gmt/plain/compare";
+import { isAfterTime, isBeforeTime } from "@burglekitt/gmt/plain/compare";
+import { isAfterDateTime, isBeforeDateTime } from "@burglekitt/gmt/plain/compare";
 ```
 
-#### `plain.format`
+### `@burglekitt/gmt/plain/format`
 
 ```typescript
-formatDate(dateStr: string, locale: string, options?: Intl.DateTimeFormatOptions): string
-formatTime(timeStr: string, locale: string, options?: Intl.DateTimeFormatOptions): string
-formatDateTime(dateTimeStr: string, locale: string, options?: Intl.DateTimeFormatOptions): string
+import { formatDate, formatTime, formatDateTime } from "@burglekitt/gmt/plain/format";
 ```
 
-#### `plain.map`
+### `@burglekitt/gmt/plain/map`
 
 ```typescript
-mapDaysInMonth(monthStr: string): string[]          // "2024-02" => ["2024-02-01", ..., "2024-02-29"]
+import { mapDaysInMonth, mapDatesInRange } from "@burglekitt/gmt/plain/map";
+
+mapDaysInMonth(monthStr: string): string[]
 mapDatesInRange(start: string, end: string, stepDays?: number): string[]
 ```
 
-#### `plain.math`
+### `@burglekitt/gmt/plain/math`
 
 ```typescript
-addDate(dateStr: string, amount: number, unit: "year" | "month" | "week" | "day"): string
-subtractDate(dateStr: string, amount: number, unit: "year" | "month" | "week" | "day"): string
-addTime(timeStr: string, amount: number, unit: "hour" | "minute" | "second" | "millisecond"): string
-subtractTime(timeStr: string, amount: number, unit: "hour" | "minute" | "second" | "millisecond"): string
-addDateTime(dateTimeStr: string, amount: number, unit: DateTimeUnit): string
-subtractDateTime(dateTimeStr: string, amount: number, unit: DateTimeUnit): string
+import { addDate, subtractDate } from "@burglekitt/gmt/plain/math";
+import { addTime, subtractTime } from "@burglekitt/gmt/plain/math";
+import { addDateTime, subtractDateTime } from "@burglekitt/gmt/plain/math";
+
+// Date units: "year" | "month" | "week" | "day"
+// Time units: "hour" | "minute" | "second" | "millisecond"
+// DateTime units: all of the above
 ```
 
-#### `plain.parse`
+### `@burglekitt/gmt/plain/parse`
 
 ```typescript
-parseDateUnit(dateStr: string, unit: "year" | "month" | "day"): number
-parseTimeUnit(timeStr: string, unit: "hour" | "minute" | "second" | "millisecond"): number
-parseDateTimeUnit(dateTimeStr: string, unit: DateTimeUnit): number
+import { parseDateUnit, parseTimeUnit, parseDateTimeUnit } from "@burglekitt/gmt/plain/parse";
 ```
 
-#### `plain.validators`
+### `@burglekitt/gmt/plain/validate`
 
 ```typescript
-isValidDate(value: string): boolean
-isValidTime(value: string): boolean
-isValidDateTime(value: string): boolean
-isValidDateRange(start: string, end: string): boolean
+import { isValidDate, isValidTime, isValidDateTime, isValidDateRange } from "@burglekitt/gmt/plain/validate";
 ```
 
 ---
 
-### `@burglekitt/gmt/zoned`
-
-Zoned operations attach a real IANA timezone to every value. Use these when you care about what the clock on the wall says in a specific place, including DST transitions.
-
-#### `zoned.compare`
+### `@burglekitt/gmt/zoned/compare`
 
 ```typescript
-areZonedEqual(a: string, b: string): boolean
-isAfterZoned(a: string, b: string): boolean   // compares at the Instant level
-isBeforeZoned(a: string, b: string): boolean  // compares at the Instant level
+import { areZonedEqual, isAfterZoned, isBeforeZoned } from "@burglekitt/gmt/zoned/compare";
+// isAfterZoned / isBeforeZoned compare at the Instant level — timezone-offset-independent
 ```
 
-#### `zoned.format`
+### `@burglekitt/gmt/zoned/format`
 
 ```typescript
-formatZonedDateTime(zdtStr: string, locale: string, options?: Intl.DateTimeFormatOptions): string
-formatZonedRange(startStr: string, endStr: string, locale: string, options?: Intl.DateTimeFormatOptions): string
+import { formatZonedDateTime, formatZonedRange } from "@burglekitt/gmt/zoned/format";
 ```
 
-#### `zoned.map`
+### `@burglekitt/gmt/zoned/map`
 
 ```typescript
+import { mapZonedHoursInDay, mapZonedDatesInRange } from "@burglekitt/gmt/zoned/map";
+
 mapZonedHoursInDay(zdtStr: string): string[]              // DST-aware: 23, 24, or 25 entries
-mapZonedDatesInRange(start: string, end: string, stepDays?: number): string[]  // enforces same timezone
+mapZonedDatesInRange(start: string, end: string, stepDays?: number): string[]  // throws if timezones differ
 ```
 
-#### `zoned.math`
+### `@burglekitt/gmt/zoned/math`
 
 ```typescript
-addZoned(zdtStr: string, amount: number, unit: DateTimeUnit): string
-subtractZoned(zdtStr: string, amount: number, unit: DateTimeUnit): string
+import { addZoned, subtractZoned } from "@burglekitt/gmt/zoned/math";
 ```
 
-#### `zoned.parse`
+### `@burglekitt/gmt/zoned/parse`
 
 ```typescript
-parseZonedDate(zdtStr: string): string
-parseZonedTime(zdtStr: string): string
-parseZonedTimezone(zdtStr: string): string
-parseZonedUnit(zdtStr: string, unit: DateTimeUnit): number
+import { parseZonedDate, parseZonedTime, parseZonedTimezone, parseZonedUnit } from "@burglekitt/gmt/zoned/parse";
 ```
 
-#### `zoned.validate`
+### `@burglekitt/gmt/zoned/validate`
 
 ```typescript
-isValidZonedDateTime(value: string): boolean
-isValidTimezone(value: string): boolean
+import { isValidZonedDateTime, isValidTimezone } from "@burglekitt/gmt/zoned/validate";
 ```
 
 ---
