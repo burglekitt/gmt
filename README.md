@@ -1,119 +1,129 @@
 # Burglekitt Monorepo
 
-A modern monorepo for building Burglekitt community libraries, currently hosting **@burglekitt/gmt** — a Temporal-based date and time utilities package.
+Home of [@burglekitt/gmt](./packages/gmt) — **Give Me Temporal!**
 
-## 🚀 Quick Start
+A monorepo for Burglekitt community libraries, built with Nx, powered by Bun, and dead serious about making JavaScript date handling not terrible.
 
-### Prerequisites
+---
 
-- **Node.js** >= 18.0.0
-- **Bun** (recommended for development)
+## Packages
 
-### Installation & Development
+### [@burglekitt/gmt](./packages/gmt)
+
+The date and time library JavaScript deserved from the start. String in, string out, no `Date` objects, DST handled correctly by default.
 
 ```bash
-# Install dependencies
-bun install
+npm install @burglekitt/gmt
+```
 
-# Build all packages
-bun nx run-many -t build
+See [packages/gmt/README.md](./packages/gmt/README.md) for the full API reference and TODO roadmap.
+
+---
+
+## Quick Start
+
+```bash
+# Install all workspace dependencies
+bun install
 
 # Run tests across all packages
 bun nx run-many -t test
+
+# Build all packages
+bun nx run-many -t build
 
 # Lint and format
 bun run lint
 bun run format
 ```
 
-## 📦 Packages
+---
 
-### [@burglekitt/gmt](./packages/gmt)
-
-Temporal-based date and time utilities with timezone support and Temporal polyfill integration.
-
-- **Status:** Pre-alpha
-- **License:** MIT
-- **Install:** `npm install @burglekitt/gmt`
-
-See [packages/gmt/README.md](./packages/gmt/README.md) for usage and API documentation.
-
-## 🛠️ Development
-
-### Project Structure
+## Project Structure
 
 ```
 .
 ├── packages/
-│   ├── gmt/              # Temporal date/time utilities (pre-alpha)
-│   └── [future packages]
-├── burglekitt/           # Nx workspace configuration (internal)
-├── .github/workflows/    # GitHub Actions CI/CD
-├── biome.json            # Code quality (format/lint)
-├── tsconfig.base.json    # TypeScript base configuration
-└── package.json          # Workspace configuration
+│   └── gmt/                    # @burglekitt/gmt — Give Me Temporal!
+│       ├── src/
+│       │   ├── plain/          # Timezone-free operations
+│       │   │   ├── compare/    # isAfterDate, isBeforeDate, areDatesEqual, ...
+│       │   │   ├── format/     # formatDate, formatTime, formatDateTime
+│       │   │   ├── map/        # mapDaysInMonth, mapDatesInRange, ...
+│       │   │   ├── math/       # addDate, subtractDate, addTime, ...
+│       │   │   ├── parse/      # parseDateUnit, parseTimeUnit, ...
+│       │   │   └── validate/   # isValidDate, isValidTime, ...
+│       │   ├── zoned/          # IANA timezone-aware operations
+│       │   │   ├── compare/    # isAfterZoned, isBeforeZoned, areZonedEqual
+│       │   │   ├── format/     # formatZonedDateTime, formatZonedRange
+│       │   │   ├── map/        # mapZonedHoursInDay, mapZonedDatesInRange
+│       │   │   ├── math/       # addZoned, subtractZoned
+│       │   │   ├── parse/      # parseZonedDate, parseZonedTimezone, ...
+│       │   │   └── validate/   # isValidZonedDateTime, isValidTimezone
+│       │   ├── regex/          # Composable regex patterns for date/time strings
+│       │   └── schemas/        # Zod schemas for runtime validation
+│       └── package.json
+├── burglekitt/                  # Nx workspace configuration (internal, do not publish)
+├── biome.json                   # Formatting and linting rules
+├── tsconfig.base.json           # Shared TypeScript base config
+└── package.json                 # Workspace root
 ```
-
-### Workspace Scripts
-
-Run from the root directory:
-
-```bash
-# Check formatting and linting
-bun run check
-bun run lint
-bun run format             # Auto-format code
-
-# Build and test
-bun nx run-many -t build
-bun nx run-many -t test
-bun nx run-many -t typecheck
-
-# With Nx directly
-bunx nx graph              # View project dependency graph
-bunx nx sync               # Sync TypeScript project references
-```
-
-### Package-Specific Scripts
-
-Navigate to a package directory and run:
-
-```bash
-cd packages/gmt
-bun run build
-bun run test
-bun run lint
-```
-
-## 📝 Code Quality
-
-This monorepo uses:
-
-- **[Biome](https://biomejs.dev/)** for formatting and linting
-- **[TypeScript](https://www.typescriptlang.org/)** for type safety
-- **[Vitest](https://vitest.dev/)** for testing
-- **[Nx](https://nx.dev/)** for task orchestration
-
-All formatting and linting rules are defined in [biome.json](./biome.json).
-
-### Editor Setup
-
-For the best experience:
-
-1. Install the [Biome VS Code extension](https://marketplace.visualstudio.com/items?itemName=biomejs.biome)
-2. Install [Prettier (for Markdown)](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
-3. Workspace settings are automatically applied via [.vscode/settings.json](./.vscode/settings.json)
-
-## 🚢 Releases
-
-This monorepo is currently in **pre-alpha**. Each package follows semantic versioning and will be published independently to npm when stable.
-
-Release process and automation coming soon.
-
-## 📄 License
-
-MIT — See [LICENSE](./LICENSE) for details.
 
 ---
 
-For more information about @burglekitt/gmt, see [packages/gmt/README.md](./packages/gmt/README.md).
+## Workspace Scripts
+
+Run from the root:
+
+```bash
+# Test, build, typecheck
+bun nx run-many -t test
+bun nx run-many -t build
+bun nx run-many -t typecheck
+
+# Code quality
+bun run check
+bun run lint
+bun run format
+
+# Nx utilities
+bunx nx graph        # Visual dependency graph
+bunx nx sync         # Sync TypeScript project references
+```
+
+Run within a specific package:
+
+```bash
+cd packages/gmt
+bun run test
+bun run build
+bun run lint
+```
+
+---
+
+## Code Quality
+
+| Tool | Purpose |
+|---|---|
+| [Biome](https://biomejs.dev/) | Formatting and linting |
+| [TypeScript](https://www.typescriptlang.org/) | Type safety |
+| [Vitest](https://vitest.dev/) | Testing |
+| [Nx](https://nx.dev/) | Task orchestration and caching |
+| [Zod](https://zod.dev/) | Runtime validation at API boundaries |
+
+All formatting and linting rules are defined in [biome.json](./biome.json).
+
+**Editor setup:** Install the [Biome VS Code extension](https://marketplace.visualstudio.com/items?itemName=biomejs.biome). Workspace settings are applied automatically via `.vscode/settings.json`.
+
+---
+
+## Releases
+
+Pre-alpha. Each package follows semantic versioning and will be published independently to npm when stable.
+
+---
+
+## License
+
+MIT — See [LICENSE](./LICENSE) for details.
