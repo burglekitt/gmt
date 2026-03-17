@@ -7,7 +7,7 @@ export default defineWorkspace([
       globals: true,
       environment: "node",
       root: "packages/gmt",
-      include: ["src/**/__tests__/**/*.test.ts"],
+      include: ["src/**/*.test.ts", "src/**/*.spec.ts"],
       setupFiles: ["./vitest.setup.ts"],
     },
   },

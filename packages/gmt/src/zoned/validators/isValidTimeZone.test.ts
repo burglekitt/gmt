@@ -1,11 +1,13 @@
-import { isValidTimeZone } from "../validators";
+import { isValidTimeZone } from ".";
 
 describe("isValidTimeZone", () => {
   it.each`
     timeZone              | expected
+    ${"Pacific/Apia"}     | ${true}
     ${"America/New_York"} | ${true}
     ${"Europe/London"}    | ${true}
-  `("validates $timezone as $expected", ({ timeZone, expected }) => {
+    ${"Pacific/Niue"}     | ${true}
+  `("validates $timeZone as $expected", ({ timeZone, expected }) => {
     expect(isValidTimeZone(timeZone)).toBe(expected);
   });
 });

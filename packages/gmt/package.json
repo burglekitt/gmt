@@ -36,14 +36,17 @@
     "build": "tsc --project tsconfig.build.json",
     "build:types": "tsc --project tsconfig.build.json --declaration --emitDeclarationOnly",
     "test": "vitest run",
+    "test:watch": "vitest",
     "lint": "biome check .",
     "format": "biome check --write ."
   },
   "dependencies": {
-    "@js-temporal/polyfill": "^0.5.1"
+    "@js-temporal/polyfill": "^0.5.1",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/bun": "latest",
+    "@types/node": "^22.13.10",
     "typescript": "^5.0.0",
     "vitest": "^2.0.5"
   }
