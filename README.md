@@ -6,20 +6,6 @@ A monorepo for Burglekitt community libraries, built with Nx, powered by Bun, an
 
 ---
 
-## Packages
-
-### [@burglekitt/gmt](./packages/gmt)
-
-The date and time library JavaScript deserved from the start. String in, string out, no `Date` objects, DST handled correctly by default.
-
-```bash
-npm install @burglekitt/gmt
-```
-
-See [packages/gmt/README.md](./packages/gmt/README.md) for the full API reference and TODO roadmap.
-
----
-
 ## Quick Start
 
 ```bash
@@ -44,27 +30,34 @@ bun run format
 ```
 .
 ├── packages/
-│   └── gmt/                    # @burglekitt/gmt — Give Me Temporal!
-│       ├── src/
-│       │   ├── plain/          # Timezone-free operations
-│       │   │   ├── compare/    # isAfterDate, isBeforeDate, areDatesEqual, ...
-│       │   │   ├── format/     # formatDate, formatTime, formatDateTime
-│       │   │   ├── map/        # mapDaysInMonth, mapDatesInRange, ...
-│       │   │   ├── math/       # addDate, subtractDate, addTime, ...
-│       │   │   ├── parse/      # parseDateUnit, parseTimeUnit, ...
-│       │   │   └── validate/   # isValidDate, isValidTime, ...
-│       │   ├── zoned/          # IANA timezone-aware operations
-│       │   │   ├── compare/    # isAfterZoned, isBeforeZoned, areZonedEqual
-│       │   │   ├── format/     # formatZonedDateTime, formatZonedRange
-│       │   │   ├── map/        # mapZonedHoursInDay, mapZonedDatesInRange
-│       │   │   ├── math/       # addZoned, subtractZoned
-│       │   │   ├── parse/      # parseZonedDate, parseZonedTimezone, ...
-│       │   │   └── validate/   # isValidZonedDateTime, isValidTimezone
-│       │   ├── regex/          # Composable regex patterns for date/time strings
-│       │   └── schemas/        # Zod schemas for runtime validation
-│       └── package.json
+│   ├── gmt/                    # @burglekitt/gmt — Give Me Temporal!
+│   │   ├── src/
+│   │   │   ├── plain/          # Timezone-free operations
+│   │   │   │   ├── compare/    # isAfterDate, isBeforeDate, areDatesEqual, ...
+│   │   │   │   ├── format/     # formatDate, formatTime, formatDateTime
+│   │   │   │   ├── map/        # mapDaysInMonth, mapDatesInRange, ...
+│   │   │   │   ├── calculate/       # addDate, subtractDate, addTime, ...
+│   │   │   │   ├── parse/      # parseDateUnit, parseTimeUnit, ...
+│   │   │   │   └── validate/   # isValidDate, isValidTime, ...
+│   │   │   ├── zoned/          # IANA timezone-aware operations
+│   │   │   │   ├── compare/    # isAfterZoned, isBeforeZoned, areZonedEqual
+│   │   │   │   ├── format/     # formatZonedDateTime, formatZonedRange
+│   │   │   │   ├── map/        # mapZonedHoursInDay, mapZonedDatesInRange
+│   │   │   │   ├── calculate/       # addZoned, subtractZoned
+│   │   │   │   ├── parse/      # parseZonedDate, parseZonedTimezone, ...
+│   │   │   │   └── validate/   # isValidZonedDateTime, isValidTimezone
+│   │   │   ├── regex/          # Composable regex patterns for date/time strings
+│   │   │   └── schemas/        # Zod schemas for runtime validation
+│   │   └── package.json
+│   ├── gmt-biome/              # @burglekitt/gmt-biome — Shared Biome config
+│   │   ├── biome.json          # Consumer-facing config (uses ./plugins/ paths)
+│   │   └── plugins/            # Grit plugins banning Date APIs
+│   └── gmt-eslint/             # @burglekitt/gmt-eslint — Shared ESLint flat config
+│       └── eslint/
+│           └── index.mjs       # Flat config banning Date APIs
 ├── burglekitt/                  # Nx workspace configuration (internal, do not publish)
-├── biome.json                   # Formatting and linting rules
+├── biome.json                   # Root Biome config — references gmt-biome plugins directly
+├── eslint.config.mjs            # Root ESLint config — imports gmt-eslint
 ├── tsconfig.base.json           # Shared TypeScript base config
 └── package.json                 # Workspace root
 ```
@@ -148,21 +141,69 @@ bun run lint
 
 | Tool | Purpose |
 |---|---|
-| [Biome](https://biomejs.dev/) | Formatting and linting |
+| [Biome](https://biomejs.dev/) | Formatting and linting (+ Grit plugins for Date ban) |
 | [TypeScript](https://www.typescriptlang.org/) | Type safety |
 | [Vitest](https://vitest.dev/) | Testing |
 | [Nx](https://nx.dev/) | Task orchestration and caching |
 | [Zod](https://zod.dev/) | Runtime validation at API boundaries |
 
-All formatting and linting rules are defined in [biome.json](./biome.json).
+All Biome rules are in [biome.json](./biome.json) (Grit plugins live in [packages/gmt-biome/plugins/](./packages/gmt-biome/plugins/)).
 
-**Editor setup:** Install the [Biome VS Code extension](https://marketplace.visualstudio.com/items?itemName=biomejs.biome). Workspace settings are applied automatically via `.vscode/settings.json`.
+**For consumers:** [@burglekitt/gmt-eslint](./packages/gmt-eslint) provides a standalone ESLint flat config with the same Date API ban rules.
+
+---
+
+## Packages
+
+| Package | npm | Description |
+|---|---|---|
+| [`@burglekitt/gmt`](./packages/gmt) | `npm install @burglekitt/gmt` | Give Me Temporal — string-in/string-out date library |
+| [`@burglekitt/gmt-biome`](./packages/gmt-biome) | `npm install -D @burglekitt/gmt-biome` | Shared Biome config — bans `Date` APIs via Grit plugins |
+| [`@burglekitt/gmt-eslint`](./packages/gmt-eslint) | `npm install -D @burglekitt/gmt-eslint` | Shared ESLint flat config — bans `Date` APIs |
 
 ---
 
 ## Releases
 
 Pre-alpha. Each package follows semantic versioning and will be published independently to npm when stable.
+
+### Publishing
+
+Publishing is **manual only** — triggered via the [Publish Package workflow](.github/workflows/publish.yml) in GitHub Actions (`Actions → Publish Package → Run workflow`).
+
+**Prerequisites (one-time setup):**
+
+1. Create an npm access token at [npmjs.com](https://www.npmjs.com/) with `Publish` permission for the `@burglekitt` org.
+2. Add it as a repository secret named `NPM_TOKEN` in GitHub (`Settings → Secrets → Actions`).
+3. Create a `npm-publish` environment in GitHub (`Settings → Environments`) and add the secret there to gate production publishes.
+
+**To publish a package:**
+
+```bash
+# 1. Bump the version in the package's package.json
+#    Follow semantic versioning: patch / minor / major
+
+# 2. Commit and push to main
+git add packages/<package>/package.json
+git commit -m "chore(release): @burglekitt/<package>@<version>"
+git push origin main
+
+# 3. Trigger the workflow on GitHub
+#    Actions → Publish Package → Run workflow
+#    Select: package, tag (usually "latest")
+```
+
+**Config packages (gmt-biome, gmt-eslint) need no build step** — their source files are published directly.
+
+**`@burglekitt/gmt` must be built before publish** — the workflow runs `nx run @burglekitt/gmt:build` automatically.
+
+**To verify a package is ready before publishing:**
+
+```bash
+cd packages/gmt-biome && npm pack --dry-run
+cd packages/gmt-eslint && npm pack --dry-run
+cd packages/gmt      && npm pack --dry-run   # after building
+```
 
 ---
 

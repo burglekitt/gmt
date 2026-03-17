@@ -1,0 +1,3 @@
+`Date.parse($args)` where {
+	register_diagnostic(span=`Date.parse`, message="Avoid using Date.parse(). Use Temporal instead.", severity="error")
+}

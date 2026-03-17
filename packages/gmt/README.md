@@ -56,7 +56,7 @@ bun add @burglekitt/gmt
 ### Date arithmetic
 
 ```typescript
-import { addDate, subtractDate } from "@burglekitt/gmt/plain/math";
+import { addDate, subtractDate } from "@burglekitt/gmt/plain/calculate";
 
 addDate("2026-01-01", 90, "day");         // "2026-04-01"
 addDate("2026-01-01", 1, "year");          // "2027-01-01"
@@ -103,7 +103,7 @@ formatZonedDateTime("2026-03-17T09:00:00+00:00[UTC]", "en-US", { dateStyle: "ful
 ### Timezone-aware operations
 
 ```typescript
-import { addZoned, subtractZoned } from "@burglekitt/gmt/zoned/math";
+import { addZoned, subtractZoned } from "@burglekitt/gmt/zoned/calculate";
 import { isAfterZoned } from "@burglekitt/gmt/zoned/compare";
 import { mapZonedHoursInDay } from "@burglekitt/gmt/zoned/map";
 
@@ -176,12 +176,12 @@ mapDaysInMonth(monthStr: string): string[]
 mapDatesInRange(start: string, end: string, stepDays?: number): string[]
 ```
 
-### `@burglekitt/gmt/plain/math`
+### `@burglekitt/gmt/plain/calculate`
 
 ```typescript
-import { addDate, subtractDate } from "@burglekitt/gmt/plain/math";
-import { addTime, subtractTime } from "@burglekitt/gmt/plain/math";
-import { addDateTime, subtractDateTime } from "@burglekitt/gmt/plain/math";
+import { addDate, subtractDate } from "@burglekitt/gmt/plain/calculate";
+import { addTime, subtractTime } from "@burglekitt/gmt/plain/calculate";
+import { addDateTime, subtractDateTime } from "@burglekitt/gmt/plain/calculate";
 
 // Date units: "year" | "month" | "week" | "day"
 // Time units: "hour" | "minute" | "second" | "millisecond"
@@ -224,10 +224,10 @@ mapZonedHoursInDay(zdtStr: string): string[]              // DST-aware: 23, 24, 
 mapZonedDatesInRange(start: string, end: string, stepDays?: number): string[]  // throws if timezones differ
 ```
 
-### `@burglekitt/gmt/zoned/math`
+### `@burglekitt/gmt/zoned/calculate`
 
 ```typescript
-import { addZoned, subtractZoned } from "@burglekitt/gmt/zoned/math";
+import { addZoned, subtractZoned } from "@burglekitt/gmt/zoned/calculate";
 ```
 
 ### `@burglekitt/gmt/zoned/parse`

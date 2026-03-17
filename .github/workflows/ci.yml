@@ -42,6 +42,13 @@ jobs:
       - run: bunx nx run-many -t lint test typecheck build
         if: github.event_name == 'push'
 
+      # Verify config packages are packagable — no build step needed for config-only packages
+      - name: Verify gmt-biome pack
+        run: cd packages/gmt-biome && npm pack --dry-run
+
+      - name: Verify gmt-eslint pack
+        run: cd packages/gmt-eslint && npm pack --dry-run
+
       # Nx Cloud recommends fixes for failures to help you get CI green faster. Learn more: https://nx.dev/ci/features/self-healing-ci
       - run: bunx nx fix-ci
         if: always()

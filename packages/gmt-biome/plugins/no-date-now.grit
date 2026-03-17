@@ -1,0 +1,3 @@
+`Date.now()` where {
+	register_diagnostic(span=`Date.now`, message="Avoid using Date.now(). Use Temporal instead.", severity="error")
+}
