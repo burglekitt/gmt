@@ -1,0 +1,24 @@
+{
+  "name": "burglekitt",
+  "private": true,
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "format": "biome format",
+    "format:fix": "biome format --write",
+    "lint": "biome lint",
+    "lint:fix": "biome lint --write",
+    "check": "biome check",
+    "check:fix": "biome check --write",
+    "test": "vitest run",
+    "test:gmt": "cd packages/gmt && vitest run"
+  },
+  "dependencies": {
+    "@js-temporal/polyfill": "^0.5.1"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.3.10",
+    "@biomejs/biome": "^1.7.3",
+    "vitest": "^2.0.5",
+    "zod": "^3.23.8"
+  }
+}
