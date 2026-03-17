@@ -34,7 +34,7 @@
   },
   "scripts": {
     "build": "tsc --project tsconfig.build.json",
-    "build:types": "tsc --project tsconfig.build.json --declaration --emitDeclarationOnly",
+    "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "biome check .",

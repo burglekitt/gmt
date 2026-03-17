@@ -31,8 +31,16 @@ jobs:
 
       - run: bun install --no-cache
 
-      # Nx lint, test, build, typecheck all projects
-      - run: bunx nx run-many -t lint test build typecheck
+      # Sets NX_BASE and NX_HEAD for reliable affected calculations
+      - uses: nrwl/nx-set-shas@v4
+
+      # Pull requests: run only what changed
+      - run: bunx nx affected -t lint test typecheck build --base=$NX_BASE --head=$NX_HEAD
+        if: github.event_name == 'pull_request'
+
+      # Main branch: run the full monorepo checks
+      - run: bunx nx run-many -t lint test typecheck build
+        if: github.event_name == 'push'
 
       # Nx Cloud recommends fixes for failures to help you get CI green faster. Learn more: https://nx.dev/ci/features/self-healing-ci
       - run: bunx nx fix-ci

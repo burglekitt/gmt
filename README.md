@@ -91,6 +91,48 @@ bunx nx graph        # Visual dependency graph
 bunx nx sync         # Sync TypeScript project references
 ```
 
+## Nx Commands You Will Actually Use
+
+As more packages are added under `packages/*`, these commands become the default workflow:
+
+```bash
+# Run targets for every package
+bun run build
+bun run test:nx
+bun run lint:nx
+bun run typecheck
+
+# Full local gate before PR
+bun run validate
+
+# Only run on projects affected by your branch changes
+bun run affected:build
+bun run affected:test
+bun run affected:lint
+bun run affected:typecheck
+
+# Workspace maintenance
+bun run graph
+bun run sync
+bun run sync:check
+bun run reset
+```
+
+Recommended PR flow:
+
+```bash
+bun run affected:lint
+bun run affected:test
+bun run affected:typecheck
+bun run affected:build
+```
+
+CI strategy:
+
+- Pull requests run `nx affected` targets (`lint`, `test`, `typecheck`, `build`) using `NX_BASE` and `NX_HEAD`.
+- Pushes to `main` run full `nx run-many` across all projects.
+- `defaultBase` is set to `main` in Nx config so local affected commands behave consistently.
+
 Run within a specific package:
 
 ```bash
