@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import { isValidDate, isValidDateTime, isValidTime } from "../plain/validate";
 import { plainDate, plainDateTime, plainTime, timezone } from "../regex";
-import { isValidTimeZone } from "../zoned/validation";
+import { isValidTimeZone } from "../zoned/validate";
 
 export const dateStringSchema = z
   .string()
