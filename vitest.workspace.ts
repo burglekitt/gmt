@@ -1,14 +1,13 @@
-import { defineWorkspace } from "vitest/config";
+import { defineProject } from "vitest/config";
 
-export default defineWorkspace([
-  {
+export default [
+  defineProject({
     test: {
       name: "gmt",
       globals: true,
       environment: "node",
       root: "packages/gmt",
       include: ["src/**/*.test.ts", "src/**/*.spec.ts"],
-      setupFiles: ["./vitest.setup.ts"],
     },
-  },
-]);
+  }),
+];

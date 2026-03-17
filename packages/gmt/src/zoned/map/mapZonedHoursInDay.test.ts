@@ -11,7 +11,10 @@ describe("mapZonedHoursInDay", () => {
     ({
       anchor,
       expectedLength,
-    }: { anchor: string; expectedLength: number }) => {
+    }: {
+      anchor: string;
+      expectedLength: number;
+    }) => {
       expect(mapZonedHoursInDay(anchor)).toHaveLength(expectedLength);
     },
   );

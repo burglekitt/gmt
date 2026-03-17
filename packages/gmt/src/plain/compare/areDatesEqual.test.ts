@@ -17,7 +17,11 @@ describe("areDatesEqual", () => {
       value1,
       value2,
       expected,
-    }: { value1: string; value2: string; expected: boolean }) => {
+    }: {
+      value1: string;
+      value2: string;
+      expected: boolean;
+    }) => {
       expect(areDatesEqual(value1, value2)).toBe(expected);
     },
   );
