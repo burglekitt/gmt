@@ -1,12 +1,19 @@
 import { Temporal } from "@js-temporal/polyfill";
-
-type DateUnit = "year" | "month" | "week" | "day";
+import { isValidDate, isValidDateUnit } from "../validate";
 
 export function subtractDate(
   value: string,
   amount: number,
-  unit: DateUnit,
+  unit: Temporal.DateUnit,
 ): string {
+  const validDate = isValidDate(value);
+  const validUnit = isValidDateUnit(unit);
+  const validAmount = typeof amount === "number" && !Number.isNaN(amount);
+
+  if (!validDate || !validUnit || !validAmount) {
+    return "";
+  }
+
   const date = Temporal.PlainDate.from(value);
 
   switch (unit) {

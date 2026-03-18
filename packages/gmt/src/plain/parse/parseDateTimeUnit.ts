@@ -1,9 +1,15 @@
 import { Temporal } from "@js-temporal/polyfill";
 
+import { isValidDateTime } from "../validate";
+
 export function parseDateTimeUnit(
   value: string,
   unit: "year" | "month" | "day" | "hour" | "minute" | "second" | "millisecond",
 ): string {
+  if (!isValidDateTime(value)) {
+    return "";
+  }
+
   const dateTime = Temporal.PlainDateTime.from(value);
 
   switch (unit) {
@@ -21,5 +27,7 @@ export function parseDateTimeUnit(
       return dateTime.second.toString().padStart(2, "0");
     case "millisecond":
       return dateTime.millisecond.toString().padStart(3, "0");
+    default:
+      return "";
   }
 }

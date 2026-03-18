@@ -1,3 +1,5 @@
+import { Temporal } from "@js-temporal/polyfill";
+import { localNoonBattleCases } from "../test/timezoneFixtures";
 import { isBeforeZoned } from "./isBeforeZoned";
 
 describe("isBeforeZoned", () => {
@@ -21,4 +23,13 @@ describe("isBeforeZoned", () => {
       expect(isBeforeZoned(value1, value2)).toBe(expected);
     },
   );
+
+  for (const { timeZone, value } of localNoonBattleCases) {
+    it(`returns true for an earlier battle-test datetime in ${timeZone}`, () => {
+      const earlier = Temporal.ZonedDateTime.from(value)
+        .subtract({ minutes: 1 })
+        .toString();
+      expect(isBeforeZoned(earlier, value)).toBe(true);
+    });
+  }
 });

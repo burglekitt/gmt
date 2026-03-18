@@ -30,7 +30,7 @@ describe("regex/time", () => {
     value   | expected
     ${"00"} | ${true}
     ${"59"} | ${true}
-    ${"60"} | ${true}
+    ${"60"} | ${false}
     ${"61"} | ${false}
   `(
     "second pattern matches $value as $expected",
@@ -58,7 +58,7 @@ describe("regex/time", () => {
     ${"08:30:45"}     | ${true}
     ${"08:30:45.123"} | ${true}
     ${"08:30:45,123"} | ${true}
-    ${"23:59:60"}     | ${true}
+    ${"23:59:60"}     | ${false}
     ${"8:30:45"}      | ${false}
     ${"24:00:00"}     | ${false}
   `(

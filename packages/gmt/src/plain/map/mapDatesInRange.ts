@@ -1,12 +1,24 @@
 import { Temporal } from "@js-temporal/polyfill";
 
+import { isValidDate } from "../validate";
+
 export function mapDatesInRange(
   startDate: string,
   endDate: string,
-  stepDays = 1,
+  ...stepDaysInput: [stepDays?: number]
 ): string[] {
-  if (!Number.isInteger(stepDays) || stepDays <= 0) {
-    throw new RangeError("stepDays must be a positive integer");
+  const resolvedStepDays = stepDaysInput.length === 0 ? 1 : stepDaysInput[0];
+
+  if (
+    typeof resolvedStepDays !== "number" ||
+    !Number.isInteger(resolvedStepDays) ||
+    resolvedStepDays <= 0
+  ) {
+    return [];
+  }
+
+  if (!isValidDate(startDate) || !isValidDate(endDate)) {
+    return [];
   }
 
   const start = Temporal.PlainDate.from(startDate);
@@ -20,7 +32,7 @@ export function mapDatesInRange(
   for (
     let current = start;
     Temporal.PlainDate.compare(current, end) <= 0;
-    current = current.add({ days: stepDays })
+    current = current.add({ days: resolvedStepDays })
   ) {
     result.push(current.toString());
   }

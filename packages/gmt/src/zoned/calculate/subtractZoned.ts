@@ -1,4 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
+import { isValidZonedDateTime } from "../validate";
 
 type ZonedUnit =
   | "year"
@@ -15,7 +16,18 @@ export function subtractZoned(
   amount: number,
   unit: ZonedUnit,
 ): string {
-  const zoned = Temporal.ZonedDateTime.from(value);
+  const validAmount = typeof amount === "number" && !Number.isNaN(amount);
+
+  if (!isValidZonedDateTime(value) || !validAmount) {
+    return "";
+  }
+
+  let zoned: Temporal.ZonedDateTime;
+  try {
+    zoned = Temporal.ZonedDateTime.from(value);
+  } catch {
+    return "";
+  }
 
   switch (unit) {
     case "year":
@@ -34,5 +46,7 @@ export function subtractZoned(
       return zoned.subtract({ seconds: amount }).toString();
     case "millisecond":
       return zoned.subtract({ milliseconds: amount }).toString();
+    default:
+      return "";
   }
 }

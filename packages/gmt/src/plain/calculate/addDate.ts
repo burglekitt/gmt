@@ -1,8 +1,19 @@
 import { Temporal } from "@js-temporal/polyfill";
+import { isValidDate, isValidDateUnit } from "../validate";
 
-type DateUnit = "year" | "month" | "week" | "day";
+export function addDate(
+  value: string /* ISO 8601 date */,
+  amount: number,
+  unit: Temporal.DateUnit,
+): string {
+  const validDate = isValidDate(value);
+  const validUnit = isValidDateUnit(unit);
+  const validAmount = typeof amount === "number" && !Number.isNaN(amount);
 
-export function addDate(value: string, amount: number, unit: DateUnit): string {
+  if (!validDate || !validUnit || !validAmount) {
+    return "";
+  }
+
   const date = Temporal.PlainDate.from(value);
 
   switch (unit) {

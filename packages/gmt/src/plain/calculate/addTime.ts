@@ -1,8 +1,19 @@
 import { Temporal } from "@js-temporal/polyfill";
+import { isValidTime, isValidTimeUnit } from "../validate";
 
-type TimeUnit = "hour" | "minute" | "second" | "millisecond";
+export function addTime(
+  value: string,
+  amount: number,
+  unit: Temporal.TimeUnit,
+): string {
+  const validTime = isValidTime(value);
+  const validUnit = isValidTimeUnit(unit);
+  const validAmount = typeof amount === "number" && !Number.isNaN(amount);
 
-export function addTime(value: string, amount: number, unit: TimeUnit): string {
+  if (!validTime || !validUnit || !validAmount) {
+    return "";
+  }
+
   const time = Temporal.PlainTime.from(value);
 
   switch (unit) {
@@ -14,5 +25,9 @@ export function addTime(value: string, amount: number, unit: TimeUnit): string {
       return time.add({ seconds: amount }).toString();
     case "millisecond":
       return time.add({ milliseconds: amount }).toString();
+    case "microsecond":
+      return time.add({ microseconds: amount }).toString();
+    case "nanosecond":
+      return time.add({ nanoseconds: amount }).toString();
   }
 }

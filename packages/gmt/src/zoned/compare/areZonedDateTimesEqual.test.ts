@@ -1,3 +1,4 @@
+import { sameInstantBattleCases } from "../test/timezoneFixtures";
 import { areZonedDateTimesEqual } from "./areZonedDateTimesEqual";
 
 describe("areZonedDateTimesEqual", () => {
@@ -23,4 +24,10 @@ describe("areZonedDateTimesEqual", () => {
       expect(areZonedDateTimesEqual(value1, value2)).toBe(expected);
     },
   );
+
+  for (const { timeZone, value } of sameInstantBattleCases) {
+    it(`returns true for identical battle-test zoned datetime in ${timeZone}`, () => {
+      expect(areZonedDateTimesEqual(value, value)).toBe(true);
+    });
+  }
 });

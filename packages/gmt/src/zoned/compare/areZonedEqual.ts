@@ -1,5 +1,4 @@
 import { Temporal } from "@js-temporal/polyfill";
-
 import { isValidZonedDateTime } from "../validate";
 
 export function areZonedDateTimesEqual(
@@ -10,10 +9,16 @@ export function areZonedDateTimesEqual(
     return false;
   }
 
+  let zonedDateTime1: Temporal.ZonedDateTime;
+  let zonedDateTime2: Temporal.ZonedDateTime;
   try {
-    const zonedDateTime1 = Temporal.ZonedDateTime.from(value1);
-    const zonedDateTime2 = Temporal.ZonedDateTime.from(value2);
+    zonedDateTime1 = Temporal.ZonedDateTime.from(value1);
+    zonedDateTime2 = Temporal.ZonedDateTime.from(value2);
+  } catch {
+    return false;
+  }
 
+  try {
     return (
       zonedDateTime1.year === zonedDateTime2.year &&
       zonedDateTime1.month === zonedDateTime2.month &&

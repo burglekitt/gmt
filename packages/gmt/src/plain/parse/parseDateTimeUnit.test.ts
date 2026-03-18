@@ -1,34 +1,56 @@
 import { parseDateTimeUnit } from "./parseDateTimeUnit";
 
 describe("parseDateTimeUnit", () => {
-  const value = "2024-03-17T14:30:45.123";
+  it.each`
+    value                        | unit             | expected
+    ${"2024-03-17T14:30:45.123"} | ${"year"}        | ${"2024"}
+    ${"2024-03-17T14:30:45.123"} | ${"month"}       | ${"03"}
+    ${"2024-03-17T14:30:45.123"} | ${"day"}         | ${"17"}
+    ${"2024-03-17T14:30:45.123"} | ${"hour"}        | ${"14"}
+    ${"2024-03-17T14:30:45.123"} | ${"minute"}      | ${"30"}
+    ${"2024-03-17T14:30:45.123"} | ${"second"}      | ${"45"}
+    ${"2024-03-17T14:30:45.123"} | ${"millisecond"} | ${"123"}
+  `("returns $expected for valid unit $unit", ({ value, unit, expected }) => {
+    expect(parseDateTimeUnit(value, unit)).toBe(expected);
+  });
+
+  it.each`
+    value                        | unit        | expected
+    ${"0001-01-01T00:00:00.001"} | ${"year"}   | ${"1"}
+    ${"2024-12-31T23:59:59"}     | ${"month"}  | ${"12"}
+    ${"2024-03-01T08:05:09"}     | ${"minute"} | ${"05"}
+  `(
+    "returns $expected for edge case unit $unit",
+    ({ value, unit, expected }) => {
+      expect(parseDateTimeUnit(value, unit)).toBe(expected);
+    },
+  );
+
+  it.each`
+    invalidValue
+    ${"not-a-datetime"}
+    ${"2024-03-17"}
+    ${"2024-03-17T24:00:00"}
+    ${""}
+    ${null}
+    ${undefined}
+  `(
+    "returns an empty string for invalid datetime $invalidValue",
+    ({ invalidValue }) => {
+      expect(parseDateTimeUnit(invalidValue as never, "year")).toBe("");
+    },
+  );
 
   it.each`
     unit             | expected
-    ${"year"}        | ${"2024"}
-    ${"month"}       | ${"03"}
-    ${"day"}         | ${"17"}
-    ${"hour"}        | ${"14"}
-    ${"minute"}      | ${"30"}
-    ${"second"}      | ${"45"}
-    ${"millisecond"} | ${"123"}
-  `("returns $expected for unit $unit", ({ unit, expected }) => {
-    expect(
-      parseDateTimeUnit(
-        value,
-        unit as
-          | "year"
-          | "month"
-          | "day"
-          | "hour"
-          | "minute"
-          | "second"
-          | "millisecond",
-      ),
-    ).toBe(expected);
-  });
-
-  it("throws for an invalid datetime string", () => {
-    expect(() => parseDateTimeUnit("not-a-datetime", "year")).toThrow();
+    ${"week"}        | ${""}
+    ${"microsecond"} | ${""}
+    ${""}            | ${""}
+    ${null}          | ${""}
+    ${undefined}     | ${""}
+  `("returns an empty string for invalid unit $unit", ({ unit, expected }) => {
+    expect(parseDateTimeUnit("2024-03-17T14:30:45.123", unit as never)).toBe(
+      expected,
+    );
   });
 });

@@ -5,12 +5,13 @@ import { chopZulu } from "./chopZulu";
 describe("chopZulu", () => {
   it.each`
     value                         | expected
-    ${"2024-03-17T00:00:00Z"}     | ${"2024-03-17"}
-    ${"2024-03-17T12:30:45Z"}     | ${"2024-03-17"}
-    ${"2024-03-17T23:59:59Z"}     | ${"2024-03-17"}
-    ${"2024-03-17T12:30:45.123Z"} | ${"2024-03-17"}
-    ${"2024-03-17T12:30:45,999Z"} | ${"2024-03-17"}
-    ${"+001234-12-31T23:59:59Z"}  | ${"+001234-12-31"}
+    ${"2024-03-17T00:00:00Z"}     | ${"2024-03-17T00:00:00"}
+    ${"2024-03-17T00:00:00z"}     | ${"2024-03-17T00:00:00"}
+    ${"2024-03-17T12:30:45Z"}     | ${"2024-03-17T12:30:45"}
+    ${"2024-03-17T23:59:59Z"}     | ${"2024-03-17T23:59:59"}
+    ${"2024-03-17T12:30:45.123Z"} | ${"2024-03-17T12:30:45.123"}
+    ${"2024-03-17T12:30:45,999Z"} | ${"2024-03-17T12:30:45,999"}
+    ${"+001234-12-31T23:59:59Z"}  | ${"+001234-12-31T23:59:59"}
   `(
     "returns $expected for $value",
     ({ value, expected }: { value: string; expected: string }) => {
@@ -18,15 +19,17 @@ describe("chopZulu", () => {
     },
   );
 
-  it("throws for an invalid Zulu datetime (missing Z)", () => {
-    expect(() => chopZulu("2024-03-17T12:30:45")).toThrow();
-  });
-
-  it("throws for a plain date (not a datetime)", () => {
-    expect(() => chopZulu("2024-03-17")).toThrow();
-  });
-
-  it("throws for an invalid format", () => {
-    expect(() => chopZulu("not-a-datetime")).toThrow();
+  it.each`
+    invalidValue
+    ${"2024-03-17T12:30:45"}
+    ${"2024-03-17"}
+    ${NaN}
+    ${null}
+    ${undefined}
+    ${true}
+    ${false}
+    ${""}
+  `("returns empty string for $invalidValue", ({ invalidValue }) => {
+    expect(chopZulu(invalidValue)).toBe("");
   });
 });

@@ -1,7 +1,19 @@
 import { Temporal } from "@js-temporal/polyfill";
+import { isValidZonedDateTime } from "../validate";
 
 export function mapZonedHoursInDay(anchor: string): string[] {
-  const start = Temporal.ZonedDateTime.from(anchor).with({
+  if (!isValidZonedDateTime(anchor)) {
+    return [];
+  }
+
+  let zonedDateTime: Temporal.ZonedDateTime;
+  try {
+    zonedDateTime = Temporal.ZonedDateTime.from(anchor);
+  } catch {
+    return [];
+  }
+
+  const start = zonedDateTime.with({
     hour: 0,
     minute: 0,
     second: 0,

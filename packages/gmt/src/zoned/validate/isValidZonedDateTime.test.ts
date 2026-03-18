@@ -1,3 +1,4 @@
+import { sameInstantBattleCases } from "../test/timezoneFixtures";
 import { isValidZonedDateTime } from ".";
 
 describe("isValidZonedDateTime", () => {
@@ -17,6 +18,7 @@ describe("isValidZonedDateTime", () => {
     value
     ${"2024-03-17T14:30:45.123-04:00"}
     ${"2024-03-17T14:30:45Z"}
+    ${"2024-03-17T14:30:60Z[UTC]"}
     ${"2024-03-17T14:30:45.123-04:00[Not/AZone]"}
     ${"not-a-zoned-datetime"}
   `(
@@ -25,4 +27,10 @@ describe("isValidZonedDateTime", () => {
       expect(isValidZonedDateTime(value)).toBe(false);
     },
   );
+
+  for (const { timeZone, value } of sameInstantBattleCases) {
+    it(`accepts battle-test zoned datetime in ${timeZone}`, () => {
+      expect(isValidZonedDateTime(value)).toBe(true);
+    });
+  }
 });

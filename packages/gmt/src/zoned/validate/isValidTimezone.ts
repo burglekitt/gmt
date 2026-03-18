@@ -2,7 +2,7 @@
 
 import { Temporal } from "@js-temporal/polyfill";
 
-export function isValidTimeZone(timeZone: string): boolean {
+export function isValidTimezone(timeZone: string): boolean {
   try {
     Temporal.ZonedDateTime.from({
       year: 2020,

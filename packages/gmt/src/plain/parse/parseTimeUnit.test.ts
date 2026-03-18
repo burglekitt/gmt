@@ -1,24 +1,51 @@
 import { parseTimeUnit } from "./parseTimeUnit";
 
 describe("parseTimeUnit", () => {
-  const value = "14:30:45.123";
+  it.each`
+    value             | unit             | expected
+    ${"14:30:45.123"} | ${"hour"}        | ${"14"}
+    ${"14:30:45.123"} | ${"minute"}      | ${"30"}
+    ${"14:30:45.123"} | ${"second"}      | ${"45"}
+    ${"14:30:45.123"} | ${"millisecond"} | ${"123"}
+  `("returns $expected for valid unit $unit", ({ value, unit, expected }) => {
+    expect(parseTimeUnit(value, unit)).toBe(expected);
+  });
+
+  it.each`
+    value             | unit             | expected
+    ${"00:00:00.001"} | ${"millisecond"} | ${"001"}
+    ${"23:59:59"}     | ${"hour"}        | ${"23"}
+    ${"08:05:09"}     | ${"minute"}      | ${"05"}
+  `(
+    "returns $expected for edge case unit $unit",
+    ({ value, unit, expected }) => {
+      expect(parseTimeUnit(value, unit)).toBe(expected);
+    },
+  );
+
+  it.each`
+    invalidValue
+    ${"not-a-time"}
+    ${"24:00:00"}
+    ${"2024-03-17T14:30:45"}
+    ${""}
+    ${null}
+    ${undefined}
+  `(
+    "returns an empty string for invalid time $invalidValue",
+    ({ invalidValue }) => {
+      expect(parseTimeUnit(invalidValue as never, "hour")).toBe("");
+    },
+  );
 
   it.each`
     unit             | expected
-    ${"hour"}        | ${"14"}
-    ${"minute"}      | ${"30"}
-    ${"second"}      | ${"45"}
-    ${"millisecond"} | ${"123"}
-  `("returns $expected for unit $unit", ({ unit, expected }) => {
-    expect(
-      parseTimeUnit(
-        value,
-        unit as "hour" | "minute" | "second" | "millisecond",
-      ),
-    ).toBe(expected);
-  });
-
-  it("throws for an invalid time string", () => {
-    expect(() => parseTimeUnit("not-a-time", "hour")).toThrow();
+    ${"day"}         | ${""}
+    ${"microsecond"} | ${""}
+    ${""}            | ${""}
+    ${null}          | ${""}
+    ${undefined}     | ${""}
+  `("returns an empty string for invalid unit $unit", ({ unit, expected }) => {
+    expect(parseTimeUnit("14:30:45.123", unit as never)).toBe(expected);
   });
 });

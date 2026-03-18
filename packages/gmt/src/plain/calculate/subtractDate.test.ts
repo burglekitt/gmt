@@ -24,7 +24,63 @@ describe("subtractDate", () => {
     },
   );
 
-  it("throws for an invalid date", () => {
-    expect(() => subtractDate("invalid", 1, "day")).toThrow();
+  it.each`
+    negativeAmount | expectedDate
+    ${-1}          | ${"2024-03-18"}
+    ${-2}          | ${"2024-03-19"}
+    ${-10}         | ${"2024-03-27"}
+  `(
+    "returns the correct date when subtracting a negative amount: $negativeAmount",
+    ({ negativeAmount, expectedDate }) => {
+      expect(subtractDate("2024-03-17", negativeAmount, "day")).toEqual(
+        expectedDate,
+      );
+    },
+  );
+
+  it.each`
+    invalidAmount
+    ${"not-a-number"}
+    ${NaN}
+    ${null}
+    ${undefined}
+    ${true}
+    ${false}
+  `(
+    "returns an empty string for an invalid amount: $invalidAmount",
+    ({ invalidAmount }) => {
+      expect(subtractDate("2024-03-17", invalidAmount as never, "day")).toEqual(
+        "",
+      );
+    },
+  );
+
+  it.each`
+    invalidValue
+    ${"2024-02-30"}
+    ${"not-a-date"}
+    ${"2024-13-01"}
+    ${"2024-00-10"}
+    ${""}
+    ${true}
+    ${null}
+    ${undefined}
+    ${"12"}
+    ${"2024"}
+    ${"2024-02"}
+    ${"2024-02-29T12:00:00"}
+    ${"2024-02-29T12:00:00Z"}
+  `("returns an empty string for an invalid date", ({ invalidValue }) => {
+    expect(subtractDate(invalidValue, 1, "day")).toEqual("");
+  });
+
+  it.each`
+    invalidUnit
+    ${"invalid"}
+    ${""}
+    ${null}
+    ${undefined}
+  `("returns an empty string for an invalid unit", ({ invalidUnit }) => {
+    expect(subtractDate("2024-03-17", 1, invalidUnit as never)).toEqual("");
   });
 });
