@@ -6,7 +6,6 @@ import { getToday } from "./getToday";
 describe("getToday", () => {
   it("returns an ISO plain date string", () => {
     const value = getToday();
-    expect(value).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     expect(isValidDate(value)).toBe(true);
   });
 

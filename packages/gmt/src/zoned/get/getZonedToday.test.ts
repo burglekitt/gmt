@@ -1,3 +1,4 @@
+import { isValidDate } from "../../plain/validate";
 import { battleTestTimeZones } from "../test/timezoneFixtures";
 import { getZonedToday } from "./getZonedToday";
 
@@ -10,7 +11,7 @@ describe("getZonedToday", () => {
     "returns an ISO date string for valid timezone $timeZone",
     ({ timeZone }) => {
       const value = getZonedToday(timeZone);
-      expect(value).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(isValidDate(value)).toBe(true);
     },
   );
 
@@ -29,7 +30,7 @@ describe("getZonedToday", () => {
 
   for (const timeZone of battleTestTimeZones) {
     it(`returns an ISO date for battle-test timezone ${timeZone}`, () => {
-      expect(getZonedToday(timeZone)).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(isValidDate(getZonedToday(timeZone))).toBe(true);
     });
   }
 });
