@@ -1,7 +1,7 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { isValidZonedDateTime } from "../validate";
 
-export function areZonedDateTimesEqual(
+export function areZonedEqual(
   value1: string,
   value2: string,
 ): boolean {
@@ -35,3 +35,5 @@ export function areZonedDateTimesEqual(
     return false;
   }
 }
+
+export const areZonedDateTimesEqual = areZonedEqual;

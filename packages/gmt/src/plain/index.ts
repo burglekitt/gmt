@@ -6,4 +6,4 @@ export * as format from "./format";
 export * as get from "./get";
 export * as map from "./map";
 export * as parse from "./parse";
-export * as validators from "./validate";
+export * as validate from "./validate";

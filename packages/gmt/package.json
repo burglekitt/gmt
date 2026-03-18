@@ -29,9 +29,29 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
-    "./*": {
-      "types": "./dist/*.d.ts",
-      "default": "./dist/*.js"
+    "./plain": {
+      "types": "./dist/plain/index.d.ts",
+      "default": "./dist/plain/index.js"
+    },
+    "./plain/*": {
+      "types": "./dist/plain/*/index.d.ts",
+      "default": "./dist/plain/*/index.js"
+    },
+    "./zoned": {
+      "types": "./dist/zoned/index.d.ts",
+      "default": "./dist/zoned/index.js"
+    },
+    "./zoned/*": {
+      "types": "./dist/zoned/*/index.d.ts",
+      "default": "./dist/zoned/*/index.js"
+    },
+    "./regex": {
+      "types": "./dist/regex/index.d.ts",
+      "default": "./dist/regex/index.js"
+    },
+    "./regex/*": {
+      "types": "./dist/regex/*.d.ts",
+      "default": "./dist/regex/*.js"
     }
   },
   "files": [
@@ -43,7 +63,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "build": "tsc --project tsconfig.build.json",
+    "build": "rm -rf dist && tsc --project tsconfig.build.json",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",

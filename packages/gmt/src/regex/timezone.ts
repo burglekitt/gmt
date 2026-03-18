@@ -1,1 +1,1 @@
-export const timezone: RegExp = /^[A-Za-z_+-]+(?:\/[A-Za-z0-9_+-]+)+$/;
+export const timezone: RegExp = /^(?:UTC|GMT|[A-Za-z_+-]+(?:\/[A-Za-z0-9_+-]+)+)$/;

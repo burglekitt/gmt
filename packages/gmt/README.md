@@ -188,7 +188,7 @@ parseZonedDate("2024-03-17T14:30:45+00:00[UTC]");
 parseZonedTimezone("2024-03-17T14:30:45+00:00[UTC]");
 // "UTC"
 
-isValidTimeZone("Asia/Kathmandu");
+isValidTimezone("Asia/Kathmandu");
 // true
 
 isValidZonedDateTime("2024-03-17T14:30:45+00:00[UTC]");
