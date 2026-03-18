@@ -51,7 +51,6 @@
     "format": "biome check --write ."
   },
   "dependencies": {
-    "@js-temporal/polyfill": "^0.5.1",
-    "zod": "^4.3.6"
+    "@js-temporal/polyfill": "^0.5.1"
   }
 }
