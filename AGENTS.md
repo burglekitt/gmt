@@ -67,7 +67,17 @@
 | `date.getTime()`            | `Temporal.Instant.from(date).epochSeconds` |
 | Manual string parsing       | `Temporal.PlainDate.from(string)`     |
 | Mutating methods            | Use Temporal’s immutable methods      |
+### 🚨 **Error Handling: Invalid Input Return Values**
 
+**Rule**: Return values depend on the function's return type:
+
+| Return Type | Invalid Input Behavior | Example |
+|-------------|----------------------|---------|
+| `string`    | Return empty string `""` | `addDate("invalid", 1, "day") → ""` |
+| `number`    | Return `null` | `diffDate("invalid", "2024-01-01", "day") → null` |
+| `boolean`   | Return `false` | `isValidDate("invalid") → false` |
+
+**Why**: Consistent, type-safe error handling without exceptions. Allows chaining and null-coalescing operators.
 ---
 
 ## 🔍 Code Review Checklist
@@ -79,6 +89,10 @@
 3. **Plain/zoned separation** (no cross-contamination).
 4. **Zod validation** for all public APIs.
 5. **100% test coverage** for edge cases (timezones, leap seconds).
+6. **Error handling is type-safe**: 
+   - Functions returning `string` return `""` on invalid input
+   - Functions returning `number` return `null` on invalid input
+   - Functions returning `boolean` return `false` on invalid input
 
 ---
 
