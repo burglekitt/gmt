@@ -1,41 +1,17 @@
 # @burglekitt/gmt
 
-# Give Me Temporal!
+Give Me Temporal.
 
-> `@burglekitt/gmt`
+`@burglekitt/gmt` is a Temporal-first date and time library with a simple rule set:
 
-<p align="center">
-  <a href="https://giphy.com/gifs/aint-nobody-got-time-for-that-oh-lord-jesus-its-a-fire-njAjh98E1PUha">
-    <img src="https://media.giphy.com/media/njAjh98E1PUha/giphy.gif" alt="Ain't nobody got time for new Date()" width="480" />
-  </a>
-  <br><br>
-  <em>Ain't nobody got time for <code>new Date()</code>.</em>
-</p>
+- ISO 8601 strings in
+- ISO 8601 strings, numbers, booleans, or arrays out
+- no `Date`
+- plain and zoned operations kept separate
 
-The date and time library JavaScript deserved from the start. `gmt` wraps the [Temporal API](https://tc39.es/proposal-temporal/) in a clean, ergonomic interface that keeps you out of `Date` hell forever. No mutation. No timezone guessing. No 2-AM DST surprises. Just ISO strings in, ISO strings out, and Temporal doing the heavy lifting underneath.
+It wraps `@js-temporal/polyfill` behind a smaller, more opinionated API aimed at the cases application code actually hits: arithmetic, comparison, parsing, formatting, unix conversions, timezone conversion, and validation.
 
-**Status:** Pre-alpha. APIs may change. But the vibes are immaculate.
-
----
-
-## Why This Exists
-
-JavaScript's `Date` is a crime scene.
-
-- `new Date("2024-03-10")` gives you UTC midnight — not local midnight
-- `date.getMonth()` returns 0 for January, because why not
-- Every timezone operation requires a third-party library the size of a dictionary
-- Mutation is the default, which means passing a `Date` anywhere is a gamble
-
-`Temporal` fixes all of this. `gmt` makes it fast to use:
-
-- Functions accept **ISO 8601 strings** and return **ISO 8601 strings**
-- The underlying `Temporal` objects never escape — they're an implementation detail
-- Plain (timezone-free) and Zoned (timezone-aware) operations are strictly separated
-- DST is handled correctly by default, not as an afterthought
-- Fully tree-shakable: import only what you use
-
-If you are still calling `new Date()`, this library is here to judge you and then help you.
+**Status:** pre-alpha. Expect API movement while the surface is still being filled out.
 
 ---
 
@@ -51,291 +27,354 @@ bun add @burglekitt/gmt
 
 ---
 
+## Package Layout
+
+The package exports four top-level namespaces:
+
+```typescript
+import { Temporal, plain, zoned, regex } from "@burglekitt/gmt";
+```
+
+- `Temporal`: re-exported from `@js-temporal/polyfill`
+- `plain`: timezone-free helpers
+- `zoned`: timezone-aware helpers
+- `regex`: low-level regex building blocks
+
+You can also import subpaths directly:
+
+```typescript
+import { addDate } from "@burglekitt/gmt/plain/calculate";
+import { getNow } from "@burglekitt/gmt/plain/get";
+import { convertUnixToTimezone } from "@burglekitt/gmt/zoned/convert";
+```
+
+---
+
+## Core Rules
+
+| Rule | Current behavior |
+|---|---|
+| String-first API | Public helpers consume ISO strings and return normalized strings where appropriate |
+| Temporal-only internals | `Temporal` does the parsing and timezone math |
+| Plain/zoned separation | `plain/*` is timezone-free, `zoned/*` is timezone-aware |
+| No-throw public helpers | Invalid input returns a typed fallback instead of throwing |
+
+Invalid input fallbacks are consistent across the library:
+
+- string-returning helpers return `""`
+- number-returning helpers return `null`
+- boolean-returning helpers return `false`
+- array-returning helpers return `[]`
+
+---
+
 ## Quick Start
 
-### Date arithmetic
+### Plain arithmetic and comparisons
 
 ```typescript
-import { addDate, subtractDate } from "@burglekitt/gmt/plain/calculate";
+import { addDate, diffDateTime } from "@burglekitt/gmt/plain/calculate";
+import { areDatesEqual, isBeforeDateTime } from "@burglekitt/gmt/plain/compare";
 
-addDate("2026-01-01", 90, "day");         // "2026-04-01"
-addDate("2026-01-01", 1, "year");          // "2027-01-01"
-subtractDate("2026-03-31", 1, "month");   // "2026-02-28"
+addDate("2026-01-01", 90, "day");
+// "2026-03-32" is impossible, so Temporal normalizes correctly -> "2026-04-01"
+
+diffDateTime("2024-03-17T12:00:00", "2024-03-17T12:30:00", "minute");
+// 30
+
+areDatesEqual("2026-03-17", "2026-03-17T09:00:00");
+// true
+
+isBeforeDateTime("2026-03-17T09:00:00", "2026-03-17T10:00:00");
+// true
 ```
 
-### Comparisons
+### Plain get, parse, map, and validate helpers
 
 ```typescript
-import { isBeforeDate, isAfterDate, areDatesEqual } from "@burglekitt/gmt/plain/compare";
+import { getNow, getToday, getUnixNow } from "@burglekitt/gmt/plain/get";
+import { mapDatesInRange, mapDaysInMonth } from "@burglekitt/gmt/plain/map";
+import { parseDateUnit } from "@burglekitt/gmt/plain/parse";
+import { isValidDate, isValidUnixMilliseconds } from "@burglekitt/gmt/plain/validate";
 
-isBeforeDate("2026-01-01", "2026-06-15");             // true
-isAfterDate("2026-12-31", "2026-01-01");              // true
-areDatesEqual("2026-03-17", "2026-03-17T09:00:00");   // true — date part is extracted
-```
+getNow();
+// "2026-03-18T11:42:33.123"
 
-### Mapping
+getToday();
+// "2026-03-18"
 
-```typescript
-import { mapDaysInMonth, mapDatesInRange } from "@burglekitt/gmt/plain/map";
+getUnixNow("milliseconds");
+// 1710685845000
 
-// Every day in February 2024 — leap year, 29 days
 mapDaysInMonth("2024-02");
-// ["2024-02-01", "2024-02-02", ..., "2024-02-29"]
+// ["2024-02-01", ..., "2024-02-29"]
 
-// Every Monday between two dates (stepDays: 7)
-mapDatesInRange("2026-03-02", "2026-03-30", 7);
-// ["2026-03-02", "2026-03-09", "2026-03-16", "2026-03-23", "2026-03-30"]
+mapDatesInRange("2024-03-01", "2024-03-05", 2);
+// ["2024-03-01", "2024-03-03", "2024-03-05"]
+
+parseDateUnit("2024-03-17", "month");
+// "03"
+
+isValidDate("2024-02-29");
+// true
+
+isValidUnixMilliseconds("1710685845000");
+// true
 ```
 
-### Formatting
+### Zoned arithmetic, conversion, and formatting
 
 ```typescript
-import { formatDate, formatDateTime } from "@burglekitt/gmt/plain/format";
+import { addZoned } from "@burglekitt/gmt/zoned/calculate";
+import {
+  convertTimezoneToUnix,
+  convertTimezoneToZulu,
+  convertUnixToTimezone,
+  convertZuluToTimezone,
+} from "@burglekitt/gmt/zoned/convert";
 import { formatZonedDateTime } from "@burglekitt/gmt/zoned/format";
 
-formatDate("2026-03-17", "en-US", { dateStyle: "full" });
-// "Tuesday, March 17, 2026"
-
-formatZonedDateTime("2026-03-17T09:00:00+00:00[UTC]", "en-US", { dateStyle: "full", timeStyle: "short" });
-// "Tuesday, March 17, 2026 at 9:00 AM"
-```
-
-### Timezone-aware operations
-
-```typescript
-import { addZoned, subtractZoned } from "@burglekitt/gmt/zoned/calculate";
-import { isAfterZoned } from "@burglekitt/gmt/zoned/compare";
-import { mapZonedHoursInDay } from "@burglekitt/gmt/zoned/map";
-
-// Add across a DST boundary — Temporal handles the offset change for you
 addZoned("2026-03-07T23:00:00-05:00[America/New_York]", 2, "hour");
-// "2026-03-08T02:00:00-04:00[America/New_York]" — note offset changed to -04:00
+// "2026-03-08T01:00:00-05:00[America/New_York]" or DST-adjusted equivalent depending on the instant
 
-// Compare across timezones — compared at the Instant level, no offset confusion
-isAfterZoned(
-  "2026-03-17T10:00:00+05:30[Asia/Kolkata]",
-  "2026-03-17T09:00:00+00:00[UTC]"
+convertTimezoneToUnix("2024-03-17T10:30:45-04:00[America/New_York]", "seconds");
+// 1710685845
+
+convertTimezoneToZulu("2024-03-17T10:30:45-04:00[America/New_York]");
+// "2024-03-17T14:30:45Z"
+
+convertUnixToTimezone(1710685845000, "Asia/Kolkata");
+// "2024-03-17T20:00:45+05:30[Asia/Kolkata]"
+
+convertZuluToTimezone("2024-03-17T14:30:45Z", "Pacific/Apia");
+// zoned datetime in Pacific/Apia at the same instant
+
+formatZonedDateTime("2024-03-17T14:30:45+00:00[UTC]", "en-US", {
+  dateStyle: "full",
+  timeStyle: "short",
+});
+// locale-dependent non-empty formatted string
+```
+
+### Zoned get, map, parse, and validate helpers
+
+```typescript
+import { getZonedDateTime, getZonedNow, getZonedToday } from "@burglekitt/gmt/zoned/get";
+import { mapZonedDatesInRange, mapZonedHoursInDay } from "@burglekitt/gmt/zoned/map";
+import { parseZonedDate, parseZonedTimezone } from "@burglekitt/gmt/zoned/parse";
+import { isValidTimezone, isValidZonedDateTime } from "@burglekitt/gmt/zoned/validate";
+
+getZonedNow("UTC");
+// current zoned datetime in UTC
+
+getZonedToday("America/Chicago");
+// local ISO date string for that timezone
+
+getZonedDateTime("2024-03-17T14:30:45", "Europe/Helsinki");
+// "2024-03-17T14:30:45+02:00[Europe/Helsinki]"
+
+mapZonedHoursInDay("2024-03-17T12:00:00+00:00[UTC]");
+// 24 hourly zoned datetimes for that local day
+
+mapZonedDatesInRange(
+  "2024-03-17T10:00:00-05:00[America/Chicago]",
+  "2024-03-19T10:00:00-05:00[America/Chicago]",
 );
-// false — both resolve to the same instant
+// ["2024-03-17", "2024-03-18", "2024-03-19"]
 
-// Every hour in a New York day during DST spring-forward — only 23 entries
-mapZonedHoursInDay("2026-03-08T12:00:00-05:00[America/New_York]");
-// ["2026-03-08T00:00:00-05:00[...]", ..., 23 entries — 2 AM never happens]
-```
+parseZonedDate("2024-03-17T14:30:45+00:00[UTC]");
+// "2024-03-17"
 
-### Parsing & validation
+parseZonedTimezone("2024-03-17T14:30:45+00:00[UTC]");
+// "UTC"
 
-```typescript
-import { parseDateUnit } from "@burglekitt/gmt/plain/parse";
-import { isValidDate, isValidDateRange } from "@burglekitt/gmt/plain/validate";
-import { isValidZonedDateTime } from "@burglekitt/gmt/zoned/validate";
+isValidTimeZone("Asia/Kathmandu");
+// true
 
-parseDateUnit("2026-03-17", "month");                                    // 3
-isValidDate("2026-13-01");                                               // false
-isValidDateRange("2026-01-01", "2026-12-31");                            // true
-isValidZonedDateTime("2026-03-17T09:00:00+00:00[UTC]");                  // true
+isValidZonedDateTime("2024-03-17T14:30:45+00:00[UTC]");
+// true
 ```
 
 ---
 
-## Design Rules
-
-| Rule | Why |
-|---|---|
-| All inputs and outputs are ISO 8601 strings | Avoids `Date` object pitfalls entirely |
-| `Temporal` objects never escape public APIs | Implementation detail, not your problem |
-| `plain/` and `zoned/` are strictly separate | Mixing them is a bug waiting to happen |
-| Functions are pure and stateless | Easy to test, reason about, and compose |
-| DST is handled at the Instant level | Zoned operations are always correct |
-
----
-
-## API Reference
-
-### `@burglekitt/gmt/plain/compare`
-
-```typescript
-import { areDatesEqual, areTimesEqual, areDateTimesEqual } from "@burglekitt/gmt/plain/compare";
-import { isAfterDate, isBeforeDate } from "@burglekitt/gmt/plain/compare";
-import { isAfterTime, isBeforeTime } from "@burglekitt/gmt/plain/compare";
-import { isAfterDateTime, isBeforeDateTime } from "@burglekitt/gmt/plain/compare";
-```
-
-### `@burglekitt/gmt/plain/format`
-
-```typescript
-import { formatDate, formatTime, formatDateTime } from "@burglekitt/gmt/plain/format";
-```
-
-### `@burglekitt/gmt/plain/map`
-
-```typescript
-import { mapDaysInMonth, mapDatesInRange } from "@burglekitt/gmt/plain/map";
-
-mapDaysInMonth(monthStr: string): string[]
-mapDatesInRange(start: string, end: string, stepDays?: number): string[]
-```
+## API Surface
 
 ### `@burglekitt/gmt/plain/calculate`
 
-```typescript
-import { addDate, subtractDate } from "@burglekitt/gmt/plain/calculate";
-import { addTime, subtractTime } from "@burglekitt/gmt/plain/calculate";
-import { addDateTime, subtractDateTime } from "@burglekitt/gmt/plain/calculate";
+- `addDate`
+- `addDateTime`
+- `addTime`
+- `diffDate`
+- `diffDateTime`
+- `diffTime`
+- `subtractDate`
+- `subtractDateTime`
+- `subtractTime`
 
-// Date units: "year" | "month" | "week" | "day"
-// Time units: "hour" | "minute" | "second" | "millisecond"
-// DateTime units: all of the above
-```
+### `@burglekitt/gmt/plain/compare`
+
+- `areDatesEqual`
+- `areDateTimesEqual`
+- `areTimesEqual`
+- `isAfterDate`
+- `isAfterDateTime`
+- `isAfterTime`
+- `isBeforeDate`
+- `isBeforeDateTime`
+- `isBeforeTime`
+
+### `@burglekitt/gmt/plain/format`
+
+- `formatDate`
+- `formatDateTime`
+- `formatTime`
+
+### `@burglekitt/gmt/plain/get`
+
+- `getNow`
+- `getSystemTimezone`
+- `getToday`
+- `getUnixNow`
+
+### `@burglekitt/gmt/plain/map`
+
+- `mapDatesInRange`
+- `mapDaysInMonth`
 
 ### `@burglekitt/gmt/plain/parse`
 
-```typescript
-import { parseDateUnit, parseTimeUnit, parseDateTimeUnit } from "@burglekitt/gmt/plain/parse";
-```
+- `parseDateTimeUnit`
+- `parseDateUnit`
+- `parseTimeUnit`
 
 ### `@burglekitt/gmt/plain/validate`
 
-```typescript
-import { isValidDate, isValidTime, isValidDateTime, isValidDateRange } from "@burglekitt/gmt/plain/validate";
-```
-
----
-
-### `@burglekitt/gmt/zoned/compare`
-
-```typescript
-import { areZonedEqual, isAfterZoned, isBeforeZoned } from "@burglekitt/gmt/zoned/compare";
-// isAfterZoned / isBeforeZoned compare at the Instant level — timezone-offset-independent
-```
-
-### `@burglekitt/gmt/zoned/format`
-
-```typescript
-import { formatZonedDateTime, formatZonedRange } from "@burglekitt/gmt/zoned/format";
-```
-
-### `@burglekitt/gmt/zoned/map`
-
-```typescript
-import { mapZonedHoursInDay, mapZonedDatesInRange } from "@burglekitt/gmt/zoned/map";
-
-mapZonedHoursInDay(zdtStr: string): string[]              // DST-aware: 23, 24, or 25 entries
-mapZonedDatesInRange(start: string, end: string, stepDays?: number): string[]  // throws if timezones differ
-```
+- `isValidDate`
+- `isValidDateOrDateTime`
+- `isValidDateRange`
+- `isValidDateTime`
+- `isValidDateTimeUnit`
+- `isValidDateUnit`
+- `isValidTime`
+- `isValidTimeUnit`
+- `isValidUnixMilliseconds`
+- `isValidUnixSeconds`
+- `isZuluDateTime`
 
 ### `@burglekitt/gmt/zoned/calculate`
 
-```typescript
-import { addZoned, subtractZoned } from "@burglekitt/gmt/zoned/calculate";
-```
+- `addZoned`
+- `subtractZoned`
+
+### `@burglekitt/gmt/zoned/compare`
+
+- `areZonedDateTimesEqual`
+- `areZonedEqual`
+- `isAfterZoned`
+- `isBeforeZoned`
+
+### `@burglekitt/gmt/zoned/convert`
+
+- `convertTimezoneToUnix`
+- `convertTimezoneToZulu`
+- `convertToUnixMilliseconds`
+- `convertToUnixSeconds`
+- `convertUnixToTimezone`
+- `convertUnixToZoned`
+- `convertUnixToZulu`
+- `convertZonedToUnix`
+- `convertZonedToZoned`
+- `convertZuluToTimezone`
+- `convertZuluToUnix`
+
+### `@burglekitt/gmt/zoned/format`
+
+- `formatZonedDateTime`
+- `formatZonedRange`
+
+### `@burglekitt/gmt/zoned/get`
+
+- `getZonedDate`
+- `getZonedDateTime`
+- `getZonedNow`
+- `getZonedToday`
+
+### `@burglekitt/gmt/zoned/map`
+
+- `mapZonedDatesInRange`
+- `mapZonedHoursInDay`
 
 ### `@burglekitt/gmt/zoned/parse`
 
-```typescript
-import { parseZonedDate, parseZonedTime, parseZonedTimezone, parseZonedUnit } from "@burglekitt/gmt/zoned/parse";
-```
+- `parseZonedDate`
+- `parseZonedTime`
+- `parseZonedTimezone`
+- `parseZonedUnit`
 
 ### `@burglekitt/gmt/zoned/validate`
 
-```typescript
-import { isValidZonedDateTime, isValidTimezone } from "@burglekitt/gmt/zoned/validate";
-```
+- `isValidTimezone`
+- `isValidZonedDateTime`
+
+### `@burglekitt/gmt/regex`
+
+- `date`
+- `date-time`
+- `time`
+- `timezone`
 
 ---
 
-## Regex and Schemas
+## TODO (Feature Gaps)
 
-Low-level building blocks for parsing and validation, exported from subpaths:
+Prioritized roadmap based on `temporal-utils` plus parity checks against Luxon, Moment, and date-fns.
 
-- `@burglekitt/gmt` — top-level re-exports `Temporal` from `@js-temporal/polyfill`
-- `src/regex/` — composable regex patterns for dates, times, datetimes, and timezones
-- `src/schemas/` — Zod schemas for all types, usable in form validation and API boundaries
+1. Interval primitives and helpers (`Interval` type, overlap checks, containment checks, interval sorting, interval normalization/merge).
+2. Range iteration helpers (each day/week/month/quarter across a range for plain and zoned inputs).
+3. Clamp/min/max helpers for dates and datetimes (bounded values and collection min/max selectors).
+4. `isBetween` and inclusive/exclusive boundary helpers for plain and zoned APIs.
+5. Quarter helpers beyond parse-only accessors (`getQuarter`, `startOfQuarter`, `endOfQuarter`).
+6. Additional start/end boundaries (`startOfWeek`, `endOfWeek`, ISO-week variants, month/year boundaries where missing).
+7. Duration utilities (interval-to-duration, ISO duration formatting, optional human-readable duration formatting).
+8. Calendar/relative formatting helpers (`formatRelative`, distance-to-now style outputs).
+9. Serialization adapters package (`gmt-serializers`) for SuperJSON-style Temporal round-tripping.
+10. Parsing pack for non-ISO but common user inputs (`YYYY/MM/DD`, `HHmm`, month-name parsing) in a separate optional package.
+11. Business-day helpers (`addBusinessDays`, `differenceInBusinessDays`) as an optional domain module.
+12. Optional validation package (`gmt-zod`) kept separate from core `@burglekitt/gmt`.
+
+---
+
+## Testing Matrix
+
+The zoned suite is intentionally biased toward timezone edge cases rather than only UTC happy paths.
+
+- `Pacific/Niue` and `Pacific/Apia` exercise far-edge calendar separation at the same instant.
+- `UTC` and `Etc/GMT` cover baseline zero-offset handling.
+- `Europe/Helsinki`, `America/Chicago`, and `Asia/Shanghai` cover common regional behavior.
+- `Asia/Kolkata`, `Asia/Kathmandu`, and `Pacific/Chatham` cover half-hour and 45-minute offset paths.
+- `Asia/Calcutta` is included as a timezone alias validation case.
+
+This matrix is used across zoned compare, convert, format, get, map, parse, and validate tests.
 
 ---
 
 ## Development
 
 ```bash
-bun install          # install dependencies
-bun run test         # run all tests (Vitest)
-bun run build        # build the package
-bun run lint         # lint with Biome
-bun run format       # format with Biome
+bun install
+bun run build
+bun run typecheck
+bun run test
+bun run lint
+bun run format
 ```
-
----
-
-## TODO
-
-**plain**
-
-- [x] `areDatesEqual` / `areTimesEqual` / `areDateTimesEqual` — equality checks
-- [x] `isAfterDate` / `isBeforeDate` — date ordering
-- [x] `isAfterTime` / `isBeforeTime` — time ordering
-- [x] `isAfterDateTime` / `isBeforeDateTime` — datetime ordering
-- [x] `formatDate` / `formatTime` / `formatDateTime` — locale-aware formatting
-- [x] `addDate` / `subtractDate` — date arithmetic
-- [x] `addTime` / `subtractTime` — time arithmetic
-- [x] `addDateTime` / `subtractDateTime` — datetime arithmetic
-- [x] `parseDateUnit` / `parseTimeUnit` / `parseDateTimeUnit` — extract numeric fields
-- [x] `isValidDate` / `isValidTime` / `isValidDateTime` / `isValidDateRange` — validation
-- [x] `mapDaysInMonth` — list all days in a calendar month
-- [x] `mapDatesInRange` — list dates between two anchors with a configurable step
-- [ ] `isLeapYear(yearStr: string): boolean` — is this year a leap year?
-- [ ] `getDayOfWeek(dateStr: string): number` — returns ISO weekday 1 (Mon) to 7 (Sun)
-- [ ] `getWeekNumber(dateStr: string): number` — ISO week number (1–53)
-- [ ] `getQuarter(dateStr: string): number` — calendar quarter (1–4)
-- [ ] `getDaysInMonth(monthStr: string): number` — total days in a given YYYY-MM month
-- [ ] `startOfMonth(dateStr: string): string` — first day of the month
-- [ ] `endOfMonth(dateStr: string): string` — last day of the month
-- [ ] `startOfWeek(dateStr: string, weekStartsOn?: "monday" | "sunday"): string`
-- [ ] `endOfWeek(dateStr: string, weekStartsOn?: "monday" | "sunday"): string`
-- [ ] `isWeekend(dateStr: string): boolean`
-- [ ] `isWeekday(dateStr: string): boolean`
-- [ ] `isBetweenDates(dateStr: string, start: string, end: string): boolean`
-- [ ] `isSameMonth(a: string, b: string): boolean`
-- [ ] `isSameYear(a: string, b: string): boolean`
-- [ ] `diffDates(a: string, b: string): number` — signed number of days between two dates
-- [ ] `diffDateTimes(a: string, b: string, unit: DateTimeUnit): number` — signed duration in the given unit
-- [ ] `clampDate(dateStr: string, min: string, max: string): string`
-- [ ] `mapDaysInWeek(dateStr: string, weekStartsOn?: "monday" | "sunday"): string[]`
-- [ ] `mapWeekdaysInMonth(monthStr: string, weekday: 1 | 2 | 3 | 4 | 5 | 6 | 7): string[]` — all Tuesdays in March, etc.
-- [ ] `mapMonthsInRange(startMonth: string, endMonth: string): string[]` — "2024-01" to "2024-12"
-- [ ] `mapTimesInDay(stepMinutes: number): string[]` — evenly spaced time slots across 24 hours
-- [ ] `mapDateTimesInDay(dateStr: string, stepMinutes: number): string[]`
-- [ ] `isValidMonthString(value: string): boolean` — validates "YYYY-MM" format
-
-**zoned**
-
-- [x] `areZonedEqual` — equality at the Instant level
-- [x] `isAfterZoned` / `isBeforeZoned` — instant-level ordering across timezones
-- [x] `formatZonedDateTime` / `formatZonedRange` — locale-aware formatting
-- [x] `addZoned` / `subtractZoned` — DST-correct arithmetic
-- [x] `parseZonedDate` / `parseZonedTime` / `parseZonedTimezone` / `parseZonedUnit`
-- [x] `isValidZonedDateTime` / `isValidTimezone`
-- [x] `mapZonedHoursInDay` — all hours in a local day including DST transitions (23/24/25 entries)
-- [x] `mapZonedDatesInRange` — local date range between two zoned anchors
-- [ ] `convertTimezone(zdtStr: string, toTimeZone: string): string` — reinterpret in a different timezone
-- [ ] `toInstant(zdtStr: string): string` — extract the UTC instant as an ISO string
-- [ ] `fromInstant(instantStr: string, timeZone: string): string` — build a ZonedDateTime from a UTC instant
-- [ ] `getUtcOffset(zdtStr: string): string` — e.g. `"+05:30"`
-- [ ] `isInDST(zdtStr: string): boolean` — is this moment in daylight saving time?
-- [ ] `diffZoned(a: string, b: string, unit: DateTimeUnit): number` — signed duration at the Instant level
-- [ ] `clampZoned(zdtStr: string, min: string, max: string): string`
-- [ ] `isBetweenZoned(zdtStr: string, start: string, end: string): boolean`
-- [ ] `startOfZonedDay(zdtStr: string): string` — local midnight in the given timezone
-- [ ] `endOfZonedDay(zdtStr: string): string` — 23:59:59.999 in the given timezone
-- [ ] `mapZonedDaysInMonth(anchorZdtStr: string): string[]` — all days in the local calendar month
-- [ ] `mapZonedWeek(anchorZdtStr: string, weekStartsOn?: "monday" | "sunday"): string[]`
-- [ ] `mapZonedMonthsInRange(start: string, end: string): string[]` — month anchors between two zoned datetimes
 
 ---
 
 ## Requirements
 
-- Node.js >= 18.0.0
-- Bun (recommended for development)
+- Node.js 18+
+- Bun recommended for local development
 
 ---
 

@@ -33,21 +33,23 @@ bun run format
 │   ├── gmt/                    # @burglekitt/gmt — Give Me Temporal!
 │   │   ├── src/
 │   │   │   ├── plain/          # Timezone-free operations
+│   │   │   │   ├── calculate/  # addDate, diffDateTime, subtractTime, ...
 │   │   │   │   ├── compare/    # isAfterDate, isBeforeDate, areDatesEqual, ...
 │   │   │   │   ├── format/     # formatDate, formatTime, formatDateTime
+│   │   │   │   ├── get/        # getNow, getToday, getUnixNow, ...
 │   │   │   │   ├── map/        # mapDaysInMonth, mapDatesInRange, ...
-│   │   │   │   ├── calculate/       # addDate, subtractDate, addTime, ...
 │   │   │   │   ├── parse/      # parseDateUnit, parseTimeUnit, ...
-│   │   │   │   └── validate/   # isValidDate, isValidTime, ...
+│   │   │   │   └── validate/   # isValidDate, unix validators, ...
 │   │   │   ├── zoned/          # IANA timezone-aware operations
+│   │   │   │   ├── calculate/  # addZoned, subtractZoned
 │   │   │   │   ├── compare/    # isAfterZoned, isBeforeZoned, areZonedEqual
+│   │   │   │   ├── convert/    # unix/zulu/timezone conversion helpers
 │   │   │   │   ├── format/     # formatZonedDateTime, formatZonedRange
+│   │   │   │   ├── get/        # getZonedNow, getZonedToday, ...
 │   │   │   │   ├── map/        # mapZonedHoursInDay, mapZonedDatesInRange
-│   │   │   │   ├── calculate/       # addZoned, subtractZoned
 │   │   │   │   ├── parse/      # parseZonedDate, parseZonedTimezone, ...
 │   │   │   │   └── validate/   # isValidZonedDateTime, isValidTimezone
 │   │   │   ├── regex/          # Composable regex patterns for date/time strings
-│   │   │   └── schemas/        # Zod schemas for runtime validation
 │   │   └── package.json
 │   ├── gmt-biome/              # @burglekitt/gmt-biome — Shared Biome config
 │   │   ├── biome.json          # Consumer-facing config (uses ./plugins/ paths)
@@ -145,7 +147,6 @@ bun run lint
 | [TypeScript](https://www.typescriptlang.org/) | Type safety |
 | [Vitest](https://vitest.dev/) | Testing |
 | [Nx](https://nx.dev/) | Task orchestration and caching |
-| [Zod](https://zod.dev/) | Runtime validation at API boundaries |
 
 All Biome rules are in [biome.json](./biome.json) (Grit plugins live in [packages/gmt-biome/plugins/](./packages/gmt-biome/plugins/)).
 
@@ -161,11 +162,17 @@ All Biome rules are in [biome.json](./biome.json) (Grit plugins live in [package
 | [`@burglekitt/gmt-biome`](./packages/gmt-biome) | `npm install -D @burglekitt/gmt-biome` | Shared Biome config — bans `Date` APIs via Grit plugins |
 | [`@burglekitt/gmt-eslint`](./packages/gmt-eslint) | `npm install -D @burglekitt/gmt-eslint` | Shared ESLint flat config — bans `Date` APIs |
 
+`@burglekitt/gmt` currently exports top-level `Temporal`, `plain`, `zoned`, and `regex` namespaces, with direct subpath imports available under `@burglekitt/gmt/*`.
+
 ---
 
 ## Releases
 
 Pre-alpha. Each package follows semantic versioning and will be published independently to npm when stable.
+
+## TODO
+
+Explore [Changesets](https://github.com/changesets/changesets) for monorepo publishing
 
 ### Publishing
 
