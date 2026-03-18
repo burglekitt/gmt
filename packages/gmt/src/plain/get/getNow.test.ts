@@ -1,3 +1,4 @@
+import { chopTime } from "../chop";
 import { isValidDateTime } from "../validate";
 import { getNow } from "./getNow";
 import { getToday } from "./getToday";
@@ -13,6 +14,6 @@ describe("getNow", () => {
 
   it("starts with today's plain date", () => {
     const value = getNow();
-    expect(value.slice(0, 10)).toBe(getToday());
+    expect(chopTime(value)).toBe(getToday());
   });
 });

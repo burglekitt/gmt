@@ -1,3 +1,4 @@
+import { chopTime } from "../chop";
 import { isValidDate } from "../validate";
 import { getNow } from "./getNow";
 import { getToday } from "./getToday";
@@ -10,6 +11,6 @@ describe("getToday", () => {
   });
 
   it("matches the date part of getNow", () => {
-    expect(getToday()).toBe(getNow().slice(0, 10));
+    expect(getToday()).toBe(chopTime(getNow()));
   });
 });

@@ -1,6 +1,7 @@
 // Re-export all Temporal polyfill functionality for plain DateTime operations
 export * from "@js-temporal/polyfill";
 export * as calculate from "./calculate";
+export * as chop from "./chop";
 export * as compare from "./compare";
 export * as format from "./format";
 export * as get from "./get";
