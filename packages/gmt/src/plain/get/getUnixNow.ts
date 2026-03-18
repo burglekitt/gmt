@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 
-// function returns get unix timestamp in seconds or milliseconds from a zoned datetime string
+// Returns the current unix timestamp in seconds or milliseconds.
 export function getUnixNow(unit: "seconds" | "milliseconds"): number {
   const instant = Temporal.Now.instant();
   if (unit === "seconds") {

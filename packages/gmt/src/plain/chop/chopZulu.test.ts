@@ -1,5 +1,5 @@
-// Sometimes a datetime with a Z needs to be treated as just a plain date
-// This function simply chops off the Z and any time information, leaving just the date
+// Sometimes a Zulu datetime needs to be treated as a plain local datetime string.
+// This helper removes only the trailing Z/z marker and preserves the time portion.
 import { chopZulu } from "./chopZulu";
 
 describe("chopZulu", () => {

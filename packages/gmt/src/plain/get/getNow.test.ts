@@ -1,5 +1,6 @@
 import { isValidDateTime } from "../validate";
 import { getNow } from "./getNow";
+import { getToday } from "./getToday";
 
 describe("getNow", () => {
   it("returns an ISO plain datetime string", () => {
@@ -12,6 +13,6 @@ describe("getNow", () => {
 
   it("starts with today's plain date", () => {
     const value = getNow();
-    expect(value.slice(0, 10)).toBe(getNow().slice(0, 10));
+    expect(value.slice(0, 10)).toBe(getToday());
   });
 });

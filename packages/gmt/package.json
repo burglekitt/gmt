@@ -37,6 +37,7 @@
       "types": "./dist/plain/*/index.d.ts",
       "default": "./dist/plain/*/index.js"
     },
+    "./plain/*/*": null,
     "./zoned": {
       "types": "./dist/zoned/index.d.ts",
       "default": "./dist/zoned/index.js"
@@ -45,6 +46,7 @@
       "types": "./dist/zoned/*/index.d.ts",
       "default": "./dist/zoned/*/index.js"
     },
+    "./zoned/*/*": null,
     "./regex": {
       "types": "./dist/regex/index.d.ts",
       "default": "./dist/regex/index.js"

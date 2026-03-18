@@ -4,6 +4,7 @@ describe("regex/zulu-date-time", () => {
   it.each`
     value                         | expected
     ${"2024-03-17T14:30Z"}        | ${true}
+    ${"2024-03-17T14:30z"}        | ${true}
     ${"2024-03-17T14:30:45Z"}     | ${true}
     ${"2024-03-17T14:30:45.123Z"} | ${true}
     ${"2024-03-17T14:30:45,123Z"} | ${true}

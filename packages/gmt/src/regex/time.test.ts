@@ -1,4 +1,11 @@
-import { hour, millisecond, minute, plainTime, second } from "./time";
+import {
+  fractionalSecond,
+  hour,
+  millisecond,
+  minute,
+  plainTime,
+  second,
+} from "./time";
 
 describe("regex/time", () => {
   it.each`
@@ -49,6 +56,19 @@ describe("regex/time", () => {
     "millisecond pattern matches $value as $expected",
     ({ value, expected }: { value: string; expected: boolean }) => {
       expect(millisecond.test(value)).toBe(expected);
+    },
+  );
+
+  it.each`
+    value           | expected
+    ${"1"}          | ${true}
+    ${"123456789"}  | ${true}
+    ${""}           | ${false}
+    ${"1234567890"} | ${false}
+  `(
+    "fractionalSecond pattern matches $value as $expected",
+    ({ value, expected }: { value: string; expected: boolean }) => {
+      expect(fractionalSecond.test(value)).toBe(expected);
     },
   );
 
