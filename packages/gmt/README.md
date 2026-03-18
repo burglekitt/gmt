@@ -327,7 +327,7 @@ isValidZonedDateTime("2024-03-17T14:30:45+00:00[UTC]");
 
 ## TODO (Feature Gaps)
 
-Prioritized roadmap based on `temporal-utils` plus parity checks against Luxon, Moment, and date-fns.
+Prioritized roadmap and parity checks against Luxon, Moment, and date-fns.
 
 1. Interval primitives and helpers (`Interval` type, overlap checks, containment checks, interval sorting, interval normalization/merge).
 2. Range iteration helpers (each day/week/month/quarter across a range for plain and zoned inputs).
