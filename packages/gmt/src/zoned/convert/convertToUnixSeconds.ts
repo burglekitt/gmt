@@ -1,5 +1,5 @@
-import { convertToUnixMilliseconds } from "./convertToUnixMilliseconds";
+import { convertZonedToUnix } from "./convertZonedToUnix";
 
-export function convertToUnixSeconds(value: string): number {
-  return Math.floor(convertToUnixMilliseconds(value) / 1000);
+export function convertToUnixSeconds(value: string): number | null {
+  return convertZonedToUnix(value, "seconds");
 }

@@ -1,0 +1,32 @@
+import { sameInstantBattleCases } from "../test/timezoneFixtures";
+import { convertTimezoneToZulu } from "./convertTimezoneToZulu";
+
+describe("convertTimezoneToZulu", () => {
+  it.each`
+    value                                            | expected
+    ${"2024-03-17T10:30:45-04:00[America/New_York]"} | ${"2024-03-17T14:30:45Z"}
+    ${"2024-03-17T14:30:45+00:00[UTC]"}              | ${"2024-03-17T14:30:45Z"}
+  `("returns $expected for $value", ({ value, expected }) => {
+    expect(convertTimezoneToZulu(value)).toBe(expected);
+  });
+
+  it.each`
+    invalidValue
+    ${"invalid"}
+    ${"2024-03-17T14:30:45"}
+    ${""}
+    ${null}
+    ${undefined}
+  `(
+    "returns an empty string for invalid zoned datetime $invalidValue",
+    ({ invalidValue }) => {
+      expect(convertTimezoneToZulu(invalidValue as never)).toBe("");
+    },
+  );
+
+  for (const { timeZone, value, zulu } of sameInstantBattleCases) {
+    it(`converts battle-test timezone ${timeZone} to shared zulu instant`, () => {
+      expect(convertTimezoneToZulu(value)).toBe(zulu);
+    });
+  }
+});
