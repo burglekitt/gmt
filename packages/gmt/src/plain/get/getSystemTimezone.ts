@@ -1,5 +1,5 @@
 export function getSystemTimezone(): string {
-    try {
+  try {
     const systemTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     return systemTimeZone || "";
   } catch {
