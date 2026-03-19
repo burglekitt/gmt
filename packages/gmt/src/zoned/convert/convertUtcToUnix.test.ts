@@ -1,6 +1,6 @@
-import { convertZuluToUnix } from "./convertZuluToUnix";
+import { convertUtcToUnix } from "./convertUtcToUnix";
 
-describe("convertZuluToUnix", () => {
+describe("convertUtcToUnix", () => {
   it.each`
     value                     | unit              | expected
     ${"1970-01-01T00:00:00Z"} | ${"milliseconds"} | ${0}
@@ -8,7 +8,7 @@ describe("convertZuluToUnix", () => {
     ${"2024-03-17T14:30:45Z"} | ${"milliseconds"} | ${1710685845000}
     ${"2024-03-17T14:30:45Z"} | ${"seconds"}      | ${1710685845}
   `("returns $expected for $value as $unit", ({ value, unit, expected }) => {
-    expect(convertZuluToUnix(value, unit)).toBe(expected);
+    expect(convertUtcToUnix(value, unit)).toBe(expected);
   });
 
   it.each`
@@ -19,9 +19,9 @@ describe("convertZuluToUnix", () => {
     ${null}
     ${undefined}
   `(
-    "returns null for invalid zulu datetime $invalidValue",
+    "returns null for invalid UTC datetime $invalidValue",
     ({ invalidValue }) => {
-      expect(convertZuluToUnix(invalidValue as never)).toBeNull();
+      expect(convertUtcToUnix(invalidValue as never)).toBeNull();
     },
   );
 
@@ -33,7 +33,7 @@ describe("convertZuluToUnix", () => {
     ${undefined}
   `("returns null for invalid unit $invalidUnit", ({ invalidUnit }) => {
     expect(
-      convertZuluToUnix("2024-03-17T14:30:45Z", invalidUnit as never),
+      convertUtcToUnix("2024-03-17T14:30:45Z", invalidUnit as never),
     ).toBeNull();
   });
 });

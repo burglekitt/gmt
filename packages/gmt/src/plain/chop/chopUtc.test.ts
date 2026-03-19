@@ -1,8 +1,8 @@
-// Sometimes a Zulu datetime needs to be treated as a plain local datetime string.
+// Sometimes a UTC datetime needs to be treated as a plain local datetime string.
 // This helper removes only the trailing Z/z marker and preserves the time portion.
-import { chopZulu } from "./chopZulu";
+import { chopUtc } from "./chopUtc";
 
-describe("chopZulu", () => {
+describe("chopUtc", () => {
   it.each`
     value                         | expected
     ${"2024-03-17T00:00:00Z"}     | ${"2024-03-17T00:00:00"}
@@ -15,7 +15,7 @@ describe("chopZulu", () => {
   `(
     "returns $expected for $value",
     ({ value, expected }: { value: string; expected: string }) => {
-      expect(chopZulu(value)).toBe(expected);
+      expect(chopUtc(value)).toBe(expected);
     },
   );
 
@@ -30,6 +30,6 @@ describe("chopZulu", () => {
     ${false}
     ${""}
   `("returns empty string for $invalidValue", ({ invalidValue }) => {
-    expect(chopZulu(invalidValue)).toBe("");
+    expect(chopUtc(invalidValue)).toBe("");
   });
 });

@@ -8,4 +8,4 @@ export * from "./isValidTime";
 export * from "./isValidTimeUnit";
 export * from "./isValidUnixMilliseconds";
 export * from "./isValidUnixSeconds";
-export * from "./isZuluDateTime";
+export * from "./isUtcDateTime";

@@ -1,7 +1,7 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { isValidZonedDateTime } from "../validate";
 
-export function convertTimezoneToZulu(value: string): string {
+export function convertTimezoneToUtc(value: string): string {
   if (!isValidZonedDateTime(value)) {
     return "";
   }

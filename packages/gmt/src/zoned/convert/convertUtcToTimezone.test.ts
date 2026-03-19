@@ -1,8 +1,8 @@
 import { parseZonedTimezone } from "../parse";
 import { battleTestTimeZones } from "../test/timezoneFixtures";
-import { convertZuluToTimezone } from "./convertZuluToTimezone";
+import { convertUtcToTimezone } from "./convertUtcToTimezone";
 
-describe("convertZuluToTimezone", () => {
+describe("convertUtcToTimezone", () => {
   it.each`
     value                     | timeZone              | expected
     ${"2024-03-17T14:30:45Z"} | ${"UTC"}              | ${"2024-03-17T14:30:45+00:00[UTC]"}
@@ -10,7 +10,7 @@ describe("convertZuluToTimezone", () => {
   `(
     "returns $expected for $value in $timeZone",
     ({ value, timeZone, expected }) => {
-      expect(convertZuluToTimezone(value, timeZone)).toBe(expected);
+      expect(convertUtcToTimezone(value, timeZone)).toBe(expected);
     },
   );
 
@@ -22,9 +22,9 @@ describe("convertZuluToTimezone", () => {
     ${null}
     ${undefined}
   `(
-    "returns an empty string for invalid zulu datetime $invalidValue",
+    "returns an empty string for invalid UTC datetime $invalidValue",
     ({ invalidValue }) => {
-      expect(convertZuluToTimezone(invalidValue as never, "UTC")).toBe("");
+      expect(convertUtcToTimezone(invalidValue as never, "UTC")).toBe("");
     },
   );
 
@@ -38,16 +38,16 @@ describe("convertZuluToTimezone", () => {
     "returns an empty string for invalid timezone $invalidTimeZone",
     ({ invalidTimeZone }) => {
       expect(
-        convertZuluToTimezone("2024-03-17T14:30:45Z", invalidTimeZone as never),
+        convertUtcToTimezone("2024-03-17T14:30:45Z", invalidTimeZone as never),
       ).toBe("");
     },
   );
 
   for (const timeZone of battleTestTimeZones) {
-    it(`converts zulu to battle-test timezone ${timeZone}`, () => {
+    it(`converts UTC to battle-test timezone ${timeZone}`, () => {
       expect(
         parseZonedTimezone(
-          convertZuluToTimezone("2024-03-17T14:30:45Z", timeZone),
+          convertUtcToTimezone("2024-03-17T14:30:45Z", timeZone),
         ),
       ).toBe(timeZone);
     });

@@ -1,6 +1,6 @@
-import { isZuluDateTime } from "./isZuluDateTime";
+import { isUtcDateTime } from "./isUtcDateTime";
 
-describe("isZuluDateTime", () => {
+describe("isUtcDateTime", () => {
   it.each`
     value
     ${"2024-03-17T14:30Z"}
@@ -9,9 +9,9 @@ describe("isZuluDateTime", () => {
     ${"2024-03-17T14:30:45,999Z"}
     ${"+001234-12-31T23:59:59Z"}
   `(
-    "returns true for valid Zulu datetime: $value",
+    "returns true for valid UTC datetime: $value",
     ({ value }: { value: string }) => {
-      expect(isZuluDateTime(value)).toBe(true);
+      expect(isUtcDateTime(value)).toBe(true);
     },
   );
 
@@ -24,9 +24,9 @@ describe("isZuluDateTime", () => {
     ${"not-a-datetime"}
     ${"2024-03-17T14:30Z "}
   `(
-    "returns false for invalid Zulu datetime: $value",
+    "returns false for invalid UTC datetime: $value",
     ({ value }: { value: string }) => {
-      expect(isZuluDateTime(value)).toBe(false);
+      expect(isUtcDateTime(value)).toBe(false);
     },
   );
 });

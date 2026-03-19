@@ -5,7 +5,7 @@ function isValidUnixUnit(unit: string): unit is UnixUnit {
   return unit === "seconds" || unit === "milliseconds";
 }
 
-export function convertUnixToZulu(
+export function convertUnixToUtc(
   value: number,
   ...unitInput: [unit?: UnixUnit]
 ): string {

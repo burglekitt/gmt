@@ -1,18 +1,18 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { isZuluDateTime } from "../../plain/validate/isZuluDateTime";
+import { isUtcDateTime } from "../../plain/validate/isUtcDateTime";
 import type { UnixUnit } from "./convertZonedToUnix";
 
 function isValidUnixUnit(unit: string): unit is UnixUnit {
   return unit === "seconds" || unit === "milliseconds";
 }
 
-export function convertZuluToUnix(
+export function convertUtcToUnix(
   value: string,
   ...unitInput: [unit?: UnixUnit]
 ): number | null {
   const resolvedUnit = unitInput.length === 0 ? "milliseconds" : unitInput[0];
 
-  if (!isZuluDateTime(value) || !isValidUnixUnit(resolvedUnit ?? "")) {
+  if (!isUtcDateTime(value) || !isValidUnixUnit(resolvedUnit ?? "")) {
     return null;
   }
 

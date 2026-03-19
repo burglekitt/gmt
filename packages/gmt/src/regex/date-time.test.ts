@@ -1,4 +1,4 @@
-import { plainDateTime, zuluDateTime } from "./date-time";
+import { plainDateTime, utcDateTime } from "./date-time";
 
 describe("regex/date-time", () => {
   it.each`
@@ -21,7 +21,7 @@ describe("regex/date-time", () => {
   );
 });
 
-describe("regex/date-time — zuluDateTime", () => {
+describe("regex/date-time — utcDateTime", () => {
   it.each`
     value                         | expected
     ${"2024-03-17T14:30Z"}        | ${true}
@@ -38,9 +38,9 @@ describe("regex/date-time — zuluDateTime", () => {
     ${"2024-03-17T24:00:00Z"}     | ${false}
     ${"not-a-datetime"}           | ${false}
   `(
-    "zuluDateTime pattern matches $value as $expected",
+    "utcDateTime pattern matches $value as $expected",
     ({ value, expected }: { value: string; expected: boolean }) => {
-      expect(zuluDateTime.test(value)).toBe(expected);
+      expect(utcDateTime.test(value)).toBe(expected);
     },
   );
 });

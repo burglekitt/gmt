@@ -1,8 +1,5 @@
 import tsParser from "@typescript-eslint/parser";
 
-const dateMessage =
-  "Do not use Date APIs. Use Temporal and unix timestamp helpers instead.";
-
 export default [
   {
     files: ["**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}"],
@@ -16,7 +13,8 @@ export default [
         "error",
         {
           name: "Date",
-          message: dateMessage,
+          message:
+            "Aint nobody got time for Date. Use @burglekitt/gmt getNow(), getUnixNow('milliseconds' | 'seconds'), getUtcNow(), or getZonedNow(timezone) instead.",
         },
       ],
       "no-restricted-properties": [
@@ -24,14 +22,28 @@ export default [
         {
           object: "Date",
           property: "now",
-          message: dateMessage,
+          message:
+            "Aint nobody got time for Date.now(). Use @burglekitt/gmt getUnixNow('milliseconds' | 'seconds') or getNow() instead.",
+        },
+        {
+          object: "Date",
+          property: "UTC",
+          message:
+            "Aint nobody got time for Date.UTC(). Use @burglekitt/gmt convertUtcDateTimeToUnix('YYYY-MM-DDTHH:mm:ss', 'milliseconds' | 'seconds') instead.",
+        },
+        {
+          object: "Date",
+          property: "parse",
+          message:
+            "Aint nobody got time for Date.parse(). Use @burglekitt/gmt convertToUnixMilliseconds(value) or convertToUnixSeconds(value) instead.",
         },
       ],
       "no-restricted-syntax": [
         "error",
         {
           selector: "NewExpression[callee.name='Date']",
-          message: dateMessage,
+          message:
+            "Aint nobody got time for new Date(). Use @burglekitt/gmt getUtcNow(), getNow(), or getZonedNow(timezone) instead.",
         },
       ],
     },

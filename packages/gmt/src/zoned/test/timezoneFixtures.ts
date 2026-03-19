@@ -25,7 +25,7 @@ export const sameInstantBattleCases = battleTestTimeZones.map((timeZone) => ({
   value: battleTestInstant.toZonedDateTimeISO(timeZone).toString(),
   unixMilliseconds: Number(battleTestInstant.epochMilliseconds),
   unixSeconds: Math.floor(Number(battleTestInstant.epochMilliseconds) / 1000),
-  zulu: battleTestInstant.toString(),
+  utc: battleTestInstant.toString(),
 }));
 
 export const localNoonBattleCases = battleTestTimeZones.map((timeZone) => ({

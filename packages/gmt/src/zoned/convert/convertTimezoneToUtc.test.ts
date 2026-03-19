@@ -1,13 +1,13 @@
 import { sameInstantBattleCases } from "../test/timezoneFixtures";
-import { convertTimezoneToZulu } from "./convertTimezoneToZulu";
+import { convertTimezoneToUtc } from "./convertTimezoneToUtc";
 
-describe("convertTimezoneToZulu", () => {
+describe("convertTimezoneToUtc", () => {
   it.each`
     value                                            | expected
     ${"2024-03-17T10:30:45-04:00[America/New_York]"} | ${"2024-03-17T14:30:45Z"}
     ${"2024-03-17T14:30:45+00:00[UTC]"}              | ${"2024-03-17T14:30:45Z"}
   `("returns $expected for $value", ({ value, expected }) => {
-    expect(convertTimezoneToZulu(value)).toBe(expected);
+    expect(convertTimezoneToUtc(value)).toBe(expected);
   });
 
   it.each`
@@ -20,13 +20,13 @@ describe("convertTimezoneToZulu", () => {
   `(
     "returns an empty string for invalid zoned datetime $invalidValue",
     ({ invalidValue }) => {
-      expect(convertTimezoneToZulu(invalidValue as never)).toBe("");
+      expect(convertTimezoneToUtc(invalidValue as never)).toBe("");
     },
   );
 
-  for (const { timeZone, value, zulu } of sameInstantBattleCases) {
-    it(`converts battle-test timezone ${timeZone} to shared zulu instant`, () => {
-      expect(convertTimezoneToZulu(value)).toBe(zulu);
+  for (const { timeZone, value, utc } of sameInstantBattleCases) {
+    it(`converts battle-test timezone ${timeZone} to shared UTC instant`, () => {
+      expect(convertTimezoneToUtc(value)).toBe(utc);
     });
   }
 });

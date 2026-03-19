@@ -2,4 +2,4 @@ export * from "./chopDate";
 export * from "./chopMilliseconds";
 export * from "./chopSeconds";
 export * from "./chopTime";
-export * from "./chopZulu";
+export * from "./chopUtc";

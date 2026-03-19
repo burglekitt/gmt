@@ -4,6 +4,26 @@ Home of [@burglekitt/gmt](./packages/gmt) — **Give Me Temporal!**
 
 A monorepo for Burglekitt community libraries, built with Nx, powered by Bun, and dead serious about making JavaScript date handling not terrible.
 
+## Aint Nobody Got Time For...
+
+![Aint nobody got time for that](https://media.giphy.com/media/bWM2eWYfN3r20/giphy.gif)
+
+We do not use JavaScript `Date` APIs in this monorepo.
+
+- Aint nobody got time for `new Date()` mutability and environment drift.
+- Aint nobody got time for `Date.parse()` guessing what you meant.
+- Aint nobody got time for `Date.UTC()` argument gymnastics.
+- Aint nobody got time for `Date.now()` scattered magic numbers.
+
+Use GMT instead:
+
+- `getNow()`, `getUnixNow()`, and `getUtcNow()` for current time values.
+- `convertUtcDateTimeToUnix()` and `convertUtcToUnix()` for explicit unix conversion.
+- `convertTimezoneToUtc()` and `convertUtcToTimezone()` for timezone-safe conversion.
+- String-in/string-out APIs with Temporal under the hood for safer behavior.
+
+If you see a Date API in code, replace it with a GMT helper.
+
 ---
 
 ## Quick Start
@@ -43,7 +63,7 @@ bun run format
 │   │   │   ├── zoned/          # IANA timezone-aware operations
 │   │   │   │   ├── calculate/  # addZoned, subtractZoned
 │   │   │   │   ├── compare/    # isAfterZoned, isBeforeZoned, areZonedEqual
-│   │   │   │   ├── convert/    # unix/zulu/timezone conversion helpers
+│   │   │   │   ├── convert/    # unix/utc/timezone conversion helpers
 │   │   │   │   ├── format/     # formatZonedDateTime, formatZonedRange
 │   │   │   │   ├── get/        # getZonedNow, getZonedToday, ...
 │   │   │   │   ├── map/        # mapZonedHoursInDay, mapZonedDatesInRange
