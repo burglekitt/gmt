@@ -3,13 +3,13 @@ import { parseDateTimeUnit } from "./parseDateTimeUnit";
 describe("parseDateTimeUnit", () => {
   it.each`
     value                        | unit             | expected
-    ${"2024-03-17T14:30:45.123"} | ${"year"}        | ${"2024"}
-    ${"2024-03-17T14:30:45.123"} | ${"month"}       | ${"03"}
-    ${"2024-03-17T14:30:45.123"} | ${"day"}         | ${"17"}
-    ${"2024-03-17T14:30:45.123"} | ${"hour"}        | ${"14"}
-    ${"2024-03-17T14:30:45.123"} | ${"minute"}      | ${"30"}
-    ${"2024-03-17T14:30:45.123"} | ${"second"}      | ${"45"}
-    ${"2024-03-17T14:30:45.123"} | ${"millisecond"} | ${"123"}
+    ${"2024-02-29T14:30:45.123"} | ${"year"}        | ${"2024"}
+    ${"2024-02-29T14:30:45.123"} | ${"month"}       | ${"02"}
+    ${"2024-02-29T14:30:45.123"} | ${"day"}         | ${"29"}
+    ${"2024-02-29T14:30:45.123"} | ${"hour"}        | ${"14"}
+    ${"2024-02-29T14:30:45.123"} | ${"minute"}      | ${"30"}
+    ${"2024-02-29T14:30:45.123"} | ${"second"}      | ${"45"}
+    ${"2024-02-29T14:30:45.123"} | ${"millisecond"} | ${"123"}
   `("returns $expected for valid unit $unit", ({ value, unit, expected }) => {
     expect(parseDateTimeUnit(value, unit)).toBe(expected);
   });
@@ -29,8 +29,8 @@ describe("parseDateTimeUnit", () => {
   it.each`
     invalidValue
     ${"not-a-datetime"}
-    ${"2024-03-17"}
-    ${"2024-03-17T24:00:00"}
+    ${"2024-02-29"}
+    ${"2024-02-29T24:00:00"}
     ${""}
     ${null}
     ${undefined}
@@ -49,7 +49,7 @@ describe("parseDateTimeUnit", () => {
     ${null}          | ${""}
     ${undefined}     | ${""}
   `("returns an empty string for invalid unit $unit", ({ unit, expected }) => {
-    expect(parseDateTimeUnit("2024-03-17T14:30:45.123", unit as never)).toBe(
+    expect(parseDateTimeUnit("2024-02-29T14:30:45.123", unit as never)).toBe(
       expected,
     );
   });

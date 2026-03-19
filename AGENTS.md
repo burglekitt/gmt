@@ -45,6 +45,20 @@
 
    - **Enforcement**: ESLint `vitest/prefer-it-each` rule (configured in `.eslintrc.json`).
 
+2. **Never Override Real Functions in Tests**
+    - **Rule**: Do not directly reassign or monkey-patch real functions (for example, `foo = ...`, `Temporal.Now.instant = ...`, `Intl.DateTimeFormat.prototype.resolvedOptions = ...`).
+    - **Use instead**:
+       - `vi.useFakeTimers()` + `vi.setSystemTime(...)` + `vi.useRealTimers()` for deterministic "now" behavior.
+       - `vi.spyOn(...).mockReturnValue(...)`, `mockReturnValueOnce(...)`, `mockImplementation(...)`, `mockResolvedValue(...)`, `mockRejectedValue(...)` for controlled behavior.
+    - **Why**: Keeps tests deterministic without mutating runtime globals in unsafe ways.
+
+3. **Locale Matrix Coverage Is Mandatory for Locale-Aware APIs**
+      - **Rule**: Any function that accepts a `locale` argument MUST test the full locale matrix:
+         - `en-US`, `en-GB`, `de-DE`, `fr-FR`, `es-ES`, `it-IT`, `pt-PT`, `sv-SE`, `is-IS`, `zh-CN`, `zh-TW`, `ja-JP`, `ko-KR`, `ar-SA`, `he-IL`, `ru-RU`, `tr-TR`
+      - **Implementation requirement**: Tests MUST reference named constants from the locale helper object (for example `MustTestLocales.enUS`) and list them explicitly in an `it.each`` table.
+      - **Do not**: Build locale tests by iterating generic arrays that hide locale names.
+      - **Why**: Explicit rows make locale intent and coverage visible, auditable, and easy to review for format regressions.
+
 
 ---
 

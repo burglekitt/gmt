@@ -1,17 +1,36 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { parseZonedTimezone } from "../parse";
-import { battleTestTimeZones } from "../test/timezoneFixtures";
+import { battleTestTimeZones, fixedNowInstant } from "../test/timezoneFixtures";
 import { getZonedNow } from "./getZonedNow";
 
 describe("getZonedNow", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime("2024-02-29T00:00:00.000Z");
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it.each`
     timeZone
     ${"UTC"}
     ${"America/New_York"}
   `(
-    "returns a zoned datetime string for valid timezone $timeZone",
+    "returns an exact zoned datetime string for valid timezone $timeZone",
     ({ timeZone }) => {
       const value = getZonedNow(timeZone);
-      expect(value).not.toBe("");
+
+      const expected = Temporal.Instant.from(fixedNowInstant)
+        .toZonedDateTimeISO(timeZone)
+        .toString({ smallestUnit: "milliseconds" });
+
+      const normalizedValue = Temporal.ZonedDateTime.from(value).toString({
+        smallestUnit: "milliseconds",
+      });
+
+      expect(normalizedValue).toBe(expected);
       expect(parseZonedTimezone(value)).toBe(timeZone);
     },
   );
@@ -30,9 +49,18 @@ describe("getZonedNow", () => {
   );
 
   for (const timeZone of battleTestTimeZones) {
-    it(`returns a zoned datetime for battle-test timezone ${timeZone}`, () => {
+    it(`returns an exact zoned datetime for battle-test timezone ${timeZone}`, () => {
       const value = getZonedNow(timeZone);
-      expect(value).not.toBe("");
+
+      const expected = Temporal.Instant.from(fixedNowInstant)
+        .toZonedDateTimeISO(timeZone)
+        .toString({ smallestUnit: "milliseconds" });
+
+      const normalizedValue = Temporal.ZonedDateTime.from(value).toString({
+        smallestUnit: "milliseconds",
+      });
+
+      expect(normalizedValue).toBe(expected);
       expect(parseZonedTimezone(value)).toBe(timeZone);
     });
   }

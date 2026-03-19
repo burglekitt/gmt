@@ -5,8 +5,8 @@ describe("convertToUnixSeconds", () => {
   it.each`
     value                                            | expected
     ${"1970-01-01T00:00:00+00:00[UTC]"}              | ${0}
-    ${"2024-03-17T09:00:00+00:00[UTC]"}              | ${1710666000}
-    ${"2024-03-17T05:00:00-04:00[America/New_York]"} | ${1710666000}
+    ${"2024-02-29T09:00:00+00:00[UTC]"}              | ${1709197200}
+    ${"2024-02-29T04:00:00-05:00[America/New_York]"} | ${1709197200}
   `(
     "returns $expected for $value",
     ({ value, expected }: { value: string; expected: number }) => {
@@ -24,7 +24,7 @@ describe("convertToUnixSeconds", () => {
   it.each`
     invalidValue
     ${"not-a-zoned-datetime"}
-    ${"2024-03-17T09:00:00+00:00"}
+    ${"2024-02-29T09:00:00+00:00"}
     ${""}
     ${null}
     ${undefined}

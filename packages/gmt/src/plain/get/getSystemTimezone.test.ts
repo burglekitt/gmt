@@ -1,15 +1,20 @@
 import { isValidTimezone } from "../../zoned/validate";
+import { mockSystemTimezone } from "../test/runtimeFixtures";
 import { getSystemTimezone } from "./getSystemTimezone";
 
 describe("getSystemTimezone", () => {
-  it("should return a non-empty string representing the system timezone", () => {
+  it("returns the mocked IANA timezone", () => {
+    const restoreTimezone = mockSystemTimezone("Pacific/Chatham");
+
     const timezone = getSystemTimezone();
-    expect(typeof timezone).toBe("string");
-    expect(timezone.length).toBeGreaterThan(0);
+
+    expect(timezone).toBe("Pacific/Chatham");
     expect(isValidTimezone(timezone)).toBe(true);
+
+    restoreTimezone();
   });
 
-  it("should return an empty string if an error occurs", () => {
+  it("returns an empty string if an error occurs", () => {
     const resolvedOptionsSpy = vi
       .spyOn(Intl.DateTimeFormat.prototype, "resolvedOptions")
       .mockImplementation(() => {

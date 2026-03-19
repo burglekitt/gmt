@@ -1,14 +1,11 @@
-import {
-  battleTestPlainDate,
-  battleTestTimeZones,
-} from "../test/timezoneFixtures";
+import { battleTestTimeZones } from "../test/timezoneFixtures";
 import { getZonedDate } from "./getZonedDate";
 
 describe("getZonedDate", () => {
   it.each`
     value           | timeZone              | expected
-    ${"2024-03-17"} | ${"America/New_York"} | ${"2024-03-17"}
-    ${"2024-03-17"} | ${"UTC"}              | ${"2024-03-17"}
+    ${"2024-02-29"} | ${"America/New_York"} | ${"2024-02-29"}
+    ${"2024-02-29"} | ${"UTC"}              | ${"2024-02-29"}
   `(
     "returns $expected for $value in $timeZone",
     ({ value, timeZone, expected }) => {
@@ -45,15 +42,13 @@ describe("getZonedDate", () => {
   `(
     "returns an empty string for invalid timezone $invalidTimeZone",
     ({ invalidTimeZone }) => {
-      expect(getZonedDate("2024-03-17", invalidTimeZone as never)).toBe("");
+      expect(getZonedDate("2024-02-29", invalidTimeZone as never)).toBe("");
     },
   );
 
   for (const timeZone of battleTestTimeZones) {
     it(`returns the plain date unchanged for battle-test timezone ${timeZone}`, () => {
-      expect(getZonedDate(battleTestPlainDate, timeZone)).toBe(
-        battleTestPlainDate,
-      );
+      expect(getZonedDate("2024-02-29", timeZone)).toBe("2024-02-29");
     });
   }
 });

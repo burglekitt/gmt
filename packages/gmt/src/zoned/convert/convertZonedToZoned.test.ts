@@ -5,8 +5,8 @@ import { convertZonedToZoned } from "./convertZonedToZoned";
 describe("convertZonedToZoned", () => {
   it.each`
     value                                            | timeZone              | expected
-    ${"2024-03-17T10:30:45-04:00[America/New_York]"} | ${"UTC"}              | ${"2024-03-17T14:30:45+00:00[UTC]"}
-    ${"2024-03-17T14:30:45+00:00[UTC]"}              | ${"America/New_York"} | ${"2024-03-17T10:30:45-04:00[America/New_York]"}
+    ${"2024-02-29T09:30:45-05:00[America/New_York]"} | ${"UTC"}              | ${"2024-02-29T14:30:45+00:00[UTC]"}
+    ${"2024-02-29T14:30:45+00:00[UTC]"}              | ${"America/New_York"} | ${"2024-02-29T09:30:45-05:00[America/New_York]"}
   `(
     "converts $value to $expected in $timeZone",
     ({ value, timeZone, expected }) => {
@@ -38,7 +38,7 @@ describe("convertZonedToZoned", () => {
     ({ invalidTimeZone }) => {
       expect(
         convertZonedToZoned(
-          "2024-03-17T14:30:45+00:00[UTC]",
+          "2024-02-29T14:30:45+00:00[UTC]",
           invalidTimeZone as never,
         ),
       ).toBe("");

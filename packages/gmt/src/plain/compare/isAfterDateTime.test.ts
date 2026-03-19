@@ -3,10 +3,10 @@ import { isAfterDateTime } from "./isAfterDateTime";
 describe("isAfterDateTime", () => {
   it.each`
     value1                | value2                | expected
-    ${"2024-03-17T10:01"} | ${"2024-03-17T10:00"} | ${true}
-    ${"2024-03-17T10:00"} | ${"2024-03-17T10:00"} | ${false}
-    ${"2024-03-17T09:59"} | ${"2024-03-17T10:00"} | ${false}
-    ${"invalid-datetime"} | ${"2024-03-17T10:00"} | ${false}
+    ${"2024-02-29T10:01"} | ${"2024-02-29T10:00"} | ${true}
+    ${"2024-02-29T10:00"} | ${"2024-02-29T10:00"} | ${false}
+    ${"2024-02-29T09:59"} | ${"2024-02-29T10:00"} | ${false}
+    ${"invalid-datetime"} | ${"2024-02-29T10:00"} | ${false}
   `(
     "returns $expected when checking if $value1 is after $value2",
     ({

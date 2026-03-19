@@ -3,10 +3,10 @@ import { addDate } from "./addDate";
 describe("addDate", () => {
   it.each`
     value           | amount | unit       | expected
-    ${"2024-03-17"} | ${1}   | ${"day"}   | ${"2024-03-18"}
-    ${"2024-03-17"} | ${2}   | ${"week"}  | ${"2024-03-31"}
+    ${"2024-02-29"} | ${1}   | ${"day"}   | ${"2024-03-01"}
+    ${"2024-02-29"} | ${2}   | ${"week"}  | ${"2024-03-14"}
     ${"2024-01-31"} | ${1}   | ${"month"} | ${"2024-02-29"}
-    ${"2024-03-17"} | ${1}   | ${"year"}  | ${"2025-03-17"}
+    ${"2024-02-29"} | ${1}   | ${"year"}  | ${"2025-02-28"}
   `(
     "returns $expected for $value + $amount $unit",
     ({
@@ -26,13 +26,13 @@ describe("addDate", () => {
 
   it.each`
     negativeAmount | expectedDate
-    ${-1}          | ${"2024-03-16"}
-    ${-2}          | ${"2024-03-15"}
-    ${-10}         | ${"2024-03-07"}
+    ${-1}          | ${"2024-02-28"}
+    ${-2}          | ${"2024-02-27"}
+    ${-10}         | ${"2024-02-19"}
   `(
     "returns the correct date when adding a negative amount: $negativeAmount",
     ({ negativeAmount, expectedDate }) => {
-      expect(addDate("2024-03-17", negativeAmount, "day")).toEqual(
+      expect(addDate("2024-02-29", negativeAmount, "day")).toEqual(
         expectedDate,
       );
     },
@@ -49,7 +49,7 @@ describe("addDate", () => {
   `(
     "returns an empty string for an invalid amount: $invalidAmount",
     ({ invalidAmount }) => {
-      expect(addDate("2024-03-17", invalidAmount as never, "day")).toEqual("");
+      expect(addDate("2024-02-29", invalidAmount as never, "day")).toEqual("");
     },
   );
 
@@ -79,6 +79,6 @@ describe("addDate", () => {
     ${null}
     ${undefined}
   `("returns an empty string for an invalid unit", ({ invalidUnit }) => {
-    expect(addDate("2024-03-17", 1, invalidUnit as never)).toEqual("");
+    expect(addDate("2024-02-29", 1, invalidUnit as never)).toEqual("");
   });
 });

@@ -1,24 +1,25 @@
 import { sameInstantBattleCases } from "../test/timezoneFixtures";
 import { parseZonedUnit } from "./parseZonedUnit";
 
+// TODO CC need gmtOffset unit
 describe("parseZonedUnit", () => {
   it.each`
-    value                                                | unit             | expected
-    ${"2024-03-17T14:30:45.123-04:00[America/New_York]"} | ${"year"}        | ${"2024"}
-    ${"2024-03-17T14:30:45.123-04:00[America/New_York]"} | ${"month"}       | ${"03"}
-    ${"2024-03-17T14:30:45.123-04:00[America/New_York]"} | ${"day"}         | ${"17"}
-    ${"2024-03-17T14:30:45.123-04:00[America/New_York]"} | ${"hour"}        | ${"14"}
-    ${"2024-03-17T14:30:45.123-04:00[America/New_York]"} | ${"minute"}      | ${"30"}
-    ${"2024-03-17T14:30:45.123-04:00[America/New_York]"} | ${"second"}      | ${"45"}
-    ${"2024-03-17T14:30:45.123-04:00[America/New_York]"} | ${"millisecond"} | ${"123"}
-    ${"2024-03-17T14:30:45.123-04:00[America/New_York]"} | ${"timezone"}    | ${"America/New_York"}
+    value                                               | unit             | expected
+    ${"2024-02-29T14:30:45.123+02:00[Europe/Helsinki]"} | ${"year"}        | ${"2024"}
+    ${"2024-02-29T14:30:45.123+02:00[Europe/Helsinki]"} | ${"month"}       | ${"02"}
+    ${"2024-02-29T14:30:45.123+02:00[Europe/Helsinki]"} | ${"day"}         | ${"29"}
+    ${"2024-02-29T14:30:45.123+02:00[Europe/Helsinki]"} | ${"hour"}        | ${"14"}
+    ${"2024-02-29T14:30:45.123+02:00[Europe/Helsinki]"} | ${"minute"}      | ${"30"}
+    ${"2024-02-29T14:30:45.123+02:00[Europe/Helsinki]"} | ${"second"}      | ${"45"}
+    ${"2024-02-29T14:30:45.123+02:00[Europe/Helsinki]"} | ${"millisecond"} | ${"123"}
+    ${"2024-02-29T14:30:45.123+02:00[Europe/Helsinki]"} | ${"timezone"}    | ${"Europe/Helsinki"}
   `("returns $expected for valid unit $unit", ({ value, unit, expected }) => {
     expect(parseZonedUnit(value, unit)).toBe(expected);
   });
 
   it.each`
     value                          | unit          | expected
-    ${"2024-03-17T14:30:45Z[UTC]"} | ${"timezone"} | ${"UTC"}
+    ${"2024-02-29T14:30:45Z[UTC]"} | ${"timezone"} | ${"UTC"}
   `(
     "returns $expected for edge case unit $unit",
     ({ value, unit, expected }) => {
@@ -28,7 +29,7 @@ describe("parseZonedUnit", () => {
 
   it.each`
     invalidValue
-    ${"2024-03-17T14:30:45.123-04:00"}
+    ${"2024-02-29T14:30:45.123-04:00"}
     ${"invalid"}
     ${""}
     ${null}
@@ -52,7 +53,7 @@ describe("parseZonedUnit", () => {
     ({ invalidUnit }) => {
       expect(
         parseZonedUnit(
-          "2024-03-17T14:30:45.123-04:00[America/New_York]",
+          "2024-02-29T14:30:45.123+02:00[Europe/Helsinki]",
           invalidUnit as never,
         ),
       ).toBe("");

@@ -6,7 +6,7 @@ describe("mapZonedHoursInDay", () => {
     anchor                                           | expectedLength
     ${"2024-03-10T12:00:00-04:00[America/New_York]"} | ${23}
     ${"2024-11-03T12:00:00-05:00[America/New_York]"} | ${25}
-    ${"2024-03-17T12:00:00+00:00[UTC]"}              | ${24}
+    ${"2024-02-29T12:00:00+00:00[UTC]"}              | ${24}
   `(
     "returns $expectedLength entries for $anchor",
     ({
@@ -22,7 +22,7 @@ describe("mapZonedHoursInDay", () => {
 
   it.each`
     anchor                              | expectedFirstPrefix
-    ${"2024-03-17T12:00:00+00:00[UTC]"} | ${"2024-03-17T00:00:00"}
+    ${"2024-02-29T12:00:00+00:00[UTC]"} | ${"2024-02-29T00:00:00"}
   `(
     "returns expected midnight anchor for $anchor",
     ({ anchor, expectedFirstPrefix }) => {
@@ -33,7 +33,7 @@ describe("mapZonedHoursInDay", () => {
   it.each`
     invalidAnchor
     ${"invalid"}
-    ${"2024-03-17T12:00:00"}
+    ${"2024-02-29T12:00:00"}
     ${""}
     ${null}
     ${undefined}

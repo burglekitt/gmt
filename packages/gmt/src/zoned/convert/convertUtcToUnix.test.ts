@@ -5,8 +5,8 @@ describe("convertUtcToUnix", () => {
     value                     | unit              | expected
     ${"1970-01-01T00:00:00Z"} | ${"milliseconds"} | ${0}
     ${"1970-01-01T00:00:00Z"} | ${"seconds"}      | ${0}
-    ${"2024-03-17T14:30:45Z"} | ${"milliseconds"} | ${1710685845000}
-    ${"2024-03-17T14:30:45Z"} | ${"seconds"}      | ${1710685845}
+    ${"2024-02-29T14:30:45Z"} | ${"milliseconds"} | ${1709217045000}
+    ${"2024-02-29T14:30:45Z"} | ${"seconds"}      | ${1709217045}
   `("returns $expected for $value as $unit", ({ value, unit, expected }) => {
     expect(convertUtcToUnix(value, unit)).toBe(expected);
   });
@@ -14,7 +14,7 @@ describe("convertUtcToUnix", () => {
   it.each`
     invalidValue
     ${"invalid"}
-    ${"2024-03-17T14:30:45"}
+    ${"2024-02-29T14:30:45"}
     ${""}
     ${null}
     ${undefined}
@@ -33,7 +33,7 @@ describe("convertUtcToUnix", () => {
     ${undefined}
   `("returns null for invalid unit $invalidUnit", ({ invalidUnit }) => {
     expect(
-      convertUtcToUnix("2024-03-17T14:30:45Z", invalidUnit as never),
+      convertUtcToUnix("2024-02-29T14:30:45Z", invalidUnit as never),
     ).toBeNull();
   });
 });

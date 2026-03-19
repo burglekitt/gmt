@@ -2,6 +2,7 @@ import { sameInstantBattleCases } from "../test/timezoneFixtures";
 import { isValidZonedDateTime } from ".";
 
 describe("isValidZonedDateTime", () => {
+  // TODO CC need key timezones
   it.each`
     value
     ${"2024-03-17T14:30:45.123-04:00[America/New_York]"}

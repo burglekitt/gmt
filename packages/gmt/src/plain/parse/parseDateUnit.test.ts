@@ -3,9 +3,9 @@ import { parseDateUnit } from "./parseDateUnit";
 describe("parseDateUnit", () => {
   it.each`
     value           | unit       | expected
-    ${"2024-03-17"} | ${"year"}  | ${"2024"}
-    ${"2024-03-17"} | ${"month"} | ${"03"}
-    ${"2024-03-17"} | ${"day"}   | ${"17"}
+    ${"2024-02-29"} | ${"year"}  | ${"2024"}
+    ${"2024-02-29"} | ${"month"} | ${"02"}
+    ${"2024-02-29"} | ${"day"}   | ${"29"}
   `("returns $expected for valid unit $unit", ({ value, unit, expected }) => {
     expect(parseDateUnit(value, unit)).toBe(expected);
   });
@@ -26,7 +26,7 @@ describe("parseDateUnit", () => {
     invalidValue
     ${"not-a-date"}
     ${"2024-02-30"}
-    ${"2024-03-17T12:00:00"}
+    ${"2024-02-29T12:00:00"}
     ${""}
     ${null}
     ${undefined}
@@ -45,6 +45,6 @@ describe("parseDateUnit", () => {
     ${null}      | ${""}
     ${undefined} | ${""}
   `("returns an empty string for invalid unit $unit", ({ unit, expected }) => {
-    expect(parseDateUnit("2024-03-17", unit as never)).toBe(expected);
+    expect(parseDateUnit("2024-02-29", unit as never)).toBe(expected);
   });
 });

@@ -5,8 +5,8 @@ import { convertUtcToTimezone } from "./convertUtcToTimezone";
 describe("convertUtcToTimezone", () => {
   it.each`
     value                     | timeZone              | expected
-    ${"2024-03-17T14:30:45Z"} | ${"UTC"}              | ${"2024-03-17T14:30:45+00:00[UTC]"}
-    ${"2024-03-17T14:30:45Z"} | ${"America/New_York"} | ${"2024-03-17T10:30:45-04:00[America/New_York]"}
+    ${"2024-02-29T14:30:45Z"} | ${"UTC"}              | ${"2024-02-29T14:30:45+00:00[UTC]"}
+    ${"2024-02-29T14:30:45Z"} | ${"America/New_York"} | ${"2024-02-29T09:30:45-05:00[America/New_York]"}
   `(
     "returns $expected for $value in $timeZone",
     ({ value, timeZone, expected }) => {
@@ -17,7 +17,7 @@ describe("convertUtcToTimezone", () => {
   it.each`
     invalidValue
     ${"invalid"}
-    ${"2024-03-17T14:30:45"}
+    ${"2024-02-29T14:30:45"}
     ${""}
     ${null}
     ${undefined}
@@ -38,7 +38,7 @@ describe("convertUtcToTimezone", () => {
     "returns an empty string for invalid timezone $invalidTimeZone",
     ({ invalidTimeZone }) => {
       expect(
-        convertUtcToTimezone("2024-03-17T14:30:45Z", invalidTimeZone as never),
+        convertUtcToTimezone("2024-02-29T14:30:45Z", invalidTimeZone as never),
       ).toBe("");
     },
   );
@@ -47,7 +47,7 @@ describe("convertUtcToTimezone", () => {
     it(`converts UTC to battle-test timezone ${timeZone}`, () => {
       expect(
         parseZonedTimezone(
-          convertUtcToTimezone("2024-03-17T14:30:45Z", timeZone),
+          convertUtcToTimezone("2024-02-29T14:30:45Z", timeZone),
         ),
       ).toBe(timeZone);
     });

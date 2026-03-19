@@ -27,7 +27,7 @@ describe("parseTimeUnit", () => {
     invalidValue
     ${"not-a-time"}
     ${"24:00:00"}
-    ${"2024-03-17T14:30:45"}
+    ${"2024-02-29T14:30:45"}
     ${""}
     ${null}
     ${undefined}

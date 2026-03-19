@@ -4,7 +4,7 @@ import { parseZonedDate } from "./parseZonedDate";
 describe("parseZonedDate", () => {
   it.each`
     value                                                | expected
-    ${"2024-03-17T14:30:45.123-04:00[America/New_York]"} | ${"2024-03-17"}
+    ${"2024-02-29T14:30:45.123-05:00[America/New_York]"} | ${"2024-02-29"}
   `("returns the plain date portion for $value", ({ value, expected }) => {
     expect(parseZonedDate(value)).toBe(expected);
   });
@@ -18,7 +18,7 @@ describe("parseZonedDate", () => {
 
   it.each`
     invalidValue
-    ${"2024-03-17T14:30:45.123-04:00"}
+    ${"2024-02-29T14:30:45.123-04:00"}
     ${"invalid"}
     ${""}
     ${null}
@@ -32,7 +32,7 @@ describe("parseZonedDate", () => {
 
   for (const { timeZone, value } of localNoonBattleCases) {
     it(`returns the local date for battle-test timezone ${timeZone}`, () => {
-      expect(parseZonedDate(value)).toBe("2024-03-17");
+      expect(parseZonedDate(value)).toBe("2024-02-29");
     });
   }
 });

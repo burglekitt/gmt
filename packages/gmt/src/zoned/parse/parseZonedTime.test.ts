@@ -4,8 +4,8 @@ import { parseZonedTime } from "./parseZonedTime";
 describe("parseZonedTime", () => {
   it.each`
     value                                                | expected
-    ${"2024-03-17T14:30-04:00[America/New_York]"}        | ${"14:30:00"}
-    ${"2024-03-17T14:30:45.123-04:00[America/New_York]"} | ${"14:30:45.123"}
+    ${"2024-02-29T14:30-05:00[America/New_York]"}        | ${"14:30:00"}
+    ${"2024-02-29T14:30:45.123-05:00[America/New_York]"} | ${"14:30:45.123"}
   `("returns the plain time portion for $value", ({ value, expected }) => {
     expect(parseZonedTime(value)).toBe(expected);
   });
@@ -19,7 +19,7 @@ describe("parseZonedTime", () => {
 
   it.each`
     invalidValue
-    ${"2024-03-17T14:30:45.123-04:00"}
+    ${"2024-02-29T14:30:45.123-04:00"}
     ${"invalid"}
     ${""}
     ${null}

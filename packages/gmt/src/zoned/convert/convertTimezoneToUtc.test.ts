@@ -4,8 +4,8 @@ import { convertTimezoneToUtc } from "./convertTimezoneToUtc";
 describe("convertTimezoneToUtc", () => {
   it.each`
     value                                            | expected
-    ${"2024-03-17T10:30:45-04:00[America/New_York]"} | ${"2024-03-17T14:30:45Z"}
-    ${"2024-03-17T14:30:45+00:00[UTC]"}              | ${"2024-03-17T14:30:45Z"}
+    ${"2024-02-29T09:30:45-05:00[America/New_York]"} | ${"2024-02-29T14:30:45Z"}
+    ${"2024-02-29T14:30:45+00:00[UTC]"}              | ${"2024-02-29T14:30:45Z"}
   `("returns $expected for $value", ({ value, expected }) => {
     expect(convertTimezoneToUtc(value)).toBe(expected);
   });
@@ -13,7 +13,7 @@ describe("convertTimezoneToUtc", () => {
   it.each`
     invalidValue
     ${"invalid"}
-    ${"2024-03-17T14:30:45"}
+    ${"2024-02-29T14:30:45"}
     ${""}
     ${null}
     ${undefined}

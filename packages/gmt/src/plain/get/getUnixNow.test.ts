@@ -2,15 +2,26 @@ import { isValidUnixMilliseconds, isValidUnixSeconds } from "../validate";
 import { getUnixNow } from "./getUnixNow";
 
 describe("getUnixNow", () => {
-  it("returns a valid 10-digit unix timestamp in seconds", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime("2024-02-29T00:00:00.000Z");
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("returns the exact mocked unix timestamp in seconds", () => {
     const unixNowSeconds = getUnixNow("seconds");
-    expect(Number.isInteger(unixNowSeconds)).toBe(true);
+
+    expect(unixNowSeconds).toBe(1709164800);
     expect(isValidUnixSeconds(String(unixNowSeconds))).toBe(true);
   });
 
-  it("returns a valid 13-digit unix timestamp in milliseconds", () => {
+  it("returns the exact mocked unix timestamp in milliseconds", () => {
     const unixNowMilliseconds = getUnixNow("milliseconds");
-    expect(Number.isInteger(unixNowMilliseconds)).toBe(true);
+
+    expect(unixNowMilliseconds).toBe(1709164800000);
     expect(isValidUnixMilliseconds(String(unixNowMilliseconds))).toBe(true);
   });
 
