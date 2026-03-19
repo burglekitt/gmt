@@ -6,7 +6,6 @@
     "production": [
       "default",
       "!{projectRoot}/src/**/*.test.ts",
-      "!{projectRoot}/src/**/*.spec.ts",
       "!{projectRoot}/vitest.config.ts",
       "!{projectRoot}/vitest.setup.ts"
     ],

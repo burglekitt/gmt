@@ -59,7 +59,7 @@ export const MustTestLocaleMetadata: Record<
   },
   [MustTestLocales.svSE]: {
     languageRegion: "Swedish (Sweden)",
-    reason: "Scandinavian language",
+    reason: "Default date format uses ISO 8601",
   },
   [MustTestLocales.isIS]: {
     languageRegion: "Icelandic (Iceland)",

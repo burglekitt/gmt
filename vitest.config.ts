@@ -5,6 +5,6 @@ export default defineConfig({
     name: "gmt",
     globals: true,
     environment: "node",
-    include: ["packages/gmt/src/**/*.test.ts", "packages/gmt/src/**/*.spec.ts"],
+    include: ["packages/gmt/src/**/*.test.ts"],
   },
 });
