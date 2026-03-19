@@ -18,20 +18,5 @@ export function diffTime(
 
   const duration = t1.until(t2, { largestUnit: unit });
 
-  switch (unit) {
-    case "hour":
-      return duration.hours;
-    case "minute":
-      return duration.minutes;
-    case "second":
-      return duration.seconds;
-    case "millisecond":
-      return duration.milliseconds;
-    case "microsecond":
-      return duration.microseconds;
-    case "nanosecond":
-      return duration.nanoseconds;
-    default:
-      return null;
-  }
+  return duration[unit] ?? null;
 }
