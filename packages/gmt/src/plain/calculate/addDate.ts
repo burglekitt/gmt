@@ -1,5 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { isValidDate, isValidDateUnit } from "../validate";
+import { isValidAmount } from "../validate/isValidAmount";
 
 export function addDate(
   value: string /* ISO 8601 date */,
@@ -8,7 +9,7 @@ export function addDate(
 ): string {
   const validDate = isValidDate(value);
   const validUnit = isValidDateUnit(unit);
-  const validAmount = typeof amount === "number" && !Number.isNaN(amount);
+  const validAmount = isValidAmount(amount);
 
   if (!validDate || !validUnit || !validAmount) {
     return "";

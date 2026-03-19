@@ -1,4 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
+import { isValidAmount } from "../../plain/validate/isValidAmount";
 import { isValidZonedDateTime } from "../validate";
 
 type ZonedUnit =
@@ -16,7 +17,7 @@ export function subtractZoned(
   amount: number,
   unit: ZonedUnit,
 ): string {
-  const validAmount = typeof amount === "number" && !Number.isNaN(amount);
+  const validAmount = isValidAmount(amount);
 
   if (!isValidZonedDateTime(value) || !validAmount) {
     return "";

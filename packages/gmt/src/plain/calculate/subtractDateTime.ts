@@ -1,5 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { isValidDateTime, isValidDateTimeUnit } from "../validate";
+import { isValidAmount } from "../validate/isValidAmount";
 
 export function subtractDateTime(
   value: string,
@@ -8,7 +9,7 @@ export function subtractDateTime(
 ): string {
   const validDateTime = isValidDateTime(value);
   const validUnit = isValidDateTimeUnit(unit);
-  const validAmount = typeof amount === "number" && !Number.isNaN(amount);
+  const validAmount = isValidAmount(amount);
 
   if (!validDateTime || !validUnit || !validAmount) {
     return "";
