@@ -6,12 +6,10 @@ export function parseZonedTime(value: string): string {
     return "";
   }
 
-  let zonedDateTime: Temporal.ZonedDateTime;
   try {
-    zonedDateTime = Temporal.ZonedDateTime.from(value);
+    const zonedDateTime = Temporal.ZonedDateTime.from(value);
+    return zonedDateTime?.toPlainTime().toString();
   } catch {
     return "";
   }
-
-  return zonedDateTime.toPlainTime().toString();
 }
