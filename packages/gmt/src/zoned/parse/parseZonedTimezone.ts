@@ -6,12 +6,5 @@ export function parseZonedTimezone(value: string): string {
     return "";
   }
 
-  let zonedDateTime: Temporal.ZonedDateTime;
-  try {
-    zonedDateTime = Temporal.ZonedDateTime.from(value);
-  } catch {
-    return "";
-  }
-
-  return zonedDateTime.timeZoneId;
+  return Temporal.ZonedDateTime.from(value).timeZoneId ?? "";
 }
