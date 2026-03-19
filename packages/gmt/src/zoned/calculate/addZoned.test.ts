@@ -13,6 +13,8 @@ describe("addZoned", () => {
     ${"2024-03-17T14:30:00+00:00[UTC]"} | ${45}  | ${"minute"}      | ${"2024-03-17T15:15:00+00:00[UTC]"}
     ${"2024-03-17T14:30:00+00:00[UTC]"} | ${45}  | ${"second"}      | ${"2024-03-17T14:30:45+00:00[UTC]"}
     ${"2024-03-17T14:30:00+00:00[UTC]"} | ${250} | ${"millisecond"} | ${"2024-03-17T14:30:00.25+00:00[UTC]"}
+    ${"2024-03-17T14:30:00+00:00[UTC]"} | ${1}   | ${"microsecond"} | ${"2024-03-17T14:30:00.000001+00:00[UTC]"}
+    ${"2024-03-17T14:30:00+00:00[UTC]"} | ${1}   | ${"nanosecond"}  | ${"2024-03-17T14:30:00.000000001+00:00[UTC]"}
   `(
     "returns $expected for $value + $amount $unit",
     ({ value, amount, unit, expected }) => {
@@ -67,7 +69,6 @@ describe("addZoned", () => {
   it.each`
     invalidUnit
     ${"timezone"}
-    ${"microsecond"}
     ${""}
     ${null}
     ${undefined}

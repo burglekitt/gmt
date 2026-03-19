@@ -1,6 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { isValidDate, isValidDateUnit } from "../validate";
-import { isValidAmount } from "../validate/isValidAmount";
+import { isValidAmount, isValidDate, isValidDateUnit } from "../validate";
 
 export function subtractDate(
   value: string,
@@ -17,5 +16,5 @@ export function subtractDate(
 
   const date = Temporal.PlainDate.from(value);
 
-  return date.subtract({ [unit]: amount }).toString();
+  return date.subtract({ [`${unit}s`]: amount }).toString();
 }

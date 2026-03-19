@@ -1,32 +1,23 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { isValidAmount } from "../../plain/validate/isValidAmount";
+import { isValidAmount, isValidDateTimeUnit } from "../../plain/validate";
 import { isValidZonedDateTime } from "../validate";
-
-type ZonedUnit =
-  | "year"
-  | "month"
-  | "week"
-  | "day"
-  | "hour"
-  | "minute"
-  | "second"
-  | "millisecond";
 
 export function addZoned(
   value: string,
   amount: number,
-  unit: ZonedUnit,
+  unit: Temporal.DateTimeUnit,
 ): string {
-  const validAmount = isValidAmount(amount);
-
-  if (!isValidZonedDateTime(value) || !validAmount) {
+  if (
+    !isValidZonedDateTime(value) ||
+    !isValidAmount(amount) ||
+    !isValidDateTimeUnit(unit)
+  ) {
     return "";
   }
 
-  let zoned: Temporal.ZonedDateTime;
   try {
-    zoned = Temporal.ZonedDateTime.from(value);
-    return zoned.add({ [unit]: amount })?.toString() || "";
+    const zoned = Temporal.ZonedDateTime.from(value);
+    return zoned.add({ [`${unit}s`]: amount }).toString();
   } catch {
     return "";
   }

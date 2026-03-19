@@ -1,6 +1,9 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { isValidDateTime, isValidDateTimeUnit } from "../validate";
-import { isValidAmount } from "../validate/isValidAmount";
+import {
+  isValidAmount,
+  isValidDateTime,
+  isValidDateTimeUnit,
+} from "../validate";
 
 export function addDateTime(
   value: string,

@@ -1,5 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { isValidAmount } from "../../plain/validate/isValidAmount";
+import { isValidAmount } from "../../plain/validate";
 import type { UnixUnit } from "./convertZonedToUnix";
 
 function isValidUnixUnit(unit: string): unit is UnixUnit {
@@ -11,9 +11,8 @@ export function convertUnixToUtc(
   ...unitInput: [unit?: UnixUnit]
 ): string {
   const resolvedUnit = unitInput.length === 0 ? "milliseconds" : unitInput[0];
-  const validAmount = isValidAmount(value);
 
-  if (!validAmount || !isValidUnixUnit(resolvedUnit ?? "")) {
+  if (!isValidAmount(value) || !isValidUnixUnit(resolvedUnit ?? "")) {
     return "";
   }
 

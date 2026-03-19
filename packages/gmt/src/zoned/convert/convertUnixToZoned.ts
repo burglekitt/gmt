@@ -1,4 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
+import { isValidAmount } from "../../plain/validate";
 import { isValidTimezone } from "../validate";
 import type { UnixUnit } from "./convertZonedToUnix";
 
@@ -14,9 +15,7 @@ export function convertUnixToZoned(
   const resolvedUnit = unitInput.length === 0 ? "milliseconds" : unitInput[0];
 
   if (
-    typeof value !== "number" ||
-    Number.isNaN(value) ||
-    !Number.isFinite(value) ||
+    !isValidAmount(value) ||
     !isValidTimezone(timeZone) ||
     !isValidUnixUnit(resolvedUnit ?? "")
   ) {

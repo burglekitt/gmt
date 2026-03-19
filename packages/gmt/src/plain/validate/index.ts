@@ -1,3 +1,5 @@
+export * from "./isUtcDateTime";
+export * from "./isValidAmount";
 export * from "./isValidDate";
 export * from "./isValidDateOrDateTime";
 export * from "./isValidDateRange";
@@ -8,4 +10,3 @@ export * from "./isValidTime";
 export * from "./isValidTimeUnit";
 export * from "./isValidUnixMilliseconds";
 export * from "./isValidUnixSeconds";
-export * from "./isUtcDateTime";

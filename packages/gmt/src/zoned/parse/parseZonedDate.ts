@@ -9,7 +9,7 @@ export function parseZonedDate(value: string): string {
 
   try {
     const zonedDateTime = Temporal.ZonedDateTime.from(value);
-    return zonedDateTime?.toPlainDate().toString();  
+    return zonedDateTime?.toPlainDate().toString();
   } catch {
     return "";
   }

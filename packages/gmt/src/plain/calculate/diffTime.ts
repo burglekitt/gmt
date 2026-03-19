@@ -18,5 +18,5 @@ export function diffTime(
 
   const duration = t1.until(t2, { largestUnit: unit });
 
-  return duration[unit] ?? null;
+  return duration[`${unit}s`] ?? null;
 }
