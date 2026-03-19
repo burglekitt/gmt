@@ -15,9 +15,8 @@ describe("getUtcNow", () => {
 
   it("returns the exact mocked UTC datetime string", () => {
     const utcNow = getUtcNow();
-  
+
     expect(utcNow).toBeTruthy();
-    
   });
 
   it("returns a parseable Temporal instant", () => {

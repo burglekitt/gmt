@@ -1,7 +1,7 @@
 import { sameInstantBattleCases } from "../test/timezoneFixtures";
 import { convertToUnixMilliseconds } from "./convertToUnixMilliseconds";
 
-// TODO CC needs all core IANA timezones - for ALL zoned tests, and add to AGENTS.md
+// TODO add core timezones
 describe("convertToUnixMilliseconds", () => {
   it.each`
     value                                            | expected

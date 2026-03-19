@@ -1,7 +1,7 @@
 import { sameInstantBattleCases } from "../test/timezoneFixtures";
 import { parseZonedUnit } from "./parseZonedUnit";
 
-// TODO CC need gmtOffset unit
+// TODO need tew parseZonedTimezone
 describe("parseZonedUnit", () => {
   it.each`
     value                                               | unit             | expected

@@ -13,6 +13,8 @@ describe("formatZonedDateTime", () => {
     ${valueByLocale[MustTestLocales.enUS]} | ${{ dateStyle: "long", timeStyle: "long" }}                                                                                    | ${"February 3, 2024 at 2:30:45 PM EST"}
     ${valueByLocale[MustTestLocales.enUS]} | ${{ dateStyle: "medium", timeStyle: "medium" }}                                                                                | ${"Feb 3, 2024, 2:30:45 PM"}
     ${valueByLocale[MustTestLocales.enUS]} | ${{ dateStyle: "short", timeStyle: "short" }}                                                                                  | ${"2/3/24, 2:30 PM"}
+    ${valueByLocale[MustTestLocales.enUS]} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "shortOffset" }}                                                         | ${"2:30 PM GMT-5"}
+    ${valueByLocale[MustTestLocales.enUS]} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "longOffset" }}                                                          | ${"2:30 PM GMT-05:00"}
     ${valueByLocale[MustTestLocales.enUS]} | ${{ year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric", second: "numeric" }}                   | ${"February 3, 2024 at 2:30:45 PM"}
     ${valueByLocale[MustTestLocales.enUS]} | ${{ year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" }}                                     | ${"Feb 3, 2024, 2:30 PM"}
     ${valueByLocale[MustTestLocales.enUS]} | ${{ year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit" }}                | ${"02/03/2024, 02:30:45 PM"}

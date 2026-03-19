@@ -1,36 +1,34 @@
-import { Temporal } from "@js-temporal/polyfill";
+import { Temporal, Intl as TemporalIntl } from "@js-temporal/polyfill";
 import { isValidZonedDateTime } from "../validate";
 
 export function formatZonedRange(
-  value1: string,
-  value2: string,
+  from: string,
+  to: string,
   locale?: string,
   options?: Intl.DateTimeFormatOptions,
 ): string {
-  if (!isValidZonedDateTime(value1) || !isValidZonedDateTime(value2)) {
+  if (!isValidZonedDateTime(from) || !isValidZonedDateTime(to)) {
     return "";
   }
 
   let zdt1: Temporal.ZonedDateTime;
   let zdt2: Temporal.ZonedDateTime;
   try {
-    zdt1 = Temporal.ZonedDateTime.from(value1);
-    zdt2 = Temporal.ZonedDateTime.from(value2);
+    zdt1 = Temporal.ZonedDateTime.from(from);
+    zdt2 = Temporal.ZonedDateTime.from(to);
   } catch {
     return "";
   }
 
-  const epochMs1 = Number(zdt1.toInstant().epochMilliseconds);
-  const epochMs2 = Number(zdt2.toInstant().epochMilliseconds);
   const formatOptions: Intl.DateTimeFormatOptions = {
     timeZone: zdt1.timeZoneId,
     ...options,
   };
 
   try {
-    return new Intl.DateTimeFormat(locale, formatOptions).formatRange(
-      epochMs1,
-      epochMs2,
+    return new TemporalIntl.DateTimeFormat(locale, formatOptions).formatRange(
+      zdt1.toInstant(),
+      zdt2.toInstant(),
     );
   } catch {
     return "";
