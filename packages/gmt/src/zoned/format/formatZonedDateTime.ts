@@ -10,14 +10,8 @@ export function formatZonedDateTime(
     return "";
   }
 
-  let zonedDateTime: Temporal.ZonedDateTime;
   try {
-    zonedDateTime = Temporal.ZonedDateTime.from(value);
-  } catch {
-    return "";
-  }
-
-  try {
+    const zonedDateTime = Temporal.ZonedDateTime.from(value);
     return zonedDateTime.toLocaleString(locale, options);
   } catch {
     return "";
