@@ -1,5 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { isValidAmount } from "../../plain/validate";
+import { isValidAmount } from "../../internal";
 import type { UnixUnit } from "./convertZonedToUnix";
 
 function isValidUnixUnit(unit: string): unit is UnixUnit {

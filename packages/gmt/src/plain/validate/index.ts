@@ -1,5 +1,4 @@
 export * from "./isUtcDateTime";
-export * from "./isValidAmount";
 export * from "./isValidDate";
 export * from "./isValidDateOrDateTime";
 export * from "./isValidDateRange";

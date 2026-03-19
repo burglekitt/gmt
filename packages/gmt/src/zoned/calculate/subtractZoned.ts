@@ -1,5 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { isValidAmount, isValidDateTimeUnit } from "../../plain/validate";
+import { isValidAmount } from "../../internal";
+import { isValidDateTimeUnit } from "../../plain/validate";
 import { isValidZonedDateTime } from "../validate";
 
 export function subtractZoned(

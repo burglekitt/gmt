@@ -1,5 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { isValidAmount, isValidDate, isValidDateUnit } from "../validate";
+import { isValidAmount } from "../../internal";
+import { isValidDate, isValidDateUnit } from "../validate";
 
 export function subtractDate(
   value: string,
