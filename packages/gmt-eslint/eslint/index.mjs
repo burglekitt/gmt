@@ -45,6 +45,12 @@ export default [
           message:
             "Aint nobody got time for new Date(). Use @burglekitt/gmt getUtcNow(), getNow(), or getZonedNow(timezone) instead.",
         },
+        {
+          selector:
+            "CallExpression[callee.type='MemberExpression'][callee.property.name='getTimezoneOffset']",
+          message:
+            "Aint nobody got time for date.getTimezoneOffset(). Use @burglekitt/gmt getZonedNow(timezone) or convertZonedDateTimeToUnix(date, timezone) instead.",
+        },
       ],
     },
   },

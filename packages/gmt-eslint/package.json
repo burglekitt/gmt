@@ -1,10 +1,10 @@
 {
   "name": "@burglekitt/gmt-eslint",
-  "version": "0.0.1",
-  "private": false,
+  "version": "0.1.0",
   "type": "module",
   "description": "Shared ESLint configuration for gmt projects",
   "license": "MIT",
+  "main": "./eslint/index.mjs",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
