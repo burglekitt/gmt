@@ -1,5 +1,3 @@
-import { Temporal } from "@js-temporal/polyfill";
-
 export const unixFixture = {
   seconds: "1709164800",
   milliseconds: "1709164800000",
@@ -9,17 +7,6 @@ export const unixFixture = {
 // TODO CC remove now too complex
 export const fixedNowInstant = "2024-02-29T00:00:00.000Z";
 export const fixedSystemTimezone = "Europe/Helsinki";
-
-export function useFixedSystemTime(
-  instantIso: string = fixedNowInstant,
-): () => void {
-  vi.useFakeTimers();
-  vi.setSystemTime(Number(Temporal.Instant.from(instantIso).epochMilliseconds));
-
-  return () => {
-    vi.useRealTimers();
-  };
-}
 
 export function mockSystemTimezone(
   timeZone: string = fixedSystemTimezone,
