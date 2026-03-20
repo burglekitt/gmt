@@ -371,26 +371,6 @@ This matrix is used across zoned compare, convert, format, get, map, parse, and 
 
 ---
 
-## Development
-
-```bash
-bun install
-bun run build
-bun run typecheck
-bun run test
-bun run lint
-bun run format
-```
-
----
-
-## Requirements
-
-- Node.js 18+
-- Bun recommended for local development
-
----
-
 ## License
 
 MIT — See [LICENSE](../../LICENSE) for details.
