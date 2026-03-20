@@ -20,9 +20,13 @@ export function formatZonedRange(
     return "";
   }
 
+  if (zdt1.timeZoneId !== zdt2.timeZoneId) {
+    return "";
+  }
+
   const formatOptions: Intl.DateTimeFormatOptions = {
-    timeZone: zdt1.timeZoneId,
     ...options,
+    timeZone: zdt1.timeZoneId,
   };
 
   try {

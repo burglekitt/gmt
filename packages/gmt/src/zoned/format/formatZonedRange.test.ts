@@ -25,6 +25,36 @@ describe("formatZonedRange", () => {
     },
   );
 
+  it.each`
+    from                                             | to
+    ${"2024-02-29T10:00:00-05:00[America/New_York]"} | ${"2024-02-29T12:00:00+01:00[Europe/Paris]"}
+    ${"2024-02-29T10:00:00+00:00[UTC]"}              | ${"2024-02-29T12:00:00+09:00[Asia/Tokyo]"}
+  `(
+    "returns empty string when range endpoints use different timezones: $from -> $to",
+    ({ from, to }) => {
+      expect(
+        formatZonedRange(from, to, "en-US", {
+          dateStyle: "long",
+          timeStyle: "short",
+        }),
+      ).toBe("");
+    },
+  );
+
+  it("forces formatting to use endpoint timezone even when options.timeZone is provided", () => {
+    const from = "2024-02-29T10:00:00-05:00[America/New_York]";
+    const to = "2024-02-29T12:00:00-05:00[America/New_York]";
+
+    expect(
+      formatZonedRange(from, to, "en-US", {
+        hour: "numeric",
+        minute: "numeric",
+        timeZoneName: "short",
+        timeZone: "UTC",
+      }),
+    ).toBe("10:00 AM – 12:00 PM EST");
+  });
+
   // TODO do rest of locales
   // en-GB
   // de-DE

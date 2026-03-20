@@ -49,7 +49,7 @@ export default [
           selector:
             "CallExpression[callee.type='MemberExpression'][callee.property.name='getTimezoneOffset']",
           message:
-            "Aint nobody got time for date.getTimezoneOffset(). Use @burglekitt/gmt getZonedNow(timezone) or convertZonedDateTimeToUnix(date, timezone) instead.",
+            "Aint nobody got time for date.getTimezoneOffset(). Timezone offsets change throughout the year, so use @burglekitt/gmt zoned methods instead.",
         },
       ],
     },
