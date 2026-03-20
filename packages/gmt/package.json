@@ -38,6 +38,7 @@
       "default": "./dist/plain/*/index.js"
     },
     "./plain/*/*": null,
+    "./plain/test": null,
     "./zoned": {
       "types": "./dist/zoned/index.d.ts",
       "default": "./dist/zoned/index.js"
