@@ -71,7 +71,7 @@
 | ISO strings                 | `"2024-03-10"`                            |
 | Temporal objects            | `Temporal.PlainDate.from("2024-03-10")`   |
 | Zod validation              | `PlainDateSchema.parse(input)`            |
-| Tree-shakable exports       | `export * as plain from "./plain"`       |
+| Tree-shakable exports       | `export * "./plain"`       |
 
 ### ❌ **Forbidden**
 
