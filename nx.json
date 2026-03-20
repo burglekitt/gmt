@@ -30,7 +30,6 @@
       "inputs": ["default"]
     }
   },
-  "nxCloudId": "69b90a6812159535b487d4ca",
   "plugins": [
     {
       "plugin": "@nx/js/typescript",
