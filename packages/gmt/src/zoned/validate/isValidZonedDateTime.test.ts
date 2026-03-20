@@ -17,6 +17,20 @@ describe("isValidZonedDateTime", () => {
 
   it.each`
     value
+    ${"2024-03-17T14:30:60[America/New_York]"}
+    ${"2024-03-17T14:30:60.123[America/New_York]"}
+    ${"2024-03-17T14:30:60+05:00[Asia/Kolkata]"}
+    ${"2024-03-17T14:30:60-08:00[America/Los_Angeles]"}
+    ${"2024-03-17T14:30:60Z[UTC]"}
+  `(
+    "returns false for leap second with zoned datetime: $value",
+    ({ value }: { value: string }) => {
+      expect(isValidZonedDateTime(value)).toBe(false);
+    },
+  );
+
+  it.each`
+    value
     ${"2024-03-17T14:30:45.123-04:00"}
     ${"2024-03-17T14:30:45Z"}
     ${"2024-03-17T14:30:60Z[UTC]"}

@@ -1,7 +1,8 @@
 import { Temporal } from "@js-temporal/polyfill";
+import { isLeapSecond } from "../../plain/validate/isLeapSecond";
 
 export function isValidZonedDateTime(value: string): boolean {
-  if (/T\d{2}:\d{2}:60(?:[.,]\d+)?(?:[+-Zz[])/.test(value)) {
+  if (isLeapSecond(value)) {
     return false;
   }
 

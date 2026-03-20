@@ -1,4 +1,5 @@
 export * from "./isUtcDateTime";
+export * from "./isLeapSecond";
 export * from "./isValidDate";
 export * from "./isValidDateOrDateTime";
 export * from "./isValidDateRange";
