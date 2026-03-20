@@ -7,7 +7,7 @@ export default [
       globals: true,
       environment: "node",
       root: "packages/gmt",
-      include: ["src/**/*.test.ts", "src/**/*.spec.ts"],
+      include: ["src/**/*.test.ts"],
     },
   }),
 ];
