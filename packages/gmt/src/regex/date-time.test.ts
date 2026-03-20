@@ -1,4 +1,5 @@
-import { plainDateTime, utcDateTime } from "./date-time";
+import { plainDateTime } from "./date-time";
+import { utcDateTime } from "./utc-date-time";
 
 describe("regex/date-time", () => {
   it.each`
