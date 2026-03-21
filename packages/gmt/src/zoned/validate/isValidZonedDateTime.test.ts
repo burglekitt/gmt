@@ -1,5 +1,11 @@
-import { sameInstantBattleCases } from "../test/timezoneFixtures";
+import {
+  sameInstantBattleCases,
+  unixEpochBattleCases,
+} from "../test/timezoneFixtures";
 import { isValidZonedDateTime } from ".";
+
+const invalidHistoricalKathmanduOffset =
+  "1970-01-01T05:45:00+05:45[Asia/Kathmandu]";
 
 describe("isValidZonedDateTime", () => {
   // TODO add timezones
@@ -34,6 +40,7 @@ describe("isValidZonedDateTime", () => {
     ${"2024-03-17T14:30:45.123-04:00"}
     ${"2024-03-17T14:30:45Z"}
     ${"2024-03-17T14:30:60Z[UTC]"}
+    ${invalidHistoricalKathmanduOffset}
     ${"2024-03-17T14:30:45.123-04:00[Not/AZone]"}
     ${"not-a-zoned-datetime"}
   `(
@@ -45,6 +52,12 @@ describe("isValidZonedDateTime", () => {
 
   for (const { timeZone, value } of sameInstantBattleCases) {
     it(`accepts battle-test zoned datetime in ${timeZone}`, () => {
+      expect(isValidZonedDateTime(value)).toBe(true);
+    });
+  }
+
+  for (const { timeZone, value } of unixEpochBattleCases) {
+    it(`accepts historical epoch zoned datetime in ${timeZone}`, () => {
       expect(isValidZonedDateTime(value)).toBe(true);
     });
   }
