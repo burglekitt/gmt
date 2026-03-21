@@ -1,14 +1,13 @@
 import {
+  invalidHistoricalKathmanduOffset,
+  localNoonBattleCases,
   sameInstantBattleCases,
   unixEpochBattleCases,
+  validOnlyBattleTestTimeZones,
 } from "../test/timezoneFixtures";
 import { isValidZonedDateTime } from ".";
 
-const invalidHistoricalKathmanduOffset =
-  "1970-01-01T05:45:00+05:45[Asia/Kathmandu]";
-
 describe("isValidZonedDateTime", () => {
-  // TODO add timezones
   it.each`
     value
     ${"2024-03-17T14:30:45.123-04:00[America/New_York]"}
@@ -20,6 +19,20 @@ describe("isValidZonedDateTime", () => {
       expect(isValidZonedDateTime(value)).toBe(true);
     },
   );
+
+  for (const timeZone of validOnlyBattleTestTimeZones) {
+    it(`accepts valid fixture timezone without explicit offset: ${timeZone}`, () => {
+      expect(isValidZonedDateTime(`2024-03-17T14:30:45.123[${timeZone}]`)).toBe(
+        true,
+      );
+    });
+  }
+
+  for (const { timeZone, value } of localNoonBattleCases) {
+    it(`accepts local-noon fixture zoned datetime in ${timeZone}`, () => {
+      expect(isValidZonedDateTime(value)).toBe(true);
+    });
+  }
 
   it.each`
     value
