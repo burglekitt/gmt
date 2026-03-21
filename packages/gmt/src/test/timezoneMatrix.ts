@@ -1,5 +1,15 @@
 import { MustTestLocales } from "./localeMatrix";
 
+/**
+ * Canonical timezone IDs that stress offset and date-boundary behavior.
+ *
+ * Example lookups:
+ * - MustTestDstTimezones["UTC"] => "UTC"
+ * - MustTestDstTimezones["America/New_York"] => "America/New_York"
+ * - MustTestDstTimezones["Europe/Helsinki"] => "Europe/Helsinki"
+ * - MustTestDstTimezones["Pacific/Apia"] => "Pacific/Apia"
+ * - MustTestDstTimezones["Pacific/Niue"] => "Pacific/Niue"
+ */
 export const MustTestDstTimezones = {
   "America/New_York": "America/New_York",
   "Asia/Shanghai": "Asia/Shanghai",
@@ -13,6 +23,18 @@ export const MustTestDstTimezones = {
   "Europe/Helsinki": "Europe/Helsinki",
 } as const;
 
+/**
+ * Locale to representative timezone mapping for locale-aware APIs.
+ *
+ * Examples from this map:
+ * - MustTestLocaleTimezones[MustTestLocales.enUS] => "America/New_York"
+ *
+ * Related matrix examples used by timezone-centric tests:
+ * - MustTestDstTimezones["UTC"] => "UTC"
+ * - MustTestDstTimezones["Europe/Helsinki"] => "Europe/Helsinki"
+ * - MustTestDstTimezones["Pacific/Apia"] => "Pacific/Apia"
+ * - MustTestDstTimezones["Pacific/Niue"] => "Pacific/Niue"
+ */
 export const MustTestLocaleTimezones = {
   [MustTestLocales.enUS]: "America/New_York",
   [MustTestLocales.enGB]: "Europe/London",
@@ -33,6 +55,16 @@ export const MustTestLocaleTimezones = {
   [MustTestLocales.trTR]: "Europe/Istanbul",
 } as const;
 
+/**
+ * Union view used by tests that need a single "must test" timezone set.
+ *
+ * Example lookups:
+ * - MustTestTimezones["UTC"] => "UTC"
+ * - MustTestTimezones["America/New_York"] => "America/New_York"
+ * - MustTestTimezones["Europe/Helsinki"] => "Europe/Helsinki"
+ * - MustTestTimezones["Pacific/Apia"] => "Pacific/Apia"
+ * - MustTestTimezones["Pacific/Niue"] => "Pacific/Niue"
+ */
 export const MustTestTimezones = {
   ...MustTestDstTimezones,
   ...MustTestLocaleTimezones,

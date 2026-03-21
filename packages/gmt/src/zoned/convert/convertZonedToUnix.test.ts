@@ -1,5 +1,11 @@
-import { sameInstantBattleCases } from "../test/timezoneFixtures";
+import {
+  sameInstantBattleCases,
+  unixEpochBattleCases,
+} from "../test/timezoneFixtures";
 import { convertZonedToUnix } from "./convertZonedToUnix";
+
+const invalidHistoricalKathmanduOffset =
+  "1970-01-01T05:45:00+05:45[Asia/Kathmandu]";
 
 describe("convertZonedToUnix", () => {
   it.each`
@@ -16,6 +22,7 @@ describe("convertZonedToUnix", () => {
     invalidValue
     ${"not-a-zoned-datetime"}
     ${"2024-02-29T09:00:00+00:00"}
+    ${invalidHistoricalKathmanduOffset}
     ${""}
     ${null}
     ${undefined}
@@ -48,6 +55,18 @@ describe("convertZonedToUnix", () => {
     unixSeconds,
   } of sameInstantBattleCases) {
     it(`returns consistent unix values for battle-test timezone ${timeZone}`, () => {
+      expect(convertZonedToUnix(value, "milliseconds")).toBe(unixMilliseconds);
+      expect(convertZonedToUnix(value, "seconds")).toBe(unixSeconds);
+    });
+  }
+
+  for (const {
+    timeZone,
+    value,
+    unixMilliseconds,
+    unixSeconds,
+  } of unixEpochBattleCases) {
+    it(`returns historical unix values for battle-test timezone ${timeZone}`, () => {
       expect(convertZonedToUnix(value, "milliseconds")).toBe(unixMilliseconds);
       expect(convertZonedToUnix(value, "seconds")).toBe(unixSeconds);
     });

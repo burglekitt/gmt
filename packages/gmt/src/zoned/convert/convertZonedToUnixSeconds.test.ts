@@ -1,5 +1,5 @@
 import { sameInstantBattleCases } from "../test/timezoneFixtures";
-import { convertToUnixSeconds } from "./convertToUnixSeconds";
+import { convertZonedToUnixSeconds } from "./convertZonedToUnixSeconds";
 
 describe("convertToUnixSeconds", () => {
   it.each`
@@ -10,7 +10,7 @@ describe("convertToUnixSeconds", () => {
   `(
     "returns $expected for $value",
     ({ value, expected }: { value: string; expected: number }) => {
-      expect(convertToUnixSeconds(value)).toBe(expected);
+      expect(convertZonedToUnixSeconds(value)).toBe(expected);
     },
   );
 
@@ -18,7 +18,7 @@ describe("convertToUnixSeconds", () => {
     value
     ${"1970-01-01T00:00:00+00:00[Etc/UTC]"}
   `("returns a number for edge case zoned datetime $value", ({ value }) => {
-    expect(convertToUnixSeconds(value)).not.toBeNull();
+    expect(convertZonedToUnixSeconds(value)).not.toBeNull();
   });
 
   it.each`
@@ -31,13 +31,13 @@ describe("convertToUnixSeconds", () => {
   `(
     "returns null for invalid zoned datetime $invalidValue",
     ({ invalidValue }) => {
-      expect(convertToUnixSeconds(invalidValue as never)).toBeNull();
+      expect(convertZonedToUnixSeconds(invalidValue as never)).toBeNull();
     },
   );
 
   for (const { timeZone, value, unixSeconds } of sameInstantBattleCases) {
     it(`returns shared epoch seconds for battle-test timezone ${timeZone}`, () => {
-      expect(convertToUnixSeconds(value)).toBe(unixSeconds);
+      expect(convertZonedToUnixSeconds(value)).toBe(unixSeconds);
     });
   }
 });

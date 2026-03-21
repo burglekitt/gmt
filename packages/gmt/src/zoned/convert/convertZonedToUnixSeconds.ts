@@ -1,5 +1,5 @@
 import { convertZonedToUnix } from "./convertZonedToUnix";
 
-export function convertToUnixSeconds(value: string): number | null {
+export function convertZonedToUnixSeconds(value: string): number | null {
   return convertZonedToUnix(value, "seconds");
 }
