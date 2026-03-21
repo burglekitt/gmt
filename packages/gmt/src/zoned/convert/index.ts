@@ -7,6 +7,4 @@ export * from "./convertUtcDateTimeToUnix";
 export * from "./convertUtcToTimezone";
 export * from "./convertUtcToUnix";
 export * from "./convertZonedToUnix";
-export * from "./convertZonedToUnixMilliseconds";
-export * from "./convertZonedToUnixSeconds";
 export * from "./convertZonedToZoned";
