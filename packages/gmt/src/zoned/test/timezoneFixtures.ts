@@ -120,3 +120,6 @@ export const fixedNowInstant = "2024-02-29T00:00:00.000Z";
 // Invalid historical string: 1970 Kathmandu used +05:30, not +05:45.
 export const invalidHistoricalKathmanduOffset =
   "1970-01-01T05:45:00+05:45[Asia/Kathmandu]";
+
+// Test for leap year handling in timezone conversions. 2024-02-29T00:00:00Z is 1709164800000 in unix milliseconds.
+export const battleTestLeapYearUnix = 1709164800000;

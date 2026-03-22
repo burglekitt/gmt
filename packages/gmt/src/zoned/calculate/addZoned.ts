@@ -13,6 +13,7 @@ export function addZoned(
     !isValidAmount(amount) ||
     !isValidDateTimeUnit(unit)
   ) {
+    // TODO descriptive messages of what failed - likely could be GMT offset for historical changes and DST
     return "";
   }
 

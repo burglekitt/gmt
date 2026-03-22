@@ -1,4 +1,3 @@
-export * from "./convertTimezoneToUnix";
 export * from "./convertTimezoneToUtc";
 export * from "./convertUnixToTimezone";
 export * from "./convertUnixToUtc";

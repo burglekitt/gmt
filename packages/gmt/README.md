@@ -382,6 +382,7 @@ Prioritized roadmap and parity checks against Luxon, Moment, and date-fns.
 10. Parsing pack for non-ISO but common user inputs (`YYYY/MM/DD`, `HHmm`, month-name parsing) in a separate optional package.
 11. Business-day helpers (`addBusinessDays`, `differenceInBusinessDays`) as an optional domain module.
 12. Optional validation package (`gmt-zod`) kept separate from core `@burglekitt/gmt`.
+13. Descriptive parsing errors for timezones, GMT offsets
 ---
 
 ## Testing Matrix

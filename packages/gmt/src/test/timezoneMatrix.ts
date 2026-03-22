@@ -11,16 +11,24 @@ import { MustTestLocales } from "./localeMatrix";
  * - MustTestDstTimezones["Pacific/Niue"] => "Pacific/Niue"
  */
 export const MustTestDstTimezones = {
-  "America/New_York": "America/New_York",
-  "Asia/Shanghai": "Asia/Shanghai",
+  UTC: "UTC",
+  GMT: "GMT",
+  "Etc/GMT": "Etc/GMT",
+  "Europe/Lisbon": "Europe/Lisbon",
+  "Europe/Dublin": "Europe/Dublin",
+  "Europe/Berlin": "Europe/Berlin",
+  "Europe/Helsinki": "Europe/Helsinki",
+  "Europe/Istanbul": "Europe/Istanbul",
   "Asia/Kolkata": "Asia/Kolkata",
   "Asia/Kathmandu": "Asia/Kathmandu",
+  "Asia/Shanghai": "Asia/Shanghai",
+  "Australia/Lord_Howe": "Australia/Lord_Howe",
   "Pacific/Chatham": "Pacific/Chatham",
   "Pacific/Apia": "Pacific/Apia",
   "Pacific/Niue": "Pacific/Niue",
-  UTC: "UTC",
-  "Etc/GMT": "Etc/GMT",
-  "Europe/Helsinki": "Europe/Helsinki",
+  "America/New_York": "America/New_York",
+  "America/Chicago": "America/Chicago",
+  "America/Phoenix": "America/Phoenix",
 } as const;
 
 /**
@@ -55,17 +63,27 @@ export const MustTestLocaleTimezones = {
   [MustTestLocales.trTR]: "Europe/Istanbul",
 } as const;
 
-/**
- * Union view used by tests that need a single "must test" timezone set.
- *
- * Example lookups:
- * - MustTestTimezones["UTC"] => "UTC"
- * - MustTestTimezones["America/New_York"] => "America/New_York"
- * - MustTestTimezones["Europe/Helsinki"] => "Europe/Helsinki"
- * - MustTestTimezones["Pacific/Apia"] => "Pacific/Apia"
- * - MustTestTimezones["Pacific/Niue"] => "Pacific/Niue"
- */
-export const MustTestTimezones = {
+export const LocaleTimezones = {
+  "America/New_York": "America/New_York",
+  "Europe/London": "Europe/London",
+  "Europe/Berlin": "Europe/Berlin",
+  "Europe/Paris": "Europe/Paris",
+  "Europe/Madrid": "Europe/Madrid",
+  "Europe/Rome": "Europe/Rome",
+  "Europe/Lisbon": "Europe/Lisbon",
+  "Europe/Stockholm": "Europe/Stockholm",
+  "Atlantic/Reykjavik": "Atlantic/Reykjavik",
+  "Asia/Shanghai": "Asia/Shanghai",
+  "Asia/Taipei": "Asia/Taipei",
+  "Asia/Tokyo": "Asia/Tokyo",
+  "Asia/Seoul": "Asia/Seoul",
+  "Asia/Riyadh": "Asia/Riyadh",
+  "Asia/Jerusalem": "Asia/Jerusalem",
+  "Europe/Moscow": "Europe/Moscow",
+  "Europe/Istanbul": "Europe/Istanbul",
+};
+
+export const TestTimezones = {
   ...MustTestDstTimezones,
-  ...MustTestLocaleTimezones,
+  ...LocaleTimezones,
 };
