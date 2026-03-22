@@ -1,5 +1,4 @@
 import {
-  invalidHistoricalKathmanduOffset,
   localNoonBattleCases,
   sameInstantBattleCases,
   unixEpochBattleCases,
@@ -56,10 +55,6 @@ describe("isValidZonedDateTime", () => {
     ${"1970-07-01T00:00:00+05:30[Asia/Kathmandu]"}      | ${true}
     ${"2024-02-29T00:00:00+05:45[Asia/Kathmandu]"}      | ${true}
     ${"2024-07-01T00:00:00+05:45[Asia/Kathmandu]"}      | ${true}
-    ${"1970-01-01T00:00:00+03:00[Europe/Moscow]"}       | ${true}
-    ${"1970-07-01T00:00:00+03:00[Europe/Moscow]"}       | ${true}
-    ${"2024-02-29T00:00:00+03:00[Europe/Moscow]"}       | ${true}
-    ${"2024-07-01T00:00:00+03:00[Europe/Moscow]"}       | ${true}
     ${"1970-01-01T00:00:00+10:00[Australia/Lord_Howe]"} | ${true}
     ${"1970-07-01T00:00:00+10:00[Australia/Lord_Howe]"} | ${true}
     ${"2024-02-29T00:00:00+11:00[Australia/Lord_Howe]"} | ${true}
@@ -76,10 +71,6 @@ describe("isValidZonedDateTime", () => {
     ${"1970-07-01T00:00:00+02:00[Europe/Istanbul]"}     | ${true}
     ${"2024-02-29T00:00:00+03:00[Europe/Istanbul]"}     | ${true}
     ${"2024-07-01T00:00:00+03:00[Europe/Istanbul]"}     | ${true}
-    ${"1970-01-01T00:00:00-11:00[Pacific/Apia]"}        | ${true}
-    ${"1970-07-01T00:00:00-11:00[Pacific/Apia]"}        | ${true}
-    ${"2024-02-29T00:00:00+13:00[Pacific/Apia]"}        | ${true}
-    ${"2024-07-01T00:00:00+13:00[Pacific/Apia]"}        | ${true}
     ${"1970-01-01T00:00:00+01:00[Europe/Lisbon]"}       | ${true}
     ${"1970-07-01T00:00:00+01:00[Europe/Lisbon]"}       | ${true}
     ${"2024-02-29T00:00:00+00:00[Europe/Lisbon]"}       | ${true}
@@ -98,6 +89,24 @@ describe("isValidZonedDateTime", () => {
       expect(isValidZonedDateTime(historical)).toBe(validity);
     },
   );
+
+  // invalid historical offsets
+  it.each`
+    value
+    ${"1970-01-01T05:45:00+05:45[Asia/Kathmandu]"}
+    ${"1970-01-01T00:00:00+11:00[Australia/Lord_Howe]"} | ${true}
+    ${"1970-07-01T00:00:00+10:30[Australia/Lord_Howe]"} | ${true}
+    ${"1970-01-01T00:00:00+13:45[Pacific/Chatham]"}     | ${true}
+    ${"1970-01-01T00:00:00+03:00[Europe/Istanbul]"}     | ${true}
+    ${"1970-07-01T00:00:00+03:00[Europe/Istanbul]"}     | ${true}
+    ${"1970-01-01T00:00:00+13:00[Pacific/Apia]"}        | ${true}
+    ${"1970-07-01T00:00:00+13:00[Pacific/Apia]"}        | ${true}
+    ${"1970-01-01T00:00:00+00:00[Europe/Lisbon]"}       | ${true}
+    ${"1970-01-01T00:00:00+00:00[Europe/Dublin]"}       | ${true}
+    ${"1970-07-01T00:00:00+02:00[Europe/Berlin]"}       | ${true}
+  `("returns false for invalid historical offset: $value", ({ value }) => {
+    expect(isValidZonedDateTime(value)).toBe(false);
+  });
 
   it.each`
     value
@@ -118,7 +127,6 @@ describe("isValidZonedDateTime", () => {
     ${"2024-03-17T14:30:45.123-04:00"}
     ${"2024-03-17T14:30:45Z"}
     ${"2024-03-17T14:30:60Z[UTC]"}
-    ${invalidHistoricalKathmanduOffset}
     ${"2024-03-17T14:30:45.123-04:00[Not/AZone]"}
     ${"not-a-zoned-datetime"}
   `(

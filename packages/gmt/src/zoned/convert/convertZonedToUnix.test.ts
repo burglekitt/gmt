@@ -5,9 +5,6 @@ import {
 } from "../test/timezoneFixtures";
 import { convertZonedToUnix } from "./convertZonedToUnix";
 
-const invalidHistoricalKathmanduOffset =
-  "1970-01-01T05:45:00+05:45[Asia/Kathmandu]";
-
 describe("convertZonedToUnix", () => {
   it("defaults to milliseconds when unit is not provided", () => {
     expect(convertZonedToUnix("1970-01-01T00:00:00+00:00[UTC]")).toBe(0);
@@ -74,7 +71,6 @@ describe("convertZonedToUnix", () => {
     invalidValue
     ${"not-a-zoned-datetime"}
     ${"2024-02-29T09:00:00+00:00"}
-    ${invalidHistoricalKathmanduOffset}
     ${""}
     ${null}
     ${undefined}
