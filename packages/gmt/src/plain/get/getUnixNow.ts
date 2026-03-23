@@ -2,7 +2,6 @@ import { Temporal } from "@js-temporal/polyfill";
 
 type UnixUnit = "seconds" | "milliseconds";
 
-// TODO CC extract  - or don't i laready have this....
 function isValidUnixUnit(unit: string): unit is UnixUnit {
   return unit === "seconds" || unit === "milliseconds";
 }

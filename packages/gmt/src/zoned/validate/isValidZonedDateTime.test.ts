@@ -84,7 +84,7 @@ describe("isValidZonedDateTime", () => {
     ${"2024-02-29T00:00:00+01:00[Europe/Berlin]"}       | ${true}
     ${"2024-07-01T00:00:00+02:00[Europe/Berlin]"}       | ${true}
   `(
-    "recognizes validity historical offset in $historical as as $validity for timezone offsets have changed",
+    "recognizes validity historical offset in $historical as $validity for timezone offsets have changed",
     ({ historical, validity }) => {
       expect(isValidZonedDateTime(historical)).toBe(validity);
     },
