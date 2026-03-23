@@ -1,5 +1,5 @@
+import type { UnixUnit } from "../../plain/validate/isValidUnixUnit";
 import { convertUnixToZoned } from "./convertUnixToZoned";
-import type { UnixUnit } from "./convertZonedToUnix";
 
 export function convertUnixToTimezone(
   value: number,
