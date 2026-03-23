@@ -122,7 +122,7 @@ describe("convertUnixToZoned", () => {
   `(
     "returns an empty string for invalid unix value $invalidValue",
     ({ invalidValue }) => {
-      expect(convertUnixToZoned(invalidValue, "UTC")).toBe("");
+      expect(convertUnixToZoned(invalidValue as never, "UTC")).toBe("");
     },
   );
 
@@ -135,7 +135,7 @@ describe("convertUnixToZoned", () => {
   `(
     "returns an empty string for invalid timezone $invalidTimeZone",
     ({ invalidTimeZone }) => {
-      expect(convertUnixToZoned(0, invalidTimeZone)).toBe("");
+      expect(convertUnixToZoned(0, invalidTimeZone as never)).toBe("");
     },
   );
 
@@ -148,7 +148,7 @@ describe("convertUnixToZoned", () => {
   `(
     "returns an empty string for invalid unit $invalidUnit",
     ({ invalidUnit }) => {
-      expect(convertUnixToZoned(0, "UTC", invalidUnit)).toBe("");
+      expect(convertUnixToZoned(0, "UTC", invalidUnit as never)).toBe("");
     },
   );
 
