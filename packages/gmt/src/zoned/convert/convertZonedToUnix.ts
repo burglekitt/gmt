@@ -11,6 +11,16 @@ export function convertZonedToUnix(
   value: string,
   ...unitInput: [unit?: UnixUnit]
 ): number | null {
+/**
+ * Convert an ISO 8601 zoned datetime string to a unix epoch value in
+ * milliseconds (default) or seconds.
+ *
+ * - Returns `null` for invalid zoned datetime or invalid unit.
+ *
+ * @param value zoned ISO 8601 datetime string
+ * @param unit optional unit, "seconds" or "milliseconds"
+ * @returns epoch number or null when invalid
+ */
   const resolvedUnit = unitInput.length === 0 ? "milliseconds" : unitInput[0];
 
   if (!isValidZonedDateTime(value) || !isValidUnixUnit(resolvedUnit ?? "")) {

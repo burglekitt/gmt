@@ -6,6 +6,16 @@ function isValidUnixUnit(unit: string): unit is UnixUnit {
   return unit === "seconds" || unit === "milliseconds";
 }
 
+/**
+ * Convert a UTC Instant string to a unix epoch value in milliseconds or
+ * seconds.
+ *
+ * - Returns `null` for invalid inputs or unit.
+ *
+ * @param value UTC Instant string
+ * @param unit optional unit, "seconds" or "milliseconds"
+ * @returns epoch number or null when invalid
+ */
 export function convertUtcToUnix(
   value: string,
   ...unitInput: [unit?: UnixUnit]

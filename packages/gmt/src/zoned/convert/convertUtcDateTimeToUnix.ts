@@ -6,6 +6,17 @@ function isValidUnixUnit(unit: string): unit is UnixUnit {
   return unit === "seconds" || unit === "milliseconds";
 }
 
+/**
+ * Convert a UTC plain datetime string (no timezone suffix) to a unix epoch
+ * value in milliseconds (default) or seconds.
+ *
+ * - Input must match the plain UTC datetime regex.
+ * - Returns `null` for invalid inputs or invalid unit.
+ *
+ * @param value plain UTC datetime string (e.g. "2024-02-29T09:00:00")
+ * @param unit optional unit, "seconds" or "milliseconds"
+ * @returns epoch number or null when invalid
+ */
 export function convertUtcDateTimeToUnix(
   value: string,
   ...unitInput: [unit?: UnixUnit]
