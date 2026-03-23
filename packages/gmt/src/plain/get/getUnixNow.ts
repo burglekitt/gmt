@@ -2,11 +2,21 @@ import { Temporal } from "@js-temporal/polyfill";
 
 type UnixUnit = "seconds" | "milliseconds";
 
+// TODO CC extract  - or don't i laready have this....
 function isValidUnixUnit(unit: string): unit is UnixUnit {
   return unit === "seconds" || unit === "milliseconds";
 }
 
-// Returns the current unix timestamp in seconds or milliseconds.
+/**
+ * Return the current Unix timestamp in either seconds or milliseconds.
+ *
+ * - Pass the optional unit `"seconds"` to receive seconds; defaults to
+ *   milliseconds when omitted.
+ * - Returns `null` for invalid unit input.
+ *
+ * @param unit optional unit specifier: "seconds" | "milliseconds"
+ * @returns number (unix timestamp) or null on invalid unit
+ */
 export function getUnixNow(...unitInput: [unit?: UnixUnit]): number | null {
   const resolvedUnit = unitInput.length === 0 ? "milliseconds" : unitInput[0];
 
