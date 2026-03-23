@@ -309,8 +309,6 @@ isValidZonedDateTime("2024-03-17T14:30:45+00:00[UTC]");
 - `convertUnixToZoned`
 - `convertUnixToUtc`
 - `convertUtcDateTimeToUnix`
-- `convertZonedToUnixMilliseconds`
-- `convertZonedToUnixSeconds`
 - `convertZonedToUnix`
 - `convertZonedToZoned`
 - `convertUtcToTimezone`

@@ -1,11 +1,10 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { isValidAmount } from "../../internal";
+import {
+  isValidUnixUnit,
+  type UnixUnit,
+} from "../../plain/validate/isValidUnixUnit";
 import { isValidTimezone } from "../validate";
-import type { UnixUnit } from "./convertZonedToUnix";
-
-function isValidUnixUnit(unit: string): unit is UnixUnit {
-  return unit === "seconds" || unit === "milliseconds";
-}
 
 export function convertUnixToZoned(
   value: number,

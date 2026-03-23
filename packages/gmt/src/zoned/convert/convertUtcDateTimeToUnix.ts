@@ -1,10 +1,9 @@
 import { Temporal } from "@js-temporal/polyfill";
+import {
+  isValidUnixUnit,
+  type UnixUnit,
+} from "../../plain/validate/isValidUnixUnit";
 import { plainDateTime } from "../../regex";
-import type { UnixUnit } from "./convertZonedToUnix";
-
-function isValidUnixUnit(unit: string): unit is UnixUnit {
-  return unit === "seconds" || unit === "milliseconds";
-}
 
 /**
  * Convert a UTC plain datetime string (no timezone suffix) to a unix epoch

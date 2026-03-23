@@ -1,8 +1,4 @@
 /**
- * Returns the system timezone name (e.g. "America/New_York").
- * Returns an empty string if the timezone cannot be determined.
- */
-/**
  * Return the runtime system timezone name (for example "America/New_York").
  *
  * - Uses Intl.DateTimeFormat().resolvedOptions().timeZone to discover

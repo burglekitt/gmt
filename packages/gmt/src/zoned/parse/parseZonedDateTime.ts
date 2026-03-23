@@ -12,9 +12,7 @@ import { isValidZonedDateTime } from "../validate/isValidZonedDateTime";
  * @param value zoned ISO 8601 datetime string
  * @returns plain local datetime string or empty string when invalid
  */
-export const parseZonedDateTime = (
-  value: string,
-): Temporal.ZonedDateTime | string => {
+export const parseZonedDateTime = (value: string): string => {
   if (!isValidZonedDateTime(value) || isLeapSecond(value)) {
     return "";
   }

@@ -1,10 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
-
-type UnixUnit = "seconds" | "milliseconds";
-
-function isValidUnixUnit(unit: string): unit is UnixUnit {
-  return unit === "seconds" || unit === "milliseconds";
-}
+import { isValidUnixUnit, type UnixUnit } from "../validate/isValidUnixUnit";
 
 /**
  * Return the current Unix timestamp in either seconds or milliseconds.
