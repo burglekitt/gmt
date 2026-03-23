@@ -373,7 +373,7 @@ Prioritized roadmap and parity checks against Luxon, Moment, and date-fns.
 
 1. Interval primitives and helpers (`Interval` type, overlap checks, containment checks, interval sorting, interval normalization/merge).
 2. Range iteration helpers (each day/week/month/quarter across a range for plain and zoned inputs).
-3. Clamp/min/max helpers for dates and datetimes (bounded values and collection min/max selectors).
+3. Clamp/min/max helpers for dates datetimes times (bounded values and collection min/max selectors).
 4. `isBetween` and inclusive/exclusive boundary helpers for plain and zoned APIs.
 5. Quarter helpers beyond parse-only accessors (`getQuarter`, `startOfQuarter`, `endOfQuarter`).
 6. Additional start/end boundaries (`startOfWeek`, `endOfWeek`, ISO-week variants, month/year boundaries where missing).
