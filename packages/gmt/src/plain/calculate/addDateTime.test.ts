@@ -18,14 +18,14 @@ describe("addDateTime", () => {
   });
 
   it.each`
-    negativeAmounts     | expectedDateTime
+    negativeAmount      | expectedDateTime
     ${{ minutes: -1 }}  | ${"2024-02-29T14:29:00"}
     ${{ minutes: -30 }} | ${"2024-02-29T14:00:00"}
     ${{ minutes: -90 }} | ${"2024-02-29T13:00:00"}
   `(
-    "returns $expectedDateTime when adding a negative amount: $negativeAmounts",
-    ({ negativeAmounts, expectedDateTime }) => {
-      expect(addDateTime("2024-02-29T14:30", negativeAmounts)).toBe(
+    "returns $expectedDateTime when adding a negative amount: $negativeAmount",
+    ({ negativeAmount, expectedDateTime }) => {
+      expect(addDateTime("2024-02-29T14:30", negativeAmount)).toBe(
         expectedDateTime,
       );
     },
