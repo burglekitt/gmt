@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { getLargestDateTimeUnit } from "../../plain/calculate/getLargestDateTimeUnit";
-import { isValidDateTimeUnit } from "../../plain/validate";
+import { isValidDateTimeDurationUnit } from "../../plain/validate";
 import type { DateTimeDurationUnit } from "../../types";
 import { isValidZonedDateTime } from "../validate";
 
@@ -26,8 +26,8 @@ export function diffZoned(
     isValidZonedDateTime(value1) && isValidZonedDateTime(value2);
   const isSingleUnit = !Array.isArray(units);
   const validUnits = isSingleUnit
-    ? isValidDateTimeUnit(units)
-    : units.every(isValidDateTimeUnit);
+    ? isValidDateTimeDurationUnit(units)
+    : units.every(isValidDateTimeDurationUnit);
 
   if (!validZonedDateTimes || !validUnits) {
     return null;

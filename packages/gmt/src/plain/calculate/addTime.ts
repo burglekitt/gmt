@@ -1,7 +1,7 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { isValidAmount } from "../../internal";
 import type { TimeDurationUnit } from "../../types";
-import { isValidTime, isValidTimeUnit } from "../validate";
+import { isValidTime, isValidTimeDurationUnit } from "../validate";
 
 /**
  * Return a PlainTime ISO string with `amount` added to `value` using the
@@ -19,7 +19,7 @@ export function addTime(
   units: Partial<Record<TimeDurationUnit, number>>,
 ): string {
   const validTime = isValidTime(value);
-  const validUnits = Object.keys(units).every(isValidTimeUnit);
+  const validUnits = Object.keys(units).every(isValidTimeDurationUnit);
   const validAmounts = Object.values(units).every(isValidAmount);
 
   if (!validTime || !validUnits || !validAmounts) {

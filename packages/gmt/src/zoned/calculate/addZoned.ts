@@ -1,7 +1,7 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { isValidAmount } from "../../internal";
-import { isValidDateTimeUnit } from "../../plain/validate";
-import type { DateTimeUnits } from "../../types";
+import { isValidDateTimeDurationUnit } from "../../plain/validate";
+import type { DateTimeDurationUnit } from "../../types";
 import { isValidZonedDateTime } from "../validate";
 
 /**
@@ -20,15 +20,15 @@ import { isValidZonedDateTime } from "../validate";
  * ```
  *
  * @param value ISO 8601 zoned datetime string
- * @param units Partial<Record<DateTimeUnits, number>> object specifying units to add (e.g. { days: 1, months: 2 })
+ * @param units Partial<Record<DateTimeDurationUnit, number>> object specifying units to add (e.g. { days: 1, months: 2 })
  * @returns zoned ISO 8601 string on success, or empty string on invalid input
  */
 export function addZoned(
   value: string,
-  units: Partial<Record<DateTimeUnits, number>>,
+  units: Partial<Record<DateTimeDurationUnit, number>>,
 ): string {
   const validZonedDateTime = isValidZonedDateTime(value);
-  const validUnits = Object.keys(units).every(isValidDateTimeUnit);
+  const validUnits = Object.keys(units).every(isValidDateTimeDurationUnit);
   const validAmounts = Object.values(units).every(isValidAmount);
 
   if (!validZonedDateTime || !validUnits || !validAmounts) {

@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 import type { DateDurationUnit } from "../../types";
-import { isValidDate, isValidDateUnit } from "../validate";
+import { isValidDate, isValidDateDurationUnit } from "../validate";
 import { getLargestDateUnit } from "./getLargestDateUnit";
 
 /**
@@ -24,8 +24,8 @@ export function diffDate(
   const validDates = isValidDate(date1) && isValidDate(date2);
   const isSingleUnit = !Array.isArray(units);
   const validUnits = isSingleUnit
-    ? isValidDateUnit(units)
-    : units.every(isValidDateUnit);
+    ? isValidDateDurationUnit(units)
+    : units.every(isValidDateDurationUnit);
 
   if (!validDates || !validUnits) {
     return null;

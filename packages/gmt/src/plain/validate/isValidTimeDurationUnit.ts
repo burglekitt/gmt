@@ -1,4 +1,4 @@
-import type { TimeUnits } from "../../types";
+import type { TimeDurationUnit } from "../../types";
 
 /**
  * Return true when `unit` is a valid TimeUnit.
@@ -6,7 +6,9 @@ import type { TimeUnits } from "../../types";
  * @param unit string candidate
  * @returns boolean indicating whether the unit is valid
  */
-export const isValidTimeUnit = (unit: string): unit is TimeUnits => {
+export const isValidTimeDurationUnit = (
+  unit: string,
+): unit is TimeDurationUnit => {
   return (
     unit === "hours" ||
     unit === "minutes" ||

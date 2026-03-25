@@ -6,7 +6,7 @@ import type { DateTimeDurationUnit } from "../../types";
  * @param unit candidate string
  * @returns boolean indicating validity
  */
-export const isValidDateTimeUnit = (
+export const isValidDateTimeDurationUnit = (
   unit: string,
 ): unit is DateTimeDurationUnit => {
   return (

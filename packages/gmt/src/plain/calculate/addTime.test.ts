@@ -1,4 +1,4 @@
-import type { TimeUnits } from "../../types";
+import type { TimeDurationUnit } from "../../types";
 import { addTime } from "./addTime";
 
 describe("addTime", () => {
@@ -25,7 +25,7 @@ describe("addTime", () => {
       negativeUnits,
       expectedTime,
     }: {
-      negativeUnits: Partial<Record<TimeUnits, number>>;
+      negativeUnits: Partial<Record<TimeDurationUnit, number>>;
       expectedTime: string;
     }) => {
       expect(addTime("14:30:00", negativeUnits)).toBe(expectedTime);

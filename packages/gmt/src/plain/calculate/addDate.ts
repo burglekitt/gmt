@@ -1,7 +1,7 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { isValidAmount } from "../../internal";
 import type { DateDurationUnit } from "../../types";
-import { isValidDate, isValidDateUnit } from "../validate";
+import { isValidDate, isValidDateDurationUnit } from "../validate";
 
 /**
  * Return a PlainDate ISO string with `amount` added according to `unit`.
@@ -18,7 +18,7 @@ export function addDate(
   units: Partial<Record<DateDurationUnit, number>>,
 ): string {
   const validDate = isValidDate(value);
-  const validUnits = Object.keys(units).every(isValidDateUnit);
+  const validUnits = Object.keys(units).every(isValidDateDurationUnit);
   const validAmounts = Object.values(units).every(isValidAmount);
 
   if (!validDate || !validUnits || !validAmounts) {

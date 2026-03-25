@@ -1,7 +1,7 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { isValidAmount } from "../../internal";
-import type { DateUnits } from "../../types";
-import { isValidDate, isValidDateUnit } from "../validate";
+import type { DateDurationUnit } from "../../types";
+import { isValidDate, isValidDateDurationUnit } from "../validate";
 
 /**
  * Return a PlainDate ISO string with `amount` subtracted according to `unit`.
@@ -10,15 +10,15 @@ import { isValidDate, isValidDateUnit } from "../validate";
  * - Returns an empty string for invalid inputs.
  *
  * @param value ISO PlainDate string
- * @param units Partial<Record<DateUnits, number>> object specifying units to subtract (e.g. { day: 1, month: 2 })
+ * @param units Partial<Record<DateDurationUnit, number>> object specifying units to subtract (e.g. { day: 1, month: 2 })
  * @returns ISO PlainDate string after subtraction, or "" on invalid input
  */
 export function subtractDate(
   value: string,
-  units: Partial<Record<DateUnits, number>>,
+  units: Partial<Record<DateDurationUnit, number>>,
 ): string {
   const validDate = isValidDate(value);
-  const validUnits = Object.keys(units).every(isValidDateUnit);
+  const validUnits = Object.keys(units).every(isValidDateDurationUnit);
   const validAmounts = Object.values(units).every(isValidAmount);
 
   if (!validDate || !validUnits || !validAmounts) {
