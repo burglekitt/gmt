@@ -13,7 +13,7 @@ describe("addDate", () => {
   });
 
   it.each`
-    negativeAmounts                                   | expectedDate
+    negativeAmount                                    | expectedDate
     ${{ years: -1 }}                                  | ${"2023-02-28"}
     ${{ months: -1 }}                                 | ${"2024-01-29"}
     ${{ weeks: -1 }}                                  | ${"2024-02-22"}
@@ -21,8 +21,8 @@ describe("addDate", () => {
     ${{ years: -1, months: -1, weeks: -1, days: -1 }} | ${"2023-01-21"}
   `(
     "returns the correct date when adding a negative amount: $negativeAmount",
-    ({ negativeAmounts, expectedDate }) => {
-      expect(addDate("2024-02-29", negativeAmounts)).toEqual(expectedDate);
+    ({ negativeAmount, expectedDate }) => {
+      expect(addDate("2024-02-29", negativeAmount)).toEqual(expectedDate);
     },
   );
 
