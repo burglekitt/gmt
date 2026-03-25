@@ -59,7 +59,7 @@ describe("addDate", () => {
   });
 
   it.each`
-    invalidAmounts
+    invalidAmount
     ${"not-a-number"}
     ${NaN}
     ${null}
