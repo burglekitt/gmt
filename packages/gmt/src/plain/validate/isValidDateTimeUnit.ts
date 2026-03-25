@@ -1,4 +1,4 @@
-import type { DateTimeUnits } from "../../types";
+import type { DateTimeDurationUnit } from "../../types";
 
 /**
  * Return true when `unit` is a valid DateTimeUnit.
@@ -6,7 +6,9 @@ import type { DateTimeUnits } from "../../types";
  * @param unit candidate string
  * @returns boolean indicating validity
  */
-export const isValidDateTimeUnit = (unit: string): unit is DateTimeUnits => {
+export const isValidDateTimeUnit = (
+  unit: string,
+): unit is DateTimeDurationUnit => {
   return (
     unit === "years" ||
     unit === "months" ||

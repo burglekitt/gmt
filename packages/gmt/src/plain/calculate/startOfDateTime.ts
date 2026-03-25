@@ -1,5 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
-import type { FractionalDigits } from "../../types";
+import type { FractionalDigit } from "../../types";
 import { isValidDateTime } from "../validate";
 
 /**
@@ -48,7 +48,7 @@ export function startOfDateTime(
     "nanosecond",
   ] as const;
 
-  const fractionalDigits: Record<string, FractionalDigits> = {
+  const fractionalDigits: Record<string, FractionalDigit> = {
     year: 0,
     month: 0,
     week: 0,
@@ -117,7 +117,7 @@ export function startOfDateTime(
   if ((timeUnits as readonly string[]).includes(unit as string)) {
     const payload = timeResets[unit as string] ?? {};
     const result = source.with(payload);
-    const digits = fractionalDigits[unit as string] as FractionalDigits;
+    const digits = fractionalDigits[unit as string] as FractionalDigit;
     return result.toString({ fractionalSecondDigits: digits });
   }
 

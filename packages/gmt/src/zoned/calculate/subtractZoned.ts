@@ -1,7 +1,7 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { isValidAmount } from "../../internal";
 import { isValidDateTimeUnit } from "../../plain/validate";
-import type { DateTimeUnits } from "../../types";
+import type { DateTimeDurationUnit } from "../../types";
 import { isValidZonedDateTime } from "../validate";
 
 /**
@@ -21,12 +21,12 @@ import { isValidZonedDateTime } from "../validate";
  *
  * @param value ISO 8601 zoned datetime string
  * @param amount numeric amount to subtract (can be negative)
- * @param unit Temporal.DateTimeUnit unit to subtract (e.g. "day", "hour")
+ * @param unit DateTimeDurationUnit unit to subtract (e.g. "day", "hour")
  * @returns zoned ISO 8601 string on success, or empty string on invalid input
  */
 export function subtractZoned(
   value: string,
-  units: Partial<Record<DateTimeUnits, number>>,
+  units: Partial<Record<DateTimeDurationUnit, number>>,
 ): string {
   const validZonedDateTime = isValidZonedDateTime(value);
   const validUnits = Object.keys(units).every(isValidDateTimeUnit);

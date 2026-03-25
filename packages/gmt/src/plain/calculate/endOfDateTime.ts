@@ -1,5 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
-import type { FractionalDigits } from "../../types";
+import type { FractionalDigit } from "../../types";
 import { isValidDateTime } from "../validate";
 import { endOfDate } from "./endOfDate";
 
@@ -131,7 +131,7 @@ export function endOfDateTime(
   const result = source.with(payload);
   const digits = fractionalMap[unit as Temporal.TimeUnit];
   return result.toString({
-    fractionalSecondDigits: digits as FractionalDigits,
+    fractionalSecondDigits: digits as FractionalDigit,
   });
 }
 

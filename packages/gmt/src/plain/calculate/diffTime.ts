@@ -1,5 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
-import type { TimeUnits } from "../../types";
+import type { TimeDurationUnit } from "../../types";
 import { isValidTime, isValidTimeUnit } from "../validate";
 import { getLargestTimeUnit } from "./getLargestTimeUnit";
 
@@ -12,14 +12,14 @@ import { getLargestTimeUnit } from "./getLargestTimeUnit";
  *
  * @param time1 ISO PlainTime string for the start
  * @param time2 ISO PlainTime string for the end
- * @param units TimeUnits to measure the difference (e.g. "hours", "minutes", "seconds")
+ * @param units TimeDurationUnit | TimeDurationUnit[] to measure the difference (e.g. "hours", "minutes", "seconds")
  * @returns numeric difference in the requested unit, or null on invalid input
  */
 export function diffTime(
   time1: string,
   time2: string,
-  units: TimeUnits | TimeUnits[],
-): number | Record<TimeUnits, number> | null {
+  units: TimeDurationUnit | TimeDurationUnit[],
+): number | Record<TimeDurationUnit, number> | null {
   const validTimes = isValidTime(time1) && isValidTime(time2);
   const isSingleUnit = !Array.isArray(units);
   const validUnits = isSingleUnit
@@ -42,11 +42,11 @@ export function diffTime(
     return duration[units] ?? 0;
   }
 
-  return (units as TimeUnits[]).reduce(
+  return (units as TimeDurationUnit[]).reduce(
     (result, unit) => {
       result[unit] = duration[unit] ?? 0;
       return result;
     },
-    {} as Record<TimeUnits, number>,
+    {} as Record<TimeDurationUnit, number>,
   );
 }

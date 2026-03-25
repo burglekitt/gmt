@@ -1,7 +1,7 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { getLargestDateTimeUnit } from "../../plain/calculate/getLargestDateTimeUnit";
 import { isValidDateTimeUnit } from "../../plain/validate";
-import type { DateTimeUnits } from "../../types";
+import type { DateTimeDurationUnit } from "../../types";
 import { isValidZonedDateTime } from "../validate";
 
 /**
@@ -14,14 +14,14 @@ import { isValidZonedDateTime } from "../validate";
  *
  * @param value1 zoned ISO 8601 datetime string (start)
  * @param value2 zoned ISO 8601 datetime string (end)
- * @param units DateTimeUnits | DateTimeUnits[] to measure the difference (e.g. "hours" | ["years", "months", "hours"])
+ * @param units DateTimeDurationUnit | DateTimeDurationUnit[] to measure the difference (e.g. "hours" | ["years", "months", "hours"])
  * @returns numeric difference in the requested unit, or null on invalid input
  */
 export function diffZoned(
   value1: string,
   value2: string,
-  units: DateTimeUnits | DateTimeUnits[],
-): number | Record<DateTimeUnits, number> | null {
+  units: DateTimeDurationUnit | DateTimeDurationUnit[],
+): number | Record<DateTimeDurationUnit, number> | null {
   const validZonedDateTimes =
     isValidZonedDateTime(value1) && isValidZonedDateTime(value2);
   const isSingleUnit = !Array.isArray(units);
@@ -47,12 +47,12 @@ export function diffZoned(
       return duration[units] ?? 0;
     }
 
-    return (units as DateTimeUnits[]).reduce(
+    return units.reduce(
       (result, unit) => {
         result[unit] = duration[unit] ?? 0;
         return result;
       },
-      {} as Record<DateTimeUnits, number>,
+      {} as Record<DateTimeDurationUnit, number>,
     );
   } catch {
     return null;

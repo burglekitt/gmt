@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { startOfDateTime } from "../../plain/calculate/startOfDateTime";
-import type { FractionalDigits } from "../../types";
+import type { FractionalDigit } from "../../types";
 import { isValidZonedDateTime } from "../validate";
 
 /**
@@ -45,7 +45,7 @@ export function startOfZoned(
     );
     if (!plainStart) return "";
     const plain = Temporal.PlainDateTime.from(plainStart);
-    const digitsMap: Record<string, FractionalDigits> = {
+    const digitsMap: Record<string, FractionalDigit> = {
       year: 0,
       month: 0,
       week: 0,
@@ -57,7 +57,7 @@ export function startOfZoned(
       microsecond: 6,
       nanosecond: 9,
     };
-    const digits = (digitsMap[unit as string] ?? 0) as FractionalDigits;
+    const digits = (digitsMap[unit as string] ?? 0) as FractionalDigit;
     const out = Temporal.ZonedDateTime.from({
       year: plain.year,
       month: plain.month,
@@ -71,7 +71,7 @@ export function startOfZoned(
       timeZone: zoned.timeZoneId,
     });
     const s = out.toString({
-      fractionalSecondDigits: digits as FractionalDigits,
+      fractionalSecondDigits: digits as FractionalDigit,
     });
     if (typeof digits === "number" && digits > 0) {
       const bracket = s.lastIndexOf("[");

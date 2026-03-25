@@ -1,5 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
-import type { DateUnits } from "../../types";
+import type { DateDurationUnit } from "../../types";
 import { isValidDate, isValidDateUnit } from "../validate";
 import { getLargestDateUnit } from "./getLargestDateUnit";
 
@@ -13,14 +13,14 @@ import { getLargestDateUnit } from "./getLargestDateUnit";
  *
  * @param date1 ISO PlainDate string for the start
  * @param date2 ISO PlainDate string for the end
- * @param units DateUnits | DateUnits[] to measure the difference (e.g. "days" | ["years", "months"])
+ * @param units DateDurationUnit | DateDurationUnit[] to measure the difference (e.g. "days" | ["years", "months"])
  * @returns numeric difference in the requested unit, or null on invalid input
  */
 export function diffDate(
   date1: string,
   date2: string,
-  units: DateUnits | DateUnits[],
-): number | Record<DateUnits, number> | null {
+  units: DateDurationUnit | DateDurationUnit[],
+): number | Record<DateDurationUnit, number> | null {
   const validDates = isValidDate(date1) && isValidDate(date2);
   const isSingleUnit = !Array.isArray(units);
   const validUnits = isSingleUnit
@@ -43,11 +43,11 @@ export function diffDate(
     return duration[units] ?? 0;
   }
 
-  return (units as DateUnits[]).reduce(
+  return (units as DateDurationUnit[]).reduce(
     (result, unit) => {
       result[unit] = duration[unit] ?? 0;
       return result;
     },
-    {} as Record<DateUnits, number>,
+    {} as Record<DateDurationUnit, number>,
   );
 }

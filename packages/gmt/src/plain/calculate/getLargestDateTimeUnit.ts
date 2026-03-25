@@ -1,4 +1,4 @@
-import type { DateTimeUnits } from "../../types";
+import type { DateTimeDurationUnit } from "../../types";
 
 /**
  * Return the largest DateTimeUnit from the provided array.
@@ -8,8 +8,10 @@ import type { DateTimeUnits } from "../../types";
  * @param units array of DateTimeUnits to evaluate
  * @returns the largest DateTimeUnit found, or "seconds" if none are valid
  */
-export function getLargestDateTimeUnit(units: DateTimeUnits[]): DateTimeUnits {
-  const order: DateTimeUnits[] = [
+export function getLargestDateTimeUnit(
+  units: DateTimeDurationUnit[],
+): DateTimeDurationUnit {
+  const order: DateTimeDurationUnit[] = [
     "years",
     "months",
     "weeks",

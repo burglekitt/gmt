@@ -1,5 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
-import type { FractionalDigits } from "../../types";
+import type { FractionalDigit } from "../../types";
 import { isValidTime } from "../validate";
 
 /**
@@ -65,7 +65,7 @@ export function startOfTime(value: string, unit: Temporal.TimeUnit): string {
     nanosecond: { millisecond: 0, microsecond: 0, nanosecond: 0 },
   };
 
-  const fractionalDigits: Record<Temporal.TimeUnit, FractionalDigits> = {
+  const fractionalDigits: Record<Temporal.TimeUnit, FractionalDigit> = {
     hour: 0,
     minute: 0,
     second: 0,

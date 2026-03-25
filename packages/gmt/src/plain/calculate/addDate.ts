@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { isValidAmount } from "../../internal";
-import type { DateUnits } from "../../types";
+import type { DateDurationUnit } from "../../types";
 import { isValidDate, isValidDateUnit } from "../validate";
 
 /**
@@ -10,12 +10,12 @@ import { isValidDate, isValidDateUnit } from "../validate";
  * - Returns an empty string for invalid inputs.
  *
  * @param value ISO PlainDate string
- * @param units Partial<Record<DateUnits, number>> object specifying units to add (e.g. { day: 1, month: 2 })
+ * @param units Partial<Record<DateDurationUnit, number>> object specifying units to add (e.g. { day: 1, month: 2 })
  * @returns ISO PlainDate string after addition, or "" on invalid input
  */
 export function addDate(
   value: string /* ISO 8601 date */,
-  units: Partial<Record<DateUnits, number>>,
+  units: Partial<Record<DateDurationUnit, number>>,
 ): string {
   const validDate = isValidDate(value);
   const validUnits = Object.keys(units).every(isValidDateUnit);
