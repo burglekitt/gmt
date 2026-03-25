@@ -1,7 +1,7 @@
 import type { TimeDurationUnit } from "../../types";
 
 /**
- * Return true when `unit` is a valid TimeUnit.
+ * Return true when `unit` is a valid TimeDurationUnit.
  *
  * @param unit string candidate
  * @returns boolean indicating whether the unit is valid
