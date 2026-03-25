@@ -19,10 +19,8 @@ export function subtractTime(
   units: Partial<Record<TimeUnits, number>>,
 ): string {
   const validTime = isValidTime(value);
-  const validUnits = Object.keys(units).every((unit) => isValidTimeUnit(unit));
-  const validAmounts = Object.values(units).every((amount) =>
-    isValidAmount(amount),
-  );
+  const validUnits = Object.keys(units).every(isValidTimeUnit);
+  const validAmounts = Object.values(units).every(isValidAmount);
 
   if (!validTime || !validUnits || !validAmounts) {
     return "";

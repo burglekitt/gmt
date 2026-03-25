@@ -24,7 +24,7 @@ export function diffTime(
   const isSingleUnit = !Array.isArray(units);
   const validUnits = isSingleUnit
     ? isValidTimeUnit(units)
-    : units.every((unit) => isValidTimeUnit(unit));
+    : units.every(isValidTimeUnit);
 
   if (!validTimes || !validUnits) {
     return null;

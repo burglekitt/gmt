@@ -29,12 +29,8 @@ export function subtractZoned(
   units: Partial<Record<DateTimeUnits, number>>,
 ): string {
   const validZonedDateTime = isValidZonedDateTime(value);
-  const validUnits = Object.keys(units).every((unit) =>
-    isValidDateTimeUnit(unit),
-  );
-  const validAmounts = Object.values(units).every((amount) =>
-    isValidAmount(amount),
-  );
+  const validUnits = Object.keys(units).every(isValidDateTimeUnit);
+  const validAmounts = Object.values(units).every(isValidAmount);
 
   if (!validZonedDateTime || !validUnits || !validAmounts) {
     return "";

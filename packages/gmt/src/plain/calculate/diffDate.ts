@@ -25,7 +25,7 @@ export function diffDate(
   const isSingleUnit = !Array.isArray(units);
   const validUnits = isSingleUnit
     ? isValidDateUnit(units)
-    : units.every((unit) => isValidDateUnit(unit));
+    : units.every(isValidDateUnit);
 
   if (!validDates || !validUnits) {
     return null;

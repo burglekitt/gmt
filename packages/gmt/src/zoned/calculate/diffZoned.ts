@@ -27,7 +27,7 @@ export function diffZoned(
   const isSingleUnit = !Array.isArray(units);
   const validUnits = isSingleUnit
     ? isValidDateTimeUnit(units)
-    : units.every((unit) => isValidDateTimeUnit(unit));
+    : units.every(isValidDateTimeUnit);
 
   if (!validZonedDateTimes || !validUnits) {
     return null;

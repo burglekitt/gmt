@@ -18,10 +18,8 @@ export function subtractDate(
   units: Partial<Record<DateUnits, number>>,
 ): string {
   const validDate = isValidDate(value);
-  const validUnits = Object.keys(units).every((unit) => isValidDateUnit(unit));
-  const validAmounts = Object.values(units).every((amount) =>
-    isValidAmount(amount),
-  );
+  const validUnits = Object.keys(units).every(isValidDateUnit);
+  const validAmounts = Object.values(units).every(isValidAmount);
 
   if (!validDate || !validUnits || !validAmounts) {
     return "";
