@@ -1,4 +1,4 @@
-import { isValidDateTime } from "./isValidDatetime";
+import { isValidDateTime } from "./isValidDateTime";
 
 describe("isValidDateTime", () => {
   it.each`
