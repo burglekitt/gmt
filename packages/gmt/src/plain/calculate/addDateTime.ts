@@ -1,5 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { isValidAmount } from "../../internal";
+import type { DateTimeUnits } from "../../types";
 import { isValidDateTime, isValidDateTimeUnit } from "../validate";
 
 /**
@@ -9,45 +10,26 @@ import { isValidDateTime, isValidDateTimeUnit } from "../validate";
  * - Returns an empty string for invalid inputs.
  *
  * @param value ISO PlainDateTime string
- * @param amount numeric amount to add
- * @param unit Temporal.DateTimeUnit (year|month|day|hour|...)
+ * @param units Partial<Record<DateTimeUnits, number>> object specifying units to add (e.g. { days: 1, months: 2 })
  * @returns ISO PlainDateTime string after addition, or "" on invalid input
  */
 export function addDateTime(
   value: string,
-  amount: number,
-  unit: Temporal.DateTimeUnit,
+  units: Partial<Record<DateTimeUnits, number>>,
 ): string {
   const validDateTime = isValidDateTime(value);
-  const validUnit = isValidDateTimeUnit(unit);
-  const validAmount = isValidAmount(amount);
+  const validUnits = Object.keys(units).every((unit) =>
+    isValidDateTimeUnit(unit),
+  );
+  const validAmounts = Object.values(units).every((amount) =>
+    isValidAmount(amount),
+  );
 
-  if (!validDateTime || !validUnit || !validAmount) {
+  if (!validDateTime || !validUnits || !validAmounts) {
     return "";
   }
 
   const dateTime = Temporal.PlainDateTime.from(value);
 
-  switch (unit) {
-    case "year":
-      return dateTime.add({ years: amount }).toString();
-    case "month":
-      return dateTime.add({ months: amount }).toString();
-    case "week":
-      return dateTime.add({ weeks: amount }).toString();
-    case "day":
-      return dateTime.add({ days: amount }).toString();
-    case "hour":
-      return dateTime.add({ hours: amount }).toString();
-    case "minute":
-      return dateTime.add({ minutes: amount }).toString();
-    case "second":
-      return dateTime.add({ seconds: amount }).toString();
-    case "millisecond":
-      return dateTime.add({ milliseconds: amount }).toString();
-    case "microsecond":
-      return dateTime.add({ microseconds: amount }).toString();
-    case "nanosecond":
-      return dateTime.add({ nanoseconds: amount }).toString();
-  }
+  return dateTime.add(units).toString();
 }

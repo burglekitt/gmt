@@ -3,20 +3,22 @@ import { isValidDateUnit } from "./isValidDateUnit";
 describe("isValidDateUnit", () => {
   it.each`
     unit
-    ${"year"}
-    ${"month"}
-    ${"week"}
-    ${"day"}
+    ${"years"}
+    ${"months"}
+    ${"weeks"}
+    ${"days"}
   `("returns true for valid date unit: $unit", ({ unit }) => {
     expect(isValidDateUnit(unit)).toBe(true);
   });
 
   it.each`
     invalidUnit
-    ${"hour"}
-    ${"minute"}
-    ${"second"}
-    ${"millisecond"}
+    ${"hours"}
+    ${"minutes"}
+    ${"seconds"}
+    ${"milliseconds"}
+    ${"microseconds"}
+    ${"nanoseconds"}
     ${"not-a-unit"}
     ${""}
     ${1}

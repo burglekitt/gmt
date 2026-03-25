@@ -1,24 +1,22 @@
-import type { Temporal } from "@js-temporal/polyfill";
+import type { DateTimeUnits } from "../../types";
 
 /**
- * Return true when `unit` is a valid Temporal.DateTimeUnit.
+ * Return true when `unit` is a valid DateTimeUnit.
  *
  * @param unit candidate string
  * @returns boolean indicating validity
  */
-export const isValidDateTimeUnit = (
-  unit: string,
-): unit is Temporal.DateTimeUnit => {
+export const isValidDateTimeUnit = (unit: string): unit is DateTimeUnits => {
   return (
-    unit === "year" ||
-    unit === "month" ||
-    unit === "week" ||
-    unit === "day" ||
-    unit === "hour" ||
-    unit === "minute" ||
-    unit === "second" ||
-    unit === "millisecond" ||
-    unit === "microsecond" ||
-    unit === "nanosecond"
+    unit === "years" ||
+    unit === "months" ||
+    unit === "weeks" ||
+    unit === "days" ||
+    unit === "hours" ||
+    unit === "minutes" ||
+    unit === "seconds" ||
+    unit === "milliseconds" ||
+    unit === "microseconds" ||
+    unit === "nanoseconds"
   );
 };

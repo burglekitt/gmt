@@ -1,5 +1,7 @@
 import { Temporal } from "@js-temporal/polyfill";
+import type { DateTimeUnits } from "../../types";
 import { isValidDateTime, isValidDateTimeUnit } from "../validate";
+import { getLargestDateTimeUnit } from "./getLargestDateTimeUnit";
 
 /**
  * Return the difference between two PlainDateTime values in the requested
@@ -11,26 +13,42 @@ import { isValidDateTime, isValidDateTimeUnit } from "../validate";
  *
  * @param dateTime1 ISO PlainDateTime string for the start
  * @param dateTime2 ISO PlainDateTime string for the end
- * @param unit Temporal.DateTimeUnit to measure the difference
+ * @param units DateTimeUnits|DateTimeUnits[] to measure the difference (e.g. ["years", "months", "hours"])
  * @returns numeric difference in the requested unit, or null on invalid input
  */
 export function diffDateTime(
   dateTime1: string,
   dateTime2: string,
-  unit: Temporal.DateTimeUnit,
-): number | null {
+  units: DateTimeUnits | DateTimeUnits[],
+): number | Record<DateTimeUnits, number> | null {
   const validDateTimes =
     isValidDateTime(dateTime1) && isValidDateTime(dateTime2);
-  const validUnit = isValidDateTimeUnit(unit);
+  const isSingleUnit = !Array.isArray(units);
+  const validUnits = isSingleUnit
+    ? isValidDateTimeUnit(units)
+    : units.every((unit) => isValidDateTimeUnit(unit));
+  //
 
-  if (!validDateTimes || !validUnit) {
+  if (!validDateTimes || !validUnits) {
     return null;
   }
 
   const dt1 = Temporal.PlainDateTime.from(dateTime1);
   const dt2 = Temporal.PlainDateTime.from(dateTime2);
 
-  const duration = dt1.until(dt2, { largestUnit: unit });
+  const duration = dt1.until(dt2, {
+    largestUnit: isSingleUnit ? units : getLargestDateTimeUnit(units),
+  });
+  if (isSingleUnit) {
+    return duration[units] ?? 0;
+  }
 
-  return duration[`${unit}s`] ?? null;
+  // craft record for units passed
+  return units.reduce(
+    (result, unit) => {
+      result[unit] = duration[unit] ?? 0;
+      return result;
+    },
+    {} as Record<DateTimeUnits, number>,
+  );
 }

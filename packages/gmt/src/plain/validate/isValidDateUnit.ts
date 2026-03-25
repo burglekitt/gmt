@@ -1,13 +1,13 @@
-import type { Temporal } from "@js-temporal/polyfill";
+import type { DateUnits } from "../../types";
 
 /**
- * Return true when `unit` is a valid Temporal.DateUnit.
+ * Return true when `unit` is a valid DateUnit.
  *
  * @param unit string candidate
  * @returns boolean indicating whether the unit is valid
  */
-export const isValidDateUnit = (unit: string): unit is Temporal.DateUnit => {
+export const isValidDateUnit = (unit: string): unit is DateUnits => {
   return (
-    unit === "year" || unit === "month" || unit === "week" || unit === "day"
+    unit === "years" || unit === "months" || unit === "weeks" || unit === "days"
   );
 };

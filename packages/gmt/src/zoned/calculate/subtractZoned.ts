@@ -1,6 +1,7 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { isValidAmount } from "../../internal";
 import { isValidDateTimeUnit } from "../../plain/validate";
+import type { DateTimeUnits } from "../../types";
 import { isValidZonedDateTime } from "../validate";
 
 /**
@@ -14,7 +15,7 @@ import { isValidZonedDateTime } from "../validate";
  *
  * Examples:
  * ```ts
- * subtractZoned("2024-02-29T14:30:00+00:00[UTC]", 1, "year")
+ * subtractZoned("2024-02-29T14:30:00+00:00[UTC]", { years: 1 })
  * // => "2023-02-28T14:30:00+00:00[UTC]"
  * ```
  *
@@ -25,21 +26,19 @@ import { isValidZonedDateTime } from "../validate";
  */
 export function subtractZoned(
   value: string,
-  amount: number,
-  unit: Temporal.DateTimeUnit,
+  units: Partial<Record<DateTimeUnits, number>>,
 ): string {
-  if (
-    !isValidZonedDateTime(value) ||
-    !isValidAmount(amount) ||
-    !isValidDateTimeUnit(unit)
-  ) {
+  const validZonedDateTime = isValidZonedDateTime(value);
+  const validUnits = Object.keys(units).every((unit) =>
+    isValidDateTimeUnit(unit),
+  );
+  const validAmounts = Object.values(units).every((amount) =>
+    isValidAmount(amount),
+  );
+
+  if (!validZonedDateTime || !validUnits || !validAmounts) {
     return "";
   }
 
-  try {
-    const zoned = Temporal.ZonedDateTime.from(value);
-    return zoned.subtract({ [`${unit}s`]: amount }).toString();
-  } catch {
-    return "";
-  }
+  return Temporal.ZonedDateTime.from(value).subtract(units).toString();
 }

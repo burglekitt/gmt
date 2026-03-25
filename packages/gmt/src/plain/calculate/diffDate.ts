@@ -1,5 +1,7 @@
 import { Temporal } from "@js-temporal/polyfill";
+import type { DateUnits } from "../../types";
 import { isValidDate, isValidDateUnit } from "../validate";
+import { getLargestDateUnit } from "./getLargestDateUnit";
 
 /**
  * Return the difference between two PlainDate values using the provided
@@ -11,37 +13,41 @@ import { isValidDate, isValidDateUnit } from "../validate";
  *
  * @param date1 ISO PlainDate string for the start
  * @param date2 ISO PlainDate string for the end
- * @param unit Temporal.DateUnit (day|week|month|year)
+ * @param units DateUnits | DateUnits[] to measure the difference (e.g. "days" | ["years", "months"])
  * @returns numeric difference in the requested unit, or null on invalid input
  */
 export function diffDate(
   date1: string,
   date2: string,
-  unit: Temporal.DateUnit,
-): number | null {
+  units: DateUnits | DateUnits[],
+): number | Record<DateUnits, number> | null {
   const validDates = isValidDate(date1) && isValidDate(date2);
-  const validUnit = isValidDateUnit(unit);
+  const isSingleUnit = !Array.isArray(units);
+  const validUnits = isSingleUnit
+    ? isValidDateUnit(units)
+    : units.every((unit) => isValidDateUnit(unit));
 
-  if (!validDates || !validUnit) {
+  if (!validDates || !validUnits) {
     return null;
   }
 
   const d1 = Temporal.PlainDate.from(date1);
   const d2 = Temporal.PlainDate.from(date2);
 
-  const duration = d1.until(d2, { largestUnit: unit });
+  const duration = d1.until(d2, {
+    largestUnit: isSingleUnit ? units : getLargestDateUnit(units),
+  });
 
-  // Extract the specific unit
-  switch (unit) {
-    case "day":
-      return duration.days;
-    case "week":
-      return duration.weeks;
-    case "month":
-      return duration.months;
-    case "year":
-      return duration.years;
-    default:
-      return null; // Invalid unit
+  // craft record for units passed
+  if (isSingleUnit) {
+    return duration[units] ?? 0;
   }
+
+  return (units as DateUnits[]).reduce(
+    (result, unit) => {
+      result[unit] = duration[unit] ?? 0;
+      return result;
+    },
+    {} as Record<DateUnits, number>,
+  );
 }

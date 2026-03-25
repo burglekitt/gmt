@@ -1,5 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { isValidAmount } from "../../internal";
+import type { TimeUnits } from "../../types";
 import { isValidTime, isValidTimeUnit } from "../validate";
 
 /**
@@ -10,37 +11,24 @@ import { isValidTime, isValidTimeUnit } from "../validate";
  * - Returns an empty string for invalid inputs.
  *
  * @param value ISO PlainTime string
- * @param amount numeric amount to add
- * @param unit Temporal.TimeUnit (hour|minute|second|...)
+ * @param units Partial record of TimeUnits with numeric values to add
  * @returns ISO PlainTime string with amount added, or "" on invalid input
  */
 export function addTime(
   value: string,
-  amount: number,
-  unit: Temporal.TimeUnit,
+  units: Partial<Record<TimeUnits, number>>,
 ): string {
   const validTime = isValidTime(value);
-  const validUnit = isValidTimeUnit(unit);
-  const validAmount = isValidAmount(amount);
+  const validUnits = Object.keys(units).every((unit) => isValidTimeUnit(unit));
+  const validAmounts = Object.values(units).every((amount) =>
+    isValidAmount(amount),
+  );
 
-  if (!validTime || !validUnit || !validAmount) {
+  if (!validTime || !validUnits || !validAmounts) {
     return "";
   }
 
   const time = Temporal.PlainTime.from(value);
 
-  switch (unit) {
-    case "hour":
-      return time.add({ hours: amount }).toString();
-    case "minute":
-      return time.add({ minutes: amount }).toString();
-    case "second":
-      return time.add({ seconds: amount }).toString();
-    case "millisecond":
-      return time.add({ milliseconds: amount }).toString();
-    case "microsecond":
-      return time.add({ microseconds: amount }).toString();
-    case "nanosecond":
-      return time.add({ nanoseconds: amount }).toString();
-  }
+  return time.add(units).toString();
 }
