@@ -35,5 +35,10 @@ export function subtractZoned(
     return "";
   }
 
-  return Temporal.ZonedDateTime.from(value).subtract(units).toString();
+  try {
+    const zoned = Temporal.ZonedDateTime.from(value);
+    return zoned.subtract(units).toString();
+  } catch {
+    return "";
+  }
 }

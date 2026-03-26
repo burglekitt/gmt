@@ -33,22 +33,26 @@ export function diffDateTime(
     return null;
   }
 
-  const dt1 = Temporal.PlainDateTime.from(dateTime1);
-  const dt2 = Temporal.PlainDateTime.from(dateTime2);
+  try {
+    const dt1 = Temporal.PlainDateTime.from(dateTime1);
+    const dt2 = Temporal.PlainDateTime.from(dateTime2);
 
-  const duration = dt1.until(dt2, {
-    largestUnit: isSingleUnit ? units : getLargestDateTimeDurationUnit(units),
-  });
-  if (isSingleUnit) {
-    return duration[units] ?? 0;
+    const duration = dt1.until(dt2, {
+      largestUnit: isSingleUnit ? units : getLargestDateTimeDurationUnit(units),
+    });
+    if (isSingleUnit) {
+      return duration[units] ?? 0;
+    }
+
+    // craft record for units passed
+    return (units as DateTimeDurationUnit[]).reduce(
+      (result, unit) => {
+        result[unit] = duration[unit] ?? 0;
+        return result;
+      },
+      {} as Record<DateTimeDurationUnit, number>,
+    );
+  } catch {
+    return null;
   }
-
-  // craft record for units passed
-  return (units as DateTimeDurationUnit[]).reduce(
-    (result, unit) => {
-      result[unit] = duration[unit] ?? 0;
-      return result;
-    },
-    {} as Record<DateTimeDurationUnit, number>,
-  );
 }

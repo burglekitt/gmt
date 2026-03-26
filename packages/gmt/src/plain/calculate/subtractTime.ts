@@ -26,7 +26,10 @@ export function subtractTime(
     return "";
   }
 
-  const time = Temporal.PlainTime.from(value);
-
-  return time.subtract(units).toString();
+  try {
+    const time = Temporal.PlainTime.from(value);
+    return time.subtract(units).toString();
+  } catch {
+    return "";
+  }
 }

@@ -25,7 +25,10 @@ export function addDate(
     return "";
   }
 
-  const date = Temporal.PlainDate.from(value);
-
-  return date.add(units).toString();
+  try {
+    const date = Temporal.PlainDate.from(value);
+    return date.add(units).toString();
+  } catch {
+    return "";
+  }
 }

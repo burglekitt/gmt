@@ -25,7 +25,10 @@ export function addDateTime(
     return "";
   }
 
-  const dateTime = Temporal.PlainDateTime.from(value);
-
-  return dateTime.add(units).toString();
+  try {
+    const dateTime = Temporal.PlainDateTime.from(value);
+    return dateTime.add(units).toString();
+  } catch {
+    return "";
+  }
 }

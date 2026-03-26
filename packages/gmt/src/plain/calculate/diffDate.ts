@@ -31,25 +31,29 @@ export function diffDate(
     return null;
   }
 
-  const d1 = Temporal.PlainDate.from(date1);
-  const d2 = Temporal.PlainDate.from(date2);
+  try {
+    const d1 = Temporal.PlainDate.from(date1);
+    const d2 = Temporal.PlainDate.from(date2);
 
-  const duration = d1.until(d2, {
-    largestUnit: isSingleUnit
-      ? unitArg
-      : getLargestDateDurationUnit(unitArg as DateDurationUnit[]),
-  });
+    const duration = d1.until(d2, {
+      largestUnit: isSingleUnit
+        ? unitArg
+        : getLargestDateDurationUnit(unitArg as DateDurationUnit[]),
+    });
 
-  // craft record for units passed
-  if (isSingleUnit) {
-    return duration[unitArg as DateDurationUnit] ?? 0;
+    // craft record for units passed
+    if (isSingleUnit) {
+      return duration[unitArg as DateDurationUnit] ?? 0;
+    }
+
+    return (unitArg as DateDurationUnit[]).reduce(
+      (result, unit) => {
+        result[unit] = duration[unit] ?? 0;
+        return result;
+      },
+      {} as Record<DateDurationUnit, number>,
+    );
+  } catch {
+    return null;
   }
-
-  return (unitArg as DateDurationUnit[]).reduce(
-    (result, unit) => {
-      result[unit] = duration[unit] ?? 0;
-      return result;
-    },
-    {} as Record<DateDurationUnit, number>,
-  );
 }

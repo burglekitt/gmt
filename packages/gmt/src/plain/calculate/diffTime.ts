@@ -30,23 +30,27 @@ export function diffTime(
     return null;
   }
 
-  const t1 = Temporal.PlainTime.from(time1);
-  const t2 = Temporal.PlainTime.from(time2);
+  try {
+    const t1 = Temporal.PlainTime.from(time1);
+    const t2 = Temporal.PlainTime.from(time2);
 
-  const duration = t1.until(t2, {
-    largestUnit: isSingleUnit ? units : getLargestTimeDurationUnit(units),
-  });
+    const duration = t1.until(t2, {
+      largestUnit: isSingleUnit ? units : getLargestTimeDurationUnit(units),
+    });
 
-  // craft record for units passed
-  if (isSingleUnit) {
-    return duration[units] ?? 0;
+    // craft record for units passed
+    if (isSingleUnit) {
+      return duration[units] ?? 0;
+    }
+
+    return (units as TimeDurationUnit[]).reduce(
+      (result, unit) => {
+        result[unit] = duration[unit] ?? 0;
+        return result;
+      },
+      {} as Record<TimeDurationUnit, number>,
+    );
+  } catch {
+    return null;
   }
-
-  return (units as TimeDurationUnit[]).reduce(
-    (result, unit) => {
-      result[unit] = duration[unit] ?? 0;
-      return result;
-    },
-    {} as Record<TimeDurationUnit, number>,
-  );
 }

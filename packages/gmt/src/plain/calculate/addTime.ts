@@ -26,7 +26,10 @@ export function addTime(
     return "";
   }
 
-  const time = Temporal.PlainTime.from(value);
-
-  return time.add(units).toString();
+  try {
+    const time = Temporal.PlainTime.from(value);
+    return time.add(units).toString();
+  } catch {
+    return "";
+  }
 }

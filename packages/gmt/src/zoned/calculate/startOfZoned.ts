@@ -18,8 +18,6 @@ const supported: (Temporal.DateUnit | Temporal.TimeUnit)[] = [
 /**
  * Return the start of the specified date-time `unit` (year|month|day|hour|minute|...)
  * for a given zoned ISO 8601 datetime string.
- * - Uses Temporal.ZonedDateTime.startOf to compute the result.
- * - Returns an empty string "" for invalid inputs or units.
  *
  * @param value zoned ISO 8601 datetime string
  * @param unit Temporal.DateUnit|Temporal.TimeUnit to specify the unit for the start (e.g. "month")

@@ -25,7 +25,10 @@ export function subtractDateTime(
     return "";
   }
 
-  const dateTime = Temporal.PlainDateTime.from(value);
-
-  return dateTime.subtract(units).toString();
+  try {
+    const dateTime = Temporal.PlainDateTime.from(value);
+    return dateTime.subtract(units).toString();
+  } catch {
+    return "";
+  }
 }
