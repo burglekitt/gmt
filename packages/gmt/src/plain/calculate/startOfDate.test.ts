@@ -14,7 +14,7 @@ describe("startOfDate", () => {
   );
 
   // supports weekStart option
-  it.only.each`
+  it.each`
     value           | unit      | weekStartsOn | expected
     ${"2024-02-29"} | ${"week"} | ${undefined} | ${"2024-02-26"}
     ${"2024-02-29"} | ${"week"} | ${"monday"}  | ${"2024-02-26"}
