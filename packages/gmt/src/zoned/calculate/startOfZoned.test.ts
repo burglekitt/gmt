@@ -10,13 +10,43 @@ describe("startOfZoned", () => {
     ${"2024-02-29T12:34:56+00:00[UTC]"}           | ${"hour"}        | ${"2024-02-29T12:00:00+00:00[UTC]"}
     ${"2024-02-29T12:34:56+00:00[UTC]"}           | ${"minute"}      | ${"2024-02-29T12:34:00+00:00[UTC]"}
     ${"2024-02-29T12:34:56+00:00[UTC]"}           | ${"second"}      | ${"2024-02-29T12:34:56+00:00[UTC]"}
-    ${"2024-02-29T12:34:56+00:00[UTC]"}           | ${"millisecond"} | ${"2024-02-29T12:34:56.000+00:00.000[UTC]"}
-    ${"2024-02-29T12:34:56.999999999+00:00[UTC]"} | ${"microsecond"} | ${"2024-02-29T12:34:56.000000+00:00.000000[UTC]"}
-    ${"2024-02-29T12:34:56.999999999+00:00[UTC]"} | ${"nanosecond"}  | ${"2024-02-29T12:34:56.000000000+00:00.000000000[UTC]"}
+    ${"2024-02-29T12:34:56.999+00:00[UTC]"}       | ${"millisecond"} | ${"2024-02-29T12:34:56.999+00:00[UTC]"}
+    ${"2024-02-29T12:34:56.999999+00:00[UTC]"}    | ${"microsecond"} | ${"2024-02-29T12:34:56.999999+00:00[UTC]"}
+    ${"2024-02-29T12:34:56.999999999+00:00[UTC]"} | ${"nanosecond"}  | ${"2024-02-29T12:34:56.999999999+00:00[UTC]"}
   `(
     "returns $expected for value $value and unit $unit",
     ({ value, unit, expected }) => {
       expect(startOfZoned(value, unit)).toBe(expected);
+    },
+  );
+
+  // supports weekStartsOn option
+  it.each`
+    value                               | unit      | weekStartsOn | expected
+    ${"2024-02-29T12:34:56+00:00[UTC]"} | ${"week"} | ${undefined} | ${"2024-02-26T00:00:00+00:00[UTC]"}
+    ${"2024-02-29T12:34:56+00:00[UTC]"} | ${"week"} | ${"monday"}  | ${"2024-02-26T00:00:00+00:00[UTC]"}
+    ${"2024-02-29T12:34:56+00:00[UTC]"} | ${"week"} | ${"sunday"}  | ${"2024-02-25T00:00:00+00:00[UTC]"}
+  `(
+    "returns $expected for $value, $unit, and weekStartsOn $weekStartsOn, defaulting to Monday",
+    ({ value, unit, weekStartsOn, expected }) => {
+      expect(startOfZoned(value, unit, { weekStartsOn })).toBe(expected);
+    },
+  );
+
+  // supports fractionalSecondDigits option
+  it.each`
+    value                                         | unit        | fractionalSecondDigits | expected
+    ${"2024-02-29T12:34:56.789+00:00[UTC]"}       | ${"second"} | ${0}                   | ${"2024-02-29T12:34:56+00:00[UTC]"}
+    ${"2024-02-29T12:34:56.789+00:00[UTC]"}       | ${"second"} | ${3}                   | ${"2024-02-29T12:34:56.000+00:00[UTC]"}
+    ${"2024-02-29T12:34:56.789123+00:00[UTC]"}    | ${"second"} | ${6}                   | ${"2024-02-29T12:34:56.000000+00:00[UTC]"}
+    ${"2024-02-29T12:34:56.789123456+00:00[UTC]"} | ${"second"} | ${9}                   | ${"2024-02-29T12:34:56.000000000+00:00[UTC]"}
+    ${"2024-02-29T12:34:56.789+00:00[UTC]"}       | ${"second"} | ${undefined}           | ${"2024-02-29T12:34:56+00:00[UTC]"}
+  `(
+    "returns $expected for $value, $unit, and fractionalSecondDigits $fractionalSecondDigits",
+    ({ value, unit, fractionalSecondDigits, expected }) => {
+      expect(startOfZoned(value, unit, { fractionalSecondDigits })).toBe(
+        expected,
+      );
     },
   );
 

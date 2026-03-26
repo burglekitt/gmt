@@ -221,6 +221,13 @@ isValidZonedDateTime("2024-03-17T14:30:45+00:00[UTC]");
 - `subtractDate`
 - `subtractDateTime`
 - `subtractTime`
+- `startOfDate`
+- `startOfDateTime`
+- `startOfTime`
+- `endOfDate`
+- `endOfDateTime`
+- `endOfTime`
+- `weekOfYear`
 
 ### `@burglekitt/gmt/plain/chop`
 

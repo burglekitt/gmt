@@ -13,6 +13,19 @@ describe("startOfDate", () => {
     },
   );
 
+  // supports weekStart option
+  it.only.each`
+    value           | unit      | weekStartsOn | expected
+    ${"2024-02-29"} | ${"week"} | ${undefined} | ${"2024-02-26"}
+    ${"2024-02-29"} | ${"week"} | ${"monday"}  | ${"2024-02-26"}
+    ${"2024-02-29"} | ${"week"} | ${"sunday"}  | ${"2024-02-25"}
+  `(
+    "returns $expected for value $value, unit $unit, and weekStartsOn $weekStartsOn, defaulting to Sunday",
+    ({ value, unit, weekStartsOn, expected }) => {
+      expect(startOfDate(value, unit, { weekStartsOn })).toBe(expected);
+    },
+  );
+
   // error handling - invalid date
   it.each`
     invalidDate

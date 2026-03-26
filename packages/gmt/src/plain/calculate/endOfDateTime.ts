@@ -1,7 +1,19 @@
 import { Temporal } from "@js-temporal/polyfill";
 import type { FractionalDigit } from "../../types";
 import { isValidDateTime } from "../validate";
-import { endOfDate } from "./endOfDate";
+
+const supported = [
+  "year",
+  "month",
+  "week",
+  "day",
+  "hour",
+  "minute",
+  "second",
+  "millisecond",
+  "microsecond",
+  "nanosecond",
+];
 
 /**
  * Return the end of the specified date-time `unit` (year|month|day|hour|minute|...)
@@ -11,128 +23,131 @@ import { endOfDate } from "./endOfDate";
  *
  * @param value ISO 8601 datetime string
  * @param unit Temporal.DateUnit | Temporal.TimeUnit to specify the unit for the end (e.g. "month")
+ * @param options { weekStartsOn: "monday" | "sunday", fractionalSecondDigits?: number } - Optional parameter to specify the start of the week when unit is "week". Default is "monday". Optional parameter to specify fractionalSecondDigits for sub-second units (e.g. { fractionalSecondDigits: 3 } for milliseconds). Default is 0 for units larger than millisecond, 3 for millisecond, 6 for microsecond, and 9 for nanosecond.
  * @example endOfDateTime("2024-02-29T12:34:56", "month") => "2024-02-29T23:59:59.999999999"
  * @returns ISO 8601 string representing the end of the specified unit, or empty string on invalid input
  */
 export function endOfDateTime(
   value: string,
   unit: Temporal.DateUnit | Temporal.TimeUnit,
+  optionsArg?: {
+    weekStartsOn?: "monday" | "sunday";
+    fractionalSecondDigits?: FractionalDigit;
+  },
 ): string {
-  if (!isValidDateTime(value)) return "";
+  const weekStartsOn = optionsArg?.weekStartsOn ?? "monday";
+  const fractionalSecondDigits = optionsArg?.fractionalSecondDigits;
 
-  const supported: (Temporal.DateUnit | Temporal.TimeUnit)[] = [
-    "year",
-    "month",
-    "week",
-    "day",
-    "hour",
-    "minute",
-    "second",
-    "millisecond",
-    "microsecond",
-    "nanosecond",
-  ];
-
-  if (!supported.includes(unit)) return "";
+  if (!isValidDateTime(value) || !supported.includes(unit)) return "";
 
   const source = Temporal.PlainDateTime.from(value);
+  let result: Temporal.PlainDateTime;
 
-  // date units: compute end date and set time to max (23:59:59.999...)
-  const dateUnits = ["year", "month", "week", "day"] as const;
-
-  if ((dateUnits as readonly string[]).includes(unit as string)) {
-    const endDateStr = endOfDate(
-      source.toPlainDate().toString(),
-      unit as Temporal.DateUnit,
-    );
-    if (!endDateStr) return "";
-    const datePart = Temporal.PlainDate.from(endDateStr);
-    const out = Temporal.PlainDateTime.from({
-      year: datePart.year,
-      month: datePart.month,
-      day: datePart.day,
-      hour: 23,
-      minute: 59,
-      second: 59,
-      millisecond: 999,
-      microsecond: 999,
-      nanosecond: 999,
-    });
-    return out.toString({ fractionalSecondDigits: 0 });
+  switch (unit) {
+    case "year":
+      result = source.with({ month: 12, day: 31 }).withPlainTime({
+        hour: 23,
+        minute: 59,
+        second: 59,
+        millisecond: 999,
+        microsecond: 999,
+        nanosecond: 999,
+      });
+      break;
+    case "month": {
+      const lastDay = Temporal.PlainDate.from({
+        year: source.year,
+        month: source.month,
+        day: 1, // Start from day 1 to get daysInMonth
+      }).daysInMonth;
+      result = source.with({ day: lastDay }).withPlainTime({
+        hour: 23,
+        minute: 59,
+        second: 59,
+        millisecond: 999,
+        microsecond: 999,
+        nanosecond: 999,
+      });
+      break;
+    }
+    case "week": {
+      const daysToAdd =
+        weekStartsOn === "monday"
+          ? 7 - source.dayOfWeek
+          : (6 - source.dayOfWeek) % 7;
+      result = source
+        .with({
+          year: source.year,
+          month: source.month,
+          day: source.day,
+        })
+        .add({ days: daysToAdd })
+        .withPlainTime({
+          hour: 23,
+          minute: 59,
+          second: 59,
+          millisecond: 999,
+          microsecond: 999,
+          nanosecond: 999,
+        });
+      break;
+    }
+    case "day":
+      result = source.withPlainTime({
+        hour: 23,
+        minute: 59,
+        second: 59,
+        millisecond: 999,
+        microsecond: 999,
+        nanosecond: 999,
+      });
+      break;
+    case "hour":
+      result = source.with({
+        minute: 59,
+        second: 59,
+        millisecond: 999,
+        microsecond: 999,
+        nanosecond: 999,
+      });
+      break;
+    case "minute":
+      result = source.with({
+        second: 59,
+        millisecond: 999,
+        microsecond: 999,
+        nanosecond: 999,
+      });
+      break;
+    case "second":
+      result = source.with({
+        millisecond: 999,
+        microsecond: 999,
+        nanosecond: 999,
+      });
+      break;
+    case "millisecond":
+      result = source.with({ microsecond: 999, nanosecond: 999 });
+      break;
+    case "microsecond":
+      result = source.with({ nanosecond: 999 });
+      break;
+    case "nanosecond":
+      result = source;
+      break;
+    default:
+      return "";
   }
 
-  // time units: keep date, set time fields to max for the unit
-  const timePayloads: Record<
-    Temporal.TimeUnit,
-    Partial<Temporal.PlainDateTimeLike>
-  > = {
-    hour: {
-      hour: source.hour,
-      minute: 59,
-      second: 59,
-      millisecond: 999,
-      microsecond: 999,
-      nanosecond: 999,
-    },
-    minute: {
-      hour: source.hour,
-      minute: source.minute,
-      second: 59,
-      millisecond: 999,
-      microsecond: 999,
-      nanosecond: 999,
-    },
-    second: {
-      hour: source.hour,
-      minute: source.minute,
-      second: source.second,
-      millisecond: 999,
-      microsecond: 999,
-      nanosecond: 999,
-    },
-    millisecond: {
-      hour: source.hour,
-      minute: source.minute,
-      second: source.second,
-      millisecond: 999,
-      microsecond: 999,
-      nanosecond: 999,
-    },
-    microsecond: {
-      hour: source.hour,
-      minute: source.minute,
-      second: source.second,
-      millisecond: 999,
-      microsecond: 999,
-      nanosecond: 999,
-    },
-    nanosecond: {
-      hour: source.hour,
-      minute: source.minute,
-      second: source.second,
-      millisecond: 999,
-      microsecond: 999,
-      nanosecond: 999,
-    },
-  };
-
-  const fractionalMap: Record<Temporal.TimeUnit, number> = {
-    hour: 0,
-    minute: 0,
-    second: 0,
+  // Handle default precision: 0 for > sec, 3 for ms, 6 for µs, 9 for ns
+  const precisionMap: Record<string, FractionalDigit> = {
     millisecond: 3,
     microsecond: 6,
     nanosecond: 9,
   };
+  const fractionalDigits = fractionalSecondDigits ?? (precisionMap[unit] || 0);
 
-  const payload = timePayloads[
-    unit as Temporal.TimeUnit
-  ] as Partial<Temporal.PlainDateTimeLike>;
-  const result = source.with(payload);
-  const digits = fractionalMap[unit as Temporal.TimeUnit];
   return result.toString({
-    fractionalSecondDigits: digits as FractionalDigit,
+    fractionalSecondDigits: fractionalDigits,
   });
 }
-
-export default endOfDateTime;

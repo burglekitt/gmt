@@ -3,15 +3,30 @@ import { endOfTime } from "./endOfTime";
 describe("endOfTime", () => {
   it.each`
     value                   | unit             | expected
+    ${"12:34:56"}           | ${"day"}         | ${"23:59:59"}
     ${"12:34:56"}           | ${"hour"}        | ${"12:59:59"}
     ${"12:34:56"}           | ${"minute"}      | ${"12:34:59"}
     ${"12:34:56"}           | ${"second"}      | ${"12:34:56"}
-    ${"12:34:56.123"}       | ${"millisecond"} | ${"12:34:56.999"}
-    ${"12:34:56.123456"}    | ${"microsecond"} | ${"12:34:56.999999"}
-    ${"12:34:56.123456789"} | ${"nanosecond"}  | ${"12:34:56.999999999"}
+    ${"12:34:56.999"}       | ${"millisecond"} | ${"12:34:56.999"}
+    ${"12:34:56.999999"}    | ${"microsecond"} | ${"12:34:56.999999"}
+    ${"12:34:56.999999999"} | ${"nanosecond"}  | ${"12:34:56.999999999"}
   `("returns $expected for $value and $unit", ({ value, unit, expected }) => {
     expect(endOfTime(value, unit)).toBe(expected);
   });
+
+  // supports fractionalSecondDigits option
+  it.each`
+    value                   | unit        | fractionalSecondDigits | expected
+    ${"12:34:56.123456789"} | ${"second"} | ${0}                   | ${"12:34:56"}
+    ${"12:34:56.123456789"} | ${"second"} | ${3}                   | ${"12:34:56.999"}
+    ${"12:34:56.123456789"} | ${"second"} | ${6}                   | ${"12:34:56.999999"}
+    ${"12:34:56.123456789"} | ${"second"} | ${9}                   | ${"12:34:56.999999999"}
+  `(
+    "returns $expected for $value, $unit, fractionalSecondDigits $fractionalSecondDigits",
+    ({ value, unit, fractionalSecondDigits, expected }) => {
+      expect(endOfTime(value, unit, { fractionalSecondDigits })).toBe(expected);
+    },
+  );
 
   // invalid plain time
   it.each`

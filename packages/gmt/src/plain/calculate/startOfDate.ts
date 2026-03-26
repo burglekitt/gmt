@@ -1,6 +1,8 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { isValidDate } from "../validate";
 
+const supported: Temporal.DateUnit[] = ["year", "month", "week"];
+
 /**
  * Return the start of the specified date-time `unit` (year|month|day|hour|minute|...)
  * for a given ISO 8601 datetime string.
@@ -10,28 +12,44 @@ import { isValidDate } from "../validate";
  *
  * @param value ISO 8601 datetime string
  * @param unit Temporal.DateUnit to specify the unit for the start (e.g. "month")
+ * @options { weekStartsOn: "monday" | "sunday" } - Optional parameter to specify the start of the week when unit is "week". Default is "monday".
  * @example startOfDate("2024-02-29", "month") => "2024-02-01"
  *
  * @returns ISO 8601 string representing the start of the specified unit, or empty string on invalid input
  */
-export function startOfDate(value: string, unit: Temporal.DateUnit): string {
-  if (!isValidDate(value)) return "";
+export function startOfDate(
+  value: string,
+  unit: Temporal.DateUnit,
+  optionsArg?: { weekStartsOn?: "monday" | "sunday" },
+): string {
+  const weekStartsOn = optionsArg?.weekStartsOn ?? "monday";
 
-  const supported: Temporal.DateUnit[] = ["year", "month", "week"];
-  if (!supported.includes(unit)) return "";
+  if (!isValidDate(value) || !supported.includes(unit)) return "";
 
   const source = Temporal.PlainDate.from(value);
+  let result: Temporal.PlainDate;
 
-  // Week start: compute how many days to subtract to reach Monday.
-  // Use modular arithmetic so logic differs from other implementations but yields the same result.
-  if (unit === "week") {
-    const daysFromMonday = (source.dayOfWeek + 6) % 7; // Monday -> 0, Sunday -> 6
-    return source.subtract({ days: daysFromMonday }).toString();
+  switch (unit) {
+    case "year":
+      result = source.with({ month: 1, day: 1 });
+      break;
+    case "month":
+      result = source.with({ day: 1 });
+      break;
+    case "week": {
+      // Week start: compute how many days to subtract to reach Monday.
+      // Temporal: 1 (Mon) to 7 (Sun)
+      // If Monday start: Monday(1) subtracts 0, Sunday(7) subtracts 6.
+      // If Sunday start: Sunday(7) subtracts 0, Monday(1) subtracts 1.
+      const daysToSubtract =
+        weekStartsOn === "monday" ? source.dayOfWeek - 1 : source.dayOfWeek % 7;
+
+      result = source.subtract({ days: daysToSubtract });
+      break;
+    }
+    default:
+      return "";
   }
 
-  if (unit === "year") return source.with({ month: 1, day: 1 }).toString();
-  if (unit === "month") return source.with({ day: 1 }).toString();
-
-  // day -> the plain date itself
-  return source.toString();
+  return result.toString();
 }

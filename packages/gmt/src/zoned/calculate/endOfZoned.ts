@@ -1,7 +1,19 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { endOfDateTime } from "../../plain/calculate/endOfDateTime";
 import type { FractionalDigit } from "../../types";
 import { isValidZonedDateTime } from "../validate";
+
+const supported: (Temporal.DateUnit | Temporal.TimeUnit)[] = [
+  "year",
+  "month",
+  "week",
+  "day",
+  "hour",
+  "minute",
+  "second",
+  "millisecond",
+  "microsecond",
+  "nanosecond",
+];
 
 /**
  * Return the end of the specified date-time `unit` (year|month|day|hour|minute|...)
@@ -11,68 +23,123 @@ import { isValidZonedDateTime } from "../validate";
  *
  * @param value zoned ISO 8601 datetime string
  * @param unit Temporal.DateUnit|Temporal.TimeUnit to specify the unit for the end (e.g. "month")
+ * @param options { weekStartsOn: "monday" | "sunday", fractionalSecondDigits?: number } - Optional parameter to specify the start of the week when unit is "week". Default is "monday". Optional parameter to specify fractionalSecondDigits for sub-second units (e.g. { fractionalSecondDigits: 3 } for milliseconds). Default is 0 for units larger than millisecond, 3 for millisecond, 6 for microsecond, and 9 for nanosecond.
  * @example endOfZoned("2024-02-29T12:34:56+00:00[UTC]", "month") => "2024-02-29T23:59:59.999999999+00:00[UTC]"
  * @returns zoned ISO 8601 string representing the end of the specified unit, or empty string on invalid input
  */
 export function endOfZoned(
   value: string,
   unit: Temporal.DateUnit | Temporal.TimeUnit,
+  optionsArg?: {
+    weekStartsOn?: "monday" | "sunday";
+    fractionalSecondDigits?: FractionalDigit;
+  },
 ): string {
-  const validZonedDateTime = isValidZonedDateTime(value);
+  const weekStartsOn = optionsArg?.weekStartsOn ?? "monday";
+  const fractionalSecondDigits = optionsArg?.fractionalSecondDigits;
 
-  const supported: (Temporal.DateUnit | Temporal.TimeUnit)[] = [
-    "year",
-    "month",
-    "week",
-    "day",
-    "hour",
-    "minute",
-    "second",
-    "millisecond",
-    "microsecond",
-    "nanosecond",
-  ];
+  if (!isValidZonedDateTime(value) || !supported.includes(unit)) return "";
 
-  if (!validZonedDateTime || !supported.includes(unit)) return "";
+  const source = Temporal.ZonedDateTime.from(value);
+  let result: Temporal.ZonedDateTime;
 
-  try {
-    const zoned = Temporal.ZonedDateTime.from(value);
-    const localPlain = zoned.toPlainDateTime().toString();
-    const plainEnd = endOfDateTime(
-      localPlain,
-      unit as Temporal.DateUnit | Temporal.TimeUnit,
-    );
-    if (!plainEnd) return "";
-    const plain = Temporal.PlainDateTime.from(plainEnd);
-    const digitsMap: Record<string, FractionalDigit> = {
-      year: 0,
-      month: 0,
-      week: 0,
-      day: 0,
-      hour: 0,
-      minute: 0,
-      second: 0,
-      millisecond: 3,
-      microsecond: 6,
-      nanosecond: 9,
-    };
-    const digits = (digitsMap[unit as string] ?? 0) as FractionalDigit;
-    const out = Temporal.ZonedDateTime.from({
-      year: plain.year,
-      month: plain.month,
-      day: plain.day,
-      hour: plain.hour,
-      minute: plain.minute,
-      second: plain.second,
-      millisecond: plain.millisecond,
-      microsecond: plain.microsecond,
-      nanosecond: plain.nanosecond,
-      timeZone: zoned.timeZoneId,
-    });
-    return out.toString({ fractionalSecondDigits: digits as FractionalDigit });
-  } catch {
-    return "";
+  switch (unit) {
+    case "year":
+      result = source.with({ month: 12, day: 31 }).withPlainTime({
+        hour: 23,
+        minute: 59,
+        second: 59,
+        millisecond: 999,
+        microsecond: 999,
+        nanosecond: 999,
+      });
+      break;
+    case "month": {
+      const lastDay = Temporal.PlainDate.from({
+        year: source.year,
+        month: source.month,
+        day: 1,
+      }).daysInMonth;
+      result = source.with({ day: lastDay }).withPlainTime({
+        hour: 23,
+        minute: 59,
+        second: 59,
+        millisecond: 999,
+        microsecond: 999,
+        nanosecond: 999,
+      });
+      break;
+    }
+    case "week": {
+      const daysToSubtract =
+        weekStartsOn === "monday" ? source.dayOfWeek - 1 : source.dayOfWeek % 7;
+      const endOfWeek = source
+        .subtract({ days: daysToSubtract })
+        .add({ days: 6 });
+      result = endOfWeek.withPlainTime({
+        hour: 23,
+        minute: 59,
+        second: 59,
+        millisecond: 999,
+        microsecond: 999,
+        nanosecond: 999,
+      });
+      break;
+    }
+    case "day":
+      result = source.withPlainTime({
+        hour: 23,
+        minute: 59,
+        second: 59,
+        millisecond: 999,
+        microsecond: 999,
+        nanosecond: 999,
+      });
+      break;
+    case "hour":
+      result = source.with({
+        minute: 59,
+        second: 59,
+        millisecond: 999,
+        microsecond: 999,
+        nanosecond: 999,
+      });
+      break;
+    case "minute":
+      result = source.with({
+        second: 59,
+        millisecond: 999,
+        microsecond: 999,
+        nanosecond: 999,
+      });
+      break;
+    case "second":
+      result = source.with({
+        millisecond: 999,
+        microsecond: 999,
+        nanosecond: 999,
+      });
+      break;
+    case "millisecond":
+      result = source.with({ microsecond: 999, nanosecond: 999 });
+      break;
+    case "microsecond":
+      result = source.with({ nanosecond: 999 });
+      break;
+    case "nanosecond":
+      result = source; // Smallest unit, nothing to set
+      break;
+    default:
+      return "";
   }
-}
 
-export default endOfZoned;
+  // Handle default precision: 0 for > sec, 3 for ms, 6 for µs, 9 for ns
+  const precisionMap: Record<string, FractionalDigit> = {
+    millisecond: 3,
+    microsecond: 6,
+    nanosecond: 9,
+  };
+  const fractionalDigits = fractionalSecondDigits ?? (precisionMap[unit] || 0);
+
+  return result.toString({ fractionalSecondDigits: fractionalDigits });
+}
