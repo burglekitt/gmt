@@ -1,7 +1,7 @@
 import { Temporal } from "@js-temporal/polyfill";
 import type { DateDurationUnit } from "../../types";
 import { isValidDate, isValidDateDurationUnit } from "../validate";
-import { getLargestDateUnit } from "./getLargestDateUnit";
+import { getLargestDateDurationUnit } from "./getLargestDateDurationUnit";
 
 /**
  * Return the difference between two PlainDate values using the provided
@@ -13,19 +13,19 @@ import { getLargestDateUnit } from "./getLargestDateUnit";
  *
  * @param date1 ISO PlainDate string for the start
  * @param date2 ISO PlainDate string for the end
- * @param units DateDurationUnit | DateDurationUnit[] to measure the difference (e.g. "days" | ["years", "months"])
+ * @param unit DateDurationUnit | DateDurationUnit[] to measure the difference (e.g. "days" | ["years", "months"])
  * @returns numeric difference in the requested unit, or null on invalid input
  */
 export function diffDate(
   date1: string,
   date2: string,
-  units: DateDurationUnit | DateDurationUnit[],
+  unitArg: DateDurationUnit | DateDurationUnit[],
 ): number | Record<DateDurationUnit, number> | null {
   const validDates = isValidDate(date1) && isValidDate(date2);
-  const isSingleUnit = !Array.isArray(units);
+  const isSingleUnit = !Array.isArray(unitArg);
   const validUnits = isSingleUnit
-    ? isValidDateDurationUnit(units)
-    : units.every(isValidDateDurationUnit);
+    ? isValidDateDurationUnit(unitArg)
+    : (unitArg as DateDurationUnit[]).every(isValidDateDurationUnit);
 
   if (!validDates || !validUnits) {
     return null;
@@ -35,15 +35,17 @@ export function diffDate(
   const d2 = Temporal.PlainDate.from(date2);
 
   const duration = d1.until(d2, {
-    largestUnit: isSingleUnit ? units : getLargestDateUnit(units),
+    largestUnit: isSingleUnit
+      ? unitArg
+      : getLargestDateDurationUnit(unitArg as DateDurationUnit[]),
   });
 
   // craft record for units passed
   if (isSingleUnit) {
-    return duration[units] ?? 0;
+    return duration[unitArg as DateDurationUnit] ?? 0;
   }
 
-  return (units as DateDurationUnit[]).reduce(
+  return (unitArg as DateDurationUnit[]).reduce(
     (result, unit) => {
       result[unit] = duration[unit] ?? 0;
       return result;

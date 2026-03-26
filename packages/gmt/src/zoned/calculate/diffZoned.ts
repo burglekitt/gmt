@@ -1,5 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { getLargestDateTimeUnit } from "../../plain/calculate/getLargestDateTimeUnit";
+import { getLargestDateTimeDurationUnit } from "../../plain/calculate/getLargestDateTimeDurationUnit";
 import { isValidDateTimeDurationUnit } from "../../plain/validate";
 import type { DateTimeDurationUnit } from "../../types";
 import { isValidZonedDateTime } from "../validate";
@@ -40,7 +40,7 @@ export function diffZoned(
       Temporal.ZonedDateTime.from(value2).withTimeZone("UTC");
 
     const duration = normalizedZdt1.until(normalizedZdt2, {
-      largestUnit: isSingleUnit ? units : getLargestDateTimeUnit(units),
+      largestUnit: isSingleUnit ? units : getLargestDateTimeDurationUnit(units),
     });
 
     if (isSingleUnit) {

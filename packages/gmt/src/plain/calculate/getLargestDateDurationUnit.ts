@@ -6,10 +6,11 @@ import type { DateDurationUnit } from "../../types";
  * If no valid unit is found, defaults to "days" (though this case should be prevented by validation).
  *
  * @param units array of DateDurationUnits to evaluate
+ * @example getLargestDateDurationUnit(["months", "days"]) => "months"
  * @returns the largest DateDurationUnit found in the array, or "days" if none are valid
  */
 
-export function getLargestDateUnit(
+export function getLargestDateDurationUnit(
   units: DateDurationUnit[],
 ): DateDurationUnit {
   const order: DateDurationUnit[] = ["years", "months", "weeks", "days"];

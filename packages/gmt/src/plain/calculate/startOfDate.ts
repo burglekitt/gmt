@@ -12,7 +12,7 @@ const supported: Temporal.DateUnit[] = ["year", "month", "week"];
  *
  * @param value ISO 8601 datetime string
  * @param unit Temporal.DateUnit to specify the unit for the start (e.g. "month")
- * @options { weekStartsOn: "monday" | "sunday" } - Optional parameter to specify the start of the week when unit is "week". Default is "monday".
+ * @options { weekStartsOn: "monday" | "sunday" = 'monday' } - Optional parameter to specify the start of the week when unit is "week". Default is "monday".
  * @example startOfDate("2024-02-29", "month") => "2024-02-01"
  *
  * @returns ISO 8601 string representing the start of the specified unit, or empty string on invalid input

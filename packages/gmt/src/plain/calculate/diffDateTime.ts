@@ -1,7 +1,7 @@
 import { Temporal } from "@js-temporal/polyfill";
 import type { DateTimeDurationUnit } from "../../types";
 import { isValidDateTime, isValidDateTimeDurationUnit } from "../validate";
-import { getLargestDateTimeUnit } from "./getLargestDateTimeUnit";
+import { getLargestDateTimeDurationUnit } from "./getLargestDateTimeDurationUnit";
 
 /**
  * Return the difference between two PlainDateTime values in the requested
@@ -37,7 +37,7 @@ export function diffDateTime(
   const dt2 = Temporal.PlainDateTime.from(dateTime2);
 
   const duration = dt1.until(dt2, {
-    largestUnit: isSingleUnit ? units : getLargestDateTimeUnit(units),
+    largestUnit: isSingleUnit ? units : getLargestDateTimeDurationUnit(units),
   });
   if (isSingleUnit) {
     return duration[units] ?? 0;

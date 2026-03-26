@@ -5,10 +5,11 @@ import type { DateTimeDurationUnit } from "../../types";
  * The order of units from largest to smallest is: years, months, weeks, days, hours, minutes, seconds, milliseconds, microseconds, nanoseconds.
  * If no valid unit is found, defaults to "seconds" (though this case should be prevented by validation).
  *
- * @param units array of DateTimeUnit to evaluate
- * @returns the largest DateTimeUnit found, or "seconds" if none are valid
+ * @param units array of DateTimeDurationUnit to evaluate
+ * @example getLargestDateTimeDurationUnit(["hours", "minutes", "seconds"]) => "hours"
+ * @returns the largest DateTimeDurationUnit found, or "seconds" if none are valid
  */
-export function getLargestDateTimeUnit(
+export function getLargestDateTimeDurationUnit(
   units: DateTimeDurationUnit[],
 ): DateTimeDurationUnit {
   const order: DateTimeDurationUnit[] = [
