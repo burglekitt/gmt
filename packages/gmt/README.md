@@ -277,7 +277,7 @@ isValidZonedDateTime("2024-03-17T14:30:45+00:00[UTC]");
 
 - `isLeapSecond`
 - `isValidDate`
-- `isValidDateOrDateTime`
+- `isValidIsoDateLike`
 - `isValidDateRange`
 - `isValidDateTime`
 - `isValidDateTimeDurationUnit`
