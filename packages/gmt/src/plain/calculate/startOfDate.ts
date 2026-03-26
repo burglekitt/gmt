@@ -7,7 +7,7 @@ const supported: Temporal.DateUnit[] = ["year", "month", "week"];
  * Return the start of the specified date-time `unit` (year|month|day|hour|minute|...)
  * for a given ISO 8601 datetime string.
  *
- * - Uses Temporal.PlainDateTime
+ * - Uses Temporal.PlainDate
  * - Returns an empty string "" for invalid inputs or units.
  *
  * @param value ISO 8601 datetime string
