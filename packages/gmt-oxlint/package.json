@@ -1,6 +1,6 @@
 {
   "name": "@burglekitt/gmt-oxlint",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "type": "module",
   "description": "Oxlint JS plugin for banning Date APIs in Temporal-first projects",
   "license": "MIT",
