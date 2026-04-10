@@ -40,6 +40,7 @@
   },
   "exports": {
     ".": "./recommended.json",
+    "./plugins/*.grit": "./plugins/*.grit",
     "./plugins/*": "./plugins/*.grit"
   },
   "devDependencies": {
