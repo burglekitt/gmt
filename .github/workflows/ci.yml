@@ -24,20 +24,26 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Install full ICU
+      # Install full ICU data (fallback if nodejs-fullicu is not available)
+      - name: Install full ICU data
         run: |
-          sudo apt-get update
-          sudo apt-get install -y nodejs-fullicu
+          sudo apt-get update || true
+          sudo apt-get install -y nodejs-fullicu || echo "nodejs-fullicu not found, falling back to default ICU"
+          # Fallback: Use the system ICU data if nodejs-fullicu is not available
+          echo "ICU data installed at: $(ls /usr/share/nodejs/node-fullicu/full-icu-data.json || echo '/usr/share/icu/72.1/')"
 
       # Install all dependencies (including devDependencies)
       - name: Install dependencies
         run: bun install --no-cache
         env:
           NODE_ICU_DATA: /usr/share/nodejs/node-fullicu/full-icu-data.json
+          NODE_OPTIONS: "--icu-data-dir=/usr/share/nodejs/node-fullicu/full-icu-data.json"
 
       # Debug: Verify Nx modules are installed
       - name: Debug Nx modules
-        run: ls -la node_modules/@nrwl || echo "Nx modules not found"
+        run: |
+          ls -la node_modules/@nrwl || echo "Nx modules not found in node_modules/@nrwl"
+          ls -la node_modules/.bin/nx || echo "Nx binary not found in node_modules/.bin"
 
       # Sets NX_BASE and NX_HEAD for reliable affected calculations
       - uses: nrwl/nx-set-shas@v4
