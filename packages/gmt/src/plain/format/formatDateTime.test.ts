@@ -2,7 +2,7 @@ import { MustTestLocales } from "../../test/localeMatrix";
 import { formatDateTime } from "./formatDateTime";
 
 describe("formatDateTime", () => {
-    // en-US
+  // en-US
   it.each`
     value                    | options                                                                                                                        | expected
     ${"2024-02-03T14:30:45"} | ${{ dateStyle: "full", timeStyle: "full" }}                                                                                    | ${"Saturday, February 3, 2024 at 2:30:45 PM"}

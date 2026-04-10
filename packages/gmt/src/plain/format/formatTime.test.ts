@@ -2,7 +2,7 @@ import { MustTestLocales } from "../../test/localeMatrix";
 import { formatTime } from "./formatTime";
 
 describe("formatTime", () => {
-    // en-US
+  // en-US
   it.each`
     value         | options                                                                     | expected
     ${"14:30:45"} | ${{ timeStyle: "full" }}                                                    | ${"2:30:45 PM"}

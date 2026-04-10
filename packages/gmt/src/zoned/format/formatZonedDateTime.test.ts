@@ -5,7 +5,7 @@ import { formatZonedDateTime } from "./formatZonedDateTime";
 
 describe("formatZonedDateTime", () => {
   const valueByLocale = localeZonedDateTimeInputByLocale;
-  
+
   // en-US
   it.each`
     value                                  | options                                                                                                                        | expected
