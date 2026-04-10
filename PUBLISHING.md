@@ -44,7 +44,7 @@ Each package is independently versioned.
 2. Record release intent for the affected package(s):
 
 ```bash
-bun run changeset:add
+pnpm run changeset:add
 ```
 
 - The CLI is interactive: select which package(s) your change touches (space to toggle), pick `patch|minor|major`, and write a one-line summary.
@@ -57,13 +57,13 @@ bun run changeset:add
 1. Inspect pending changesets:
 
 ```bash
-bun run changeset status
+pnpm run changeset status
 ```
 
 2. Apply version bumps and update changelogs (locally) or merge the automatic Version PR:
 
 ```bash
-bun run changeset:version
+pnpm run changeset:version
 git add .
 git commit -m "Version Packages"
 git push
@@ -73,10 +73,10 @@ git push
 
 ```bash
 # build gmt (Nx)
-bunx nx run @burglekitt/gmt:build
+pnpm exec nx run @burglekitt/gmt:build
 
 # build gmt-oxlint
-cd packages/gmt-oxlint && bun run build && cd ../..
+cd packages/gmt-oxlint && pnpm run build && cd ../..`
 ```
 
 4. Dry-run the npm package contents (recommended):
@@ -101,15 +101,15 @@ Option A — Local publish (recommended):
 npm whoami
 
 # publish all pending packages (Changesets handles per-package logic)
-bun run changeset:publish
+pnpm run changeset:publish
 ```
 
-When you run `bun run changeset:publish` locally it will call `npm publish --access public` for each package with an unpublished version and will create git tags for each package it publishes.
+When you run `pnpm run changeset:publish` locally it will call `npm publish --access public` for each package with an unpublished version and will create git tags for each package it publishes.
 
 If you publish packages via the `publish.yml` GitHub Actions workflow (the optional Actions route), that workflow runs `npm publish` but does **not** create git tags. After a successful Actions publish, create and push tags locally:
 
 ```bash
-bunx changeset tag
+pnpm exec changeset tag
 git push --follow-tags
 ```
 
@@ -121,7 +121,7 @@ cd packages/gmt
 npm publish --access public
 ```
 
-- If you publish manually, create tags with `bunx changeset tag` and push them.
+- If you publish manually, create tags with `pnpm exec changeset tag` and push them.
 
 Option C — GitHub Actions publish (optional):
 
@@ -136,7 +136,7 @@ Option C — GitHub Actions publish (optional):
 `changeset:publish` (when run locally) creates these tags automatically. If you published via the `publish.yml` workflow or used `npm publish` directly, run the following to create and push tags:
 
 ```bash
-bunx changeset tag
+pnpm exec changeset tag
 git push --follow-tags
 ```
 
@@ -146,10 +146,10 @@ git push --follow-tags
 
 If you want to publish initial stable `1.0.0` packages:
 
-1. On your feature branch, run `bun run changeset:add`, select the packages, and choose `major` (or pick `major` meaning 1.0.0).
+1. On your feature branch, run `pnpm run changeset:add`, select the packages, and choose `major` (or pick `major` meaning 1.0.0).
 2. Commit and merge the PR to `main`.
-3. On `main`, run `bun run changeset:version` (or merge the Version PR).
-4. Build packages and run `bun run changeset:publish` locally. That will publish packages and create tags.
+3. On `main`, run `pnpm run changeset:version` (or merge the Version PR).
+4. Build packages and run `pnpm run changeset:publish` locally. That will publish packages and create tags.
 
 ---
 
@@ -165,26 +165,26 @@ If you want to publish initial stable `1.0.0` packages:
 
 ```bash
 # On feature branch
-bun run changeset:add
+pnpm run changeset:add
 git add .changeset/
 git commit -m "add changeset"
 
 # After main has changesets merged
-bun run changeset:version
+pnpm run changeset:version
 git add .
 git commit -m "Version Packages"
 git push
 
 # Build (if needed)
-bunx nx run @burglekitt/gmt:build
-cd packages/gmt-oxlint && bun run build && cd ../..
+pnpm exec nx run @burglekitt/gmt:build
+cd packages/gmt-oxlint && pnpm run build && cd ../..
 
 # Dry-run
 cd packages/gmt && npm pack --dry-run && cd ../..
 
 # Publish locally (recommended)
-bun run changeset:publish
-bunx changeset tag
+pnpm run changeset:publish
+pnpm exec changeset tag
 git push --follow-tags
 ```
 

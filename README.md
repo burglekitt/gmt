@@ -212,8 +212,8 @@ Basic Changesets workflow:
 - On your feature branch, run `pnpm run changeset:add` to record the change and desired bump.
 - Merge the PR. If no `.changeset/*` files were merged, create changesets before versioning — Changesets only acts on files in `.changeset/`.
 - On `main`, run `pnpm run changeset:version` to apply version bumps and update changelogs; commit and push those changes.
-- To publish locally, run `pnpm run changeset:publish` (or `bunx changeset publish`) from the repo root — this will publish packages and create package-scoped git tags.
-- If you use the Actions workflow to publish, run the workflow, then run `pnpm run changeset:tag` locally and `git push --follow-tags` to synchronize tags (Actions publish does not create tags).
+- To publish locally, run `pnpm run changeset:publish` from the repo root — this will publish packages and create package-scoped git tags.
+- If you use the Actions workflow to publish, run the workflow, then run `pnpm exec changeset tag` locally and `git push --follow-tags` to synchronize tags (Actions publish does not create tags).
 
 Notes:
 
