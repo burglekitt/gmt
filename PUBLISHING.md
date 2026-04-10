@@ -76,7 +76,7 @@ git push
 pnpm exec nx run @burglekitt/gmt:build
 
 # build gmt-oxlint
-cd packages/gmt-oxlint && pnpm run build && cd ../..`
+cd packages/gmt-oxlint && pnpm run build && cd ../..
 ```
 
 4. Dry-run the npm package contents (recommended):
