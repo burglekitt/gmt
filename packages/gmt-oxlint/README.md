@@ -27,7 +27,7 @@ pnpm add --save-dev @burglekitt/gmt-oxlint oxlint
 ### bun
 
 ```sh
-bun add --dev @burglekitt/gmt-oxlint oxlint
+pnpm add --save-dev @burglekitt/gmt-oxlint oxlint
 ```
 
 ## Usage

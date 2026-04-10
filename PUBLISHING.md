@@ -70,7 +70,7 @@ Every time you finish a change that will eventually ship as a release,
 run this **on your feature branch before merging**:
 
 ```bash
-bun run changeset:add
+pnpm run changeset:add
 ```
 
 This is **fully interactive** — it does not auto-detect anything from git. It shows you a
@@ -102,7 +102,7 @@ This is what you do when you are ready to cut a new release.
 ### Step 1 — Check what is pending
 
 ```bash
-bun run changeset status
+pnpm -w exec changeset status
 ```
 
 This lists every package that has unreleased changesets and what version bump each one will get.
@@ -111,7 +111,7 @@ If it says "no changesets found", there is nothing to release yet.
 ### Step 2 — Apply versions and update changelogs
 
 ```bash
-bun run changeset:version
+pnpm run changeset:version
 ```
 
 This reads all the pending changeset files, bumps the `version` field in each affected `package.json`,
@@ -138,10 +138,10 @@ handles this automatically. If you publish locally, build first:
 
 ```bash
 # Build gmt
-bunx nx run @burglekitt/gmt:build
+pnpm -w exec nx run @burglekitt/gmt:build
 
 # Build gmt-oxlint
-cd packages/gmt-oxlint && bun run build && cd ../..
+cd packages/gmt-oxlint && pnpm run build && cd ../..
 ```
 
 `gmt-biome` and `gmt-eslint` publish their source files as-is — no build needed.
@@ -181,7 +181,7 @@ After the workflow succeeds, do Step 6 below to tag.
 Requires being logged in to npm on your machine (`npm whoami` to verify).
 
 ```bash
-bun run changeset:publish
+pnpm run changeset:publish
 ```
 
 This runs `changeset publish`, which:
@@ -203,7 +203,7 @@ The Actions workflow does not create tags. After it finishes:
 git pull
 
 # Create git tags for any package whose current version does not have a tag yet
-bunx changeset tag
+pnpm -w exec changeset tag
 
 # Push the new tags to GitHub
 git push --follow-tags
@@ -211,7 +211,7 @@ git push --follow-tags
 
 #### After Path B (local publish)
 
-`bun run changeset:publish` already created the tags. Just push them:
+`pnpm run changeset:publish` already created the tags. Just push them:
 
 ```bash
 git push --follow-tags
@@ -270,8 +270,8 @@ git tag --sort=version:refname
 
 ## Semantic versioning cheat-sheet
 
-You do **not** run different commands for different bump types. The bump type is always
-chosen interactively when you run `bun run changeset:add` — the CLI will ask
+you do **not** run different commands for different bump types. The bump type is always
+chosen interactively when you run `pnpm run changeset:add` — the CLI will ask
 "Is this a patch, minor, or major bump?" and you pick with arrow keys.
 
 | Change type | Pick in CLI | Version example |
@@ -289,18 +289,18 @@ chosen interactively when you run `bun run changeset:add` — the CLI will ask
 # --- On your feature branch, before merging the PR ---
 
 # Interactive prompt: pick which packages changed and what kind of bump
-bun run changeset:add
+pnpm run changeset:add
 git add .changeset/
 git commit -m "add changeset"
 
 # --- When ready to release (on main, after PRs are merged) ---
 
 # See what versions would be bumped today
-bun run changeset status
+pnpm -w exec changeset status
 
 # Bump versions in package.json files and regenerate CHANGELOGs
 # (or merge the auto-opened "Version Packages" PR instead)
-bun run changeset:version
+pnpm run changeset:version
 git add .
 git commit -m "Version Packages"
 git push
@@ -310,10 +310,10 @@ git push
 # Option A: GitHub Actions (recommended) — go to Actions → Publish Package → Run workflow
 # After it finishes, create and push tags:
 git pull
-bunx changeset tag
+pnpm -w exec changeset tag
 git push --follow-tags
 
 # Option B: Local publish (must be logged in to npm — run `npm whoami` to check)
-bun run changeset:publish   # publishes + auto-creates tags
+pnpm run changeset:publish   # publishes + auto-creates tags
 git push --follow-tags
 ```

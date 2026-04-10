@@ -2,7 +2,7 @@
 
 Home of [@burglekitt/gmt](./packages/gmt) — **Give Me Temporal!**
 
-A monorepo for Burglekitt community libraries, built with Nx, powered by Bun, and dead serious about making JavaScript date handling not terrible.
+A monorepo for Burglekitt community libraries, built with Nx, powered by pnpm, and dead serious about making JavaScript date handling not terrible.
 
 ## Aint Nobody Got Time For...
 
@@ -30,17 +30,17 @@ If you see a Date API in code, replace it with a GMT helper.
 
 ```bash
 # Install all workspace dependencies
-bun install
+pnpm install
 
 # Run tests across all packages
-bun nx run-many -t test
+pnpm -w exec nx run-many -t test
 
 # Build all packages
-bun nx run-many -t build
+pnpm -w exec nx run-many -t build
 
 # Lint and format
-bun run lint
-bun run format
+pnpm run lint
+pnpm run format
 ```
 
 ---
@@ -92,18 +92,18 @@ Run from the root:
 
 ```bash
 # Test, build, typecheck
-bun nx run-many -t test
-bun nx run-many -t build
-bun nx run-many -t typecheck
+pnpm -w exec nx run-many -t test
+pnpm -w exec nx run-many -t build
+pnpm -w exec nx run-many -t typecheck
 
 # Code quality
-bun run check
-bun run lint
-bun run format
+pnpm run check
+pnpm run lint
+pnpm run format
 
 # Nx utilities
-bunx nx graph        # Visual dependency graph
-bunx nx sync         # Sync TypeScript project references
+pnpm -w exec nx graph        # Visual dependency graph
+pnpm -w exec nx sync         # Sync TypeScript project references
 ```
 
 ## Nx Commands You Will Actually Use
@@ -112,25 +112,25 @@ As more packages are added under `packages/*`, these commands become the default
 
 ```bash
 # Run targets for every package
-bun run build
-bun run test:nx
-bun run lint:nx
-bun run typecheck
+pnpm run build
+pnpm run test:nx
+pnpm run lint:nx
+pnpm run typecheck
 
 # Full local gate before PR
-bun run validate
+pnpm run validate
 
 # Only run on projects affected by your branch changes
-bun run affected:build
-bun run affected:test
-bun run affected:lint
-bun run affected:typecheck
+pnpm run affected:build
+pnpm run affected:test
+pnpm run affected:lint
+pnpm run affected:typecheck
 
 # Workspace maintenance
-bun run graph
-bun run sync
-bun run sync:check
-bun run reset
+pnpm run graph
+pnpm run sync
+pnpm run sync:check
+pnpm run reset
 ```
 
 Recommended PR flow:
@@ -152,9 +152,9 @@ Run within a specific package:
 
 ```bash
 cd packages/gmt
-bun run test
-bun run build
-bun run lint
+pnpm run test
+pnpm run build
+pnpm run lint
 ```
 
 ---
@@ -199,8 +199,8 @@ Publishing uses [Changesets](https://github.com/changesets/changesets) for monor
 
 Key points:
 
-- When you finish a change, run `bun run changeset:add` to record what changed and how big the bump is.
-- When ready to release, a maintainer runs `bun run changeset:version` to apply version bumps and update changelogs.
+- When you finish a change, run `pnpm run changeset:add` to record what changed and how big the bump is.
+- When ready to release, a maintainer runs `pnpm run changeset:version` to apply version bumps and update changelogs.
 - Publishing is triggered manually via [Actions → Publish Package](../../actions/workflows/publish.yml).
 - Git tags are package-scoped: `@burglekitt/gmt@0.3.0`, `@burglekitt/gmt-oxlint@0.2.0`, etc.
 

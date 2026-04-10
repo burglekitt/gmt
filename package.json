@@ -2,6 +2,9 @@
   "name": "root",
   "private": true,
   "packageManager": "pnpm@10.32.1+sha512.a706938f0e89ac1456b6563eab4edf1d1faf3368d1191fc5c59790e96dc918e4456ab2e67d613de1043d2e8c81f87303e6b40d4ffeca9df15ef1ad567348f2be",
+  "engines": {
+    "node": ">=24 <25"
+  },
   "workspaces": [
     "packages/*"
   ],
@@ -34,14 +37,13 @@
     "changeset:add": "changeset add",
     "changeset:version": "changeset version",
     "changeset:publish": "changeset publish",
-    "release:publish": "bun run validate && bun run changeset:publish"
+    "release:publish": "pnpm run validate && pnpm run changeset:publish"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.7",
     "@changesets/cli": "^2.30.0",
     "@nx/js": "^22.5.4",
     "@tanstack/intent": "^0.0.29",
-    "@types/bun": "^1.3.10",
     "@types/node": "^22.13.10",
     "nx": "^22.5.4",
     "tsc-alias": "^1.8.16",

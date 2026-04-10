@@ -25,7 +25,7 @@ pnpm add --save-dev @burglekitt/gmt-eslint eslint @typescript-eslint/parser
 ### bun
 
 ```sh
-bun add --dev @burglekitt/gmt-eslint eslint @typescript-eslint/parser
+pnpm add --save-dev @burglekitt/gmt-eslint eslint @typescript-eslint/parser
 ```
 
 ## Usage

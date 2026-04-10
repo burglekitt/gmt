@@ -1,65 +1,64 @@
 # Contributing
 
-Thanks for contributing to the Burglekitt monorepo.
+Node.js 24.x (recommended for development; see `.nvmrc`)
+pnpm (recommended package manager). Use Corepack or Volta to manage pnpm locally.
 
 This guide covers local development, quality checks, and publishing for workspace packages.
 
-## Requirements
-
-- Node.js 18+
-- Bun (recommended package manager and script runner)
-
-## Local setup
+Local setup (recommended):
 
 ```bash
-bun install
+# Activate Corepack and install workspace deps
+corepack enable
+corepack prepare pnpm@8 --activate
+pnpm install --frozen-lockfile
 ```
 
-## Development workflow
-
-Run from repo root.
-
-### Core checks
+Common workspace commands (run from repository root):
 
 ```bash
-bun run build
-bun run typecheck
-bun run test
-bun run lint
-bun run format
-```
-
-### Recommended pre-PR gate
-
-```bash
-bun run validate
-```
-
-### Nx-focused commands
-
-```bash
-# All projects
-bun nx run-many -t build
-bun nx run-many -t test
-bun nx run-many -t lint
-bun nx run-many -t typecheck
+# Run targets across the workspace
+pnpm -w exec nx run-many -t build
+pnpm -w exec nx run-many -t test
+pnpm -w exec nx run-many -t lint
+pnpm -w exec nx run-many -t typecheck
 
 # Affected projects only
-bun run affected:build
-bun run affected:test
-bun run affected:lint
-bun run affected:typecheck
+pnpm -w exec nx affected -t build
+pnpm -w exec nx affected -t test
+pnpm -w exec nx affected -t lint
+pnpm -w exec nx affected -t typecheck
+```
+
+Nx-focused workflow examples:
+
+```bash
+# Visual dependency graph
+pnpm -w exec nx graph
+
+# Sync TypeScript project references
+pnpm -w exec nx sync
+pnpm -w exec nx sync:check
+```
+
+Run commands inside a specific package directory:
+
+```bash
+cd packages/gmt
+pnpm run build
+pnpm run test
+pnpm run lint
 ```
 
 ## Package-level development
 
-Example for GMT package:
+Example for the `gmt` package:
 
 ```bash
 cd packages/gmt
-bun run build
-bun run test
-bun run lint
+pnpm run build
+pnpm run test
+pnpm run lint
 ```
 
 ## Publishing
@@ -72,54 +71,16 @@ Quick reference:
 
 ```bash
 # Run on your feature branch before merging — commit the generated file as part of the PR
-bun run changeset:add
+pnpm run changeset:add
 
 # See what versions would be bumped today
-bun run changeset status
+pnpm run changeset status
 
 # Apply version bumps and update changelogs
-bun run changeset:version
+pnpm run changeset:version
 
-# Publish via GitHub Actions UI (recommended)
-# → Actions → Publish Package → Run workflow
-```
-
-The `release.yml` workflow opens a "Version Packages" pull request automatically when changesets land on `main`. Merging that PR is equivalent to running `changeset:version` and pushing. It does **not** publish to npm.
-
-The `publish.yml` workflow is the actual publish step — triggered manually from the Actions UI.
-
-### Monorepo config usage (maintainers)
-
-When wiring local package configs inside this monorepo:
-
-```json
-{
-  "$schema": "https://biomejs.dev/schemas/2.4.7/schema.json",
-  "extends": ["./packages/gmt-biome/biome.json"]
-}
-```
-
-```js
-// eslint.config.mjs
-import gmtEslintConfig from "./packages/gmt-eslint/eslint/index.mjs";
-
-export default [...gmtEslintConfig];
-```
-
-```json
-// .oxlintrc.json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "jsPlugins": ["./packages/gmt-oxlint/dist/index.js"],
-  "rules": {
-    "gmt-oxlint/no-date-global": "error",
-    "gmt-oxlint/no-new-date": "error",
-    "gmt-oxlint/no-date-now": "error",
-    "gmt-oxlint/no-date-parse": "error",
-    "gmt-oxlint/no-date-utc": "error",
-    "gmt-oxlint/no-date-getTimezoneOffset": "error"
-  }
-}
+# Publish (recommended via Actions) or run locally with changeset:publish
+pnpm run changeset:publish
 ```
 
 ## PR checklist
