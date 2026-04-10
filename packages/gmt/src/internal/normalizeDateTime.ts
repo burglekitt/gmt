@@ -30,11 +30,19 @@ export function normalizeDateTime(
     " ",
   );
 
+  // Treat dash/minus characters specially:
+  // - If the dash sits between digits (e.g. dates like 2024–02–03), keep a
+  //   compact hyphen (no added spaces).
+  // - Otherwise convert dash-like characters to a spaced " - " so ranges like
+  //   "AM- 12:00" become "AM - 12:00".
+  s = s.replace(
+    /(?<=\d)[\u2010\u2011\u2012\u2013\u2014\u2015\u2212](?=\d)/g,
+    "-",
+  );
+  s = s.replace(/[\u2010\u2011\u2012\u2013\u2014\u2015\u2212]/g, " - ");
+
   // Collapse whitespace and trim
   s = s.replace(/\s+/g, " ").trim();
-
-  // Normalize a variety of dash/minus characters to ASCII hyphen-minus
-  s = s.replace(/[\u2010\u2011\u2012\u2013\u2014\u2015\u2212]/g, "-");
 
   // Normalize fraction slash etc. to ASCII slash where appropriate
   s = s.replace(/[\u2044]/g, "/");

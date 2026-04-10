@@ -9,20 +9,20 @@ describe("formatZonedRange", () => {
   // en-US
   it.each`
     from                                             | to                                               | locale     | options                                                                 | expected
-    ${"2024-02-29T10:00:00-05:00[America/New_York]"} | ${"2024-02-29T12:00:00-05:00[America/New_York]"} | ${"en-US"} | ${{ dateStyle: "long", timeStyle: "long" }}                             | ${"February 29, 2024, 10:00:00 AM EST – 12:00:00 PM EST"}
-    ${"2024-02-29T10:00:00-05:00[America/New_York]"} | ${"2024-02-29T12:00:00-05:00[America/New_York]"} | ${"en-US"} | ${{ dateStyle: "long", timeStyle: "short" }}                            | ${"February 29, 2024, 10:00 AM – 12:00 PM"}
-    ${"2024-02-29T10:00:00-05:00[America/New_York]"} | ${"2024-02-29T12:00:00-05:00[America/New_York]"} | ${"en-US"} | ${{ dateStyle: "short", timeStyle: "short" }}                           | ${"2/29/24, 10:00 AM – 12:00 PM"}
-    ${"2024-02-29T10:00:00-05:00[America/New_York]"} | ${"2024-02-29T12:00:00-05:00[America/New_York]"} | ${"en-US"} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "short" }}        | ${"10:00 AM – 12:00 PM EST"}
-    ${"2024-02-29T10:00:00-05:00[America/New_York]"} | ${"2024-02-29T12:00:00-05:00[America/New_York]"} | ${"en-US"} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "long" }}         | ${"10:00 AM – 12:00 PM EST"}
-    ${"2024-02-29T10:00:00-05:00[America/New_York]"} | ${"2024-02-29T12:00:00-05:00[America/New_York]"} | ${"en-US"} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "shortGeneric" }} | ${"10:00 AM – 12:00 PM ET"}
-    ${"2024-02-29T10:00:00-05:00[America/New_York]"} | ${"2024-02-29T12:00:00-05:00[America/New_York]"} | ${"en-US"} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "longGeneric" }}  | ${"10:00 AM – 12:00 PM ET"}
-    ${"2024-02-29T10:00:00-05:00[America/New_York]"} | ${"2024-02-29T12:00:00-05:00[America/New_York]"} | ${"en-US"} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "shortOffset" }}  | ${"10:00 AM – 12:00 PM"}
-    ${"2024-02-29T10:00:00-05:00[America/New_York]"} | ${"2024-02-29T12:00:00-05:00[America/New_York]"} | ${"en-US"} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "longOffset" }}   | ${"10:00 AM – 12:00 PM"}
+    ${"2024-02-29T10:00:00-05:00[America/New_York]"} | ${"2024-02-29T12:00:00-05:00[America/New_York]"} | ${"en-US"} | ${{ dateStyle: "long", timeStyle: "long" }}                             | ${"February 29, 2024, 10:00:00 AM EST – 12:00:00 PM EST"}
+    ${"2024-02-29T10:00:00-05:00[America/New_York]"} | ${"2024-02-29T12:00:00-05:00[America/New_York]"} | ${"en-US"} | ${{ dateStyle: "long", timeStyle: "short" }}                            | ${"February 29, 2024, 10:00 AM – 12:00 PM"}
+    ${"2024-02-29T10:00:00-05:00[America/New_York]"} | ${"2024-02-29T12:00:00-05:00[America/New_York]"} | ${"en-US"} | ${{ dateStyle: "short", timeStyle: "short" }}                           | ${"2/29/24, 10:00 AM – 12:00 PM"}
+    ${"2024-02-29T10:00:00-05:00[America/New_York]"} | ${"2024-02-29T12:00:00-05:00[America/New_York]"} | ${"en-US"} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "short" }}        | ${"10:00 AM – 12:00 PM EST"}
+    ${"2024-02-29T10:00:00-05:00[America/New_York]"} | ${"2024-02-29T12:00:00-05:00[America/New_York]"} | ${"en-US"} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "long" }}         | ${"10:00 AM – 12:00 PM EST"}
+    ${"2024-02-29T10:00:00-05:00[America/New_York]"} | ${"2024-02-29T12:00:00-05:00[America/New_York]"} | ${"en-US"} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "shortGeneric" }} | ${"10:00 AM – 12:00 PM ET"}
+    ${"2024-02-29T10:00:00-05:00[America/New_York]"} | ${"2024-02-29T12:00:00-05:00[America/New_York]"} | ${"en-US"} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "longGeneric" }}  | ${"10:00 AM – 12:00 PM ET"}
+    ${"2024-02-29T10:00:00-05:00[America/New_York]"} | ${"2024-02-29T12:00:00-05:00[America/New_York]"} | ${"en-US"} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "shortOffset" }}  | ${"10:00 AM – 12:00 PM"}
+    ${"2024-02-29T10:00:00-05:00[America/New_York]"} | ${"2024-02-29T12:00:00-05:00[America/New_York]"} | ${"en-US"} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "longOffset" }}   | ${"10:00 AM – 12:00 PM"}
     ${"2024-02-29T10:00:00-05:00[America/New_York]"} | ${"2024-02-29T12:00:00-05:00[America/New_York]"} | ${"en-US"} | ${{ dayPeriod: "narrow" }}                                              | ${"in the morning"}
     ${"2024-02-29T10:00:00-05:00[America/New_York]"} | ${"2024-02-29T12:00:00-05:00[America/New_York]"} | ${"en-US"} | ${{ dayPeriod: "short" }}                                               | ${"in the morning"}
     ${"2024-02-29T10:00:00-05:00[America/New_York]"} | ${"2024-02-29T12:00:00-05:00[America/New_York]"} | ${"en-US"} | ${{ dayPeriod: "long" }}                                                | ${"in the morning"}
-    ${"2024-02-29T10:00:00-05:00[America/New_York]"} | ${"2024-02-29T12:00:00-05:00[America/New_York]"} | ${"en-US"} | ${{ formatMatcher: "basic" }}                                           | ${"2/29/2024, 10:00:00 AM – 12:00:00 PM"}
-    ${"2024-02-29T10:00:00-05:00[America/New_York]"} | ${"2024-02-29T12:00:00-05:00[America/New_York]"} | ${"en-US"} | ${{ formatMatcher: "best fit" }}                                        | ${"2/29/2024, 10:00:00 AM – 12:00:00 PM"}
+    ${"2024-02-29T10:00:00-05:00[America/New_York]"} | ${"2024-02-29T12:00:00-05:00[America/New_York]"} | ${"en-US"} | ${{ formatMatcher: "basic" }}                                           | ${"2/29/2024, 10:00:00 AM – 12:00:00 PM"}
+    ${"2024-02-29T10:00:00-05:00[America/New_York]"} | ${"2024-02-29T12:00:00-05:00[America/New_York]"} | ${"en-US"} | ${{ formatMatcher: "best fit" }}                                        | ${"2/29/2024, 10:00:00 AM – 12:00:00 PM"}
   `(
     "formats a valid zoned datetime range correctly for locale $locale",
     ({ from, to, locale, options, expected }) => {
@@ -66,7 +66,7 @@ describe("formatZonedRange", () => {
   // en-GB
   it.each`
     from                                         | to                                         | options                                                                | expected
-    ${rangeByLocale[MustTestLocales.enGB].start} | ${rangeByLocale[MustTestLocales.enGB].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"3 February 2024, 14:30:45 GMT – 16:46:15 GMT"}
+    ${rangeByLocale[MustTestLocales.enGB].start} | ${rangeByLocale[MustTestLocales.enGB].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"3 February 2024, 14:30:45 GMT – 16:46:15 GMT"}
     ${rangeByLocale[MustTestLocales.enGB].start} | ${rangeByLocale[MustTestLocales.enGB].end} | ${{ dateStyle: "short", timeStyle: "short" }}                          | ${"03/02/2024, 14:30–16:46"}
     ${rangeByLocale[MustTestLocales.enGB].start} | ${rangeByLocale[MustTestLocales.enGB].end} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "shortOffset" }} | ${"14:30–16:46"}
   `(
@@ -81,7 +81,7 @@ describe("formatZonedRange", () => {
   // de-DE
   it.each`
     from                                         | to                                         | options                                                                | expected
-    ${rangeByLocale[MustTestLocales.deDE].start} | ${rangeByLocale[MustTestLocales.deDE].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"3. Februar 2024, 14:30:45 MEZ – 16:46:15 MEZ"}
+    ${rangeByLocale[MustTestLocales.deDE].start} | ${rangeByLocale[MustTestLocales.deDE].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"3. Februar 2024, 14:30:45 MEZ – 16:46:15 MEZ"}
     ${rangeByLocale[MustTestLocales.deDE].start} | ${rangeByLocale[MustTestLocales.deDE].end} | ${{ dateStyle: "short", timeStyle: "short" }}                          | ${"03.02.24, 14:30–16:46 Uhr"}
     ${rangeByLocale[MustTestLocales.deDE].start} | ${rangeByLocale[MustTestLocales.deDE].end} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "shortOffset" }} | ${"14:30–16:46 Uhr"}
   `(
@@ -96,9 +96,9 @@ describe("formatZonedRange", () => {
   // fr-FR
   it.each`
     from                                         | to                                         | options                                                                | expected
-    ${rangeByLocale[MustTestLocales.frFR].start} | ${rangeByLocale[MustTestLocales.frFR].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"3 février 2024, 14:30:45 UTC+1 – 16:46:15 UTC+1"}
-    ${rangeByLocale[MustTestLocales.frFR].start} | ${rangeByLocale[MustTestLocales.frFR].end} | ${{ dateStyle: "short", timeStyle: "short" }}                          | ${"03/02/2024, 14:30 – 16:46"}
-    ${rangeByLocale[MustTestLocales.frFR].start} | ${rangeByLocale[MustTestLocales.frFR].end} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "shortOffset" }} | ${"14:30 – 16:46"}
+    ${rangeByLocale[MustTestLocales.frFR].start} | ${rangeByLocale[MustTestLocales.frFR].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"3 février 2024, 14:30:45 UTC+1 – 16:46:15 UTC+1"}
+    ${rangeByLocale[MustTestLocales.frFR].start} | ${rangeByLocale[MustTestLocales.frFR].end} | ${{ dateStyle: "short", timeStyle: "short" }}                          | ${"03/02/2024, 14:30 – 16:46"}
+    ${rangeByLocale[MustTestLocales.frFR].start} | ${rangeByLocale[MustTestLocales.frFR].end} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "shortOffset" }} | ${"14:30 – 16:46"}
   `(
     "formats valid zoned datetime range for fr-FR",
     ({ from, to, options, expected }) => {
@@ -111,7 +111,7 @@ describe("formatZonedRange", () => {
   // es-ES
   it.each`
     from                                         | to                                         | options                                                                | expected
-    ${rangeByLocale[MustTestLocales.esES].start} | ${rangeByLocale[MustTestLocales.esES].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"3 de febrero de 2024, 14:30:45 CET – 16:46:15 CET"}
+    ${rangeByLocale[MustTestLocales.esES].start} | ${rangeByLocale[MustTestLocales.esES].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"3 de febrero de 2024, 14:30:45 CET – 16:46:15 CET"}
     ${rangeByLocale[MustTestLocales.esES].start} | ${rangeByLocale[MustTestLocales.esES].end} | ${{ dateStyle: "short", timeStyle: "short" }}                          | ${"3/2/24, 14:30–16:46"}
     ${rangeByLocale[MustTestLocales.esES].start} | ${rangeByLocale[MustTestLocales.esES].end} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "shortOffset" }} | ${"14:30–16:46"}
   `(
@@ -126,7 +126,7 @@ describe("formatZonedRange", () => {
   // it-IT
   it.each`
     from                                         | to                                         | options                                                                | expected
-    ${rangeByLocale[MustTestLocales.itIT].start} | ${rangeByLocale[MustTestLocales.itIT].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"3 febbraio 2024, 14:30:45 CET – 16:46:15 CET"}
+    ${rangeByLocale[MustTestLocales.itIT].start} | ${rangeByLocale[MustTestLocales.itIT].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"3 febbraio 2024, 14:30:45 CET – 16:46:15 CET"}
     ${rangeByLocale[MustTestLocales.itIT].start} | ${rangeByLocale[MustTestLocales.itIT].end} | ${{ dateStyle: "short", timeStyle: "short" }}                          | ${"03/02/24, 14:30–16:46"}
     ${rangeByLocale[MustTestLocales.itIT].start} | ${rangeByLocale[MustTestLocales.itIT].end} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "shortOffset" }} | ${"14:30–16:46"}
   `(
@@ -141,9 +141,9 @@ describe("formatZonedRange", () => {
   // pt-PT
   it.each`
     from                                         | to                                         | options                                                                | expected
-    ${rangeByLocale[MustTestLocales.ptPT].start} | ${rangeByLocale[MustTestLocales.ptPT].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"3 de fevereiro de 2024, 14:30:45 WET – 16:46:15 WET"}
-    ${rangeByLocale[MustTestLocales.ptPT].start} | ${rangeByLocale[MustTestLocales.ptPT].end} | ${{ dateStyle: "short", timeStyle: "short" }}                          | ${"03/02/24, 14:30 – 16:46"}
-    ${rangeByLocale[MustTestLocales.ptPT].start} | ${rangeByLocale[MustTestLocales.ptPT].end} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "shortOffset" }} | ${"14:30 – 16:46"}
+    ${rangeByLocale[MustTestLocales.ptPT].start} | ${rangeByLocale[MustTestLocales.ptPT].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"3 de fevereiro de 2024, 14:30:45 WET – 16:46:15 WET"}
+    ${rangeByLocale[MustTestLocales.ptPT].start} | ${rangeByLocale[MustTestLocales.ptPT].end} | ${{ dateStyle: "short", timeStyle: "short" }}                          | ${"03/02/24, 14:30 – 16:46"}
+    ${rangeByLocale[MustTestLocales.ptPT].start} | ${rangeByLocale[MustTestLocales.ptPT].end} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "shortOffset" }} | ${"14:30 – 16:46"}
   `(
     "formats valid zoned datetime range for pt-PT",
     ({ from, to, options, expected }) => {
@@ -156,7 +156,7 @@ describe("formatZonedRange", () => {
   // sv-SE
   it.each`
     from                                         | to                                         | options                                                                | expected
-    ${rangeByLocale[MustTestLocales.svSE].start} | ${rangeByLocale[MustTestLocales.svSE].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"3 februari 2024 14:30:45 CET-16:46:15 CET"}
+    ${rangeByLocale[MustTestLocales.svSE].start} | ${rangeByLocale[MustTestLocales.svSE].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"3 februari 2024 14:30:45 CET - 16:46:15 CET"}
     ${rangeByLocale[MustTestLocales.svSE].start} | ${rangeByLocale[MustTestLocales.svSE].end} | ${{ dateStyle: "short", timeStyle: "short" }}                          | ${"2024-02-03 14:30–16:46"}
     ${rangeByLocale[MustTestLocales.svSE].start} | ${rangeByLocale[MustTestLocales.svSE].end} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "shortOffset" }} | ${"14:30–16:46"}
   `(
@@ -171,7 +171,7 @@ describe("formatZonedRange", () => {
   // is-IS
   it.each`
     from                                         | to                                         | options                                                                | expected
-    ${rangeByLocale[MustTestLocales.isIS].start} | ${rangeByLocale[MustTestLocales.isIS].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"3. febrúar 2024, 14:30:45 GMT+0 – 16:46:15 GMT+0"}
+    ${rangeByLocale[MustTestLocales.isIS].start} | ${rangeByLocale[MustTestLocales.isIS].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"3. febrúar 2024, 14:30:45 GMT+0 – 16:46:15 GMT+0"}
     ${rangeByLocale[MustTestLocales.isIS].start} | ${rangeByLocale[MustTestLocales.isIS].end} | ${{ dateStyle: "short", timeStyle: "short" }}                          | ${"3.2.2024, 14:30–16:46"}
     ${rangeByLocale[MustTestLocales.isIS].start} | ${rangeByLocale[MustTestLocales.isIS].end} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "shortOffset" }} | ${"14:30–16:46"}
   `(
@@ -201,7 +201,7 @@ describe("formatZonedRange", () => {
   // zh-TW
   it.each`
     from                                         | to                                         | options                                                                | expected
-    ${rangeByLocale[MustTestLocales.zhTW].start} | ${rangeByLocale[MustTestLocales.zhTW].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"2024/2/3 下午2:30:45 [GMT+8] – 下午4:46:15 [GMT+8]"}
+    ${rangeByLocale[MustTestLocales.zhTW].start} | ${rangeByLocale[MustTestLocales.zhTW].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"2024/2/3 下午2:30:45 [GMT+8] – 下午4:46:15 [GMT+8]"}
     ${rangeByLocale[MustTestLocales.zhTW].start} | ${rangeByLocale[MustTestLocales.zhTW].end} | ${{ dateStyle: "short", timeStyle: "short" }}                          | ${"2024/2/3 下午2:30–4:46"}
     ${rangeByLocale[MustTestLocales.zhTW].start} | ${rangeByLocale[MustTestLocales.zhTW].end} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "shortOffset" }} | ${"下午2:30至4:46"}
   `(
@@ -261,7 +261,7 @@ describe("formatZonedRange", () => {
   // he-IL
   it.each`
     from                                         | to                                         | options                                                                | expected
-    ${rangeByLocale[MustTestLocales.heIL].start} | ${rangeByLocale[MustTestLocales.heIL].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"3 בפברואר 2024, 14:30:45 GMT‎+2‎ – 16:46:15 GMT‎+2‎"}
+    ${rangeByLocale[MustTestLocales.heIL].start} | ${rangeByLocale[MustTestLocales.heIL].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"3 בפברואר 2024, 14:30:45 GMT\u200E+2\u200E – 16:46:15 GMT\u200E+2\u200E"}
     ${rangeByLocale[MustTestLocales.heIL].start} | ${rangeByLocale[MustTestLocales.heIL].end} | ${{ dateStyle: "short", timeStyle: "short" }}                          | ${"3.2.2024, 14:30–16:46"}
     ${rangeByLocale[MustTestLocales.heIL].start} | ${rangeByLocale[MustTestLocales.heIL].end} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "shortOffset" }} | ${"14:30–16:46"}
   `(
@@ -276,7 +276,7 @@ describe("formatZonedRange", () => {
   // ru-RU
   it.each`
     from                                         | to                                         | options                                                                | expected
-    ${rangeByLocale[MustTestLocales.ruRU].start} | ${rangeByLocale[MustTestLocales.ruRU].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"3 февраля 2024 г., 14:30:45 GMT+3 – 16:46:15 GMT+3"}
+    ${rangeByLocale[MustTestLocales.ruRU].start} | ${rangeByLocale[MustTestLocales.ruRU].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"3 февраля 2024 г., 14:30:45 GMT+3 – 16:46:15 GMT+3"}
     ${rangeByLocale[MustTestLocales.ruRU].start} | ${rangeByLocale[MustTestLocales.ruRU].end} | ${{ dateStyle: "short", timeStyle: "short" }}                          | ${"03.02.2024, 14:30–16:46"}
     ${rangeByLocale[MustTestLocales.ruRU].start} | ${rangeByLocale[MustTestLocales.ruRU].end} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "shortOffset" }} | ${"14:30–16:46"}
   `(
@@ -291,7 +291,7 @@ describe("formatZonedRange", () => {
   // tr-TR
   it.each`
     from                                         | to                                         | options                                                                | expected
-    ${rangeByLocale[MustTestLocales.trTR].start} | ${rangeByLocale[MustTestLocales.trTR].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"3 Şubat 2024 14:30:45 GMT+3 – 16:46:15 GMT+3"}
+    ${rangeByLocale[MustTestLocales.trTR].start} | ${rangeByLocale[MustTestLocales.trTR].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"3 Şubat 2024 14:30:45 GMT+3 – 16:46:15 GMT+3"}
     ${rangeByLocale[MustTestLocales.trTR].start} | ${rangeByLocale[MustTestLocales.trTR].end} | ${{ dateStyle: "short", timeStyle: "short" }}                          | ${"3.02.2024 14:30–16:46"}
     ${rangeByLocale[MustTestLocales.trTR].start} | ${rangeByLocale[MustTestLocales.trTR].end} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "shortOffset" }} | ${"14:30–16:46"}
   `(
