@@ -27,13 +27,16 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 10.32.1+sha512.a706938f0e89ac1456b6563eab4edf1d1faf3368d1191fc5c59790e96dc918e4456ab2e67d613de1043d2e8c81f87303e6b40d4ffeca9df15ef1ad567348f2be
+          version: 10.32.1
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: pnpm
+
+      - name: Approve pnpm build scripts
+        run: pnpm approve-builds --all
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile

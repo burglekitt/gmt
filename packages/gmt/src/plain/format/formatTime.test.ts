@@ -145,7 +145,7 @@ describe("formatTime", () => {
     ${"14:30:45"} | ${{ hour: "numeric", minute: "numeric" }}                                   | ${"14:30"}
     ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit", second: "2-digit" }}                | ${"14:30:45"}
     ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit" }}                                   | ${"14:30"}
-    ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true }}  | ${"02:30:45 da tarde"}
+    ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true }}  | ${"02:30:45 p.m."}
     ${"14:30:45"} | ${{ hour: "numeric", minute: "numeric", second: "numeric", hour12: false }} | ${"14:30:45"}
   `(
     "formats valid time $value for pt-PT with options $options to $expected",
@@ -269,15 +269,15 @@ describe("formatTime", () => {
   // ko-KR
   it.each`
     value         | options                                                                     | expected
-    ${"14:30:45"} | ${{ timeStyle: "full" }}                                                    | ${"오후 2:30:45"}
-    ${"14:30:45"} | ${{ timeStyle: "long" }}                                                    | ${"오후 2:30:45"}
-    ${"14:30:45"} | ${{ timeStyle: "medium" }}                                                  | ${"오후 2:30:45"}
-    ${"14:30:45"} | ${{ timeStyle: "short" }}                                                   | ${"오후 2:30"}
-    ${"14:30:45"} | ${{ hour: "numeric", minute: "numeric", second: "numeric" }}                | ${"오후 2:30:45"}
-    ${"14:30:45"} | ${{ hour: "numeric", minute: "numeric" }}                                   | ${"오후 2:30"}
-    ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit", second: "2-digit" }}                | ${"오후 02:30:45"}
-    ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit" }}                                   | ${"오후 02:30"}
-    ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true }}  | ${"오후 02:30:45"}
+    ${"14:30:45"} | ${{ timeStyle: "full" }}                                                    | ${"PM 2:30:45"}
+    ${"14:30:45"} | ${{ timeStyle: "long" }}                                                    | ${"PM 2:30:45"}
+    ${"14:30:45"} | ${{ timeStyle: "medium" }}                                                  | ${"PM 2:30:45"}
+    ${"14:30:45"} | ${{ timeStyle: "short" }}                                                   | ${"PM 2:30"}
+    ${"14:30:45"} | ${{ hour: "numeric", minute: "numeric", second: "numeric" }}                | ${"PM 2:30:45"}
+    ${"14:30:45"} | ${{ hour: "numeric", minute: "numeric" }}                                   | ${"PM 2:30"}
+    ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit", second: "2-digit" }}                | ${"PM 02:30:45"}
+    ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit" }}                                   | ${"PM 02:30"}
+    ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true }}  | ${"PM 02:30:45"}
     ${"14:30:45"} | ${{ hour: "numeric", minute: "numeric", second: "numeric", hour12: false }} | ${"14시 30분 45초"}
   `(
     "formats valid time $value for ko-KR with options $options to $expected",

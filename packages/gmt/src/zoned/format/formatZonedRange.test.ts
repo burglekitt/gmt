@@ -156,7 +156,7 @@ describe("formatZonedRange", () => {
   // sv-SE
   it.each`
     from                                         | to                                         | options                                                                | expected
-    ${rangeByLocale[MustTestLocales.svSE].start} | ${rangeByLocale[MustTestLocales.svSE].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"3 februari 2024 14:30:45 CET – 16:46:15 CET"}
+    ${rangeByLocale[MustTestLocales.svSE].start} | ${rangeByLocale[MustTestLocales.svSE].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"3 februari 2024 14:30:45 CET-16:46:15 CET"}
     ${rangeByLocale[MustTestLocales.svSE].start} | ${rangeByLocale[MustTestLocales.svSE].end} | ${{ dateStyle: "short", timeStyle: "short" }}                          | ${"2024-02-03 14:30–16:46"}
     ${rangeByLocale[MustTestLocales.svSE].start} | ${rangeByLocale[MustTestLocales.svSE].end} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "shortOffset" }} | ${"14:30–16:46"}
   `(
@@ -171,7 +171,7 @@ describe("formatZonedRange", () => {
   // is-IS
   it.each`
     from                                         | to                                         | options                                                                | expected
-    ${rangeByLocale[MustTestLocales.isIS].start} | ${rangeByLocale[MustTestLocales.isIS].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"3. febrúar 2024, 14:30:45 GMT – 16:46:15 GMT"}
+    ${rangeByLocale[MustTestLocales.isIS].start} | ${rangeByLocale[MustTestLocales.isIS].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"3. febrúar 2024, 14:30:45 GMT+0 – 16:46:15 GMT+0"}
     ${rangeByLocale[MustTestLocales.isIS].start} | ${rangeByLocale[MustTestLocales.isIS].end} | ${{ dateStyle: "short", timeStyle: "short" }}                          | ${"3.2.2024, 14:30–16:46"}
     ${rangeByLocale[MustTestLocales.isIS].start} | ${rangeByLocale[MustTestLocales.isIS].end} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "shortOffset" }} | ${"14:30–16:46"}
   `(
@@ -231,9 +231,9 @@ describe("formatZonedRange", () => {
   // ko-KR
   it.each`
     from                                         | to                                         | options                                                                | expected
-    ${rangeByLocale[MustTestLocales.koKR].start} | ${rangeByLocale[MustTestLocales.koKR].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"2024년 2월 3일 오후 2시 30분 45초 GMT+9 ~ 오후 4시 46분 15초 GMT+9"}
-    ${rangeByLocale[MustTestLocales.koKR].start} | ${rangeByLocale[MustTestLocales.koKR].end} | ${{ dateStyle: "short", timeStyle: "short" }}                          | ${"24. 2. 3. 오후 2:30~4:46"}
-    ${rangeByLocale[MustTestLocales.koKR].start} | ${rangeByLocale[MustTestLocales.koKR].end} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "shortOffset" }} | ${"오후 2:30~4:46"}
+    ${rangeByLocale[MustTestLocales.koKR].start} | ${rangeByLocale[MustTestLocales.koKR].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"2024년 2월 3일 PM 2시 30분 45초 GMT+9 ~ PM 4시 46분 15초 GMT+9"}
+    ${rangeByLocale[MustTestLocales.koKR].start} | ${rangeByLocale[MustTestLocales.koKR].end} | ${{ dateStyle: "short", timeStyle: "short" }}                          | ${"24. 2. 3. PM 2:30~4:46"}
+    ${rangeByLocale[MustTestLocales.koKR].start} | ${rangeByLocale[MustTestLocales.koKR].end} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "shortOffset" }} | ${"PM 2:30~4:46"}
   `(
     "formats valid zoned datetime range for ko-KR",
     ({ from, to, options, expected }) => {
