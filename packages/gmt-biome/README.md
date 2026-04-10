@@ -25,7 +25,7 @@ pnpm add --save-dev @burglekitt/gmt-biome @biomejs/biome
 ### bun
 
 ```sh
-pnpm add --save-dev @burglekitt/gmt-biome @biomejs/biome
+bun add --save-dev @burglekitt/gmt-biome @biomejs/biome
 ```
 
 ## Usage

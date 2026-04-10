@@ -136,10 +136,10 @@ pnpm run reset
 Recommended PR flow:
 
 ```bash
-bun run affected:lint
-bun run affected:test
-bun run affected:typecheck
-bun run affected:build
+pnpm run affected:lint
+pnpm run affected:test
+pnpm run affected:typecheck
+pnpm run affected:build
 ```
 
 CI strategy:
