@@ -24,7 +24,7 @@ jobs:
   publish:
     name: Publish @burglekitt/${{ inputs.package }}
     runs-on: ubuntu-latest
-    environment: npm-publish
+    environment: release
     steps:
       - uses: actions/checkout@v4
 

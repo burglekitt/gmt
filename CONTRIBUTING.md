@@ -64,44 +64,29 @@ bun run lint
 
 ## Publishing
 
-Publishing is managed with Changesets and is package-scoped by default.
+Publishing is managed with Changesets and is triggered manually — nothing publishes automatically.
 
-### Changesets commands
+**See [PUBLISHING.md](./PUBLISHING.md) for the full step-by-step guide** including one-time npm org setup, how to record changesets, how to cut a release, and how git tags work in this monorepo.
 
-Run from repo root:
+Quick reference:
 
 ```bash
+# Run on your feature branch before merging — commit the generated file as part of the PR
 bun run changeset:add
+
+# See what versions would be bumped today
+bun run changeset status
+
+# Apply version bumps and update changelogs
 bun run changeset:version
-bun run changeset:publish
+
+# Publish via GitHub Actions UI (recommended)
+# → Actions → Publish Package → Run workflow
 ```
 
-- `changeset:add`: records release intent for one or more packages.
-- `changeset:version`: consumes pending changesets and updates package versions/changelogs.
-- `changeset:publish`: publishes only packages with unpublished version numbers.
+The `release.yml` workflow opens a "Version Packages" pull request automatically when changesets land on `main`. Merging that PR is equivalent to running `changeset:version` and pushing. It does **not** publish to npm.
 
-Changesets creates monorepo git tags in the format `@scope/name@x.y.z`.
-
-### Package publish scripts
-
-For publishable packages (for example, `packages/gmt-biome`, `packages/gmt-eslint`, and `packages/gmt-oxlint`):
-
-```bash
-# from the package directory
-bun run publish:dry-run
-bun run publish:public
-```
-
-These scripts run `npm publish --access public` under the hood.
-
-### CI release automation
-
-On pushes to `main`, [.github/workflows/release.yml](.github/workflows/release.yml) uses `changesets/action` to:
-
-1. Create/update a release PR with version and changelog updates.
-2. Publish on merge using `NPM_TOKEN`.
-
-The manual publish workflow remains in [.github/workflows/publish.yml](.github/workflows/publish.yml) as a fallback path.
+The `publish.yml` workflow is the actual publish step — triggered manually from the Actions UI.
 
 ### Monorepo config usage (maintainers)
 

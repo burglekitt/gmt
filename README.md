@@ -191,50 +191,18 @@ All Biome rules are in [biome.json](./biome.json) (Grit plugins live in [package
 
 ## Releases
 
-Pre-alpha. Each package follows semantic versioning and will be published independently to npm when stable.
+Pre-alpha. Each package follows semantic versioning and is published independently to npm.
 
-### Publishing
+Publishing uses [Changesets](https://github.com/changesets/changesets) for monorepo-safe, per-package version management. Nothing publishes automatically — all releases are triggered manually.
 
-Publishing is managed with [Changesets](https://github.com/changesets/changesets) for monorepo-safe, package-level releases.
+**See [PUBLISHING.md](./PUBLISHING.md) for the full step-by-step guide.**
 
-- Contributors add release intent with `bun run changeset:add`.
-- The release workflow at [.github/workflows/release.yml](.github/workflows/release.yml) creates/updates a version PR on `main`.
-- Merging the release PR publishes only packages whose versions changed.
-- Git tags are package-scoped in monorepo format: `@scope/name@x.y.z`.
+Key points:
 
-The manual workflow at [.github/workflows/publish.yml](.github/workflows/publish.yml) remains available as a fallback.
-
-**Prerequisites (one-time setup):**
-
-1. Create an npm access token at [npmjs.com](https://www.npmjs.com/) with `Publish` permission for the `@burglekitt` org.
-2. Add it as a repository secret named `NPM_TOKEN` in GitHub (`Settings → Secrets → Actions`).
-3. Create a `npm-publish` environment in GitHub (`Settings → Environments`) and add the secret there to gate production publishes.
-
-**Local release commands (maintainers):**
-
-```bash
-bun run changeset:add
-bun run changeset:version
-bun run changeset:publish
-git push --follow-tags
-```
-
-Changesets supports selective package releases. If a changeset only includes one package, only that package is versioned/published unless internal dependency rules require additional bumps.
-
-**Config packages (gmt-biome, gmt-eslint) need no build step** — their source files are published directly.
-
-**`@burglekitt/gmt-oxlint` is TypeScript-based and is built with tsup before publish** — the workflow runs `npm run build` in `packages/gmt-oxlint`.
-
-**`@burglekitt/gmt` must be built before publish** — the workflow runs `nx run @burglekitt/gmt:build` automatically.
-
-**To verify a package is ready before publishing:**
-
-```bash
-cd packages/gmt-biome && npm pack --dry-run
-cd packages/gmt-eslint && npm pack --dry-run
-cd packages/gmt-oxlint && npm pack --dry-run
-cd packages/gmt      && npm pack --dry-run   # after building
-```
+- When you finish a change, run `bun run changeset:add` to record what changed and how big the bump is.
+- When ready to release, a maintainer runs `bun run changeset:version` to apply version bumps and update changelogs.
+- Publishing is triggered manually via [Actions → Publish Package](../../actions/workflows/publish.yml).
+- Git tags are package-scoped: `@burglekitt/gmt@0.3.0`, `@burglekitt/gmt-oxlint@0.2.0`, etc.
 
 ---
 
