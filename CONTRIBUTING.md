@@ -10,7 +10,7 @@ Local setup (recommended):
 ```bash
 # Activate Corepack and install workspace deps
 corepack enable
-corepack prepare pnpm@8 --activate
+corepack prepare pnpm@13.32.1 --activate
 pnpm install --frozen-lockfile
 ```
 
