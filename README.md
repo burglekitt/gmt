@@ -172,6 +172,8 @@ All Biome rules are in [biome.json](./biome.json) (Grit plugins live in [package
 
 **For consumers:** [@burglekitt/gmt-eslint](./packages/gmt-eslint) provides a standalone ESLint flat config with the same Date API ban rules.
 
+**For Oxlint users:** [@burglekitt/gmt-oxlint](./packages/gmt-oxlint) provides the same Date API ban rules as an Oxlint JS plugin.
+
 ---
 
 ## Packages
@@ -181,6 +183,7 @@ All Biome rules are in [biome.json](./biome.json) (Grit plugins live in [package
 | [`@burglekitt/gmt`](./packages/gmt) | `npm install @burglekitt/gmt` | Give Me Temporal — string-in/string-out date library |
 | [`@burglekitt/gmt-biome`](./packages/gmt-biome) | `npm install -D @burglekitt/gmt-biome` | Shared Biome config — bans `Date` APIs via Grit plugins |
 | [`@burglekitt/gmt-eslint`](./packages/gmt-eslint) | `npm install -D @burglekitt/gmt-eslint` | Shared ESLint flat config — bans `Date` APIs |
+| [`@burglekitt/gmt-oxlint`](./packages/gmt-oxlint) | `npm install -D @burglekitt/gmt-oxlint oxlint` | Shared Oxlint JS plugin — bans `Date` APIs |
 
 `@burglekitt/gmt` currently exports top-level `Temporal`, `plain`, `zoned`, and `regex` namespaces, with direct subpath imports available under `@burglekitt/gmt/*`.
 
@@ -190,13 +193,16 @@ All Biome rules are in [biome.json](./biome.json) (Grit plugins live in [package
 
 Pre-alpha. Each package follows semantic versioning and will be published independently to npm when stable.
 
-## TODO
-
-Explore [Changesets](https://github.com/changesets/changesets) for monorepo publishing
-
 ### Publishing
 
-Publishing is **manual only** — triggered via the [Publish Package workflow](.github/workflows/publish.yml) in GitHub Actions (`Actions → Publish Package → Run workflow`).
+Publishing is managed with [Changesets](https://github.com/changesets/changesets) for monorepo-safe, package-level releases.
+
+- Contributors add release intent with `bun run changeset:add`.
+- The release workflow at [.github/workflows/release.yml](.github/workflows/release.yml) creates/updates a version PR on `main`.
+- Merging the release PR publishes only packages whose versions changed.
+- Git tags are package-scoped in monorepo format: `@scope/name@x.y.z`.
+
+The manual workflow at [.github/workflows/publish.yml](.github/workflows/publish.yml) remains available as a fallback.
 
 **Prerequisites (one-time setup):**
 
@@ -204,23 +210,20 @@ Publishing is **manual only** — triggered via the [Publish Package workflow](.
 2. Add it as a repository secret named `NPM_TOKEN` in GitHub (`Settings → Secrets → Actions`).
 3. Create a `npm-publish` environment in GitHub (`Settings → Environments`) and add the secret there to gate production publishes.
 
-**To publish a package:**
+**Local release commands (maintainers):**
 
 ```bash
-# 1. Bump the version in the package's package.json
-#    Follow semantic versioning: patch / minor / major
-
-# 2. Commit and push to main
-git add packages/<package>/package.json
-git commit -m "chore(release): @burglekitt/<package>@<version>"
-git push origin main
-
-# 3. Trigger the workflow on GitHub
-#    Actions → Publish Package → Run workflow
-#    Select: package, tag (usually "latest")
+bun run changeset:add
+bun run changeset:version
+bun run changeset:publish
+git push --follow-tags
 ```
 
+Changesets supports selective package releases. If a changeset only includes one package, only that package is versioned/published unless internal dependency rules require additional bumps.
+
 **Config packages (gmt-biome, gmt-eslint) need no build step** — their source files are published directly.
+
+**`@burglekitt/gmt-oxlint` is TypeScript-based and is built with tsup before publish** — the workflow runs `npm run build` in `packages/gmt-oxlint`.
 
 **`@burglekitt/gmt` must be built before publish** — the workflow runs `nx run @burglekitt/gmt:build` automatically.
 
@@ -229,6 +232,7 @@ git push origin main
 ```bash
 cd packages/gmt-biome && npm pack --dry-run
 cd packages/gmt-eslint && npm pack --dry-run
+cd packages/gmt-oxlint && npm pack --dry-run
 cd packages/gmt      && npm pack --dry-run   # after building
 ```
 

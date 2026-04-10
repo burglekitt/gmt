@@ -42,10 +42,16 @@ jobs:
       - run: bunx nx run-many -t lint test typecheck build
         if: github.event_name == 'push'
 
+      - name: Run gmt-oxlint tests
+        run: bun run test:gmt-oxlint
+
       # Verify config packages are packagable — no build step needed for config-only packages
       - name: Verify gmt-biome pack
         run: cd packages/gmt-biome && npm pack --dry-run
 
       - name: Verify gmt-eslint pack
         run: cd packages/gmt-eslint && npm pack --dry-run
+
+      - name: Verify gmt-oxlint pack
+        run: cd packages/gmt-oxlint && npm pack --dry-run
 

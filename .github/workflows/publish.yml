@@ -11,6 +11,7 @@ on:
           - gmt
           - gmt-biome
           - gmt-eslint
+          - gmt-oxlint
       tag:
         description: "npm dist-tag (e.g. latest, next, beta)"
         required: true
@@ -38,9 +39,13 @@ jobs:
 
       - run: bun install --no-cache
 
-      - name: Build (gmt only — config packages need no build)
+      - name: Build @burglekitt/gmt
         if: inputs.package == 'gmt'
         run: bunx nx run @burglekitt/gmt:build
+
+      - name: Build @burglekitt/gmt-oxlint
+        if: inputs.package == 'gmt-oxlint'
+        run: cd packages/gmt-oxlint && npm run build
 
       - name: Publish @burglekitt/${{ inputs.package }}
         run: npm publish --access public --tag ${{ inputs.tag }}
