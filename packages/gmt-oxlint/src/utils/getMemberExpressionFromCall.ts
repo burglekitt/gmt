@@ -1,6 +1,6 @@
 import type { CallExpressionNode, MemberExpressionNode } from "../types";
 import { isChainExpression } from "./isChainExpression";
-import { isMemberExpression } from "./isNumberExpression";
+import { isMemberExpression } from "./isMemberExpression";
 
 /**
  * Extracts the MemberExpression from a CallExpression if it exists, handling both direct and optional chaining cases.

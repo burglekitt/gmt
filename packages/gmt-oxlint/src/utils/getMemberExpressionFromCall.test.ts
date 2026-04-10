@@ -1,4 +1,3 @@
-import { describe, expect, it } from "vitest";
 import type { CallExpressionNode, MemberExpressionNode } from "../types";
 import { getMemberExpressionFromCall } from "./getMemberExpressionFromCall";
 

@@ -1,4 +1,3 @@
-import { describe, expect, it } from "vitest";
 import type { CallExpressionNode } from "../types";
 import { hasDateStaticMemberCall } from "./hasDateStaticMemberCall";
 

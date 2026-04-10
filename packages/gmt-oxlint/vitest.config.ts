@@ -4,6 +4,7 @@ export default defineConfig({
   test: {
     environment: "node",
     globals: true,
+    // Support running from repository root or package cwd
     include: ["packages/gmt-oxlint/src/**/*.test.ts", "src/**/*.test.ts"],
   },
 });

@@ -1,4 +1,3 @@
-import { describe, expect, it } from "vitest";
 import type { Node } from "../types";
 import { isIdentifier } from "./isIdentifier";
 

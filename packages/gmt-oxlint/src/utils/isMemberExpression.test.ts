@@ -1,6 +1,5 @@
-import { describe, expect, it } from "vitest";
 import type { Node } from "../types";
-import { isMemberExpression } from "./isNumberExpression";
+import { isMemberExpression } from "./isMemberExpression";
 
 describe("isMemberExpression", () => {
   it("returns true for MemberExpression node", () => {
