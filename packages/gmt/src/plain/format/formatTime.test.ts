@@ -101,7 +101,7 @@ describe("formatTime", () => {
     ${"14:30:45"} | ${{ hour: "numeric", minute: "numeric" }}                                   | ${"14:30"}
     ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit", second: "2-digit" }}                | ${"14:30:45"}
     ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit" }}                                   | ${"14:30"}
-    ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true }}  | ${"02:30:45 p. m."}
+    ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true }}  | ${"02:30:45 p. m."}
     ${"14:30:45"} | ${{ hour: "numeric", minute: "numeric", second: "numeric", hour12: false }} | ${"14:30:45"}
   `(
     "formats valid time $value for es-ES with options $options to $expected",

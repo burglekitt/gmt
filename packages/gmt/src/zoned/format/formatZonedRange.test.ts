@@ -1,3 +1,4 @@
+import { normalizeDateTime } from "../../internal";
 import { MustTestLocales } from "../../test/localeMatrix";
 import { localeZonedRangeInputByLocale } from "../test/localeZonedFixtures";
 import { formatZonedRange } from "./formatZonedRange";
@@ -25,7 +26,9 @@ describe("formatZonedRange", () => {
   `(
     "formats a valid zoned datetime range correctly for locale $locale",
     ({ from, to, locale, options, expected }) => {
-      expect(formatZonedRange(from, to, locale, options)).toBe(expected);
+      expect(formatZonedRange(from, to, locale, options)).toBe(
+        normalizeDateTime(expected),
+      );
     },
   );
 
@@ -56,7 +59,7 @@ describe("formatZonedRange", () => {
     } satisfies Intl.DateTimeFormatOptions;
 
     expect(formatZonedRange(from, to, "en-US", options)).toBe(
-      "10:00 AM – 12:00 PM EST",
+      "10:00 AM - 12:00 PM EST",
     );
   });
 
@@ -70,7 +73,7 @@ describe("formatZonedRange", () => {
     "formats valid zoned datetime range for en-GB",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.enGB, options)).toBe(
-        expected,
+        normalizeDateTime(expected),
       );
     },
   );
@@ -85,7 +88,7 @@ describe("formatZonedRange", () => {
     "formats valid zoned datetime range for de-DE",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.deDE, options)).toBe(
-        expected,
+        normalizeDateTime(expected),
       );
     },
   );
@@ -100,7 +103,7 @@ describe("formatZonedRange", () => {
     "formats valid zoned datetime range for fr-FR",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.frFR, options)).toBe(
-        expected,
+        normalizeDateTime(expected),
       );
     },
   );
@@ -115,7 +118,7 @@ describe("formatZonedRange", () => {
     "formats valid zoned datetime range for es-ES",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.esES, options)).toBe(
-        expected,
+        normalizeDateTime(expected),
       );
     },
   );
@@ -130,7 +133,7 @@ describe("formatZonedRange", () => {
     "formats valid zoned datetime range for it-IT",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.itIT, options)).toBe(
-        expected,
+        normalizeDateTime(expected),
       );
     },
   );
@@ -145,7 +148,7 @@ describe("formatZonedRange", () => {
     "formats valid zoned datetime range for pt-PT",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.ptPT, options)).toBe(
-        expected,
+        normalizeDateTime(expected),
       );
     },
   );
@@ -160,7 +163,7 @@ describe("formatZonedRange", () => {
     "formats valid zoned datetime range for sv-SE",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.svSE, options)).toBe(
-        expected,
+        normalizeDateTime(expected),
       );
     },
   );
@@ -175,7 +178,7 @@ describe("formatZonedRange", () => {
     "formats valid zoned datetime range for is-IS",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.isIS, options)).toBe(
-        expected,
+        normalizeDateTime(expected),
       );
     },
   );
@@ -190,7 +193,7 @@ describe("formatZonedRange", () => {
     "formats valid zoned datetime range for zh-CN",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.zhCN, options)).toBe(
-        expected,
+        normalizeDateTime(expected),
       );
     },
   );
@@ -205,7 +208,7 @@ describe("formatZonedRange", () => {
     "formats valid zoned datetime range for zh-TW",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.zhTW, options)).toBe(
-        expected,
+        normalizeDateTime(expected),
       );
     },
   );
@@ -220,7 +223,7 @@ describe("formatZonedRange", () => {
     "formats valid zoned datetime range for ja-JP",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.jaJP, options)).toBe(
-        expected,
+        normalizeDateTime(expected),
       );
     },
   );
@@ -235,7 +238,7 @@ describe("formatZonedRange", () => {
     "formats valid zoned datetime range for ko-KR",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.koKR, options)).toBe(
-        expected,
+        normalizeDateTime(expected),
       );
     },
   );
@@ -244,13 +247,13 @@ describe("formatZonedRange", () => {
   it.each`
     from                                         | to                                         | options                                                                | expected
     ${rangeByLocale[MustTestLocales.arSA].start} | ${rangeByLocale[MustTestLocales.arSA].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"٣ فبراير ٢٠٢٤، ٢:٣٠:٤٥ م غرينتش+٣ – ٤:٤٦:١٥ م غرينتش+٣"}
-    ${rangeByLocale[MustTestLocales.arSA].start} | ${rangeByLocale[MustTestLocales.arSA].end} | ${{ dateStyle: "short", timeStyle: "short" }}                          | ${"٣‏/٢‏/٢٠٢٤، ٢:٣٠–٤:٤٦ م"}
+    ${rangeByLocale[MustTestLocales.arSA].start} | ${rangeByLocale[MustTestLocales.arSA].end} | ${{ dateStyle: "short", timeStyle: "short" }}                          | ${"٣/٢/٢٠٢٤، ٢:٣٠–٤:٤٦ م"}
     ${rangeByLocale[MustTestLocales.arSA].start} | ${rangeByLocale[MustTestLocales.arSA].end} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "shortOffset" }} | ${"٢:٣٠–٤:٤٦ م"}
   `(
     "formats valid zoned datetime range for ar-SA",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.arSA, options)).toBe(
-        expected,
+        normalizeDateTime(expected),
       );
     },
   );
@@ -265,7 +268,7 @@ describe("formatZonedRange", () => {
     "formats valid zoned datetime range for he-IL",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.heIL, options)).toBe(
-        expected,
+        normalizeDateTime(expected),
       );
     },
   );
@@ -280,7 +283,7 @@ describe("formatZonedRange", () => {
     "formats valid zoned datetime range for ru-RU",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.ruRU, options)).toBe(
-        expected,
+        normalizeDateTime(expected),
       );
     },
   );
@@ -295,7 +298,7 @@ describe("formatZonedRange", () => {
     "formats valid zoned datetime range for tr-TR",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.trTR, options)).toBe(
-        expected,
+        normalizeDateTime(expected),
       );
     },
   );
