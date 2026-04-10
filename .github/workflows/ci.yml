@@ -24,9 +24,16 @@ jobs:
         with:
           bun-version: latest
 
+      - name: Install full ICU
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y nodejs-fullicu
+
       # Install all dependencies (including devDependencies)
       - name: Install dependencies
         run: bun install --no-cache
+        env:
+          NODE_ICU_DATA: /usr/share/nodejs/node-fullicu/full-icu-data.json
 
       # Debug: Verify Nx modules are installed
       - name: Debug Nx modules
