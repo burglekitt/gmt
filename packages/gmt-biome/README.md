@@ -36,7 +36,7 @@ In your `biome.json`:
 
 ```json
 {
-  "$schema": "https://biomejs.dev/schemas/2.4.7/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.4.6/schema.json",
   "extends": ["@burglekitt/gmt-biome"]
 }
 ```
@@ -60,6 +60,22 @@ In your `biome.toml`:
 ```toml
 extends = ["@burglekitt/gmt-biome"]
 ```
+
+### Select specific plugins
+
+If you only want a subset of the Date-ban rules, reference plugin subpaths exported by this package. Example:
+
+```json
+{
+  "$schema": "https://biomejs.dev/schemas/2.4.6/schema.json",
+  "plugins": [
+    "@burglekitt/gmt-biome/plugins/no-new-date.grit",
+    "@burglekitt/gmt-biome/plugins/no-date-now.grit"
+  ]
+}
+```
+
+Note: plugin subpaths include the `.grit` extension in the published package exports.
 
 ## Banned patterns
 

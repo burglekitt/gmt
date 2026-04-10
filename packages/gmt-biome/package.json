@@ -27,7 +27,7 @@
     "tanstack-intent"
   ],
   "files": [
-    "biome.json",
+    "recommended.json",
     "plugins",
     "LICENSE",
     "README.md",
@@ -39,7 +39,8 @@
     "publish:public": "npm publish --access public"
   },
   "exports": {
-    ".": "./biome.json"
+    ".": "./recommended.json",
+    "./plugins/*": "./plugins/*.grit"
   },
   "devDependencies": {
     "@tanstack/intent": "^0.0.29"

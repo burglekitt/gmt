@@ -15,6 +15,9 @@ Use this skill when a team wants automated enforcement of gmt-biome rules.
 1. Add lint/check command
 - Ensure CI runs a Biome check command on pull requests.
 
+5. Plugin selection
+- Decide whether to extend the full `@burglekitt/gmt-biome` bundle or include specific plugins by referencing `@burglekitt/gmt-biome/plugins/<name>.grit` in your project's `plugins` list. Prefer plugin subpaths when you only want a subset of rules.
+
 2. Scope rollout
 - If the repository has many existing violations, propose incremental adoption:
   - start on changed files or selected paths,

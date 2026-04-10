@@ -15,6 +15,7 @@ Use this skill when working in a project that already uses `@burglekitt/gmt` or 
 1. Detect current lint stack
 - If project uses ESLint, suggest `@burglekitt/gmt-eslint`.
 - If project uses Biome, suggest `@burglekitt/gmt-biome`.
+ - If project uses Biome, suggest `@burglekitt/gmt-biome` (or suggest selecting individual plugins via `@burglekitt/gmt-biome/plugins/<name>.grit` when only a subset of rules is desired).
 - If project uses Oxlint, suggest `@burglekitt/gmt-oxlint`.
 
 2. Respect developer choice
