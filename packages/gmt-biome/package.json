@@ -41,10 +41,15 @@
 	"exports": {
 		".": "./biome.json",
 		"./plugins/no-new-date": "./plugins/no-new-date.grit",
+		"./plugins/no-new-date.grit": "./plugins/no-new-date.grit",
 		"./plugins/no-date-now": "./plugins/no-date-now.grit",
+		"./plugins/no-date-now.grit": "./plugins/no-date-now.grit",
 		"./plugins/no-date-parse": "./plugins/no-date-parse.grit",
+		"./plugins/no-date-parse.grit": "./plugins/no-date-parse.grit",
 		"./plugins/no-date-utc": "./plugins/no-date-utc.grit",
-		"./plugins/no-date-getTimezoneOffset": "./plugins/no-date-getTimezoneOffset.grit"
+		"./plugins/no-date-utc.grit": "./plugins/no-date-utc.grit",
+		"./plugins/no-date-getTimezoneOffset": "./plugins/no-date-getTimezoneOffset.grit",
+		"./plugins/no-date-getTimezoneOffset.grit": "./plugins/no-date-getTimezoneOffset.grit"
 	},
 	"devDependencies": {
 		"@tanstack/intent": "^0.0.29"
