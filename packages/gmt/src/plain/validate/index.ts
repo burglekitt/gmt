@@ -8,5 +8,3 @@ export * from "./isValidDateTimeDurationUnit";
 export * from "./isValidIsoDateLike";
 export * from "./isValidTime";
 export * from "./isValidTimeDurationUnit";
-export * from "./isValidUnixMilliseconds";
-export * from "./isValidUnixSeconds";
