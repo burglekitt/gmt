@@ -13,11 +13,12 @@ import { isValidUnixUnit, type UnixUnit } from "../validate/isValidUnixUnit";
  */
 export function getUnixNow(...unitInput: [unit?: UnixUnit]): number {
   const rawUnit = unitInput.length === 0 ? undefined : unitInput[0];
-  const resolvedUnit: UnixUnit = unitInput.length === 0
-    ? "milliseconds"
-    : isValidUnixUnit(String(rawUnit ?? ""))
-    ? (rawUnit as UnixUnit)
-    : "milliseconds";
+  const resolvedUnit: UnixUnit =
+    unitInput.length === 0
+      ? "milliseconds"
+      : isValidUnixUnit(String(rawUnit ?? ""))
+        ? (rawUnit as UnixUnit)
+        : "milliseconds";
 
   const instant = Temporal.Now.instant();
   if (resolvedUnit === "seconds") {

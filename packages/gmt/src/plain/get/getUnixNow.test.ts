@@ -47,9 +47,12 @@ describe("getUnixNow", () => {
     ${""}
     ${null}
     ${undefined}
-  `("defaults to milliseconds for invalid unit: $unit", ({ unit }: { unit: unknown }) => {
-    const val = getUnixNow(unit as never);
-    expect(val).toBe(1709164800000);
-    expect(isValidUnixMilliseconds(String(val))).toBe(true);
-  });
+  `(
+    "defaults to milliseconds for invalid unit: $unit",
+    ({ unit }: { unit: unknown }) => {
+      const val = getUnixNow(unit as never);
+      expect(val).toBe(1709164800000);
+      expect(isValidUnixMilliseconds(String(val))).toBe(true);
+    },
+  );
 });
