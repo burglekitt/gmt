@@ -69,6 +69,12 @@ Publishing is managed with Changesets and is triggered manually — nothing publ
 
 For copyable commands and a quick reference, see [PUBLISHING.md](./PUBLISHING.md).
 
+## Development conventions
+
+- Use `pnpm` for package management and scripts.
+- Use `pnpm -w exec <binary>` instead of `npx`.
+- Avoid Bun-specific runtime APIs (e.g. `Bun.serve`, `bun:sqlite`) — prefer standard Node.js libraries.
+
 ## PR checklist
 
 - Ensure tests pass for affected projects.
