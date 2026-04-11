@@ -1,11 +1,3 @@
-# @burglekitt/gmt-biome
-
-## 1.0.2
-
-### Patch Changes
-
-- Fix plugin resolution for extended configs. Add biome.json as main export with root:false to avoid nested root conflicts. Remove redundant recommended.json. Simplify exports.
-
 ## 1.0.1
 
 ### Patch Changes
