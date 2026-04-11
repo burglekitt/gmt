@@ -13,6 +13,17 @@ It wraps `@js-temporal/polyfill` behind a smaller, more opinionated API aimed at
 
 **Status:** pre-alpha. Expect API movement while the surface is still being filled out.
 
+## Design Philosophy
+
+GMT enforces a strict input/output contract to keep behavior predictable and auditable:
+
+- **Explicit inputs only**: Public APIs accept clearly defined shapes — ISO 8601 date/time strings, IANA timezone identifiers, or numeric Unix epoch values (explicitly seconds or milliseconds). We do not attempt to parse arbitrary or ambiguous date formats.
+- **Predictable outputs**: Helpers return normalized values (ISO strings, numbers, booleans, or arrays). Invalid input yields typed fallbacks (`""`, `null`, or `false`) instead of throwing.
+- **No fuzzy parsing**: Avoid "throw everything at the wall" patterns found in permissive libraries. If you need permissive parsing, perform it outside of `@burglekitt/gmt` and then canonicalize to the strict shapes before calling into gmt.
+- **Developer comfort with standards**: The library's goal is to make developers comfortable and deliberate with ISO 8601, IANA timezones, UTC instants, and Unix epochs by keeping APIs small and explicit.
+
+These rules make tests deterministic, reduce timezone/DST surprises, and simplify reasoning about time-related code in production systems.
+
 ---
 
 ## Install
@@ -218,15 +229,21 @@ isValidZonedDateTime("2024-03-17T14:30:45+00:00[UTC]");
 - `diffDate`
 - `diffDateTime`
 - `diffTime`
+- `endOfDate`
+- `endOfDateTime`
+- `endOfQuarterForDate`
+- `endOfQuarterForDateTime`
+- `endOfTime`
+- `getQuarterForDate`
+- `getQuarterForDateTime`
+- `startOfDate`
+- `startOfDateTime`
+- `startOfQuarterForDate`
+- `startOfQuarterForDateTime`
+- `startOfTime`
 - `subtractDate`
 - `subtractDateTime`
 - `subtractTime`
-- `startOfDate`
-- `startOfDateTime`
-- `startOfTime`
-- `endOfDate`
-- `endOfDateTime`
-- `endOfTime`
 - `weekOfYear`
 
 ### `@burglekitt/gmt/plain/chop`
@@ -248,6 +265,9 @@ isValidZonedDateTime("2024-03-17T14:30:45+00:00[UTC]");
 - `isBeforeDate`
 - `isBeforeDateTime`
 - `isBeforeTime`
+- `isBetweenDate`
+- `isBetweenDateTime`
+- `isBetweenTime`
 
 ### `@burglekitt/gmt/plain/format`
 
@@ -291,6 +311,9 @@ isValidZonedDateTime("2024-03-17T14:30:45+00:00[UTC]");
 ### `@burglekitt/gmt/zoned/calculate`
 
 - `addZoned`
+- `endOfQuarterForZoned`
+- `getQuarterForZoned`
+- `startOfQuarterForZoned`
 - `subtractZoned`
 
 ### `@burglekitt/gmt/zoned/chop`
@@ -307,6 +330,7 @@ isValidZonedDateTime("2024-03-17T14:30:45+00:00[UTC]");
 - `areZonedEqual`
 - `isAfterZoned`
 - `isBeforeZoned`
+- `isBetweenZoned`
 
 ### `@burglekitt/gmt/zoned/convert`
 
@@ -370,6 +394,23 @@ isValidZonedDateTime("2024-03-17T14:30:45+00:00[UTC]");
 - `unixMilliseconds`
 - `utcDateTime`
 
+### `@burglekitt/gmt/unix`
+
+- `convertUnixToUtc`
+- `convertUnixToZoned`
+- `getUnixNow`
+- `parseUnixUnit`
+- `isValidUnixUnit`
+- `isValidUnixSeconds`
+- `isValidUnixMilliseconds`
+
+### `@burglekitt/gmt/utc`
+
+- `chopUtc`
+- `convertUtcToUnix`
+- `convertUtcToZoned`
+- `getUtcNow`
+
 ---
 
 ## TODO (Feature Gaps)
@@ -379,16 +420,14 @@ Prioritized roadmap and parity checks against Luxon, Moment, and date-fns.
 1. Interval primitives and helpers (`Interval` type, overlap checks, containment checks, interval sorting, interval normalization/merge).
 2. Range iteration helpers (each day/week/month/quarter across a range for plain and zoned inputs).
 3. Clamp/min/max helpers for dates datetimes times (bounded values and collection min/max selectors).
-4. `isBetween` and inclusive/exclusive boundary helpers for plain and zoned APIs.
-5. Quarter helpers beyond parse-only accessors (`getQuarter`, `startOfQuarter`, `endOfQuarter`).
-6. Additional start/end boundaries (`startOfWeek`, `endOfWeek`, ISO-week variants, month/year boundaries where missing).
-7. Duration utilities (interval-to-duration, ISO duration formatting, optional human-readable duration formatting).
-8. Calendar/relative formatting helpers (`formatRelative`, distance-to-now style outputs).
-9. Serialization adapters package (`gmt-serializers`) for SuperJSON-style Temporal round-tripping.
-10. Parsing pack for non-ISO but common user inputs (`YYYY/MM/DD`, `HHmm`, month-name parsing) in a separate optional package.
-11. Business-day helpers (`addBusinessDays`, `differenceInBusinessDays`) as an optional domain module.
-12. Optional validation package (`gmt-zod`) kept separate from core `@burglekitt/gmt`.
-13. Descriptive parsing errors for timezones, GMT offsets
+4. Additional start/end boundaries (`startOfWeek`, `endOfWeek`, ISO-week variants, month/year boundaries where missing).
+5. Duration utilities (interval-to-duration, ISO duration formatting, optional human-readable duration formatting).
+6. Calendar/relative formatting helpers (`formatRelative`, distance-to-now style outputs).
+7. Serialization adapters package (`gmt-serializers`) for SuperJSON-style Temporal round-tripping.
+8. Parsing pack for non-ISO but common user inputs (`YYYY/MM/DD`, `HHmm`, month-name parsing) in a separate optional package.
+9. Business-day helpers (`addBusinessDays`, `differenceInBusinessDays`) as an optional domain module.
+10. Optional validation package (`gmt-zod`) kept separate from core `@burglekitt/gmt`.
+11. Descriptive parsing errors for timezones, GMT offsets
 ---
 
 ## Testing Matrix
