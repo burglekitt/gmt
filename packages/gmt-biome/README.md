@@ -60,7 +60,7 @@ Include only the plugins you need:
 }
 ```
 
-> **Note:** The `.grit` extension and the `./node_modules/` prefix are both required. Biome does not resolve npm package specifiers in `plugins` — paths must point directly to the `.grit` file on disk.
+> **Note:** The `.grit` extension is required. When installed from npm, the typical path uses the `./node_modules/` prefix (as shown above), but any relative or absolute filesystem path to the `.grit` file on disk will work — Biome does not resolve npm package specifiers in `plugins`.
 
 > **Why not `extends`?** Biome's `extends` is for sharing `biome.json` config options (formatter, linter rules, etc.). It cannot be used to distribute GritQL plugins — plugin paths in an extended config file are always resolved relative to the consuming project root, not the npm package directory. Use `plugins` instead.
 

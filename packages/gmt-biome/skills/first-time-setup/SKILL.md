@@ -35,7 +35,7 @@ Use this skill when a user wants to adopt `@burglekitt/gmt-biome`.
      }
      ```
 
-   The `./node_modules/` prefix and `.grit` extension are both required — Biome resolves plugin paths as filesystem paths, not npm package specifiers.
+   Use a filesystem path to the `.grit` file — when installed from npm, a common path is `./node_modules/...`. Biome resolves plugin paths as filesystem paths, not npm package specifiers.
 
    **Important:** `extends` cannot be used for GritQL plugins — it only accepts `biome.json` config files. Always use `plugins`.
  - Preserve existing project-specific rules unless explicitly asked to replace them.
