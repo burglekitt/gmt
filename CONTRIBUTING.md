@@ -67,9 +67,6 @@ Publishing is managed with Changesets and is triggered manually — nothing publ
 
 **See [PUBLISHING.md](./PUBLISHING.md) for the full step-by-step guide** including one-time npm org setup, how to record changesets, how to cut a release, and how git tags work in this monorepo.
 
-Quick reference:
-**See [PUBLISHING.md](./PUBLISHING.md) for the full step-by-step guide** including one-time npm org setup, how to record changesets, how to cut a release, and how git tags work in this monorepo.
-
 For copyable commands and a quick reference, see [PUBLISHING.md](./PUBLISHING.md).
 
 ## PR checklist

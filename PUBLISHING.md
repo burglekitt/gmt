@@ -129,7 +129,7 @@ If you publish from GitHub Actions, use an npm Automation token with the minimal
 
 ```yaml
 env:
-	NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 ```
 
 Security checklist for Actions-based publishing:
