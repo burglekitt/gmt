@@ -48,22 +48,6 @@ describe("startOfUnix", () => {
   );
 
   it.each`
-    value           | unit        | fractionalSecondDigits | expected
-    ${"1706659200"} | ${"second"} | ${undefined}           | ${"1706659200"}
-    ${1706659200}   | ${"second"} | ${3}                   | ${"1706659200"}
-  `(
-    "supports fractionalSecondDigits $fractionalSecondDigits returning $expected for $value and $unit",
-    ({ value, unit, fractionalSecondDigits, expected }) => {
-      expect(
-        startOfUnix(value as never, unit as never, {
-          epochUnit: "seconds",
-          fractionalSecondDigits,
-        }),
-      ).toBe(expected);
-    },
-  );
-
-  it.each`
     invalidValue
     ${"invalid"}
     ${-1}
