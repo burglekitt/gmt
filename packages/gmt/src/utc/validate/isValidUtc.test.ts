@@ -1,6 +1,6 @@
-import { isUtcDateTime } from "./isUtcDateTime";
+import { isValidUtc } from "./isValidUtc";
 
-describe("isUtcDateTime", () => {
+describe("isValidUtc", () => {
   it.each`
     value
     ${"2024-02-29T14:30Z"}
@@ -11,7 +11,7 @@ describe("isUtcDateTime", () => {
   `(
     "returns true for valid UTC datetime: $value",
     ({ value }: { value: string }) => {
-      expect(isUtcDateTime(value)).toBe(true);
+      expect(isValidUtc(value)).toBe(true);
     },
   );
 
@@ -26,7 +26,7 @@ describe("isUtcDateTime", () => {
   `(
     "returns false for invalid UTC datetime: $value",
     ({ value }: { value: string }) => {
-      expect(isUtcDateTime(value)).toBe(false);
+      expect(isValidUtc(value)).toBe(false);
     },
   );
 });

@@ -118,3 +118,5 @@ export const fixedNowInstant = "2024-02-29T00:00:00.000Z";
 
 // Test for leap year handling in timezone conversions. 2024-02-29T00:00:00Z is 1709164800000 in unix milliseconds.
 export const battleTestLeapYearUnix = 1709164800000;
+export const battleTestLeapYearUnixSeconds = 1709164800;
+export const battleTestLeapYearUtc = "2024-02-29T00:00:00Z";

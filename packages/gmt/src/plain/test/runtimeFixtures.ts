@@ -1,3 +1,4 @@
+// Unix time for 2024-02-29T00:00:00Z
 export const unixFixture = {
   seconds: "1709164800",
   milliseconds: "1709164800000",

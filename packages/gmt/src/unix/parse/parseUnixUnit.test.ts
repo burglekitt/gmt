@@ -45,7 +45,13 @@ describe("parseUnixUnit", () => {
 
   it("supports seconds epoch unit", () => {
     const epochSec = 1709164800;
-    expect(parseUnixUnit(epochSec, "year", "seconds")).toBe("2024");
+    expect(parseUnixUnit(epochSec, "year", { epochUnit: "seconds" })).toBe(
+      "2024",
+    );
+  });
+
+  it("supports optional timeZone", () => {
+    expect(parseUnixUnit(epochMs, "year", { timeZone: "UTC" })).toBe("2024");
   });
 
   it.each`

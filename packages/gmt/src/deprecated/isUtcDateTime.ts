@@ -1,7 +1,8 @@
-import { utcDateTime } from "../../regex/utc-date-time";
-import { isLeapSecond } from "./isLeapSecond";
+import { isLeapSecond } from "../plain/validate/isLeapSecond";
+import { utcDateTime } from "../regex/utc-date-time";
 
 /**
+ * @deprecated will be removed in v2.0.0 - use isValidUtc instead
  * Return true when the provided string is a valid ISO 8601 UTC datetime.
  *
  * - Rejects leap-seconds explicitly.

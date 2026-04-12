@@ -1,9 +1,9 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { isUtcDateTime } from "../../plain/validate/isUtcDateTime";
 import {
   isValidUnixUnit,
   type UnixUnit,
 } from "../../unix/validate/isValidUnixUnit";
+import { isValidUtc } from "../validate";
 
 /**
  * Convert a UTC Instant string to a unix epoch value in milliseconds or
@@ -21,7 +21,7 @@ export function convertUtcToUnix(
 ): number | null {
   const resolvedUnit = unitInput.length === 0 ? "milliseconds" : unitInput[0];
 
-  if (!isUtcDateTime(value) || !isValidUnixUnit(resolvedUnit ?? "")) {
+  if (!isValidUtc(value) || !isValidUnixUnit(resolvedUnit ?? "")) {
     return null;
   }
 

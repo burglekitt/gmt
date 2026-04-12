@@ -1,0 +1,82 @@
+import * as getSystemTimezoneModule from "../../plain/get/getSystemTimezone";
+import { MustTestDstTimezones } from "../../test/timezoneMatrix";
+import {
+  battleTestLeapYearUnix,
+  battleTestLeapYearUnixSeconds,
+} from "../../zoned/test/timezoneFixtures";
+
+import { parseUnixDate } from "./parseUnixDate";
+
+describe("parseUnixDate", () => {
+  const systemTime = "2024-02-29T00:00:00.000Z";
+  let timezoneSpy: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(systemTime);
+
+    timezoneSpy = vi
+      .spyOn(getSystemTimezoneModule, "getSystemTimezone")
+      .mockReturnValue("UTC");
+  });
+
+  afterEach(() => {
+    timezoneSpy.mockRestore();
+    vi.useRealTimers();
+  });
+  it.each`
+    value                            | options                          | expected
+    ${battleTestLeapYearUnix}        | ${undefined}                     | ${"2024-02-29"}
+    ${battleTestLeapYearUnix}        | ${{ epochUnit: "milliseconds" }} | ${"2024-02-29"}
+    ${battleTestLeapYearUnixSeconds} | ${{ epochUnit: "seconds" }}      | ${"2024-02-29"}
+    ${0}                             | ${{ epochUnit: "seconds" }}      | ${"1970-01-01"}
+    ${1704067200000}                 | ${undefined}                     | ${"2024-01-01"}
+    ${1735689600000}                 | ${undefined}                     | ${"2025-01-01"}
+  `(
+    "returns $expected for $value and options $options",
+    ({ value, options, expected }) => {
+      expect(parseUnixDate(value, options)).toBe(expected);
+    },
+  );
+
+  it.each`
+    value                     | timeZone                                       | expected
+    ${battleTestLeapYearUnix} | ${MustTestDstTimezones.UTC}                    | ${"2024-02-29"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimezones.GMT}                    | ${"2024-02-29"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Etc/GMT"]}             | ${"2024-02-29"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Europe/Lisbon"]}       | ${"2024-02-29"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Europe/Dublin"]}       | ${"2024-02-29"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Europe/Berlin"]}       | ${"2024-02-29"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Europe/Helsinki"]}     | ${"2024-02-29"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Europe/Istanbul"]}     | ${"2024-02-29"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Asia/Kolkata"]}        | ${"2024-02-29"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Asia/Kathmandu"]}      | ${"2024-02-29"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Asia/Shanghai"]}       | ${"2024-02-29"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Australia/Lord_Howe"]} | ${"2024-02-29"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Pacific/Chatham"]}     | ${"2024-02-29"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Pacific/Apia"]}        | ${"2024-02-29"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Pacific/Niue"]}        | ${"2024-02-28"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["America/New_York"]}    | ${"2024-02-28"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["America/Chicago"]}     | ${"2024-02-28"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["America/Phoenix"]}     | ${"2024-02-28"}
+  `(
+    "returns $expected for $value with timeZone $timeZone",
+    ({ value, timeZone, expected }) => {
+      expect(parseUnixDate(value, { timeZone })).toBe(expected);
+    },
+  );
+
+  it.each`
+    invalidValue
+    ${null}
+    ${undefined}
+    ${NaN}
+    ${Infinity}
+    ${-Infinity}
+  `(
+    "returns empty string for invalid value $invalidValue",
+    ({ invalidValue }) => {
+      expect(parseUnixDate(invalidValue as unknown as number)).toBe("");
+    },
+  );
+});

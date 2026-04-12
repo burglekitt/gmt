@@ -7,6 +7,9 @@ describe("isValidUnixSeconds", () => {
     ${unixFixture.seconds}
     ${"0000000000"}
     ${"9999999999"}
+    ${1709164800}
+    ${0}
+    ${9999999999}
   `("returns true for valid unix seconds $value", ({ value }) => {
     expect(isValidUnixSeconds(value)).toBe(true);
   });
@@ -19,6 +22,8 @@ describe("isValidUnixSeconds", () => {
     ${unixFixture.invalid[2]}
     ${unixFixture.invalid[3]}
     ${unixFixture.invalid[4]}
+    ${-1}
+    ${1.5}
     ${null}
     ${undefined}
   `("returns false for invalid unix seconds $value", ({ value }) => {

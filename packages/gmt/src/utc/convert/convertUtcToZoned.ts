@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { isUtcDateTime } from "../../plain/validate/isUtcDateTime";
 import { isValidTimezone } from "../../zoned/validate";
+import { isValidUtc } from "../validate";
 
 /**
  * Convert a UTC Instant string to a zoned ISO 8601 datetime string in the
@@ -15,7 +15,7 @@ import { isValidTimezone } from "../../zoned/validate";
  * @returns zoned ISO 8601 string or empty string when invalid
  */
 export function convertUtcToZoned(value: string, timeZone: string): string {
-  if (!isUtcDateTime(value) || !isValidTimezone(timeZone)) {
+  if (!isValidUtc(value) || !isValidTimezone(timeZone)) {
     return "";
   }
 

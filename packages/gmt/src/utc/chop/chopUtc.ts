@@ -1,4 +1,4 @@
-import { isUtcDateTime } from "../../plain/validate";
+import { isValidUtc } from "../validate";
 
 /**
  * Return the UTC datetime string with a trailing Z removed if present.
@@ -10,7 +10,7 @@ import { isUtcDateTime } from "../../plain/validate";
  * @returns UTC datetime string without trailing Z or "" on invalid input
  */
 export function chopUtc(value: string): string {
-  if (!isUtcDateTime(value)) {
+  if (!isValidUtc(value)) {
     return "";
   }
 
