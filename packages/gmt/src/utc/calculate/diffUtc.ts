@@ -4,6 +4,17 @@ import { isValidDateTimeDurationUnit } from "../../plain/validate";
 import type { DateTimeDurationUnit } from "../../types";
 import { isValidUtc } from "../validate/isValidUtc";
 
+/**
+ * Return the difference between two UTC datetimes measured in the given
+ * date-time `unit`.
+ *
+ * - Returns `null` for invalid inputs (no sentinel since negative diffs are valid).
+ *
+ * @param value1 UTC ISO datetime string (start)
+ * @param value2 UTC ISO datetime string (end)
+ * @param units DateTimeDurationUnit | DateTimeDurationUnit[] to measure the difference (e.g. "hours" | ["years", "months", "hours"])
+ * @returns numeric difference in the requested unit, or null on invalid input
+ */
 export function diffUtc(
   value1: string,
   value2: string,

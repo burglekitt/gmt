@@ -13,7 +13,8 @@ import { getLargestTimeDurationUnit } from "./getLargestTimeDurationUnit";
  * @param time1 ISO PlainTime string for the start
  * @param time2 ISO PlainTime string for the end
  * @param units TimeDurationUnit | TimeDurationUnit[] to measure the difference (e.g. "hours", "minutes", "seconds")
- * @returns numeric difference in the requested unit, or null on invalid input
+ * @example diffTime("12:00:00", "14:30:00", "hour") // 2
+ * @example diffTime("12:00:00", "14:30:00", ["hour", "minute"]) // { hour: 2, minute: 30 }
  */
 export function diffTime(
   time1: string,
