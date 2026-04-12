@@ -35,7 +35,14 @@ export function endOfQuarterForDateTime(value: string): string {
     const lastDayOfQuarter = nextQuarterStart.subtract({ days: 1 });
 
     return lastDayOfQuarter
-      .with({ hour: 23, minute: 59, second: 59, nanosecond: 999999999 })
+      .with({
+        hour: 23,
+        minute: 59,
+        second: 59,
+        millisecond: 999,
+        microsecond: 999,
+        nanosecond: 999,
+      })
       .toString();
   } catch {
     return "";
