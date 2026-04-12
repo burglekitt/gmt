@@ -3,7 +3,7 @@ import { isValidAmount } from "../../internal";
 import { getSystemTimezone } from "../../plain/get";
 import { isValidDateTimeDurationUnit } from "../../plain/validate";
 import type { DateTimeDurationUnit } from "../../types";
-import { isValidTimezone } from "../../zoned/validate";
+import { isValidTimeZone } from "../../zoned/validate";
 
 /**
  * Subtract a temporal amount from a Unix epoch value and return the resulting epoch.
@@ -13,7 +13,7 @@ import { isValidTimezone } from "../../zoned/validate";
  *
  * @param value Unix timestamp (number or string)
  * @param units Partial<Record<DateTimeDurationUnit, number>> object specifying units to subtract
- * @param options epochUnit optional "seconds" | "milliseconds", timeZone optional IANA timezone
+ * @param options epochUnit optional "seconds" | "milliseconds", timeZone optional IANA timeZone
  * @example subtractUnix(1706745600000, { days: 1 }) // "1706659200000"
  * @example subtractUnix(1706745600, { days: 1 }, { epochUnit: "seconds" }) // "1706659200"
  * @returns Unix epoch string after subtraction, or "" on invalid input
@@ -29,7 +29,7 @@ export function subtractUnix(
   const epochUnit = options?.epochUnit ?? "milliseconds";
   const timeZone = options?.timeZone ?? getSystemTimezone();
 
-  if (!timeZone || !isValidTimezone(timeZone)) return "";
+  if (!timeZone || !isValidTimeZone(timeZone)) return "";
 
   const validUnits = Object.keys(units).every(isValidDateTimeDurationUnit);
   const validAmounts = Object.values(units).every(isValidAmount);

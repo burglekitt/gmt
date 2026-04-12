@@ -1,5 +1,5 @@
 import { parseZonedTimezone } from "../../zoned/parse";
-import { battleTestTimeZones } from "../../zoned/test/timezoneFixtures";
+import { battleTestTimeZones } from "../../zoned/test/timeZoneFixtures";
 import { convertUtcToZoned } from "./convertUtcToZoned";
 
 describe("convertUtcToZoned", () => {
@@ -51,7 +51,7 @@ describe("convertUtcToZoned", () => {
     ${null}
     ${undefined}
   `(
-    "returns an empty string for invalid timezone $invalidTimeZone",
+    "returns an empty string for invalid timeZone $invalidTimeZone",
     ({ invalidTimeZone }) => {
       expect(
         convertUtcToZoned("2024-02-29T14:30:45Z", invalidTimeZone as never),
@@ -60,7 +60,7 @@ describe("convertUtcToZoned", () => {
   );
 
   for (const timeZone of battleTestTimeZones) {
-    it(`converts UTC to battle-test timezone ${timeZone}`, () => {
+    it(`converts UTC to battle-test timeZone ${timeZone}`, () => {
       expect(
         parseZonedTimezone(convertUtcToZoned("2024-02-29T14:30:45Z", timeZone)),
       ).toBe(timeZone);

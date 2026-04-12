@@ -62,7 +62,7 @@ describe("addUtc", () => {
 
   it.each`
     invalidUnit
-    ${"timezone"}
+    ${"timeZone"}
     ${""}
     ${null}
     ${undefined}

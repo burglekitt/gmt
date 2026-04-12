@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { weekOfYear } from "../../plain/calculate/weekOfYear";
-import { isValidTimezone } from "../validate";
+import { isValidTimeZone } from "../validate";
 
 export type ZonedNowUnit =
   | "year"
@@ -32,11 +32,11 @@ function isValidZonedNowUnit(unit: string): unit is ZonedNowUnit {
 }
 
 /**
- * Return the requested current unit value for the specified IANA timezone.
+ * Return the requested current unit value for the specified IANA timeZone.
  *
- * - Returns empty string for invalid timezone or unit.
+ * - Returns empty string for invalid timeZone or unit.
  *
- * @param ianaTimezone IANA timezone identifier
+ * @param ianaTimezone IANA timeZone identifier
  * @param unit unit to extract from current zoned time
  * @returns string representation of the requested unit or "" when invalid
  */
@@ -45,7 +45,7 @@ export function getZonedNowUnit(
   unit: ZonedNowUnit,
 ): string {
   if (
-    !isValidTimezone(ianaTimezone) ||
+    !isValidTimeZone(ianaTimezone) ||
     !isValidZonedNowUnit(String(unit ?? ""))
   ) {
     return "";

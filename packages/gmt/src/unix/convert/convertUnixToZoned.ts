@@ -4,7 +4,7 @@ import {
   isValidUnixUnit,
   type UnixUnit,
 } from "../../unix/validate/isValidUnixUnit";
-import { isValidTimezone } from "../../zoned/validate";
+import { isValidTimeZone } from "../../zoned/validate";
 
 export function convertUnixToZoned(
   value: number,
@@ -16,10 +16,10 @@ export function convertUnixToZoned(
    * specified `timeZone`.
    *
    * - `value` is milliseconds by default, or seconds when `unit` is "seconds".
-   * - Returns empty string "" for invalid inputs (amount, timezone, or unit).
+   * - Returns empty string "" for invalid inputs (amount, timeZone, or unit).
    *
    * @param value epoch value
-   * @param timeZone IANA timezone identifier
+   * @param timeZone IANA timeZone identifier
    * @param unit optional unit, "seconds" or "milliseconds"
    * @returns zoned ISO 8601 string or empty string when invalid
    */
@@ -27,7 +27,7 @@ export function convertUnixToZoned(
 
   if (
     !isValidAmount(value) ||
-    !isValidTimezone(timeZone) ||
+    !isValidTimeZone(timeZone) ||
     !isValidUnixUnit(resolvedUnit ?? "")
   ) {
     return "";

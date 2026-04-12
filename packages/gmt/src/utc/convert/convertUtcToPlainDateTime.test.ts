@@ -11,13 +11,13 @@ describe("convertUtcToPlainDateTime", () => {
   });
 
   it.each`
-    value                     | timezone              | expected
+    value                     | timeZone              | expected
     ${"2024-02-29T00:00:00Z"} | ${"UTC"}              | ${"2024-02-29T00:00:00"}
     ${"2024-02-29T00:00:00Z"} | ${"America/New_York"} | ${"2024-02-28T19:00:00"}
   `(
-    "returns $expected for UTC value $value in timezone $timezone",
-    ({ value, timezone, expected }) => {
-      expect(convertUtcToPlainDateTime(value, { timezone })).toBe(expected);
+    "returns $expected for UTC value $value in timeZone $timeZone",
+    ({ value, timeZone, expected }) => {
+      expect(convertUtcToPlainDateTime(value, { timeZone })).toBe(expected);
     },
   );
 

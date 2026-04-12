@@ -1,5 +1,5 @@
-import { MustTestDstTimezones } from "../../test/timezoneMatrix";
-import { battleTestLeapYearUtc } from "../../zoned/test/timezoneFixtures";
+import { MustTestDstTimezones } from "../../test/timeZoneMatrix";
+import { battleTestLeapYearUtc } from "../../zoned/test/timeZoneFixtures";
 import { parseUtcTime } from "./parseUtcTime";
 
 describe("parseUtcTime", () => {

@@ -1,7 +1,7 @@
 import { MustTestLocales } from "./localeMatrix";
 
 /**
- * Canonical timezone IDs that stress offset and date-boundary behavior.
+ * Canonical timeZone IDs that stress offset and date-boundary behavior.
  *
  * Example lookups:
  * - MustTestDstTimezones["UTC"] => "UTC"
@@ -32,12 +32,12 @@ export const MustTestDstTimezones = {
 } as const;
 
 /**
- * Locale to representative timezone mapping for locale-aware APIs.
+ * Locale to representative timeZone mapping for locale-aware APIs.
  *
  * Examples from this map:
  * - MustTestLocaleTimezones[MustTestLocales.enUS] => "America/New_York"
  *
- * Related matrix examples used by timezone-centric tests:
+ * Related matrix examples used by timeZone-centric tests:
  * - MustTestDstTimezones["UTC"] => "UTC"
  * - MustTestDstTimezones["Europe/Helsinki"] => "Europe/Helsinki"
  * - MustTestDstTimezones["Pacific/Apia"] => "Pacific/Apia"

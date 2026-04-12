@@ -2,16 +2,16 @@ import { convertUnixToZoned } from "../unix/convert/convertUnixToZoned";
 import type { UnixUnit } from "../unix/validate/isValidUnixUnit";
 
 /**
- * @deprecated will be removed in v2.0.0 - use convertUnixToZoned instead with system timezone
+ * @deprecated will be removed in v2.0.0 - use convertUnixToZoned instead with system timeZone
  * Convert a unix epoch value to a zoned ISO 8601 datetime string.
  *
  * - `value` is a numeric epoch in either milliseconds (default) or seconds.
- * - `timeZone` is an IANA timezone id.
+ * - `timeZone` is an IANA timeZone id.
  * - When `unit` is omitted milliseconds are assumed.
  * - Returns an empty string "" for invalid inputs.
  *
  * @param value epoch value in milliseconds or seconds
- * @param timeZone IANA timezone identifier
+ * @param timeZone IANA timeZone identifier
  * @param unit optional unit, "seconds" or "milliseconds"
  * @example convertUnixToTimezone(1700000000000, "America/New_York") // "2023-11-14T10:13:20-05:00[America/New_York]"
  * @returns zoned ISO 8601 string or empty string when invalid

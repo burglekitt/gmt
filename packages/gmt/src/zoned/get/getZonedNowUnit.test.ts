@@ -13,7 +13,7 @@ describe("getZonedNowUnit", () => {
   });
 
   it.each`
-    timezone              | unit             | expected
+    timeZone              | unit             | expected
     ${"UTC"}              | ${"year"}        | ${"2024"}
     ${"UTC"}              | ${"month"}       | ${"02"}
     ${"UTC"}              | ${"week"}        | ${"9"}
@@ -59,9 +59,9 @@ describe("getZonedNowUnit", () => {
     ${"America/New_York"} | ${"microsecond"} | ${"000"}
     ${"America/New_York"} | ${"nanosecond"}  | ${"000"}
   `(
-    "returns expected unit $unit for timezone $timezone",
-    ({ timezone, unit, expected }) => {
-      const val = getZonedNowUnit(timezone, unit as never);
+    "returns expected unit $unit for timeZone $timeZone",
+    ({ timeZone, unit, expected }) => {
+      const val = getZonedNowUnit(timeZone, unit as never);
       if (unit === "microsecond" || unit === "nanosecond") {
         // micro/nanoseconds are too small to assert exact values reliably
         expect(val).toMatch(/^\d{3}$/);
@@ -72,15 +72,15 @@ describe("getZonedNowUnit", () => {
   );
 
   it.each`
-    invalidTimezone
+    invalidTimeZone
     ${""}
     ${"invalid"}
     ${null}
     ${undefined}
   `(
-    "returns empty string for invalid timezone $invalidTimezone",
-    ({ invalidTimezone }) => {
-      expect(getZonedNowUnit(invalidTimezone as never, "year")).toBe("");
+    "returns empty string for invalid timeZone $invalidTimeZone",
+    ({ invalidTimeZone }) => {
+      expect(getZonedNowUnit(invalidTimeZone as never, "year")).toBe("");
     },
   );
 

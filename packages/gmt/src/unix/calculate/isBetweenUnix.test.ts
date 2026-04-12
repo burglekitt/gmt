@@ -2,16 +2,16 @@ import * as getSystemTimezoneModule from "../../plain/get/getSystemTimezone";
 import { isBetweenUnix } from "./isBetweenUnix";
 
 describe("isBetweenUnix", () => {
-  let timezoneSpy: ReturnType<typeof vi.spyOn>;
+  let timeZoneSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
-    timezoneSpy = vi
+    timeZoneSpy = vi
       .spyOn(getSystemTimezoneModule, "getSystemTimezone")
       .mockReturnValue("UTC");
   });
 
   afterEach(() => {
-    timezoneSpy.mockRestore();
+    timeZoneSpy.mockRestore();
   });
 
   it.each`

@@ -1,22 +1,22 @@
 // function that uses Temporal polyfill and validates if the passed string is a valid IANA timezone
 
 import { Temporal } from "@js-temporal/polyfill";
-import { timezoneLike } from "../../regex";
+import { timeZoneLike } from "../../regex";
 
 /**
- * Validate whether a string is a valid IANA timezone identifier.
+ * Validate whether a string is a valid IANA timeZone identifier.
  *
  * - Uses the Temporal polyfill to construct a ZonedDateTime and a regex
- *   sanity-check on the timezone string.
- * - Returns `true` when the timezone appears valid, otherwise `false`.
+ *   sanity-check on the timeZone string.
+ * - Returns `true` when the timeZone appears valid, otherwise `false`.
  *
- * @param timeZone timezone identifier to validate
- * @example isValidTimezone("America/New_York") // true
- * @example isValidTimezone("Europe/London") // true
- * @example isValidTimezone("Invalid/Timezone") // false
+ * @param timeZone timeZone identifier to validate
+ * @example isValidTimeZone("America/New_York") // true
+ * @example isValidTimeZone("Europe/London") // true
+ * @example isValidTimeZone("Invalid/Timezone") // false
  * @returns boolean indicating validity
  */
-export function isValidTimezone(timeZone: string): boolean {
+export function isValidTimeZone(timeZone: string): boolean {
   try {
     Temporal.ZonedDateTime.from({
       year: 2020,
@@ -27,7 +27,7 @@ export function isValidTimezone(timeZone: string): boolean {
       second: 0,
       timeZone,
     });
-    return timezoneLike.test(timeZone) && true;
+    return timeZoneLike.test(timeZone) && true;
   } catch {
     return false;
   }

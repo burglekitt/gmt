@@ -1,6 +1,6 @@
-import { timezoneLike } from "./timezone-like";
+import { timeZoneLike } from "./time-zone-like";
 
-describe("regex/timezoneLike", () => {
+describe("regex/timeZoneLike", () => {
   it.each`
     value                 | expected
     ${"UTC"}              | ${true}
@@ -12,7 +12,7 @@ describe("regex/timezoneLike", () => {
     ${"UTC+1"}            | ${false}
     ${"America"}          | ${false}
     ${""}                 | ${false}
-  `("timezone pattern matches $value as $expected", ({ value, expected }) => {
-    expect(timezoneLike.test(value)).toBe(expected);
+  `("timeZone pattern matches $value as $expected", ({ value, expected }) => {
+    expect(timeZoneLike.test(value)).toBe(expected);
   });
 });

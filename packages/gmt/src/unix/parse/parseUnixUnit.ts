@@ -23,7 +23,7 @@ export type PlainNowUnit =
  *
  * - `value` is a numeric epoch in milliseconds by default, or seconds when
  *   `epochUnit` is "seconds".
- * - Uses system timezone to interpret the epoch by default, or the provided IANA timezone.
+ * - Uses system timeZone to interpret the epoch by default, or the provided IANA timeZone.
  * - Returns empty string on invalid input.
  */
 export function parseUnixUnit(

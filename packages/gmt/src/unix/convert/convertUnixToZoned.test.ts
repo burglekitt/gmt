@@ -1,5 +1,5 @@
 import { parseZonedTimezone } from "../../zoned/parse";
-import { battleTestTimeZones } from "../../zoned/test/timezoneFixtures";
+import { battleTestTimeZones } from "../../zoned/test/timeZoneFixtures";
 import { convertUnixToZoned } from "./convertUnixToZoned";
 
 describe("convertUnixToZoned", () => {
@@ -133,7 +133,7 @@ describe("convertUnixToZoned", () => {
     ${null}
     ${undefined}
   `(
-    "returns an empty string for invalid timezone $invalidTimeZone",
+    "returns an empty string for invalid timeZone $invalidTimeZone",
     ({ invalidTimeZone }) => {
       expect(convertUnixToZoned(0, invalidTimeZone as never)).toBe("");
     },
@@ -153,7 +153,7 @@ describe("convertUnixToZoned", () => {
   );
 
   for (const timeZone of battleTestTimeZones) {
-    it(`returns a zoned datetime in battle-test timezone ${timeZone}`, () => {
+    it(`returns a zoned datetime in battle-test timeZone ${timeZone}`, () => {
       const value = convertUnixToZoned(1709217045000, timeZone);
       expect(parseZonedTimezone(value)).toBe(timeZone);
     });

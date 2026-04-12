@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { getSystemTimezone } from "../../plain";
-import { isValidTimezone } from "../../zoned";
+import { isValidTimeZone } from "../../zoned";
 import {
   isValidUnixMilliseconds,
   isValidUnixSeconds,
@@ -20,13 +20,13 @@ import {
  */
 export function convertUnixToPlainTime(
   unix: number | string,
-  options?: { epochUnit?: "seconds" | "milliseconds"; timezone?: string },
+  options?: { epochUnit?: "seconds" | "milliseconds"; timeZone?: string },
 ): string {
-  const { epochUnit = "milliseconds", timezone = getSystemTimezone() } =
+  const { epochUnit = "milliseconds", timeZone = getSystemTimezone() } =
     options ?? {};
 
   if (!isValidUnixUnit(epochUnit)) return "";
-  if (!isValidTimezone(timezone)) return "";
+  if (!isValidTimeZone(timeZone)) return "";
 
   try {
     const numUnix = typeof unix === "string" ? Number(unix) : unix;
@@ -40,7 +40,7 @@ export function convertUnixToPlainTime(
     const instant = Temporal.Instant.fromEpochMilliseconds(
       epochUnit === "seconds" ? numUnix * 1000 : numUnix,
     );
-    const zonedDateTime = instant.toZonedDateTimeISO(timezone);
+    const zonedDateTime = instant.toZonedDateTimeISO(timeZone);
     return zonedDateTime.toPlainTime().toString();
   } catch {
     return "";

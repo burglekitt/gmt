@@ -3,19 +3,19 @@ import { parseUnixUnit } from "./parseUnixUnit";
 
 describe("parseUnixUnit", () => {
   const systemTime = "2024-02-29T00:00:00.000Z";
-  let timezoneSpy: ReturnType<typeof vi.spyOn>;
+  let timeZoneSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
     vi.useFakeTimers();
     vi.setSystemTime(systemTime);
 
-    timezoneSpy = vi
+    timeZoneSpy = vi
       .spyOn(getSystemTimezoneModule, "getSystemTimezone")
       .mockReturnValue("UTC");
   });
 
   afterEach(() => {
-    timezoneSpy.mockRestore();
+    timeZoneSpy.mockRestore();
     vi.useRealTimers();
   });
 

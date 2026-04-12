@@ -1,4 +1,4 @@
-// convertUnixToTimezone - same as convertUnixToZoned, but with the system timezone
+// convertUnixToTimezone - same as convertUnixToZoned, but with the system timeZone
 // isUtcDateTime - same as isValidUtc, but with a different name and no leap second support
 export * from "./convertUnixToTimezone";
 export * from "./convertUnixToTimezone";

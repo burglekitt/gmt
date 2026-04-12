@@ -1,7 +1,7 @@
 import { normalizeDateTime } from "../../internal";
 import { MustTestLocales } from "../../test/localeMatrix";
 import { localeZonedDateTimeInputByLocale } from "../test/localeZonedFixtures";
-import { sameInstantBattleCases } from "../test/timezoneFixtures";
+import { sameInstantBattleCases } from "../test/timeZoneFixtures";
 import { formatZonedDateTime } from "./formatZonedDateTime";
 
 describe("formatZonedDateTime", () => {
@@ -405,9 +405,9 @@ describe("formatZonedDateTime", () => {
     });
   }
 
-  // Locale-native smoke: every locale formatted using its canonical timezone input
+  // Locale-native smoke: every locale formatted using its canonical timeZone input
   for (const locale of Object.values(MustTestLocales)) {
-    it(`smoke: formats zoned datetime for locale ${locale} in its canonical timezone`, () => {
+    it(`smoke: formats zoned datetime for locale ${locale} in its canonical timeZone`, () => {
       const value = localeZonedDateTimeInputByLocale[locale];
       expect(formatZonedDateTime(value, locale)).not.toBe("");
     });

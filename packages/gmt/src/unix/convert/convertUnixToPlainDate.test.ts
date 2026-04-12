@@ -2,16 +2,16 @@ import * as getSystemTimezoneModule from "../../plain/get/getSystemTimezone";
 import { convertUnixToPlainDate } from "./convertUnixToPlainDate";
 
 describe("convertUnixToPlainDate", () => {
-  let timezoneSpy: ReturnType<typeof vi.spyOn>;
+  let timeZoneSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
-    timezoneSpy = vi
+    timeZoneSpy = vi
       .spyOn(getSystemTimezoneModule, "getSystemTimezone")
       .mockReturnValue("UTC");
   });
 
   afterEach(() => {
-    timezoneSpy.mockRestore();
+    timeZoneSpy.mockRestore();
   });
 
   it.each`
@@ -33,14 +33,14 @@ describe("convertUnixToPlainDate", () => {
   );
 
   it.each`
-    unix             | timezone              | expected
+    unix             | timeZone              | expected
     ${1706659200000} | ${"UTC"}              | ${"2024-01-31"}
     ${1706659200000} | ${"America/New_York"} | ${"2024-01-30"}
   `(
-    "returns $expected for unix $unix in timezone $timezone",
-    ({ unix, timezone, expected }) => {
+    "returns $expected for unix $unix in timeZone $timeZone",
+    ({ unix, timeZone, expected }) => {
       expect(
-        convertUnixToPlainDate(unix, { timezone, epochUnit: "milliseconds" }),
+        convertUnixToPlainDate(unix, { timeZone, epochUnit: "milliseconds" }),
       ).toBe(expected);
     },
   );

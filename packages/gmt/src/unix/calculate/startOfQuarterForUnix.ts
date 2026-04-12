@@ -1,7 +1,7 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { getSystemTimezone } from "../../plain/get";
 import { isValidUnixUnit } from "../../unix/validate/isValidUnixUnit";
-import { isValidTimezone } from "../../zoned/validate";
+import { isValidTimeZone } from "../../zoned/validate";
 
 /**
  * Return the start of the quarter for a Unix timestamp.
@@ -10,7 +10,7 @@ import { isValidTimezone } from "../../zoned/validate";
  * - Returns empty string for invalid inputs.
  *
  * @param value Unix timestamp (number or string)
- * @param options epochUnit optional "seconds" | "milliseconds", timeZone optional IANA timezone
+ * @param options epochUnit optional "seconds" | "milliseconds", timeZone optional IANA timeZone
  * @example startOfQuarterForUnix(1706659200000) // "1704067200000"
  * @example startOfQuarterForUnix(1706659200, { epochUnit: "seconds" }) // "1704067200"
  * @returns Unix epoch string representing the start of the quarter, or "" on invalid input
@@ -25,7 +25,7 @@ export function startOfQuarterForUnix(
   const epochUnit = options?.epochUnit ?? "milliseconds";
   const timeZone = options?.timeZone ?? getSystemTimezone();
 
-  if (!timeZone || !isValidTimezone(timeZone) || !isValidUnixUnit(epochUnit)) {
+  if (!timeZone || !isValidTimeZone(timeZone) || !isValidUnixUnit(epochUnit)) {
     return "";
   }
 

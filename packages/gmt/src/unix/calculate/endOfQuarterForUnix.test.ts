@@ -2,16 +2,16 @@ import * as getSystemTimezoneModule from "../../plain/get/getSystemTimezone";
 import { endOfQuarterForUnix } from "./endOfQuarterForUnix";
 
 describe("endOfQuarterForUnix", () => {
-  let timezoneSpy: ReturnType<typeof vi.spyOn>;
+  let timeZoneSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
-    timezoneSpy = vi
+    timeZoneSpy = vi
       .spyOn(getSystemTimezoneModule, "getSystemTimezone")
       .mockReturnValue("UTC");
   });
 
   afterEach(() => {
-    timezoneSpy.mockRestore();
+    timeZoneSpy.mockRestore();
   });
 
   it.each`

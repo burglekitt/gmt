@@ -1,7 +1,7 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { getSystemTimezone } from "../../plain/get";
 import { isValidUnixUnit } from "../../unix/validate/isValidUnixUnit";
-import { isValidTimezone } from "../../zoned/validate";
+import { isValidTimeZone } from "../../zoned/validate";
 
 const supported: (Temporal.DateUnit | Temporal.TimeUnit)[] = [
   "year",
@@ -24,7 +24,7 @@ const supported: (Temporal.DateUnit | Temporal.TimeUnit)[] = [
  *
  * @param value Unix timestamp (number or string)
  * @param unit Temporal.DateUnit | Temporal.TimeUnit to specify the start
- * @param options epochUnit optional "seconds" | "milliseconds", timeZone optional IANA timezone, weekStartsOn optional "monday" | "sunday"
+ * @param options epochUnit optional "seconds" | "milliseconds", timeZone optional IANA timeZone, weekStartsOn optional "monday" | "sunday"
  * @example startOfUnix(1706659200000, "year") // "1704067200000"
  * @example startOfUnix(1706659200000, "month") // "1705353600000"
  * @example startOfUnix(1706659200, "day", { epochUnit: "seconds" }) // "1706640000"
@@ -46,7 +46,7 @@ export function startOfUnix(
   if (
     !timeZone ||
     !supported.includes(unit) ||
-    !isValidTimezone(timeZone) ||
+    !isValidTimeZone(timeZone) ||
     !isValidUnixUnit(epochUnit)
   ) {
     return "";

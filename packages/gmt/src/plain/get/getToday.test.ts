@@ -6,23 +6,23 @@ import * as getSystemTimezoneModule from "./getSystemTimezone";
 import { getToday } from "./getToday";
 
 describe("getToday", () => {
-  let timezoneSpy: ReturnType<typeof vi.spyOn>;
+  let timeZoneSpy: ReturnType<typeof vi.spyOn>;
   const systemTime = "2024-02-29T00:00:00.000Z";
 
   beforeEach(() => {
     vi.useFakeTimers();
     vi.setSystemTime(systemTime);
-    timezoneSpy = vi
+    timeZoneSpy = vi
       .spyOn(getSystemTimezoneModule, "getSystemTimezone")
       .mockReturnValue("UTC");
   });
 
   afterEach(() => {
-    timezoneSpy.mockRestore();
+    timeZoneSpy.mockRestore();
     vi.useRealTimers();
   });
 
-  it("returns an exact plain date for the mocked system timezone", () => {
+  it("returns an exact plain date for the mocked system timeZone", () => {
     const today = getToday();
 
     // today should be same day as system time

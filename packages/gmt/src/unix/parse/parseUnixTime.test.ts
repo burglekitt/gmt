@@ -1,24 +1,24 @@
 import * as getSystemTimezoneModule from "../../plain/get/getSystemTimezone";
-import { MustTestDstTimezones } from "../../test/timezoneMatrix";
-import { battleTestLeapYearUnix } from "../../zoned/test/timezoneFixtures";
+import { MustTestDstTimezones } from "../../test/timeZoneMatrix";
+import { battleTestLeapYearUnix } from "../../zoned/test/timeZoneFixtures";
 
 import { parseUnixTime } from "./parseUnixTime";
 
 describe("parseUnixTime", () => {
   const systemTime = "2024-02-29T00:00:00.000Z";
-  let timezoneSpy: ReturnType<typeof vi.spyOn>;
+  let timeZoneSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
     vi.useFakeTimers();
     vi.setSystemTime(systemTime);
 
-    timezoneSpy = vi
+    timeZoneSpy = vi
       .spyOn(getSystemTimezoneModule, "getSystemTimezone")
       .mockReturnValue("UTC");
   });
 
   afterEach(() => {
-    timezoneSpy.mockRestore();
+    timeZoneSpy.mockRestore();
     vi.useRealTimers();
   });
   it.each`

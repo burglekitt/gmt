@@ -1,7 +1,7 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { getSystemTimezone } from "../../plain/get";
 import { isValidUnixUnit } from "../../unix/validate/isValidUnixUnit";
-import { isValidTimezone } from "../../zoned/validate";
+import { isValidTimeZone } from "../../zoned/validate";
 
 export function endOfQuarterForUnix(
   value: string | number,
@@ -13,7 +13,7 @@ export function endOfQuarterForUnix(
   const epochUnit = options?.epochUnit ?? "milliseconds";
   const timeZone = options?.timeZone ?? getSystemTimezone();
 
-  if (!timeZone || !isValidTimezone(timeZone) || !isValidUnixUnit(epochUnit)) {
+  if (!timeZone || !isValidTimeZone(timeZone) || !isValidUnixUnit(epochUnit)) {
     return "";
   }
 

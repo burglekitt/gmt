@@ -68,7 +68,7 @@ describe("subtractUtc", () => {
 
   it.each`
     invalidUnit
-    ${"timezone"}
+    ${"timeZone"}
     ${""}
     ${null}
     ${undefined}

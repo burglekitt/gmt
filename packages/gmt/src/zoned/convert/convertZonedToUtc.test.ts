@@ -1,4 +1,4 @@
-import { sameInstantBattleCases } from "../test/timezoneFixtures";
+import { sameInstantBattleCases } from "../test/timeZoneFixtures";
 import { convertZonedToUtc } from "./convertZonedToUtc";
 
 describe("convertZonedToUtc", () => {
@@ -61,14 +61,14 @@ describe("convertZonedToUtc", () => {
     ${"2024-02-28T18:00:00-06:00[America/Chicago]"}     | ${"2024-02-29T00:00:00Z"}
     ${"2024-02-28T17:00:00-07:00[America/Phoenix]"}     | ${"2024-02-29T00:00:00Z"}
   `(
-    "converts all battle-test timezones representing 2024-02-29T00:00:00Z to UTC $expected",
+    "converts all battle-test timeZones representing 2024-02-29T00:00:00Z to UTC $expected",
     ({ value, expected }) => {
       expect(convertZonedToUtc(value)).toBe(expected);
     },
   );
 
   for (const { timeZone, value, utc } of sameInstantBattleCases) {
-    it(`converts battle-test timezone ${timeZone} to shared UTC instant`, () => {
+    it(`converts battle-test timeZone ${timeZone} to shared UTC instant`, () => {
       expect(convertZonedToUtc(value)).toBe(utc);
     });
   }

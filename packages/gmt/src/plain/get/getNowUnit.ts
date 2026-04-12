@@ -32,10 +32,10 @@ function isValidPlainNowUnit(unit: string): unit is PlainNowUnit {
 }
 
 /**
- * Return the requested current unit value using the system timezone.
+ * Return the requested current unit value using the system timeZone.
  *
- * - Uses the runtime system timezone via `getSystemTimezone()`.
- * - Returns an empty string on invalid unit or when the system timezone
+ * - Uses the runtime system timeZone via `getSystemTimezone()`.
+ * - Returns an empty string on invalid unit or when the system timeZone
  *   cannot be determined.
  *
  * @param unit unit to extract from current local time

@@ -1,5 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { isValidTimezone } from "../../zoned/validate";
+import { isValidTimeZone } from "../../zoned/validate";
 import { isValidUtc } from "../validate";
 
 /**
@@ -7,15 +7,15 @@ import { isValidUtc } from "../validate";
  * specified `timeZone`.
  *
  * - `value` must be a parseable UTC Instant string.
- * - `timeZone` must be a valid IANA timezone id.
+ * - `timeZone` must be a valid IANA timeZone id.
  * - Returns empty string "" for invalid inputs.
  *
  * @param value UTC Instant string
- * @param timeZone IANA timezone identifier
+ * @param timeZone IANA timeZone identifier
  * @returns zoned ISO 8601 string or empty string when invalid
  */
 export function convertUtcToZoned(value: string, timeZone: string): string {
-  if (!isValidUtc(value) || !isValidTimezone(timeZone)) {
+  if (!isValidUtc(value) || !isValidTimeZone(timeZone)) {
     return "";
   }
 

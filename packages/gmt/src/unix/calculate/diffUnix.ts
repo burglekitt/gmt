@@ -3,7 +3,7 @@ import { getLargestDateTimeDurationUnit } from "../../plain/calculate/getLargest
 import { getSystemTimezone } from "../../plain/get";
 import { isValidDateTimeDurationUnit } from "../../plain/validate";
 import type { DateTimeDurationUnit } from "../../types";
-import { isValidTimezone } from "../../zoned/validate";
+import { isValidTimeZone } from "../../zoned/validate";
 
 /**
  * Return the difference between two Unix timestamps measured in the given unit.
@@ -14,7 +14,7 @@ import { isValidTimezone } from "../../zoned/validate";
  * @param value1 first Unix timestamp
  * @param value2 second Unix timestamp
  * @param units DateTimeDurationUnit | DateTimeDurationUnit[] to measure the difference
- * @param options epochUnit optional "seconds" | "milliseconds", timeZone optional IANA timezone
+ * @param options epochUnit optional "seconds" | "milliseconds", timeZone optional IANA timeZone
  * @example diffUnix(1706745600000, 1706659200000, "day") // 1
  * @example diffUnix(1706745600, 1706659200, "day", { epochUnit: "seconds" }) // 1
  * @returns numeric difference in the requested unit, or null on invalid input
@@ -31,7 +31,7 @@ export function diffUnix(
   const epochUnit = options?.epochUnit ?? "milliseconds";
   const timeZone = options?.timeZone ?? getSystemTimezone();
 
-  if (!timeZone || !isValidTimezone(timeZone)) return null;
+  if (!timeZone || !isValidTimeZone(timeZone)) return null;
 
   const isSingleUnit = !Array.isArray(units);
   const validUnits = isSingleUnit

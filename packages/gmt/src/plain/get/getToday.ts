@@ -2,9 +2,9 @@ import { Temporal } from "@js-temporal/polyfill";
 import { getSystemTimezone } from "./getSystemTimezone";
 
 /**
- * Return the current PlainDate as an ISO string in the system timezone.
+ * Return the current PlainDate as an ISO string in the system timeZone.
  *
- * - Uses the system timezone resolved via Intl.
+ * - Uses the system timeZone resolved via Intl.
  * - Returns an empty string on failure.
  *
  * @example getToday() // "2024-03-15" (current date)
