@@ -1,5 +1,3 @@
-// function that uses Temporal polyfill and validates if the passed string is a valid IANA timezone
-
 import { Temporal } from "@js-temporal/polyfill";
 import { timeZoneLike } from "../../regex";
 

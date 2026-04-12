@@ -1,5 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { localNoonBattleCases } from "../test/timeZoneFixtures";
+import { localNoonBattleCases } from "../../test/timeZonesForTests";
 import { isAfterZoned } from "./isAfterZoned";
 
 describe("isAfterZoned", () => {

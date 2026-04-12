@@ -1,5 +1,5 @@
+import { sameInstantBattleCases } from "../../test/timeZonesForTests";
 import { parseZonedTimezone } from "../parse";
-import { sameInstantBattleCases } from "../test/timeZoneFixtures";
 import { convertZonedToZoned } from "./convertZonedToZoned";
 
 describe("convertZonedToZoned", () => {

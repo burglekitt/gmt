@@ -1,7 +1,7 @@
 import {
   sameInstantBattleCases,
   unixEpochBattleCases,
-} from "../test/timeZoneFixtures";
+} from "../../test/timeZonesForTests";
 import { isValidTimeZone } from "../validate";
 import { chopZonedDateTime } from "./chopZonedDateTime";
 

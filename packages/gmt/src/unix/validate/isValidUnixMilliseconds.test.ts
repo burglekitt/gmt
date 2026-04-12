@@ -1,4 +1,4 @@
-import { unixFixture } from "../../plain/test/runtimeFixtures";
+import { unixFixture } from "../../test/timeZonesForTests";
 import { isValidUnixMilliseconds } from "./isValidUnixMilliseconds";
 
 describe("isValidUnixMilliseconds", () => {

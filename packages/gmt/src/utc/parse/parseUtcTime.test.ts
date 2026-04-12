@@ -1,5 +1,7 @@
-import { MustTestDstTimezones } from "../../test/timeZoneMatrix";
-import { battleTestLeapYearUtc } from "../../zoned/test/timeZoneFixtures";
+import {
+  battleTestLeapYearUtc,
+  MustTestDstTimeZones,
+} from "../../test/timeZonesForTests";
 import { parseUtcTime } from "./parseUtcTime";
 
 describe("parseUtcTime", () => {
@@ -16,18 +18,18 @@ describe("parseUtcTime", () => {
 
   it.each`
     value                    | timeZone                                       | expected
-    ${battleTestLeapYearUtc} | ${MustTestDstTimezones.UTC}                    | ${"00:00:00"}
-    ${battleTestLeapYearUtc} | ${MustTestDstTimezones.GMT}                    | ${"00:00:00"}
-    ${battleTestLeapYearUtc} | ${MustTestDstTimezones["Etc/GMT"]}             | ${"00:00:00"}
-    ${battleTestLeapYearUtc} | ${MustTestDstTimezones["Europe/Lisbon"]}       | ${"00:00:00"}
-    ${battleTestLeapYearUtc} | ${MustTestDstTimezones["Europe/Dublin"]}       | ${"00:00:00"}
-    ${battleTestLeapYearUtc} | ${MustTestDstTimezones["Europe/Berlin"]}       | ${"01:00:00"}
-    ${battleTestLeapYearUtc} | ${MustTestDstTimezones["Australia/Lord_Howe"]} | ${"11:00:00"}
-    ${battleTestLeapYearUtc} | ${MustTestDstTimezones["Pacific/Apia"]}        | ${"13:00:00"}
-    ${battleTestLeapYearUtc} | ${MustTestDstTimezones["Pacific/Niue"]}        | ${"13:00:00"}
-    ${battleTestLeapYearUtc} | ${MustTestDstTimezones["America/New_York"]}    | ${"19:00:00"}
-    ${battleTestLeapYearUtc} | ${MustTestDstTimezones["America/Chicago"]}     | ${"18:00:00"}
-    ${battleTestLeapYearUtc} | ${MustTestDstTimezones["America/Phoenix"]}     | ${"17:00:00"}
+    ${battleTestLeapYearUtc} | ${MustTestDstTimeZones.UTC}                    | ${"00:00:00"}
+    ${battleTestLeapYearUtc} | ${MustTestDstTimeZones.GMT}                    | ${"00:00:00"}
+    ${battleTestLeapYearUtc} | ${MustTestDstTimeZones["Etc/GMT"]}             | ${"00:00:00"}
+    ${battleTestLeapYearUtc} | ${MustTestDstTimeZones["Europe/Lisbon"]}       | ${"00:00:00"}
+    ${battleTestLeapYearUtc} | ${MustTestDstTimeZones["Europe/Dublin"]}       | ${"00:00:00"}
+    ${battleTestLeapYearUtc} | ${MustTestDstTimeZones["Europe/Berlin"]}       | ${"01:00:00"}
+    ${battleTestLeapYearUtc} | ${MustTestDstTimeZones["Australia/Lord_Howe"]} | ${"11:00:00"}
+    ${battleTestLeapYearUtc} | ${MustTestDstTimeZones["Pacific/Apia"]}        | ${"13:00:00"}
+    ${battleTestLeapYearUtc} | ${MustTestDstTimeZones["Pacific/Niue"]}        | ${"13:00:00"}
+    ${battleTestLeapYearUtc} | ${MustTestDstTimeZones["America/New_York"]}    | ${"19:00:00"}
+    ${battleTestLeapYearUtc} | ${MustTestDstTimeZones["America/Chicago"]}     | ${"18:00:00"}
+    ${battleTestLeapYearUtc} | ${MustTestDstTimeZones["America/Phoenix"]}     | ${"17:00:00"}
   `(
     "returns $expected for $value with timeZone $timeZone",
     ({ value, timeZone, expected }) => {

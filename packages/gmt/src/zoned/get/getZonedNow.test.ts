@@ -1,6 +1,9 @@
 import { Temporal } from "@js-temporal/polyfill";
+import {
+  battleTestTimeZones,
+  fixedNowInstant,
+} from "../../test/timeZonesForTests";
 import { parseZonedTimezone } from "../parse";
-import { battleTestTimeZones, fixedNowInstant } from "../test/timeZoneFixtures";
 import { getZonedNow } from "./getZonedNow";
 
 describe("getZonedNow", () => {

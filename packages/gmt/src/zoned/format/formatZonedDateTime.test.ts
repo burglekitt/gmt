@@ -1,7 +1,9 @@
 import { normalizeDateTime } from "../../internal";
-import { MustTestLocales } from "../../test/localeMatrix";
-import { localeZonedDateTimeInputByLocale } from "../test/localeZonedFixtures";
-import { sameInstantBattleCases } from "../test/timeZoneFixtures";
+import {
+  localeZonedDateTimeInputByLocale,
+  MustTestLocales,
+  sameInstantBattleCases,
+} from "../../test/timeZonesForTests";
 import { formatZonedDateTime } from "./formatZonedDateTime";
 
 describe("formatZonedDateTime", () => {

@@ -1,4 +1,4 @@
-import { localRangeBattleCases } from "../test/timeZoneFixtures";
+import { localRangeBattleCases } from "../../test/timeZonesForTests";
 import { mapZonedDatesInRange } from "./mapZonedDatesInRange";
 
 describe("mapZonedDatesInRange", () => {

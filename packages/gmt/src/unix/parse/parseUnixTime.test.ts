@@ -1,6 +1,8 @@
 import * as getSystemTimezoneModule from "../../plain/get/getSystemTimezone";
-import { MustTestDstTimezones } from "../../test/timeZoneMatrix";
-import { battleTestLeapYearUnix } from "../../zoned/test/timeZoneFixtures";
+import {
+  battleTestLeapYearUnix,
+  MustTestDstTimeZones,
+} from "../../test/timeZonesForTests";
 
 import { parseUnixTime } from "./parseUnixTime";
 
@@ -38,18 +40,18 @@ describe("parseUnixTime", () => {
 
   it.each`
     value                     | timeZone                                       | expected
-    ${battleTestLeapYearUnix} | ${MustTestDstTimezones.UTC}                    | ${"00:00:00"}
-    ${battleTestLeapYearUnix} | ${MustTestDstTimezones.GMT}                    | ${"00:00:00"}
-    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Etc/GMT"]}             | ${"00:00:00"}
-    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Europe/Lisbon"]}       | ${"00:00:00"}
-    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Europe/Dublin"]}       | ${"00:00:00"}
-    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Europe/Berlin"]}       | ${"01:00:00"}
-    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Australia/Lord_Howe"]} | ${"11:00:00"}
-    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Pacific/Apia"]}        | ${"13:00:00"}
-    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Pacific/Niue"]}        | ${"13:00:00"}
-    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["America/New_York"]}    | ${"19:00:00"}
-    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["America/Chicago"]}     | ${"18:00:00"}
-    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["America/Phoenix"]}     | ${"17:00:00"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimeZones.UTC}                    | ${"00:00:00"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimeZones.GMT}                    | ${"00:00:00"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimeZones["Etc/GMT"]}             | ${"00:00:00"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimeZones["Europe/Lisbon"]}       | ${"00:00:00"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimeZones["Europe/Dublin"]}       | ${"00:00:00"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimeZones["Europe/Berlin"]}       | ${"01:00:00"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimeZones["Australia/Lord_Howe"]} | ${"11:00:00"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimeZones["Pacific/Apia"]}        | ${"13:00:00"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimeZones["Pacific/Niue"]}        | ${"13:00:00"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimeZones["America/New_York"]}    | ${"19:00:00"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimeZones["America/Chicago"]}     | ${"18:00:00"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimeZones["America/Phoenix"]}     | ${"17:00:00"}
   `(
     "returns $expected for $value with timeZone $timeZone",
     ({ value, timeZone, expected }) => {

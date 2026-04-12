@@ -1,9 +1,9 @@
 import * as getSystemTimezoneModule from "../../plain/get/getSystemTimezone";
-import { MustTestDstTimezones } from "../../test/timeZoneMatrix";
 import {
   battleTestLeapYearUnix,
   battleTestLeapYearUnixSeconds,
-} from "../../zoned/test/timeZoneFixtures";
+  MustTestDstTimeZones,
+} from "../../test/timeZonesForTests";
 
 import { parseUnixDate } from "./parseUnixDate";
 
@@ -41,24 +41,24 @@ describe("parseUnixDate", () => {
 
   it.each`
     value                     | timeZone                                       | expected
-    ${battleTestLeapYearUnix} | ${MustTestDstTimezones.UTC}                    | ${"2024-02-29"}
-    ${battleTestLeapYearUnix} | ${MustTestDstTimezones.GMT}                    | ${"2024-02-29"}
-    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Etc/GMT"]}             | ${"2024-02-29"}
-    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Europe/Lisbon"]}       | ${"2024-02-29"}
-    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Europe/Dublin"]}       | ${"2024-02-29"}
-    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Europe/Berlin"]}       | ${"2024-02-29"}
-    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Europe/Helsinki"]}     | ${"2024-02-29"}
-    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Europe/Istanbul"]}     | ${"2024-02-29"}
-    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Asia/Kolkata"]}        | ${"2024-02-29"}
-    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Asia/Kathmandu"]}      | ${"2024-02-29"}
-    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Asia/Shanghai"]}       | ${"2024-02-29"}
-    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Australia/Lord_Howe"]} | ${"2024-02-29"}
-    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Pacific/Chatham"]}     | ${"2024-02-29"}
-    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Pacific/Apia"]}        | ${"2024-02-29"}
-    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["Pacific/Niue"]}        | ${"2024-02-28"}
-    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["America/New_York"]}    | ${"2024-02-28"}
-    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["America/Chicago"]}     | ${"2024-02-28"}
-    ${battleTestLeapYearUnix} | ${MustTestDstTimezones["America/Phoenix"]}     | ${"2024-02-28"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimeZones.UTC}                    | ${"2024-02-29"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimeZones.GMT}                    | ${"2024-02-29"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimeZones["Etc/GMT"]}             | ${"2024-02-29"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimeZones["Europe/Lisbon"]}       | ${"2024-02-29"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimeZones["Europe/Dublin"]}       | ${"2024-02-29"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimeZones["Europe/Berlin"]}       | ${"2024-02-29"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimeZones["Europe/Helsinki"]}     | ${"2024-02-29"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimeZones["Europe/Istanbul"]}     | ${"2024-02-29"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimeZones["Asia/Kolkata"]}        | ${"2024-02-29"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimeZones["Asia/Kathmandu"]}      | ${"2024-02-29"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimeZones["Asia/Shanghai"]}       | ${"2024-02-29"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimeZones["Australia/Lord_Howe"]} | ${"2024-02-29"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimeZones["Pacific/Chatham"]}     | ${"2024-02-29"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimeZones["Pacific/Apia"]}        | ${"2024-02-29"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimeZones["Pacific/Niue"]}        | ${"2024-02-28"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimeZones["America/New_York"]}    | ${"2024-02-28"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimeZones["America/Chicago"]}     | ${"2024-02-28"}
+    ${battleTestLeapYearUnix} | ${MustTestDstTimeZones["America/Phoenix"]}     | ${"2024-02-28"}
   `(
     "returns $expected for $value with timeZone $timeZone",
     ({ value, timeZone, expected }) => {

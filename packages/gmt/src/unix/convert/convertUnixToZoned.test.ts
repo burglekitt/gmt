@@ -1,5 +1,5 @@
+import { battleTestTimeZones } from "../../test/timeZonesForTests";
 import { parseZonedTimezone } from "../../zoned/parse";
-import { battleTestTimeZones } from "../../zoned/test/timeZoneFixtures";
 import { convertUnixToZoned } from "./convertUnixToZoned";
 
 describe("convertUnixToZoned", () => {

@@ -1,4 +1,4 @@
-import { localNoonBattleCases } from "../test/timeZoneFixtures";
+import { localNoonBattleCases } from "../../test/timeZonesForTests";
 import { parseZonedDate } from "./parseZonedDate";
 
 describe("parseZonedDate", () => {

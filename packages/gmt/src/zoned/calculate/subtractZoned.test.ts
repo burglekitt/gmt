@@ -1,5 +1,5 @@
+import { localNoonBattleCases } from "../../test/timeZonesForTests";
 import { parseZonedTimezone } from "../parse";
-import { localNoonBattleCases } from "../test/timeZoneFixtures";
 import { subtractZoned } from "./subtractZoned";
 
 describe("subtractZoned", () => {

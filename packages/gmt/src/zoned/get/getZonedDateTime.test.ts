@@ -1,5 +1,5 @@
+import { battleTestTimeZones } from "../../test/timeZonesForTests";
 import { parseZonedTimezone } from "../parse";
-import { battleTestTimeZones } from "../test/timeZoneFixtures";
 import { getZonedDateTime } from "./getZonedDateTime";
 
 describe("getZonedDateTime", () => {
