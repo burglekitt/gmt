@@ -5,6 +5,20 @@ import { isValidDateTimeDurationUnit } from "../../plain/validate";
 import type { DateTimeDurationUnit } from "../../types";
 import { isValidTimezone } from "../../zoned/validate";
 
+/**
+ * Return the difference between two Unix timestamps measured in the given unit.
+ *
+ * - Accepts Unix timestamps in milliseconds (default) or seconds.
+ * - Returns `null` for invalid inputs.
+ *
+ * @param value1 first Unix timestamp
+ * @param value2 second Unix timestamp
+ * @param units DateTimeDurationUnit | DateTimeDurationUnit[] to measure the difference
+ * @param options epochUnit optional "seconds" | "milliseconds", timeZone optional IANA timezone
+ * @example diffUnix(1706745600000, 1706659200000, "day") // 1
+ * @example diffUnix(1706745600, 1706659200, "day", { epochUnit: "seconds" }) // 1
+ * @returns numeric difference in the requested unit, or null on invalid input
+ */
 export function diffUnix(
   value1: string | number,
   value2: string | number,

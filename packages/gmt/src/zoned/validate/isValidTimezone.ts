@@ -11,6 +11,9 @@ import { timezoneLike } from "../../regex";
  * - Returns `true` when the timezone appears valid, otherwise `false`.
  *
  * @param timeZone timezone identifier to validate
+ * @example isValidTimezone("America/New_York") // true
+ * @example isValidTimezone("Europe/London") // true
+ * @example isValidTimezone("Invalid/Timezone") // false
  * @returns boolean indicating validity
  */
 export function isValidTimezone(timeZone: string): boolean {

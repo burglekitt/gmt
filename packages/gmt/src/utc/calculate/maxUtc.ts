@@ -8,6 +8,10 @@ import { isValidUtc } from "../validate/isValidUtc";
  * - Validation is performed on each item in the array.
  *
  * @param utcDateTimes Array of ISO datetime strings (e.g. "2024-03-10T12:00:00Z")
+ * @example maxUtc(["2024-03-10T12:00:00Z", "2024-03-15T12:00:00Z", "2024-03-12T12:00:00Z"]) // "2024-03-15T12:00:00Z"
+ * @example maxUtc(["invalid", "2024-03-15T12:00:00Z"]) // "2024-03-15T12:00:00Z"
+ * @example maxUtc(["invalid", "also invalid"]) // null
+ * @example maxUtc([]) // null
  * @returns The latest UTC datetime string, or null on invalid input
  */
 export function maxUtc(utcDateTimes: string[]): string | null {

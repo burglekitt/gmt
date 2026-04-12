@@ -2,6 +2,21 @@ import { Temporal } from "@js-temporal/polyfill";
 import { getSystemTimezone } from "../../plain/get";
 import { isValidTimezone } from "../../zoned/validate";
 
+/**
+ * Return true when the Unix timestamp is between start and end (inclusive by default).
+ *
+ * - Accepts Unix timestamps in milliseconds (default) or seconds.
+ * - Returns false for invalid inputs.
+ *
+ * @param value Unix timestamp to check
+ * @param start Unix timestamp for range start
+ * @param end Unix timestamp for range end
+ * @param options epochUnit optional "seconds" | "milliseconds", timeZone optional IANA timezone, inclusiveStart optional, inclusiveEnd optional
+ * @example isBetweenUnix(1705000000000, 1704000000000, 1706000000000) // true
+ * @example isBetweenUnix(1705000000, 1704000000, 1706000000, { epochUnit: "seconds" }) // true
+ * @example isBetweenUnix(1703000000000, 1704000000000, 1706000000000) // false
+ * @returns boolean indicating whether value is between start and end
+ */
 export function isBetweenUnix(
   value: string | number,
   start: string | number,

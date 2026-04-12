@@ -7,6 +7,9 @@ import { isValidAmount } from "../../internal";
  * - Accepts Unix timestamps in seconds or milliseconds.
  *
  * @param unixValues Array of Unix timestamps (e.g. 1699531200)
+ * @example minUnix([1706659200000, 1704067200000, 1700000000000]) // 1700000000000
+ * @example minUnix([1704067200, 1700000000], { epochUnit: "seconds" }) // 1700000000
+ * @example minUnix([]) // null
  * @returns The earliest Unix timestamp, or null on invalid input
  */
 export function minUnix(unixValues: number[]): number | null {

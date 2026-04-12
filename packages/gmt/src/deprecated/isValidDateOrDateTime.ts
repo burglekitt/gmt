@@ -1,7 +1,8 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { plainDate, plainDateTime } from "../../regex";
+import { plainDate, plainDateTime } from "../regex";
 
 /**
+ * @deprecated will be removed in v2.0.0 - Use isValidIsoDateLike instead. This function name was misleading since it only checks for valid ISO date or datetime strings, not other formats.
  * Return true when the input is a valid PlainDate or PlainDateTime ISO string.
  *
  * - Performs regex pre-checks and then constructs Temporal objects to

@@ -16,6 +16,20 @@ const supported: (Temporal.DateUnit | Temporal.TimeUnit)[] = [
   "nanosecond",
 ];
 
+/**
+ * Return the end of the specified unit for a Unix timestamp.
+ *
+ * - Accepts Unix timestamps in milliseconds (default) or seconds.
+ * - Returns empty string for invalid inputs.
+ *
+ * @param value Unix timestamp (number or string)
+ * @param unit Temporal.DateUnit | Temporal.TimeUnit to specify the end
+ * @param options epochUnit optional "seconds" | "milliseconds", timeZone optional IANA timezone, weekStartsOn optional "monday" | "sunday"
+ * @example endOfUnix(1706659200000, "year") // "1735689600000"
+ * @example endOfUnix(1706659200000, "month") // "1708012800000"
+ * @example endOfUnix(1706659200, "day", { epochUnit: "seconds" }) // "1706736000"
+ * @returns Unix epoch string representing the end of the unit, or "" on invalid input
+ */
 export function endOfUnix(
   value: string | number,
   unit: Temporal.DateUnit | Temporal.TimeUnit,

@@ -5,6 +5,19 @@ import { isValidDateTimeDurationUnit } from "../../plain/validate";
 import type { DateTimeDurationUnit } from "../../types";
 import { isValidTimezone } from "../../zoned/validate";
 
+/**
+ * Subtract a temporal amount from a Unix epoch value and return the resulting epoch.
+ *
+ * - Accepts Unix timestamps in milliseconds (default) or seconds.
+ * - Returns empty string for invalid inputs.
+ *
+ * @param value Unix timestamp (number or string)
+ * @param units Partial<Record<DateTimeDurationUnit, number>> object specifying units to subtract
+ * @param options epochUnit optional "seconds" | "milliseconds", timeZone optional IANA timezone
+ * @example subtractUnix(1706745600000, { days: 1 }) // "1706659200000"
+ * @example subtractUnix(1706745600, { days: 1 }, { epochUnit: "seconds" }) // "1706659200"
+ * @returns Unix epoch string after subtraction, or "" on invalid input
+ */
 export function subtractUnix(
   value: string | number,
   units: Partial<Record<DateTimeDurationUnit, number>>,
