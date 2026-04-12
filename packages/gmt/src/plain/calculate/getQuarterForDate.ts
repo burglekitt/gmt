@@ -10,6 +10,11 @@ import { isValidDate } from "../validate";
  * - Returns null for invalid inputs.
  *
  * @param value ISO PlainDate string
+ * @example getQuarterForDate("2024-01-15") // 1
+ * @example getQuarterForDate("2024-04-15") // 2
+ * @example getQuarterForDate("2024-07-15") // 3
+ * @example getQuarterForDate("2024-10-15") // 4
+ * @example getQuarterForDate("invalid") // null
  * @returns number (1-4) or null for invalid input
  */
 export function getQuarterForDate(value: string): number | null {

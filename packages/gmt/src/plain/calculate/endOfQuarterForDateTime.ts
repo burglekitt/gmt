@@ -9,6 +9,9 @@ import { isValidDateTime } from "../validate";
  * - Returns an empty string for invalid inputs.
  *
  * @param value ISO PlainDateTime string
+ * @example endOfQuarterForDateTime("2024-03-15T12:00:00") // "2024-03-31T23:59:59.999999999"
+ * @example endOfQuarterForDateTime("2024-06-15T12:00:00") // "2024-06-30T23:59:59.999999999"
+ * @example endOfQuarterForDateTime("invalid") // ""
  * @returns ISO PlainDateTime string for the end of the quarter, or empty string on invalid input
  */
 export function endOfQuarterForDateTime(value: string): string {

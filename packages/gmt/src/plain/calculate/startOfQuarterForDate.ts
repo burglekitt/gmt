@@ -9,6 +9,11 @@ import { isValidDate } from "../validate";
  * - Returns an empty string for invalid inputs.
  *
  * @param value ISO PlainDate string
+ * @example startOfQuarterForDate("2024-03-15") // "2024-01-01"
+ * @example startOfQuarterForDate("2024-06-15") // "2024-04-01"
+ * @example startOfQuarterForDate("2024-09-15") // "2024-07-01"
+ * @example startOfQuarterForDate("2024-12-15") // "2024-10-01"
+ * @example startOfQuarterForDate("invalid") // ""
  * @returns ISO PlainDate string for the first day of the quarter, or empty string on invalid input
  */
 export function startOfQuarterForDate(value: string): string {

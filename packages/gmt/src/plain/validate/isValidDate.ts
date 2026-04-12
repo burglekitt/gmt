@@ -9,6 +9,9 @@ import { plainDate } from "../../regex";
  * - Returns false on invalid input.
  *
  * @param value ISO PlainDate string
+ * @example isValidDate("2024-03-10") // true
+ * @example isValidDate("2024-02-30") // false
+ * @example isValidDate("invalid") // false
  * @returns boolean indicating validity
  */
 export function isValidDate(value: string): boolean {

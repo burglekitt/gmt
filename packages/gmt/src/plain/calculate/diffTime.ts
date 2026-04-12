@@ -15,6 +15,10 @@ import { getLargestTimeDurationUnit } from "./getLargestTimeDurationUnit";
  * @param units TimeDurationUnit | TimeDurationUnit[] to measure the difference (e.g. "hours", "minutes", "seconds")
  * @example diffTime("12:00:00", "14:30:00", "hour") // 2
  * @example diffTime("12:00:00", "14:30:00", ["hour", "minute"]) // { hour: 2, minute: 30 }
+ * @example diffTime("invalid", "14:30:00", "hour") // null
+ * @example diffTime("12:00:00", "invalid", "hour") // null
+ * @example diffTime("12:00:00", "14:30:00", "invalidUnit") // null
+ * @returns number if single unit is requested, or record of unit values if multiple units are requested, or null on invalid input
  */
 export function diffTime(
   time1: string,

@@ -10,6 +10,8 @@ import { isValidDate } from "../validate";
  * @param dates Array of ISO PlainDate strings (e.g. "2024-03-10")
  * @example maxDate(["2024-03-10", "2024-03-15", "2024-03-12"]) // "2024-03-15"
  * @example maxDate(["invalid", "2024-03-15", "2024-03-12"]) // "2024-03-15"
+ * @example maxDate(["invalid", "also invalid"]) // null
+ * @example maxDate([]) // null
  * @returns The latest date string, or null on invalid input
  */
 export function maxDate(dates: string[]): string | null {
