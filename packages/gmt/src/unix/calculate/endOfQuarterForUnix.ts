@@ -49,7 +49,9 @@ export function endOfQuarterForUnix(
       hour: 23,
       minute: 59,
       second: 59,
-      nanosecond: 999999999,
+      millisecond: 999,
+      microsecond: 999,
+      nanosecond: 999,
     });
 
     const epoch =
