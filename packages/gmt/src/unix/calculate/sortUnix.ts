@@ -1,3 +1,5 @@
+import { isValidAmount } from "../../internal";
+
 /**
  * Sort an array of Unix timestamp values in ascending or descending order.
  *
@@ -14,7 +16,7 @@ export function sortUnix(
 ): number[] {
   if (!unixValues.length) return [];
 
-  const valid = unixValues.filter((v) => typeof v === "number" && !isNaN(v));
+  const valid = unixValues.filter(isValidAmount);
   if (!valid.length) return [];
 
   const sorted = valid.sort((a, b) => a - b);

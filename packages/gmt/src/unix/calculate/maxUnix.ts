@@ -1,3 +1,5 @@
+import { isValidAmount } from "../../internal";
+
 /**
  * Return the latest (maximum) of the given Unix timestamp values.
  *
@@ -10,7 +12,7 @@
 export function maxUnix(unixValues: number[]): number | null {
   if (!unixValues.length) return null;
 
-  const valid = unixValues.filter((v) => typeof v === "number" && !isNaN(v));
+  const valid = unixValues.filter(isValidAmount);
   if (!valid.length) return null;
 
   return Math.max(...valid);
