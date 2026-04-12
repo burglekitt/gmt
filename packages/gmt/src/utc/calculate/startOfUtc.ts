@@ -15,6 +15,19 @@ const supported: (Temporal.DateUnit | Temporal.TimeUnit)[] = [
   "nanosecond",
 ];
 
+/**
+ * Return the start of the specified date-time `unit` for a given UTC datetime string.
+ *
+ * - Returns empty string for invalid inputs or units.
+ *
+ * @param value ISO UTC datetime string
+ * @param unit Temporal.DateUnit | Temporal.TimeUnit to specify the start
+ * @param options weekStartsOn optional "monday" | "sunday", fractionalSecondDigits optional
+ * @example startOfUtc("2024-03-15T14:30:45Z", "year") // "2024-01-01T00:00:00Z"
+ * @example startOfUtc("2024-03-15T14:30:45Z", "month") // "2024-03-01T00:00:00Z"
+ * @example startOfUtc("invalid", "year") // ""
+ * @returns UTC Instant string representing the start of the unit, or "" on invalid input
+ */
 export function startOfUtc(
   value: string,
   unit: Temporal.DateUnit | Temporal.TimeUnit,
