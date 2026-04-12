@@ -3,21 +3,8 @@ import { isValidAmount } from "../../internal";
 import { getSystemTimezone } from "../../plain/get";
 import { isValidDateTimeDurationUnit } from "../../plain/validate";
 import type { DateTimeDurationUnit } from "../../types";
-import { convertUnixToZoned } from "../convert";
+import { isValidTimezone } from "../../zoned/validate";
 
-/**
- * Add a temporal amount to a unix epoch value and return a new unix epoch value.
- *
- * - Inputs can be string or number (representing unix epoch)
- * - epochUnit specifies whether input is seconds or milliseconds
- * - Returns string representation of the resulting unix epoch
- * - On invalid input returns empty string ""
- *
- * @param value unix epoch in milliseconds or seconds
- * @param units Partial<Record<DateTimeDurationUnit, number>> object specifying units to add
- * @param options epochUnit: "seconds" | "milliseconds"
- * @returns unix epoch as string on success, or "" on invalid input
- */
 export function addUnix(
   value: string | number,
   units: Partial<Record<DateTimeDurationUnit, number>>,
@@ -29,7 +16,7 @@ export function addUnix(
   const epochUnit = options?.epochUnit ?? "milliseconds";
   const timeZone = options?.timeZone ?? getSystemTimezone();
 
-  if (!timeZone) return "";
+  if (!timeZone || !isValidTimezone(timeZone)) return "";
 
   const validUnits = Object.keys(units).every(isValidDateTimeDurationUnit);
   const validAmounts = Object.values(units).every(isValidAmount);
@@ -48,10 +35,11 @@ export function addUnix(
   }
 
   try {
-    const zoned = convertUnixToZoned(numValue, timeZone, epochUnit);
-    if (!zoned) return "";
+    const instant = Temporal.Instant.fromEpochMilliseconds(
+      epochUnit === "seconds" ? numValue * 1000 : numValue,
+    );
 
-    const zdt = Temporal.ZonedDateTime.from(zoned);
+    const zdt = instant.toZonedDateTimeISO(timeZone);
     const result = zdt.add(units);
     const epoch =
       epochUnit === "seconds"

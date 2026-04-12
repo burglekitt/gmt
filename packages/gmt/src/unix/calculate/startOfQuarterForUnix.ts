@@ -1,7 +1,7 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { getSystemTimezone } from "../../plain/get";
-import { convertZonedToUnix } from "../../zoned/convert";
-import { convertUnixToZoned } from "../convert";
+import { isValidUnixUnit } from "../../unix/validate/isValidUnixUnit";
+import { isValidTimezone } from "../../zoned/validate";
 
 export function startOfQuarterForUnix(
   value: string | number,
@@ -13,7 +13,9 @@ export function startOfQuarterForUnix(
   const epochUnit = options?.epochUnit ?? "milliseconds";
   const timeZone = options?.timeZone ?? getSystemTimezone();
 
-  if (!timeZone) return "";
+  if (!timeZone || !isValidTimezone(timeZone) || !isValidUnixUnit(epochUnit)) {
+    return "";
+  }
 
   const numValue = typeof value === "string" ? Number(value) : value;
   if (
@@ -25,25 +27,28 @@ export function startOfQuarterForUnix(
   }
 
   try {
-    const zoned = convertUnixToZoned(numValue, timeZone, epochUnit);
-    if (!zoned) return "";
+    const instant = Temporal.Instant.fromEpochMilliseconds(
+      epochUnit === "seconds" ? numValue * 1000 : numValue,
+    );
 
-    const zdt = Temporal.ZonedDateTime.from(zoned);
+    const zdt = instant.toZonedDateTimeISO(timeZone);
     const month = zdt.month;
     const quarterStartMonth = Math.floor((month - 1) / 3) * 3 + 1;
 
-    const result = zdt
-      .with({
-        month: quarterStartMonth,
-        day: 1,
-        hour: 0,
-        minute: 0,
-        second: 0,
-      })
-      .toString();
+    const result = zdt.with({
+      month: quarterStartMonth,
+      day: 1,
+      hour: 0,
+      minute: 0,
+      second: 0,
+    });
 
-    const epoch = convertZonedToUnix(result, epochUnit);
-    return epoch?.toString() ?? "";
+    const epoch =
+      epochUnit === "seconds"
+        ? Math.floor(result.epochMilliseconds / 1000)
+        : result.epochMilliseconds;
+
+    return epoch.toString();
   } catch {
     return "";
   }

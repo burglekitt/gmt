@@ -3,7 +3,7 @@ import { getLargestDateTimeDurationUnit } from "../../plain/calculate/getLargest
 import { getSystemTimezone } from "../../plain/get";
 import { isValidDateTimeDurationUnit } from "../../plain/validate";
 import type { DateTimeDurationUnit } from "../../types";
-import { convertUnixToZoned } from "../convert";
+import { isValidTimezone } from "../../zoned/validate";
 
 export function diffUnix(
   value1: string | number,
@@ -17,7 +17,7 @@ export function diffUnix(
   const epochUnit = options?.epochUnit ?? "milliseconds";
   const timeZone = options?.timeZone ?? getSystemTimezone();
 
-  if (!timeZone) return null;
+  if (!timeZone || !isValidTimezone(timeZone)) return null;
 
   const isSingleUnit = !Array.isArray(units);
   const validUnits = isSingleUnit
@@ -43,13 +43,15 @@ export function diffUnix(
   }
 
   try {
-    const zoned1 = convertUnixToZoned(numValue1, timeZone, epochUnit);
-    const zoned2 = convertUnixToZoned(numValue2, timeZone, epochUnit);
+    const instant1 = Temporal.Instant.fromEpochMilliseconds(
+      epochUnit === "seconds" ? numValue1 * 1000 : numValue1,
+    );
+    const instant2 = Temporal.Instant.fromEpochMilliseconds(
+      epochUnit === "seconds" ? numValue2 * 1000 : numValue2,
+    );
 
-    if (!zoned1 || !zoned2) return null;
-
-    const zdt1 = Temporal.ZonedDateTime.from(zoned1);
-    const zdt2 = Temporal.ZonedDateTime.from(zoned2);
+    const zdt1 = instant1.toZonedDateTimeISO(timeZone);
+    const zdt2 = instant2.toZonedDateTimeISO(timeZone);
 
     const duration = zdt1.until(zdt2, {
       largestUnit: isSingleUnit ? units : getLargestDateTimeDurationUnit(units),

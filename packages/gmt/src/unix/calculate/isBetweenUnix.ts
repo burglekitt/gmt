@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { getSystemTimezone } from "../../plain/get";
-import { convertUnixToZoned } from "../convert";
+import { isValidTimezone } from "../../zoned/validate";
 
 export function isBetweenUnix(
   value: string | number,
@@ -18,7 +18,7 @@ export function isBetweenUnix(
   const inclusiveStart = options?.inclusiveStart ?? true;
   const inclusiveEnd = options?.inclusiveEnd ?? true;
 
-  if (!timeZone) return false;
+  if (!timeZone || !isValidTimezone(timeZone)) return false;
 
   const numValue = typeof value === "string" ? Number(value) : value;
   const numStart = typeof start === "string" ? Number(start) : start;
@@ -39,30 +39,26 @@ export function isBetweenUnix(
   }
 
   try {
-    const zoned = convertUnixToZoned(numValue, timeZone, epochUnit);
-    const startZoned = convertUnixToZoned(numStart, timeZone, epochUnit);
-    const endZoned = convertUnixToZoned(numEnd, timeZone, epochUnit);
-
-    if (!zoned || !startZoned || !endZoned) return false;
-
-    const zdt = Temporal.ZonedDateTime.from(zoned);
-    const startZdt = Temporal.ZonedDateTime.from(startZoned);
-    const endZdt = Temporal.ZonedDateTime.from(endZoned);
-
-    const startInstant = startZdt.toInstant();
-    const endInstant = endZdt.toInstant();
-    const valueInstant = zdt.toInstant();
+    const instant = Temporal.Instant.fromEpochMilliseconds(
+      epochUnit === "seconds" ? numValue * 1000 : numValue,
+    );
+    const startInstant = Temporal.Instant.fromEpochMilliseconds(
+      epochUnit === "seconds" ? numStart * 1000 : numStart,
+    );
+    const endInstant = Temporal.Instant.fromEpochMilliseconds(
+      epochUnit === "seconds" ? numEnd * 1000 : numEnd,
+    );
 
     if (Temporal.Instant.compare(startInstant, endInstant) === 1) {
       return false;
     }
 
     const startCheck = inclusiveStart
-      ? Temporal.Instant.compare(startInstant, valueInstant) <= 0
-      : Temporal.Instant.compare(startInstant, valueInstant) < 0;
+      ? Temporal.Instant.compare(startInstant, instant) <= 0
+      : Temporal.Instant.compare(startInstant, instant) < 0;
     const endCheck = inclusiveEnd
-      ? Temporal.Instant.compare(valueInstant, endInstant) <= 0
-      : Temporal.Instant.compare(valueInstant, endInstant) < 0;
+      ? Temporal.Instant.compare(instant, endInstant) <= 0
+      : Temporal.Instant.compare(instant, endInstant) < 0;
 
     return startCheck && endCheck;
   } catch {

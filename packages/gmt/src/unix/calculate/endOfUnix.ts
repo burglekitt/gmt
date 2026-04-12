@@ -1,8 +1,7 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { getSystemTimezone } from "../../plain/get";
-import type { FractionalDigit } from "../../types";
-import { convertZonedToUnix } from "../../zoned/convert";
-import { convertUnixToZoned } from "../convert";
+import { isValidUnixUnit } from "../../unix/validate/isValidUnixUnit";
+import { isValidTimezone } from "../../zoned/validate";
 
 const supported: (Temporal.DateUnit | Temporal.TimeUnit)[] = [
   "year",
@@ -24,15 +23,20 @@ export function endOfUnix(
     epochUnit?: "seconds" | "milliseconds";
     timeZone?: string;
     weekStartsOn?: "monday" | "sunday";
-    fractionalSecondDigits?: FractionalDigit;
   },
 ): string {
   const epochUnit = options?.epochUnit ?? "milliseconds";
   const timeZone = options?.timeZone ?? getSystemTimezone();
   const weekStartsOn = options?.weekStartsOn ?? "monday";
-  const fractionalSecondDigits = options?.fractionalSecondDigits;
 
-  if (!timeZone || !supported.includes(unit)) return "";
+  if (
+    !timeZone ||
+    !supported.includes(unit) ||
+    !isValidTimezone(timeZone) ||
+    !isValidUnixUnit(epochUnit)
+  ) {
+    return "";
+  }
 
   const numValue = typeof value === "string" ? Number(value) : value;
   if (
@@ -44,10 +48,10 @@ export function endOfUnix(
   }
 
   try {
-    const zoned = convertUnixToZoned(numValue, timeZone, epochUnit);
-    if (!zoned) return "";
+    const epochMs = epochUnit === "seconds" ? numValue * 1000 : numValue;
+    const instant = Temporal.Instant.fromEpochMilliseconds(epochMs);
 
-    const source = Temporal.ZonedDateTime.from(zoned);
+    const source = instant.toZonedDateTimeISO(timeZone);
     let result: Temporal.ZonedDateTime;
 
     switch (unit) {
@@ -142,19 +146,12 @@ export function endOfUnix(
         return "";
     }
 
-    const precisionMap: Record<string, FractionalDigit> = {
-      millisecond: 3,
-      microsecond: 6,
-      nanosecond: 9,
-    };
-    const fractionalDigits =
-      fractionalSecondDigits ?? (precisionMap[unit] || 0);
+    const epoch =
+      epochUnit === "seconds"
+        ? Math.floor(result.epochMilliseconds / 1000)
+        : result.epochMilliseconds;
 
-    const endEpoch = convertZonedToUnix(
-      result.toString({ fractionalSecondDigits: fractionalDigits }),
-      epochUnit,
-    );
-    return endEpoch?.toString() ?? "";
+    return epoch.toString();
   } catch {
     return "";
   }
