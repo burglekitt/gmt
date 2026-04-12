@@ -35,6 +35,15 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Cleanup stale TypeScript/Nx artifacts to avoid cached build issues
+      - name: Cleanup TypeScript build info and Nx cache
+        run: |
+          echo "Removing stale tsbuildinfo and dist directories"
+          find . -name '*.tsbuildinfo' -print -delete || true
+          rm -rf packages/*/dist || true
+          pnpm -w exec nx reset || true
+          pnpm -w exec tsc -b --clean || true
+
       # Debug: Verify Nx modules are installed
       - name: Debug Nx modules
         run: |
