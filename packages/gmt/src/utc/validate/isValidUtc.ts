@@ -7,12 +7,15 @@ import { utcDateTime } from "../../regex/utc-date-time";
  *
  * - Rejects leap-seconds explicitly.
  * - Uses a regex to validate the UTC datetime format.
+ * - Uses Temporal.Instant.from for strong validation.
  *
  * @param value input UTC datetime string (ISO 8601)
+ * @example isValidUtc("2024-03-17T14:30:45Z") // true
+ * @example isValidUtc("2024-12-31T23:59:60Z") // false (leap second)
+ * @example isValidUtc("invalid") // false
  * @returns boolean indicating whether the input is a valid UTC datetime
  */
 export function isValidUtc(value: string): boolean {
-  // TODO is this leap second a problem here and everywhere
   if (isLeapSecond(value)) {
     return false;
   }

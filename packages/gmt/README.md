@@ -234,8 +234,20 @@ isValidZonedDateTime("2024-03-17T14:30:45+00:00[UTC]");
 - `endOfQuarterForDate`
 - `endOfQuarterForDateTime`
 - `endOfTime`
+- `getLargestDateDurationUnit`
+- `getLargestDateTimeDurationUnit`
+- `getLargestTimeDurationUnit`
 - `getQuarterForDate`
 - `getQuarterForDateTime`
+- `maxDate`
+- `maxDateTime`
+- `maxTime`
+- `minDate`
+- `minDateTime`
+- `minTime`
+- `sortDates`
+- `sortDateTimes`
+- `sortTimes`
 - `startOfDate`
 - `startOfDateTime`
 - `startOfQuarterForDate`
@@ -303,7 +315,7 @@ isValidZonedDateTime("2024-03-17T14:30:45+00:00[UTC]");
 - `isValidDateTimeDurationUnit`
 - `isValidDateDurationUnit`
 - `isValidTime`
-- `isValidTimeUnit`
+- `isValidTimeDurationUnit`
 - `isValidUnixMilliseconds`
 - `isValidUnixSeconds`
 - `isUtcDateTime`
@@ -417,17 +429,22 @@ isValidZonedDateTime("2024-03-17T14:30:45+00:00[UTC]");
 
 Prioritized roadmap and parity checks against Luxon, Moment, and date-fns.
 
-1. Interval primitives and helpers (`Interval` type, overlap checks, containment checks, interval sorting, interval normalization/merge).
-2. Range iteration helpers (each day/week/month/quarter across a range for plain and zoned inputs).
-3. Clamp/min/max helpers for dates datetimes times (bounded values and collection min/max selectors).
-4. Additional start/end boundaries (`startOfWeek`, `endOfWeek`, ISO-week variants, month/year boundaries where missing).
-5. Duration utilities (interval-to-duration, ISO duration formatting, optional human-readable duration formatting).
-6. Calendar/relative formatting helpers (`formatRelative`, distance-to-now style outputs).
-7. Serialization adapters package (`gmt-serializers`) for SuperJSON-style Temporal round-tripping.
-8. Parsing pack for non-ISO but common user inputs (`YYYY/MM/DD`, `HHmm`, month-name parsing) in a separate optional package.
-9. Business-day helpers (`addBusinessDays`, `differenceInBusinessDays`) as an optional domain module.
-10. Optional validation package (`gmt-zod`) kept separate from core `@burglekitt/gmt`.
-11. Descriptive parsing errors for timezones, GMT offsets
+Completed:
+- ✅ min/max/sort for dates, datetimes, times (bounded values and collection selectors)
+- ✅ Additional start/end boundaries (startOfDate/endOfDate with "week" unit covers startOfWeek/endOfWeek)
+
+In progress:
+- 1. Interval primitives and helpers (`Interval` type, overlap checks, containment checks, interval sorting, interval normalization/merge).
+- 3. Additional month/year boundaries where missing.
+
+Future:
+- Duration utilities (interval-to-duration, ISO duration formatting, optional human-readable duration formatting).
+- Calendar/relative formatting helpers (`formatRelative`, distance-to-now style outputs).
+- Serialization adapters package (`gmt-serializers`) for SuperJSON-style Temporal round-tripping.
+- Parsing pack for non-ISO but common user inputs (`YYYY/MM/DD`, `HHmm`, month-name parsing) in a separate optional package.
+- Business-day helpers (`addBusinessDays`, `differenceInBusinessDays`) as an optional domain module.
+- Optional validation package (`gmt-zod`) kept separate from core `@burglekitt/gmt`.
+- Descriptive parsing errors for timezones, GMT offsets
 ---
 
 ## Testing Matrix
