@@ -38,6 +38,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Clean any stale TypeScript build artifacts that could cause module resolution issues
+      - name: Clean stale build artifacts
+        run: |
+          find . -name "*.tsbuildinfo" -delete 2>/dev/null || true
+          rm -rf .nx/cache 2>/dev/null || true
+
       # Debug: Verify Nx modules are installed
       - name: Debug Nx modules
         run: |

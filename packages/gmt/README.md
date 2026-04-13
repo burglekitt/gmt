@@ -56,7 +56,6 @@ You can also import subpaths directly:
 ```typescript
 import { addDate } from "@burglekitt/gmt/plain/calculate";
 import { getNow } from "@burglekitt/gmt/plain/get";
-import { convertUnixToTimezone } from "@burglekitt/gmt/zoned/convert";
 ```
 
 ---
@@ -138,10 +137,7 @@ isValidUnixMilliseconds("1710685845000");
 ```typescript
 import { addZoned } from "@burglekitt/gmt/zoned/calculate";
 import {
-  convertUtcDateTimeToUnix,
-  convertTimezoneToUnix,
-  convertTimezoneToUtc,
-  convertUnixToTimezone,
+  convertUtcToUnix,
   convertUtcToUnix,
   convertUtcToTimezone,
 } from "@burglekitt/gmt/zoned/convert";
@@ -153,17 +149,8 @@ addZoned("2026-03-07T23:00:00-05:00[America/New_York]", 2, "hour");
 convertTimezoneToUnix("2024-03-17T10:30:45-04:00[America/New_York]", "seconds");
 // 1710685845
 
-convertTimezoneToUtc("2024-03-17T10:30:45-04:00[America/New_York]");
-// "2024-03-17T14:30:45Z"
-
 convertUtcToUnix("2024-03-17T14:30:45Z", "seconds");
 // 1710685845
-
-convertUtcDateTimeToUnix("2024-03-17T09:00:00", "seconds");
-// 1710666000
-
-convertUnixToTimezone(1710685845000, "Asia/Kolkata");
-// "2024-03-17T20:00:45+05:30[Asia/Kolkata]"
 
 convertUtcToTimezone("2024-03-17T14:30:45Z", "Pacific/Apia");
 // zoned datetime in Pacific/Apia at the same instant
@@ -318,7 +305,6 @@ isValidZonedDateTime("2024-03-17T14:30:45+00:00[UTC]");
 - `isValidTimeDurationUnit`
 - `isValidUnixMilliseconds`
 - `isValidUnixSeconds`
-- `isUtcDateTime`
 
 ### `@burglekitt/gmt/zoned/calculate`
 
@@ -347,11 +333,8 @@ isValidZonedDateTime("2024-03-17T14:30:45+00:00[UTC]");
 ### `@burglekitt/gmt/zoned/convert`
 
 - `convertTimezoneToUnix`
-- `convertTimezoneToUtc`
-- `convertUnixToTimezone`
 - `convertUnixToZoned`
 - `convertUnixToUtc`
-- `convertUtcDateTimeToUnix`
 - `convertZonedToUnix`
 - `convertZonedToZoned`
 - `convertUtcToTimezone`

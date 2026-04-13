@@ -82,11 +82,7 @@
       "types": "./dist/utc/*/index.d.ts",
       "default": "./dist/utc/*/index.js"
     },
-    "./utc/*/*": null,
-    "./deprecated": {
-      "types": "./dist/deprecated/index.d.ts",
-      "default": "./dist/deprecated/index.js"
-    }
+    "./utc/*/*": null
   },
   "files": [
     "dist",
