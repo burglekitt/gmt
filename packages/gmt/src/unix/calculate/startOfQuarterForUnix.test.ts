@@ -1,4 +1,4 @@
-import * as getSystemTimeZoneModule from "../../plain/get/getSystemTimeZone";
+import * as getSystemTimeZoneModule from "../../plain/get/FIXgetSystemTimeZone";
 import { startOfQuarterForUnix } from "./startOfQuarterForUnix";
 
 describe("startOfQuarterForUnix", () => {

@@ -1,2 +1,2 @@
+export * from "./FIXtimeZoneMatrix";
 export * from "./localeMatrix";
-export * from "./timeZoneMatrix";

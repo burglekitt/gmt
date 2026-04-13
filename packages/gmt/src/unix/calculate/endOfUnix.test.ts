@@ -1,4 +1,4 @@
-import * as getSystemTimeZoneModule from "../../plain/get/getSystemTimeZone";
+import * as getSystemTimeZoneModule from "../../plain/get/FIXgetSystemTimeZone";
 import { endOfUnix } from "./endOfUnix";
 
 describe("endOfUnix", () => {

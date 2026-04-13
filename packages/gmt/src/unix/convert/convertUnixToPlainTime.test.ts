@@ -1,4 +1,4 @@
-import * as getSystemTimeZoneModule from "../../plain/get/getSystemTimeZone";
+import * as getSystemTimeZoneModule from "../../plain/get/FIXgetSystemTimeZone";
 import { convertUnixToPlainTime } from "./convertUnixToPlainTime";
 
 describe("convertUnixToPlainTime", () => {

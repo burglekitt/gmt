@@ -1,5 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { MustTestLocales } from ".";
+import { MustTestLocales } from "./localeMatrix";
 
 /**
  * Canonical timeZone IDs that stress offset and date-boundary behavior.
