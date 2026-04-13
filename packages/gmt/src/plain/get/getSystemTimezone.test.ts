@@ -1,6 +1,6 @@
 import { mockSystemTimeZone } from "../../test";
 import { isValidTimeZone } from "../../zoned/validate";
-import { getSystemTimeZone } from "./FIXgetSystemTimeZone";
+import { getSystemTimeZone } from "./getSystemTimeZone";
 
 describe("getSystemTimeZone", () => {
   it.each`

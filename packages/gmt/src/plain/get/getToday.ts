@@ -1,5 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { getSystemTimeZone } from "./FIXgetSystemTimeZone";
+import { getSystemTimeZone } from "./getSystemTimeZone";
 
 /**
  * Return the current PlainDate as an ISO string in the system timeZone.

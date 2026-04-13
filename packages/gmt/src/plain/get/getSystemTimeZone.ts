@@ -5,6 +5,7 @@
  *   the host timeZone.
  * - Returns an empty string if the timeZone cannot be determined.
  *
+ * @example getSystemTimeZone() // "America/New_York"
  * @returns system timeZone name or an empty string on failure
  */
 export function getSystemTimeZone(): string {

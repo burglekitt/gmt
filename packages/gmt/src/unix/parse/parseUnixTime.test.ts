@@ -1,4 +1,4 @@
-import * as getSystemTimeZoneModule from "../../plain/get/FIXgetSystemTimeZone";
+import * as getSystemTimeZoneModule from "../../plain/get/getSystemTimeZone";
 import { battleTestLeapYearUnix, MustTestDstTimeZones } from "../../test";
 
 import { parseUnixTime } from "./parseUnixTime";

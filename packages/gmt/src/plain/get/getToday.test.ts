@@ -1,8 +1,8 @@
 import { chopTime, chopUtc } from "../chop";
 import { areDatesEqual } from "../compare";
 import { isValidDate } from "../validate";
-import * as getSystemTimeZoneModule from "./FIXgetSystemTimeZone";
 import { getNow } from "./getNow";
+import * as getSystemTimeZoneModule from "./getSystemTimeZone";
 import { getToday } from "./getToday";
 
 describe("getToday", () => {

@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { weekOfYear } from "../calculate/weekOfYear";
-import { getSystemTimeZone } from "./FIXgetSystemTimeZone";
+import { getSystemTimeZone } from "./getSystemTimeZone";
 
 export type PlainNowUnit =
   | "year"
