@@ -5,7 +5,7 @@ import type { UnixUnit } from "../validate/isValidUnixUnit";
 /**
  * Return whether `value1` represents an instant strictly after `value2`.
  *
- * - Both inputs must be valid unix epoch numbers (or strings).
+ * - Both inputs must be valid unix epoch numbers.
  * - Comparison is performed using Temporal.Instant (same instant semantics).
  * - Invalid inputs return `false`.
  *
@@ -17,27 +17,24 @@ import type { UnixUnit } from "../validate/isValidUnixUnit";
  * @returns `true` if `value1` is after `value2`, otherwise `false`
  */
 export function isAfterUnix(
-  value1: string | number,
-  value2: string | number,
+  value1: number,
+  value2: number,
   options?: {
     epochUnit?: UnixUnit;
   },
 ): boolean {
   const epochUnit = options?.epochUnit ?? "milliseconds";
 
-  const numValue1 = typeof value1 === "string" ? Number(value1) : value1;
-  const numValue2 = typeof value2 === "string" ? Number(value2) : value2;
-
-  if (!isValidAmount(numValue1) || !isValidAmount(numValue2)) {
+  if (!isValidAmount(value1) || !isValidAmount(value2)) {
     return false;
   }
 
   try {
     const instant1 = Temporal.Instant.fromEpochMilliseconds(
-      epochUnit === "seconds" ? numValue1 * 1000 : numValue1,
+      epochUnit === "seconds" ? value1 * 1000 : value1,
     );
     const instant2 = Temporal.Instant.fromEpochMilliseconds(
-      epochUnit === "seconds" ? numValue2 * 1000 : numValue2,
+      epochUnit === "seconds" ? value2 * 1000 : value2,
     );
 
     return Temporal.Instant.compare(instant1, instant2) === 1;

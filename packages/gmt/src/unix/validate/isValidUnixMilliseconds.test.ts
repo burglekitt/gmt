@@ -1,12 +1,8 @@
-import { unixFixture } from "../../test/timeZonesForTests";
 import { isValidUnixMilliseconds } from "./isValidUnixMilliseconds";
 
 describe("isValidUnixMilliseconds", () => {
   it.each`
     value
-    ${unixFixture.milliseconds}
-    ${"0000000000000"}
-    ${"9999999999999"}
     ${1709164800000}
     ${0}
     ${9999999999999}
@@ -16,16 +12,12 @@ describe("isValidUnixMilliseconds", () => {
 
   it.each`
     value
-    ${unixFixture.seconds}
-    ${unixFixture.invalid[0]}
-    ${unixFixture.invalid[1]}
-    ${unixFixture.invalid[2]}
-    ${unixFixture.invalid[3]}
-    ${unixFixture.invalid[4]}
     ${-1}
     ${1.5}
     ${null}
     ${undefined}
+    ${"1709164800000"}
+    ${"not-a-timestamp"}
   `("returns false for invalid unix milliseconds $value", ({ value }) => {
     expect(isValidUnixMilliseconds(value as never)).toBe(false);
   });

@@ -3,7 +3,7 @@ import {
   sameInstantBattleCases,
   unixEpochBattleCases,
   validOnlyBattleTestTimeZones,
-} from "../../test/timeZonesForTests";
+} from "../../test";
 import { isValidZonedDateTime } from ".";
 
 describe("isValidZonedDateTime", () => {

@@ -2,7 +2,7 @@ import { chopMilliseconds, chopTime, chopUtc } from "../chop";
 import { isAfterDateTime } from "../compare";
 import { isValidDateTime } from "../validate";
 import { getNow } from "./getNow";
-import * as getSystemTimezoneModule from "./getSystemTimezone";
+import * as getSystemTimeZoneModule from "./getSystemTimeZone";
 import { getToday } from "./getToday";
 
 describe("getNow", () => {
@@ -14,7 +14,7 @@ describe("getNow", () => {
     vi.setSystemTime(systemTime);
 
     timeZoneSpy = vi
-      .spyOn(getSystemTimezoneModule, "getSystemTimezone")
+      .spyOn(getSystemTimeZoneModule, "getSystemTimeZone")
       .mockReturnValue("UTC");
   });
 

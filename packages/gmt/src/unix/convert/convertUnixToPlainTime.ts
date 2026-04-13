@@ -1,5 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { getSystemTimezone } from "../../plain";
+import { getSystemTimeZone } from "../../plain";
 import { isValidTimeZone } from "../../zoned";
 import {
   isValidUnixMilliseconds,
@@ -12,33 +12,32 @@ import {
  * - Accepts Unix timestamps in seconds or milliseconds (default is milliseconds).
  * - Returns an empty string for invalid inputs.
  * - Uses Temporal.ZonedDateTime for accurate time conversion.
- * @param unix Unix timestamp (number or string)
+ * @param unix Unix timestamp (number)
  * @param options conversion options
  * @example convertUnixToPlainTime(1706659200000) // "00:00:00"
  * @example convertUnixToPlainTime(1706659200, { epochUnit: "seconds" }) // "00:00:00"
  * @returns plain time string in "HH:mm:ss" format or "" on invalid input
  */
 export function convertUnixToPlainTime(
-  unix: number | string,
+  unix: number,
   options?: { epochUnit?: "seconds" | "milliseconds"; timeZone?: string },
 ): string {
-  const { epochUnit = "milliseconds", timeZone = getSystemTimezone() } =
+  const { epochUnit = "milliseconds", timeZone = getSystemTimeZone() } =
     options ?? {};
 
   if (!isValidUnixUnit(epochUnit)) return "";
   if (!isValidTimeZone(timeZone)) return "";
 
   try {
-    const numUnix = typeof unix === "string" ? Number(unix) : unix;
     if (
-      (epochUnit === "milliseconds" && !isValidUnixMilliseconds(numUnix)) ||
-      (epochUnit === "seconds" && !isValidUnixSeconds(numUnix))
+      (epochUnit === "milliseconds" && !isValidUnixMilliseconds(unix)) ||
+      (epochUnit === "seconds" && !isValidUnixSeconds(unix))
     ) {
       return "";
     }
 
     const instant = Temporal.Instant.fromEpochMilliseconds(
-      epochUnit === "seconds" ? numUnix * 1000 : numUnix,
+      epochUnit === "seconds" ? unix * 1000 : unix,
     );
     const zonedDateTime = instant.toZonedDateTimeISO(timeZone);
     return zonedDateTime.toPlainTime().toString();

@@ -1,4 +1,4 @@
-import { battleTestTimeZones } from "../../test/timeZonesForTests";
+import { battleTestTimeZones } from "../../test";
 import { parseZonedTimezone } from "../../zoned/parse";
 import { convertUnixToZoned } from "./convertUnixToZoned";
 

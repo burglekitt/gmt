@@ -1,8 +1,5 @@
 import { normalizeDateTime } from "../../internal";
-import {
-  localeZonedRangeInputByLocale,
-  MustTestLocales,
-} from "../../test/timeZonesForTests";
+import { localeZonedRangeInputByLocale, MustTestLocales } from "../../test";
 import { formatZonedRange } from "./formatZonedRange";
 
 describe("formatZonedRange", () => {

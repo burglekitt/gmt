@@ -13,10 +13,11 @@ describe("maxUnix", () => {
   );
 
   it.each`
-    unixValues           | expected
-    ${[]}                | ${null}
-    ${[NaN]}             | ${null}
-    ${[NaN, 1704067200]} | ${1704067200}
+    unixValues              | expected
+    ${[]}                   | ${null}
+    ${[NaN]}                | ${null}
+    ${[NaN, 1704067200]}    | ${1704067200}
+    ${[Infinity, Infinity]} | ${null}
   `(
     "returns $expected for edge case: $unixValues",
     ({ unixValues, expected }) => {

@@ -1,5 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { getSystemTimezone } from "../../plain/get";
+import { getSystemTimeZone } from "../../plain/get";
 import { isValidUnixUnit } from "../../unix/validate/isValidUnixUnit";
 import { isValidTimeZone } from "../../zoned/validate";
 
@@ -20,27 +20,27 @@ const supported: (Temporal.DateUnit | Temporal.TimeUnit)[] = [
  * Return the end of the specified unit for a Unix timestamp.
  *
  * - Accepts Unix timestamps in milliseconds (default) or seconds.
- * - Returns empty string for invalid inputs.
+ * - Returns null for invalid inputs.
  *
- * @param value Unix timestamp (number or string)
+ * @param value Unix timestamp (number)
  * @param unit Temporal.DateUnit | Temporal.TimeUnit to specify the end
  * @param options epochUnit optional "seconds" | "milliseconds", timeZone optional IANA timeZone, weekStartsOn optional "monday" | "sunday"
- * @example endOfUnix(1706659200000, "year") // "1735689600000"
- * @example endOfUnix(1706659200000, "month") // "1708012800000"
- * @example endOfUnix(1706659200, "day", { epochUnit: "seconds" }) // "1706736000"
- * @returns Unix epoch string representing the end of the unit, or "" on invalid input
+ * @example endOfUnix(1706659200000, "year") // 1735689600000
+ * @example endOfUnix(1706659200000, "month") // 1708012800000
+ * @example endOfUnix(1706659200, "day", { epochUnit: "seconds" }) // 1706736000
+ * @returns Unix epoch number representing the end of the unit, or null on invalid input
  */
 export function endOfUnix(
-  value: string | number,
+  value: number,
   unit: Temporal.DateUnit | Temporal.TimeUnit,
   options?: {
     epochUnit?: "seconds" | "milliseconds";
     timeZone?: string;
     weekStartsOn?: "monday" | "sunday";
   },
-): string {
+): number | null {
   const epochUnit = options?.epochUnit ?? "milliseconds";
-  const timeZone = options?.timeZone ?? getSystemTimezone();
+  const timeZone = options?.timeZone ?? getSystemTimeZone();
   const weekStartsOn = options?.weekStartsOn ?? "monday";
 
   if (
@@ -49,20 +49,15 @@ export function endOfUnix(
     !isValidTimeZone(timeZone) ||
     !isValidUnixUnit(epochUnit)
   ) {
-    return "";
+    return null;
   }
 
-  const numValue = typeof value === "string" ? Number(value) : value;
-  if (
-    !Number.isFinite(numValue) ||
-    !Number.isInteger(numValue) ||
-    numValue < 0
-  ) {
-    return "";
+  if (!Number.isFinite(value) || !Number.isInteger(value) || value < 0) {
+    return null;
   }
 
   try {
-    const epochMs = epochUnit === "seconds" ? numValue * 1000 : numValue;
+    const epochMs = epochUnit === "seconds" ? value * 1000 : value;
     const instant = Temporal.Instant.fromEpochMilliseconds(epochMs);
 
     const source = instant.toZonedDateTimeISO(timeZone);
@@ -157,7 +152,7 @@ export function endOfUnix(
         result = source;
         break;
       default:
-        return "";
+        return null;
     }
 
     const epoch =
@@ -165,8 +160,8 @@ export function endOfUnix(
         ? Math.floor(result.epochMilliseconds / 1000)
         : result.epochMilliseconds;
 
-    return epoch.toString();
+    return epoch;
   } catch {
-    return "";
+    return null;
   }
 }

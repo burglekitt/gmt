@@ -1,4 +1,4 @@
-import { validOnlyBattleTestTimeZones } from "../../test/timeZonesForTests";
+import { validOnlyBattleTestTimeZones } from "../../test";
 import { isValidTimeZone } from ".";
 
 describe("isValidTimeZone", () => {

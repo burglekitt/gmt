@@ -1,5 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { getSystemTimezone } from "../../plain/get";
+import { getSystemTimeZone } from "../../plain/get";
 import { isValidTimeZone } from "../../zoned/validate";
 
 /**
@@ -18,9 +18,9 @@ import { isValidTimeZone } from "../../zoned/validate";
  * @returns boolean indicating whether value is between start and end
  */
 export function isBetweenUnix(
-  value: string | number,
-  start: string | number,
-  end: string | number,
+  value: number,
+  start: number,
+  end: number,
   options?: {
     epochUnit?: "seconds" | "milliseconds";
     timeZone?: string;
@@ -29,39 +29,35 @@ export function isBetweenUnix(
   },
 ): boolean {
   const epochUnit = options?.epochUnit ?? "milliseconds";
-  const timeZone = options?.timeZone ?? getSystemTimezone();
+  const timeZone = options?.timeZone ?? getSystemTimeZone();
   const inclusiveStart = options?.inclusiveStart ?? true;
   const inclusiveEnd = options?.inclusiveEnd ?? true;
 
   if (!timeZone || !isValidTimeZone(timeZone)) return false;
 
-  const numValue = typeof value === "string" ? Number(value) : value;
-  const numStart = typeof start === "string" ? Number(start) : start;
-  const numEnd = typeof end === "string" ? Number(end) : end;
-
   if (
-    !Number.isFinite(numValue) ||
-    !Number.isInteger(numValue) ||
-    numValue < 0 ||
-    !Number.isFinite(numStart) ||
-    !Number.isInteger(numStart) ||
-    numStart < 0 ||
-    !Number.isFinite(numEnd) ||
-    !Number.isInteger(numEnd) ||
-    numEnd < 0
+    !Number.isFinite(value) ||
+    !Number.isInteger(value) ||
+    value < 0 ||
+    !Number.isFinite(start) ||
+    !Number.isInteger(start) ||
+    start < 0 ||
+    !Number.isFinite(end) ||
+    !Number.isInteger(end) ||
+    end < 0
   ) {
     return false;
   }
 
   try {
     const instant = Temporal.Instant.fromEpochMilliseconds(
-      epochUnit === "seconds" ? numValue * 1000 : numValue,
+      epochUnit === "seconds" ? value * 1000 : value,
     );
     const startInstant = Temporal.Instant.fromEpochMilliseconds(
-      epochUnit === "seconds" ? numStart * 1000 : numStart,
+      epochUnit === "seconds" ? start * 1000 : start,
     );
     const endInstant = Temporal.Instant.fromEpochMilliseconds(
-      epochUnit === "seconds" ? numEnd * 1000 : numEnd,
+      epochUnit === "seconds" ? end * 1000 : end,
     );
 
     if (Temporal.Instant.compare(startInstant, endInstant) === 1) {

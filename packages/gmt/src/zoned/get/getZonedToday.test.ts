@@ -1,9 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { isValidDate } from "../../plain/validate";
-import {
-  battleTestTimeZones,
-  fixedNowInstant,
-} from "../../test/timeZonesForTests";
+import { battleTestTimeZones, fixedNowInstant } from "../../test";
 import { getZonedToday } from "./getZonedToday";
 
 describe("getZonedToday", () => {

@@ -1,8 +1,8 @@
-import { mockSystemTimezone } from "../../test/timeZonesForTests";
+import { mockSystemTimeZone } from "../../test";
 import { isValidTimeZone } from "../../zoned/validate";
-import { getSystemTimezone } from "./getSystemTimezone";
+import { getSystemTimeZone } from "./getSystemTimeZone";
 
-describe("getSystemTimezone", () => {
+describe("getSystemTimeZone", () => {
   it.each`
     mockTimezone
     ${"UTC"}
@@ -24,9 +24,9 @@ describe("getSystemTimezone", () => {
     ${"America/Chicago"}
     ${"America/Phoenix"}
   `("returns the mocked IANA timeZone $mockTimezone", ({ mockTimezone }) => {
-    const restoreTimezone = mockSystemTimezone(mockTimezone);
+    const restoreTimezone = mockSystemTimeZone(mockTimezone);
 
-    const timeZone = getSystemTimezone();
+    const timeZone = getSystemTimeZone();
     expect(timeZone).toBe(mockTimezone);
     expect(isValidTimeZone(timeZone)).toBe(true);
     restoreTimezone();
@@ -40,7 +40,7 @@ describe("getSystemTimezone", () => {
       });
 
     try {
-      const timeZone = getSystemTimezone();
+      const timeZone = getSystemTimeZone();
       expect(timeZone).toBe("");
     } finally {
       resolvedOptionsSpy.mockRestore();

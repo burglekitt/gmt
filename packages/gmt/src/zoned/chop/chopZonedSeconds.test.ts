@@ -1,4 +1,4 @@
-import { sameInstantBattleCases } from "../../test/timeZonesForTests";
+import { sameInstantBattleCases } from "../../test";
 import { isValidZonedDateTime } from "../validate/isValidZonedDateTime";
 import { chopZonedSeconds } from "./chopZonedSeconds";
 

@@ -1,4 +1,4 @@
-import { sameInstantBattleCases } from "../../test/timeZonesForTests";
+import { sameInstantBattleCases } from "../../test";
 import { convertZonedToUtc } from "./convertZonedToUtc";
 
 describe("convertZonedToUtc", () => {

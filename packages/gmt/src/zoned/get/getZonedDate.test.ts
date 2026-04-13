@@ -1,4 +1,4 @@
-import { battleTestTimeZones } from "../../test/timeZonesForTests";
+import { battleTestTimeZones } from "../../test";
 import { getZonedDate } from "./getZonedDate";
 
 describe("getZonedDate", () => {

@@ -1,4 +1,4 @@
-import { localNoonBattleCases } from "../../test/timeZonesForTests";
+import { localNoonBattleCases } from "../../test";
 import { parseZonedTimezone } from "../parse";
 import { addZoned } from "./addZoned";
 

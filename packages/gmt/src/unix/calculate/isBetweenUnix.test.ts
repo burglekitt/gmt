@@ -1,4 +1,4 @@
-import * as getSystemTimezoneModule from "../../plain/get/getSystemTimezone";
+import * as getSystemTimeZoneModule from "../../plain/get/getSystemTimeZone";
 import { isBetweenUnix } from "./isBetweenUnix";
 
 describe("isBetweenUnix", () => {
@@ -6,7 +6,7 @@ describe("isBetweenUnix", () => {
 
   beforeEach(() => {
     timeZoneSpy = vi
-      .spyOn(getSystemTimezoneModule, "getSystemTimezone")
+      .spyOn(getSystemTimeZoneModule, "getSystemTimeZone")
       .mockReturnValue("UTC");
   });
 

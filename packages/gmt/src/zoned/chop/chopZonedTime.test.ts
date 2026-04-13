@@ -1,5 +1,5 @@
 import { isValidDate } from "../../plain/validate/isValidDate";
-import { sameInstantBattleCases } from "../../test/timeZonesForTests";
+import { sameInstantBattleCases } from "../../test";
 import { chopZonedTime } from "./chopZonedTime";
 
 describe("chopZonedTime", () => {

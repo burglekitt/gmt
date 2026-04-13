@@ -15,14 +15,14 @@ describe("getUnixNow", () => {
     const unixNowSeconds = getUnixNow("seconds");
 
     expect(unixNowSeconds).toBe(1709164800);
-    expect(isValidUnixSeconds(String(unixNowSeconds))).toBe(true);
+    expect(isValidUnixSeconds(unixNowSeconds)).toBe(true);
   });
 
   it("returns the exact mocked unix timestamp in milliseconds", () => {
     const unixNowMilliseconds = getUnixNow("milliseconds");
 
     expect(unixNowMilliseconds).toBe(1709164800000);
-    expect(isValidUnixMilliseconds(String(unixNowMilliseconds))).toBe(true);
+    expect(isValidUnixMilliseconds(unixNowMilliseconds)).toBe(true);
   });
 
   it("keeps seconds and milliseconds aligned", () => {
@@ -38,7 +38,7 @@ describe("getUnixNow", () => {
     const unixNowMilliseconds = getUnixNow();
 
     expect(unixNowMilliseconds).toBe(1709164800000);
-    expect(isValidUnixMilliseconds(String(unixNowMilliseconds))).toBe(true);
+    expect(isValidUnixMilliseconds(unixNowMilliseconds)).toBe(true);
   });
 
   it.each`
@@ -52,7 +52,7 @@ describe("getUnixNow", () => {
     ({ unit }: { unit: unknown }) => {
       const val = getUnixNow(unit as never);
       expect(val).toBe(1709164800000);
-      expect(isValidUnixMilliseconds(String(val))).toBe(true);
+      expect(isValidUnixMilliseconds(val)).toBe(true);
     },
   );
 });

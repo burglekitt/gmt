@@ -2,7 +2,7 @@ import {
   battleTestLeapYearUnix,
   sameInstantBattleCases,
   unixEpochBattleCases,
-} from "../../test/timeZonesForTests";
+} from "../../test";
 import { convertZonedToUnix } from "./convertZonedToUnix";
 
 describe("convertZonedToUnix", () => {

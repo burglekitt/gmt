@@ -1,15 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
-import {
-  localeZonedDateTimeInputByLocale,
-  localeZonedRangeInputByLocale,
-  MustTestLocales,
-} from "./localeMatrix";
-
-export {
-  localeZonedDateTimeInputByLocale,
-  localeZonedRangeInputByLocale,
-  MustTestLocales,
-};
+import { MustTestLocales } from ".";
 
 /**
  * Canonical timeZone IDs that stress offset and date-boundary behavior.
@@ -228,7 +218,7 @@ export const unixFixture = {
 
 export const fixedSystemTimezone = "Europe/Helsinki";
 
-export function mockSystemTimezone(
+export function mockSystemTimeZone(
   timeZone: string = fixedSystemTimezone,
 ): () => void {
   const defaultOptions = Intl.DateTimeFormat().resolvedOptions();

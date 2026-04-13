@@ -1,7 +1,4 @@
-import {
-  battleTestLeapYearUtc,
-  MustTestDstTimeZones,
-} from "../../test/timeZonesForTests";
+import { battleTestLeapYearUtc, MustTestDstTimeZones } from "../../test";
 import { parseUtcTime } from "./parseUtcTime";
 
 describe("parseUtcTime", () => {

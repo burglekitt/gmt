@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { weekOfYear } from "../calculate/weekOfYear";
-import { getSystemTimezone } from "./getSystemTimezone";
+import { getSystemTimeZone } from "./getSystemTimeZone";
 
 export type PlainNowUnit =
   | "year"
@@ -34,7 +34,7 @@ function isValidPlainNowUnit(unit: string): unit is PlainNowUnit {
 /**
  * Return the requested current unit value using the system timeZone.
  *
- * - Uses the runtime system timeZone via `getSystemTimezone()`.
+ * - Uses the runtime system timeZone via `getSystemTimeZone()`.
  * - Returns an empty string on invalid unit or when the system timeZone
  *   cannot be determined.
  *
@@ -44,7 +44,7 @@ function isValidPlainNowUnit(unit: string): unit is PlainNowUnit {
 export function getNowUnit(unit: PlainNowUnit): string {
   if (!isValidPlainNowUnit(String(unit ?? ""))) return "";
 
-  const timeZone = getSystemTimezone();
+  const timeZone = getSystemTimeZone();
   if (!timeZone) return "";
 
   let now: Temporal.ZonedDateTime;

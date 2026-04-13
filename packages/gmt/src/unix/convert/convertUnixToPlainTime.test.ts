@@ -1,4 +1,4 @@
-import * as getSystemTimezoneModule from "../../plain/get/getSystemTimezone";
+import * as getSystemTimeZoneModule from "../../plain/get/getSystemTimeZone";
 import { convertUnixToPlainTime } from "./convertUnixToPlainTime";
 
 describe("convertUnixToPlainTime", () => {
@@ -6,7 +6,7 @@ describe("convertUnixToPlainTime", () => {
 
   beforeEach(() => {
     timeZoneSpy = vi
-      .spyOn(getSystemTimezoneModule, "getSystemTimezone")
+      .spyOn(getSystemTimeZoneModule, "getSystemTimeZone")
       .mockReturnValue("UTC");
   });
 
@@ -20,7 +20,6 @@ describe("convertUnixToPlainTime", () => {
     ${1706659200}    | ${"seconds"}      | ${"00:00:00"}
     ${1706659200000} | ${"milliseconds"} | ${"00:00:00"}
     ${1706713200000} | ${undefined}      | ${"15:00:00"}
-    ${"1706713200"}  | ${"seconds"}      | ${"15:00:00"}
   `(
     "returns $expected for unix $unix with epochUnit $epochUnit",
     ({ unix, epochUnit, expected }) => {

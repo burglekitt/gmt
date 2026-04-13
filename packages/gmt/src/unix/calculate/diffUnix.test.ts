@@ -1,4 +1,4 @@
-import * as getSystemTimezoneModule from "../../plain/get/getSystemTimezone";
+import * as getSystemTimeZoneModule from "../../plain/get/getSystemTimeZone";
 import { diffUnix } from "./diffUnix";
 
 describe("diffUnix", () => {
@@ -6,7 +6,7 @@ describe("diffUnix", () => {
 
   beforeEach(() => {
     timeZoneSpy = vi
-      .spyOn(getSystemTimezoneModule, "getSystemTimezone")
+      .spyOn(getSystemTimeZoneModule, "getSystemTimeZone")
       .mockReturnValue("UTC");
   });
 
@@ -15,10 +15,10 @@ describe("diffUnix", () => {
   });
 
   it.each`
-    value1          | value2        | unit       | expected
-    ${"1704067200"} | ${1704153600} | ${"days"}  | ${1}
-    ${1704067200}   | ${1704153600} | ${"hours"} | ${24}
-    ${1704067200}   | ${1704153600} | ${"weeks"} | ${0}
+    value1        | value2        | unit       | expected
+    ${1704067200} | ${1704153600} | ${"days"}  | ${1}
+    ${1704067200} | ${1704153600} | ${"hours"} | ${24}
+    ${1704067200} | ${1704153600} | ${"weeks"} | ${0}
   `(
     "returns $expected for single unit difference between $value1 and $value2 for unit $unit",
     ({ value1, value2, unit, expected }) => {
@@ -29,10 +29,10 @@ describe("diffUnix", () => {
   );
 
   it.each`
-    value1          | value2        | units                | expected
-    ${"1704067200"} | ${1704153600} | ${["days"]}          | ${{ days: 1 }}
-    ${"1704067200"} | ${1704153600} | ${["hours"]}         | ${{ hours: 24 }}
-    ${"1704067200"} | ${1704326400} | ${["days", "hours"]} | ${{ days: 3, hours: 0 }}
+    value1        | value2        | units                | expected
+    ${1704067200} | ${1704153600} | ${["days"]}          | ${{ days: 1 }}
+    ${1704067200} | ${1704153600} | ${["hours"]}         | ${{ hours: 24 }}
+    ${1704067200} | ${1704326400} | ${["days", "hours"]} | ${{ days: 3, hours: 0 }}
   `(
     "returns $expected for $units difference between $value1 and $value2",
     ({ value1, value2, units, expected }) => {

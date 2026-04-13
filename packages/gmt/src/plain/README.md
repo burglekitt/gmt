@@ -48,7 +48,7 @@ Locale-aware formatting:
 
 Current time values:
 
-- `getNow`, `getSystemTimezone`, `getToday`
+- `getNow`, `getSystemTimeZone`, `getToday`
 
 ### map
 

@@ -1,5 +1,5 @@
 import { getNowUnit } from "./getNowUnit";
-import * as getSystemTimezoneModule from "./getSystemTimezone";
+import * as getSystemTimeZoneModule from "./getSystemTimeZone";
 
 describe("getNowUnit", () => {
   const systemTime = "2024-02-29T00:00:00.000Z";
@@ -10,7 +10,7 @@ describe("getNowUnit", () => {
     vi.setSystemTime(systemTime);
 
     timeZoneSpy = vi
-      .spyOn(getSystemTimezoneModule, "getSystemTimezone")
+      .spyOn(getSystemTimeZoneModule, "getSystemTimeZone")
       .mockReturnValue("UTC");
   });
 

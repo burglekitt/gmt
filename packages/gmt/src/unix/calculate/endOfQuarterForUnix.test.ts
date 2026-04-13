@@ -1,4 +1,4 @@
-import * as getSystemTimezoneModule from "../../plain/get/getSystemTimezone";
+import * as getSystemTimeZoneModule from "../../plain/get/getSystemTimeZone";
 import { endOfQuarterForUnix } from "./endOfQuarterForUnix";
 
 describe("endOfQuarterForUnix", () => {
@@ -6,7 +6,7 @@ describe("endOfQuarterForUnix", () => {
 
   beforeEach(() => {
     timeZoneSpy = vi
-      .spyOn(getSystemTimezoneModule, "getSystemTimezone")
+      .spyOn(getSystemTimeZoneModule, "getSystemTimeZone")
       .mockReturnValue("UTC");
   });
 
@@ -16,11 +16,11 @@ describe("endOfQuarterForUnix", () => {
 
   it.each`
     value         | expected
-    ${1704067200} | ${"1711929599"}
-    ${1706659200} | ${"1711929599"}
-    ${1709251200} | ${"1711929599"}
+    ${1704067200} | ${1711929599}
+    ${1706659200} | ${1711929599}
+    ${1709251200} | ${1711929599}
   `("returns $expected for value $value", ({ value, expected }) => {
-    const result = endOfQuarterForUnix(value as never, {
+    const result = endOfQuarterForUnix(value, {
       epochUnit: "seconds",
     });
     expect(result).toBe(expected);
@@ -33,10 +33,7 @@ describe("endOfQuarterForUnix", () => {
     ${1.5}
     ${null}
     ${undefined}
-  `(
-    "returns empty string for invalid value $invalidValue",
-    ({ invalidValue }) => {
-      expect(endOfQuarterForUnix(invalidValue as never)).toBe("");
-    },
-  );
+  `("returns null for invalid value $invalidValue", ({ invalidValue }) => {
+    expect(endOfQuarterForUnix(invalidValue as never)).toBe(null);
+  });
 });

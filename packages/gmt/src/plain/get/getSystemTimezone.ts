@@ -7,7 +7,7 @@
  *
  * @returns system timeZone name or an empty string on failure
  */
-export function getSystemTimezone(): string {
+export function getSystemTimeZone(): string {
   try {
     const systemTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     return systemTimeZone || "";

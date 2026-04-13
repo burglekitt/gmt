@@ -1,5 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { getSystemTimezone } from "./getSystemTimezone";
+import { getSystemTimeZone } from "./getSystemTimeZone";
 
 /**
  * Return the current PlainDate as an ISO string in the system timeZone.
@@ -11,7 +11,7 @@ import { getSystemTimezone } from "./getSystemTimezone";
  * @returns ISO 8601 PlainDate string or an empty string on error
  */
 export function getToday(): string {
-  const timeZone = getSystemTimezone();
+  const timeZone = getSystemTimeZone();
 
   if (!timeZone) {
     return "";

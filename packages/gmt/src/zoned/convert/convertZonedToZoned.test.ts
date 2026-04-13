@@ -1,4 +1,4 @@
-import { sameInstantBattleCases } from "../../test/timeZonesForTests";
+import { sameInstantBattleCases } from "../../test";
 import { parseZonedTimezone } from "../parse";
 import { convertZonedToZoned } from "./convertZonedToZoned";
 

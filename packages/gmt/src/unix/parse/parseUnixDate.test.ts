@@ -1,9 +1,9 @@
-import * as getSystemTimezoneModule from "../../plain/get/getSystemTimezone";
+import * as getSystemTimeZoneModule from "../../plain/get/getSystemTimeZone";
 import {
   battleTestLeapYearUnix,
   battleTestLeapYearUnixSeconds,
   MustTestDstTimeZones,
-} from "../../test/timeZonesForTests";
+} from "../../test";
 
 import { parseUnixDate } from "./parseUnixDate";
 
@@ -16,7 +16,7 @@ describe("parseUnixDate", () => {
     vi.setSystemTime(systemTime);
 
     timeZoneSpy = vi
-      .spyOn(getSystemTimezoneModule, "getSystemTimezone")
+      .spyOn(getSystemTimeZoneModule, "getSystemTimeZone")
       .mockReturnValue("UTC");
   });
 

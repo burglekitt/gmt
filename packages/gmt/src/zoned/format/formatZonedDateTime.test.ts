@@ -3,7 +3,7 @@ import {
   localeZonedDateTimeInputByLocale,
   MustTestLocales,
   sameInstantBattleCases,
-} from "../../test/timeZonesForTests";
+} from "../../test";
 import { formatZonedDateTime } from "./formatZonedDateTime";
 
 describe("formatZonedDateTime", () => {

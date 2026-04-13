@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { isValidAmount } from "../../internal";
-import { getSystemTimezone } from "../../plain/get";
+import { getSystemTimeZone } from "../../plain/get";
 import { convertUnixToZoned } from "../../unix/convert";
 
 /**
@@ -11,7 +11,7 @@ import { convertUnixToZoned } from "../../unix/convert";
  * - Uses system timeZone to interpret the epoch by default, or the provided IANA timeZone.
  * - Returns empty string on invalid input.
  *
- * @param value unix epoch in milliseconds or seconds
+ * @param value unix epoch in milliseconds or seconds (number)
  * @param options epochUnit optional unit specifier: "seconds" | "milliseconds", timeZone optional IANA timeZone
  * @returns ISO time string (e.g., "14:30:45") or "" on invalid input
  */
@@ -24,7 +24,7 @@ export function parseUnixTime(
 ): string {
   if (!isValidAmount(value)) return "";
 
-  const timeZone = options?.timeZone ?? getSystemTimezone();
+  const timeZone = options?.timeZone ?? getSystemTimeZone();
   if (!timeZone) return "";
 
   const zoned = options?.epochUnit

@@ -1,7 +1,7 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { isValidAmount } from "../../internal";
 import { weekOfYear } from "../../plain/calculate";
-import { getSystemTimezone } from "../../plain/get";
+import { getSystemTimeZone } from "../../plain/get";
 import { convertUnixToZoned } from "../../unix/convert";
 import type { UnixUnit } from "../validate";
 
@@ -38,7 +38,7 @@ export function parseUnixUnit(
   const numValue = typeof value === "string" ? Number(value) : value;
   if (!isValidAmount(numValue)) return "";
 
-  const timeZone = options?.timeZone ?? getSystemTimezone();
+  const timeZone = options?.timeZone ?? getSystemTimeZone();
   if (!timeZone) return "";
 
   const zoned =

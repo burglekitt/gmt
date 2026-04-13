@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { getLargestDateTimeDurationUnit } from "../../plain/calculate/getLargestDateTimeDurationUnit";
-import { getSystemTimezone } from "../../plain/get";
+import { getSystemTimeZone } from "../../plain/get";
 import { isValidDateTimeDurationUnit } from "../../plain/validate";
 import type { DateTimeDurationUnit } from "../../types";
 import { isValidTimeZone } from "../../zoned/validate";
@@ -20,8 +20,8 @@ import { isValidTimeZone } from "../../zoned/validate";
  * @returns numeric difference in the requested unit, or null on invalid input
  */
 export function diffUnix(
-  value1: string | number,
-  value2: string | number,
+  value1: number,
+  value2: number,
   units: DateTimeDurationUnit | DateTimeDurationUnit[],
   options?: {
     epochUnit?: "seconds" | "milliseconds";
@@ -29,7 +29,7 @@ export function diffUnix(
   },
 ): number | Record<DateTimeDurationUnit, number> | null {
   const epochUnit = options?.epochUnit ?? "milliseconds";
-  const timeZone = options?.timeZone ?? getSystemTimezone();
+  const timeZone = options?.timeZone ?? getSystemTimeZone();
 
   if (!timeZone || !isValidTimeZone(timeZone)) return null;
 
@@ -42,26 +42,23 @@ export function diffUnix(
     return null;
   }
 
-  const numValue1 = typeof value1 === "string" ? Number(value1) : value1;
-  const numValue2 = typeof value2 === "string" ? Number(value2) : value2;
-
   if (
-    !Number.isFinite(numValue1) ||
-    !Number.isInteger(numValue1) ||
-    numValue1 < 0 ||
-    !Number.isFinite(numValue2) ||
-    !Number.isInteger(numValue2) ||
-    numValue2 < 0
+    !Number.isFinite(value1) ||
+    !Number.isInteger(value1) ||
+    value1 < 0 ||
+    !Number.isFinite(value2) ||
+    !Number.isInteger(value2) ||
+    value2 < 0
   ) {
     return null;
   }
 
   try {
     const instant1 = Temporal.Instant.fromEpochMilliseconds(
-      epochUnit === "seconds" ? numValue1 * 1000 : numValue1,
+      epochUnit === "seconds" ? value1 * 1000 : value1,
     );
     const instant2 = Temporal.Instant.fromEpochMilliseconds(
-      epochUnit === "seconds" ? numValue2 * 1000 : numValue2,
+      epochUnit === "seconds" ? value2 * 1000 : value2,
     );
 
     const zdt1 = instant1.toZonedDateTimeISO(timeZone);

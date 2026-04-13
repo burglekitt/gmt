@@ -7,7 +7,7 @@ import {
 import { isValidTimeZone } from "../../zoned/validate";
 
 export function convertUnixToZoned(
-  value: number | string,
+  value: number,
   timeZone: string,
   ...unitInput: [unit?: UnixUnit]
 ): string {
@@ -16,20 +16,17 @@ export function convertUnixToZoned(
    * specified `timeZone`.
    *
    * - `value` is milliseconds by default, or seconds when `unit` is "seconds".
-   * - Accepts both number and string inputs.
    * - Returns empty string "" for invalid inputs (amount, timeZone, or unit).
    *
-   * @param value epoch value (number or string)
+   * @param value epoch value (number)
    * @param timeZone IANA timeZone identifier
    * @param unit optional unit, "seconds" or "milliseconds"
    * @returns zoned ISO 8601 string or empty string when invalid
    */
   const resolvedUnit = unitInput.length === 0 ? "milliseconds" : unitInput[0];
 
-  const numValue = typeof value === "string" ? Number(value) : value;
-
   if (
-    !isValidAmount(numValue) ||
+    !isValidAmount(value) ||
     !isValidTimeZone(timeZone) ||
     !isValidUnixUnit(resolvedUnit ?? "")
   ) {
@@ -38,7 +35,7 @@ export function convertUnixToZoned(
 
   try {
     const instant = Temporal.Instant.fromEpochMilliseconds(
-      resolvedUnit === "seconds" ? numValue * 1000 : numValue,
+      resolvedUnit === "seconds" ? value * 1000 : value,
     );
 
     return instant.toZonedDateTimeISO(timeZone).toString();

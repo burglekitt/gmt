@@ -1,3 +1,3 @@
 export * from "./getNow";
-export * from "./getSystemTimezone";
+export * from "./getSystemTimeZone";
 export * from "./getToday";
