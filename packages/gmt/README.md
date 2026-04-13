@@ -13,19 +13,6 @@ It wraps `@js-temporal/polyfill` behind a smaller, more opinionated API aimed at
 
 **Status:** pre-alpha. Expect API movement while the surface is still being filled out.
 
-## Design Philosophy
-
-GMT enforces a strict input/output contract to keep behavior predictable and auditable:
-
-- **Explicit inputs only**: Public APIs accept clearly defined shapes — ISO 8601 date/time strings, IANA timezone identifiers, or numeric Unix epoch values (explicitly seconds or milliseconds). We do not attempt to parse arbitrary or ambiguous date formats.
-- **Predictable outputs**: Helpers return normalized values (ISO strings, numbers, booleans, or arrays). Invalid input yields typed fallbacks (`""`, `null`, or `false`) instead of throwing.
-- **No fuzzy parsing**: Avoid "throw everything at the wall" patterns found in permissive libraries. If you need permissive parsing, perform it outside of `@burglekitt/gmt` and then canonicalize to the strict shapes before calling into gmt.
-- **Developer comfort with standards**: The library's goal is to make developers comfortable and deliberate with ISO 8601, IANA timezones, UTC instants, and Unix epochs by keeping APIs small and explicit.
-
-These rules make tests deterministic, reduce timezone/DST surprises, and simplify reasoning about time-related code in production systems.
-
----
-
 ## Install
 
 ```bash
@@ -36,7 +23,30 @@ npm install @burglekitt/gmt
 pnpm add @burglekitt/gmt
 ```
 
----
+## Design Philosophy
+
+GMT enforces a strict input/output contract to keep behavior predictable and auditable:
+
+- **Explicit inputs only**: Public APIs accept clearly defined shapes — ISO 8601 date/time strings, IANA timezone identifiers, or numeric Unix epoch values (explicitly seconds or milliseconds). We do not attempt to parse arbitrary or ambiguous date formats.
+- **Predictable outputs**: Helpers return normalized values (ISO strings, numbers, booleans, or arrays). Invalid input yields typed fallbacks (`""`, `null`, or `false`) instead of throwing.
+- **No fuzzy parsing**: Avoid "throw everything at the wall" patterns found in permissive libraries. If you need permissive parsing, perform it outside of `@burglekitt/gmt` and then canonicalize to the strict shapes before calling into gmt.
+- **Developer comfort with standards**: The library's goal is to make developers comfortable and deliberate with ISO 8601, IANA timezones, UTC instants, and Unix epochs by keeping APIs small and explicit.
+
+## Core Rules
+
+| Rule | Current behavior |
+|---|---|
+| String-first API | Public helpers consume ISO strings and return normalized strings where appropriate |
+| Temporal-only internals | `Temporal` does the parsing and timezone math |
+| Plain/zoned separation | `plain/*` is timezone-free, `zoned/*` is timezone-aware |
+| No-throw public helpers | Invalid input returns a typed fallback instead of throwing |
+
+Invalid input fallbacks are consistent across the library:
+
+- string-returning helpers return `""`
+- number-returning helpers return `null`
+- boolean-returning helpers return `false`
+- array-returning helpers return `[]`
 
 ## Package Layout
 
@@ -57,26 +67,6 @@ You can also import subpaths directly:
 import { addDate } from "@burglekitt/gmt/plain/calculate";
 import { getNow } from "@burglekitt/gmt/plain/get";
 ```
-
----
-
-## Core Rules
-
-| Rule | Current behavior |
-|---|---|
-| String-first API | Public helpers consume ISO strings and return normalized strings where appropriate |
-| Temporal-only internals | `Temporal` does the parsing and timezone math |
-| Plain/zoned separation | `plain/*` is timezone-free, `zoned/*` is timezone-aware |
-| No-throw public helpers | Invalid input returns a typed fallback instead of throwing |
-
-Invalid input fallbacks are consistent across the library:
-
-- string-returning helpers return `""`
-- number-returning helpers return `null`
-- boolean-returning helpers return `false`
-- array-returning helpers return `[]`
-
----
 
 ## Quick Start
 
@@ -99,61 +89,14 @@ isBeforeDateTime("2026-03-17T09:00:00", "2026-03-17T10:00:00");
 // true
 ```
 
-### Plain get, parse, map, and validate helpers
-
-```typescript
-import { getNow, getToday, getUnixNow } from "@burglekitt/gmt/plain/get";
-import { mapDatesInRange, mapDaysInMonth } from "@burglekitt/gmt/plain/map";
-import { parseDateUnit } from "@burglekitt/gmt/plain/parse";
-import { isValidDate, isValidUnixMilliseconds } from "@burglekitt/gmt/plain/validate";
-
-getNow();
-// "2026-03-18T11:42:33.123"
-
-getToday();
-// "2026-03-18"
-
-getUnixNow("milliseconds");
-// 1710685845000
-
-mapDaysInMonth("2024-02");
-// ["2024-02-01", ..., "2024-02-29"]
-
-mapDatesInRange("2024-03-01", "2024-03-05", 2);
-// ["2024-03-01", "2024-03-03", "2024-03-05"]
-
-parseDateUnit("2024-03-17", "month");
-// "03"
-
-isValidDate("2024-02-29");
-// true
-
-isValidUnixMilliseconds("1710685845000");
-// true
-```
-
-### Zoned arithmetic, conversion, and formatting
+### Zoned operations
 
 ```typescript
 import { addZoned } from "@burglekitt/gmt/zoned/calculate";
-import {
-  convertUtcToUnix,
-  convertUtcToUnix,
-  convertUtcToTimezone,
-} from "@burglekitt/gmt/zoned/convert";
 import { formatZonedDateTime } from "@burglekitt/gmt/zoned/format";
 
 addZoned("2026-03-07T23:00:00-05:00[America/New_York]", 2, "hour");
-// "2026-03-08T01:00:00-05:00[America/New_York]" or DST-adjusted equivalent depending on the instant
-
-convertTimezoneToUnix("2024-03-17T10:30:45-04:00[America/New_York]", "seconds");
-// 1710685845
-
-convertUtcToUnix("2024-03-17T14:30:45Z", "seconds");
-// 1710685845
-
-convertUtcToTimezone("2024-03-17T14:30:45Z", "Pacific/Apia");
-// zoned datetime in Pacific/Apia at the same instant
+// "2026-03-08T01:00:00-05:00[America/New_York]"
 
 formatZonedDateTime("2024-03-17T14:30:45+00:00[UTC]", "en-US", {
   dateStyle: "full",
@@ -162,348 +105,32 @@ formatZonedDateTime("2024-03-17T14:30:45+00:00[UTC]", "en-US", {
 // locale-dependent non-empty formatted string
 ```
 
-### Zoned get, map, parse, and validate helpers
+### Unix and UTC helpers
 
 ```typescript
-import { getUtcNow, getZonedDateTime, getZonedNow, getZonedToday } from "@burglekitt/gmt/zoned/get";
-import { mapZonedDatesInRange, mapZonedHoursInDay } from "@burglekitt/gmt/zoned/map";
-import { parseZonedDate, parseZonedTimezone } from "@burglekitt/gmt/zoned/parse";
-import { isValidTimezone, isValidZonedDateTime } from "@burglekitt/gmt/zoned/validate";
+import { getUnixNow } from "@burglekitt/gmt/unix/get";
+import { getUtcNow } from "@burglekitt/gmt/utc/get";
+import { convertUnixToPlainDate } from "@burglekitt/gmt/unix/convert";
 
-getZonedNow("UTC");
-// current zoned datetime in UTC
+getUnixNow("milliseconds");
+// 1710685845000
 
 getUtcNow();
-// current UTC instant string
+// "2026-03-18T11:42:33.123Z"
 
-getZonedToday("America/Chicago");
-// local ISO date string for that timezone
-
-getZonedDateTime("2024-03-17T14:30:45", "Europe/Helsinki");
-// "2024-03-17T14:30:45+02:00[Europe/Helsinki]"
-
-mapZonedHoursInDay("2024-03-17T12:00:00+00:00[UTC]");
-// 24 hourly zoned datetimes for that local day
-
-mapZonedDatesInRange(
-  "2024-03-17T10:00:00-05:00[America/Chicago]",
-  "2024-03-19T10:00:00-05:00[America/Chicago]",
-);
-// ["2024-03-17", "2024-03-18", "2024-03-19"]
-
-parseZonedDate("2024-03-17T14:30:45+00:00[UTC]");
+convertUnixToPlainDate(1710685845);
 // "2024-03-17"
-
-parseZonedTimezone("2024-03-17T14:30:45+00:00[UTC]");
-// "UTC"
-
-isValidTimezone("Asia/Kathmandu");
-// true
-
-isValidZonedDateTime("2024-03-17T14:30:45+00:00[UTC]");
-// true
 ```
-
----
 
 ## API Surface
 
-### `@burglekitt/gmt/plain/calculate`
-
-- `addDate`
-- `addDateTime`
-- `addTime`
-- `diffDate`
-- `diffDateTime`
-- `diffTime`
-- `endOfDate`
-- `endOfDateTime`
-- `endOfQuarterForDate`
-- `endOfQuarterForDateTime`
-- `endOfTime`
-- `getLargestDateDurationUnit`
-- `getLargestDateTimeDurationUnit`
-- `getLargestTimeDurationUnit`
-- `getQuarterForDate`
-- `getQuarterForDateTime`
-- `maxDate`
-- `maxDateTime`
-- `maxTime`
-- `minDate`
-- `minDateTime`
-- `minTime`
-- `sortDates`
-- `sortDateTimes`
-- `sortTimes`
-- `startOfDate`
-- `startOfDateTime`
-- `startOfQuarterForDate`
-- `startOfQuarterForDateTime`
-- `startOfTime`
-- `subtractDate`
-- `subtractDateTime`
-- `subtractTime`
-- `weekOfYear`
-
-### `@burglekitt/gmt/plain/chop`
-
-- `chopDate`
-- `chopMilliseconds`
-- `chopSeconds`
-- `chopTime`
-- `chopUtc`
-
-### `@burglekitt/gmt/plain/compare`
-
-- `areDatesEqual`
-- `areDateTimesEqual`
-- `areTimesEqual`
-- `isAfterDate`
-- `isAfterDateTime`
-- `isAfterTime`
-- `isBeforeDate`
-- `isBeforeDateTime`
-- `isBeforeTime`
-- `isBetweenDate`
-- `isBetweenDateTime`
-- `isBetweenTime`
-
-### `@burglekitt/gmt/plain/format`
-
-- `formatDate`
-- `formatDateTime`
-- `formatTime`
-
-### `@burglekitt/gmt/plain/get`
-
-- `getNow`
-- `getSystemTimezone`
-- `getToday`
-
-### `@burglekitt/gmt/plain/map`
-
-- `mapDatesInRange`
-- `mapDaysInMonth`
-
-### `@burglekitt/gmt/plain/parse`
-
-- `parseDateTimeUnit`
-- `parseDateUnit`
-- `parseTimeUnit`
-
-### `@burglekitt/gmt/plain/validate`
-
-- `isLeapSecond`
-- `isValidDate`
-- `isValidDateDurationUnit`
-- `isValidDateRange`
-- `isValidDateTime`
-- `isValidDateTimeDurationUnit`
-- `isValidIsoDateLike`
-- `isValidTime`
-- `isValidTimeDurationUnit`
-
-### `@burglekitt/gmt/zoned/calculate`
-
-- `addZoned`
-- `diffZoned`
-- `endOfQuarterForZoned`
-- `endOfZoned`
-- `getQuarterForZoned`
-- `maxZoned`
-- `minZoned`
-- `sortZoned`
-- `startOfQuarterForZoned`
-- `startOfZoned`
-- `subtractZoned`
-
-### `@burglekitt/gmt/zoned/chop`
-
-- `chopZonedDate`
-- `chopZonedDateTime`
-- `chopZonedMilliseconds`
-- `chopZonedSeconds`
-- `chopZonedTime`
-- `chopZonedTimezone`
-
-### `@burglekitt/gmt/zoned/compare`
-
-- `areZonedEqual`
-- `isAfterZoned`
-- `isBeforeZoned`
-- `isBetweenZoned`
-
-### `@burglekitt/gmt/zoned/convert`
-
-- `convertZonedToUnix`
-- `convertZonedToUtc`
-- `convertZonedToZoned`
-
-### `@burglekitt/gmt/zoned/format`
-
-- `formatZonedDateTime`
-- `formatZonedRange`
-
-### `@burglekitt/gmt/zoned/get`
-
-- `getZonedDate`
-- `getZonedDateTime`
-- `getZonedNow`
-- `getZonedNowUnit`
-- `getZonedToday`
-
-### `@burglekitt/gmt/zoned/map`
-
-- `mapZonedDatesInRange`
-- `mapZonedHoursInDay`
-
-### `@burglekitt/gmt/zoned/parse`
-
-- `parseZonedDate`
-- `parseZonedDateTime`
-- `parseZonedTime`
-- `parseZonedTimezone`
-- `parseZonedUnit`
-
-### `@burglekitt/gmt/zoned/validate`
-
-- `isValidTimezone`
-- `isValidZonedDateTime`
-
-### `@burglekitt/gmt/regex`
-
-- `year`
-- `month`
-- `day`
-- `plainDate`
-- `plainDateTime`
-- `plainTime`
-- `hour`
-- `minute`
-- `second`
-- `fractionalSecond`
-- `millisecond`
-- `leapSecond`
-- `timezoneLike`
-- `unixSeconds`
-- `unixMilliseconds`
-- `utcDateTime`
-
-### `@burglekitt/gmt/unix/calculate`
-
-- `addUnix`
-- `diffUnix`
-- `endOfQuarterForUnix`
-- `endOfUnix`
-- `isBetweenUnix`
-- `maxUnix`
-- `minUnix`
-- `sortUnix`
-- `startOfQuarterForUnix`
-- `startOfUnix`
-- `subtractUnix`
-
-### `@burglekitt/gmt/unix/convert`
-
-- `convertUnixToPlainDate`
-- `convertUnixToPlainDateTime`
-- `convertUnixToPlainTime`
-- `convertUnixToUtc`
-- `convertUnixToZoned`
-
-### `@burglekitt/gmt/unix/get`
-
-- `getUnixNow`
-
-### `@burglekitt/gmt/unix/parse`
-
-- `parseUnixDate`
-- `parseUnixTime`
-- `parseUnixUnit`
-
-### `@burglekitt/gmt/unix/validate`
-
-- `isValidUnixMilliseconds`
-- `isValidUnixSeconds`
-- `isValidUnixUnit`
-
-### `@burglekitt/gmt/utc/calculate`
-
-- `addUtc`
-- `diffUtc`
-- `endOfQuarterForUtc`
-- `endOfUtc`
-- `isBetweenUtc`
-- `maxUtc`
-- `minUtc`
-- `sortUtc`
-- `startOfQuarterForUtc`
-- `startOfUtc`
-- `subtractUtc`
-
-### `@burglekitt/gmt/utc/chop`
-
-- `chopUtc`
-
-### `@burglekitt/gmt/utc/convert`
-
-- `convertUtcToPlainDate`
-- `convertUtcToPlainDateTime`
-- `convertUtcToPlainTime`
-- `convertUtcToUnix`
-- `convertUtcToZoned`
-
-### `@burglekitt/gmt/utc/get`
-
-- `getUtcNow`
-
-### `@burglekitt/gmt/utc/parse`
-
-- `parseUtcDate`
-- `parseUtcTime`
-- `parseUtcUnit`
-
-### `@burglekitt/gmt/utc/validate`
-
-- `isValidUtc`
-
----
-
-## TODO (Feature Gaps)
-
-Prioritized roadmap and parity checks against Luxon, Moment, and date-fns.
-
-Completed:
-- ✅ min/max/sort for dates, datetimes, times (bounded values and collection selectors)
-- ✅ Additional start/end boundaries (startOfDate/endOfDate with "week" unit covers startOfWeek/endOfWeek)
-
-In progress:
-- 1. Interval primitives and helpers (`Interval` type, overlap checks, containment checks, interval sorting, interval normalization/merge).
-- 3. Additional month/year boundaries where missing.
-
-Future:
-- Duration utilities (interval-to-duration, ISO duration formatting, optional human-readable duration formatting).
-- Calendar/relative formatting helpers (`formatRelative`, distance-to-now style outputs).
-- Serialization adapters package (`gmt-serializers`) for SuperJSON-style Temporal round-tripping.
-- Parsing pack for non-ISO but common user inputs (`YYYY/MM/DD`, `HHmm`, month-name parsing) in a separate optional package.
-- Business-day helpers (`addBusinessDays`, `differenceInBusinessDays`) as an optional domain module.
-- Optional validation package (`gmt-zod`) kept separate from core `@burglekitt/gmt`.
-- Descriptive parsing errors for timezones, GMT offsets
----
-
-## Testing Matrix
-
-The zoned suite is intentionally biased toward timezone edge cases rather than only UTC happy paths.
-
-- `Pacific/Niue` and `Pacific/Apia` exercise far-edge calendar separation at the same instant.
-- `UTC` and `Etc/GMT` cover baseline zero-offset handling.
-- `Europe/Helsinki`, `America/Chicago`, and `Asia/Shanghai` cover common regional behavior.
-- `Asia/Kolkata`, `Asia/Kathmandu`, and `Pacific/Chatham` cover half-hour and 45-minute offset paths.
-- `Asia/Calcutta` is included as a timezone alias validation case.
-
-This matrix is used across zoned compare, convert, format, get, map, parse, and validate tests.
-
----
+For the complete API listing, see the namespace documentation on GitHub:
+
+- [Plain API](https://github.com/burglekitt/gmt/tree/main/packages/gmt/src/plain) — timezone-free operations
+- [Zoned API](https://github.com/burglekitt/gmt/tree/main/packages/gmt/src/zoned) — IANA timezone-aware operations
+- [Unix API](https://github.com/burglekitt/gmt/tree/main/packages/gmt/src/unix) — Unix epoch utilities
+- [UTC API](https://github.com/burglekitt/gmt/tree/main/packages/gmt/src/utc) — UTC instant utilities
+- [Regex API](https://github.com/burglekitt/gmt/tree/main/packages/gmt/src/regex) — composable regex patterns
 
 ## License
 

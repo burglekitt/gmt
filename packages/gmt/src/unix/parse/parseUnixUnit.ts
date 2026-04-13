@@ -23,26 +23,28 @@ export type PlainNowUnit =
  *
  * - `value` is a numeric epoch in milliseconds by default, or seconds when
  *   `epochUnit` is "seconds".
+ * - Accepts both number and string inputs.
  * - Uses system timeZone to interpret the epoch by default, or the provided IANA timeZone.
  * - Returns empty string on invalid input.
  */
 export function parseUnixUnit(
-  value: number,
+  value: number | string,
   unit: PlainNowUnit,
   options?: {
     epochUnit?: UnixUnit;
     timeZone?: string;
   },
 ): string {
-  if (!isValidAmount(value)) return "";
+  const numValue = typeof value === "string" ? Number(value) : value;
+  if (!isValidAmount(numValue)) return "";
 
   const timeZone = options?.timeZone ?? getSystemTimezone();
   if (!timeZone) return "";
 
   const zoned =
     typeof options?.epochUnit === "undefined"
-      ? convertUnixToZoned(value, timeZone)
-      : convertUnixToZoned(value, timeZone, options.epochUnit);
+      ? convertUnixToZoned(numValue, timeZone)
+      : convertUnixToZoned(numValue, timeZone, options.epochUnit);
   if (!zoned) return "";
 
   try {
