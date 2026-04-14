@@ -1,34 +1,13 @@
 import { Temporal } from "@js-temporal/polyfill";
+import type { DateTimeUnit } from "../../types";
 import { weekOfYear } from "../calculate/weekOfYear";
+import { isValidDateTimeUnit } from "../validate";
 import { getSystemTimeZone } from "./getSystemTimeZone";
 
-export type PlainNowUnit =
-  | "year"
-  | "month"
-  | "week"
-  | "day"
-  | "dayOfWeek"
-  | "hour"
-  | "minute"
-  | "second"
-  | "millisecond"
-  | "microsecond"
-  | "nanosecond";
+type NowUnit = DateTimeUnit | "dayOfWeek";
 
-function isValidPlainNowUnit(unit: string): unit is PlainNowUnit {
-  return [
-    "year",
-    "month",
-    "week",
-    "day",
-    "dayOfWeek",
-    "hour",
-    "minute",
-    "second",
-    "millisecond",
-    "microsecond",
-    "nanosecond",
-  ].includes(unit);
+function isValidPlainNowUnit(unit: string): unit is NowUnit {
+  return isValidDateTimeUnit(unit) || ["dayOfWeek"].includes(unit);
 }
 
 /**
@@ -41,7 +20,7 @@ function isValidPlainNowUnit(unit: string): unit is PlainNowUnit {
  * @param unit unit to extract from current local time
  * @returns string representation of the requested unit or "" when invalid
  */
-export function getNowUnit(unit: PlainNowUnit): string {
+export function getNowUnit(unit: NowUnit): string {
   if (!isValidPlainNowUnit(String(unit ?? ""))) return "";
 
   const timeZone = getSystemTimeZone();

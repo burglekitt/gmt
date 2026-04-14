@@ -1,9 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
+import { isWeekStartsOn } from "../../internal/isWeekStartsOn";
 import { isValidDate } from "../validate";
-
-function isWeekStartsOn(value: unknown): value is "monday" | "sunday" {
-  return value === "monday" || value === "sunday";
-}
 
 /**
  * Calculate the week number of the year for a given ISO 8601 date string.
