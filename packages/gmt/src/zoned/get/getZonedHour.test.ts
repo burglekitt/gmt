@@ -1,3 +1,4 @@
+import { TomorrowTimeZone, YesterdayTimeZone } from "../../test";
 import { getZonedHour } from "./getZonedHour";
 
 describe("getZonedHour", () => {
@@ -13,10 +14,10 @@ describe("getZonedHour", () => {
   });
 
   it.each`
-    timeZone          | expected
-    ${"UTC"}          | ${"00"}
-    ${"Pacific/Apia"} | ${"13"}
-    ${"Pacific/Niue"} | ${"13"}
+    timeZone             | expected
+    ${"UTC"}             | ${"00"}
+    ${YesterdayTimeZone} | ${"13"}
+    ${TomorrowTimeZone}  | ${"13"}
   `("returns $expected for timeZone $timeZone", ({ timeZone, expected }) => {
     expect(getZonedHour(timeZone)).toBe(expected);
   });

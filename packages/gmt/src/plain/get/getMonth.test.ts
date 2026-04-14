@@ -1,3 +1,4 @@
+import { TomorrowTimeZone, YesterdayTimeZone } from "../../test";
 import { getMonth } from "./getMonth";
 import * as getSystemTimeZoneModule from "./getSystemTimeZone";
 
@@ -27,4 +28,17 @@ describe("getMonth", () => {
     timeZoneSpy.mockReturnValue("");
     expect(getMonth()).toBe("");
   });
+
+  it.each`
+    timeZone             | expected
+    ${"UTC"}             | ${"02"}
+    ${YesterdayTimeZone} | ${"02"}
+    ${TomorrowTimeZone}  | ${"02"}
+  `(
+    "yesterday / today tests: returns $expected for system timeZone $timeZone",
+    ({ timeZone, expected }) => {
+      timeZoneSpy.mockReturnValue(timeZone);
+      expect(getMonth()).toBe(expected);
+    },
+  );
 });

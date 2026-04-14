@@ -1,3 +1,9 @@
+import {
+  TomorrowTimeZone,
+  TomorrowTimeZoneGmtOffset,
+  YesterdayTimeZone,
+  YesterdayTimeZoneGmtOffset,
+} from "../../test";
 import { parseZonedDateTime } from "./parseZonedDateTime";
 
 describe("parseZonedDateTime", () => {
@@ -16,13 +22,24 @@ describe("parseZonedDateTime", () => {
     ${"2024-02-29T08:00:00+08:00[Asia/Shanghai]"}       | ${"2024-02-29T08:00:00"}
     ${"2024-02-29T11:00:00+11:00[Australia/Lord_Howe]"} | ${"2024-02-29T11:00:00"}
     ${"2024-02-29T13:45:00+13:45[Pacific/Chatham]"}     | ${"2024-02-29T13:45:00"}
-    ${"2024-02-29T13:00:00+13:00[Pacific/Apia]"}        | ${"2024-02-29T13:00:00"}
-    ${"2024-02-28T13:00:00-11:00[Pacific/Niue]"}        | ${"2024-02-28T13:00:00"}
     ${"2024-02-28T19:00:00-05:00[America/New_York]"}    | ${"2024-02-28T19:00:00"}
     ${"2024-02-28T18:00:00-06:00[America/Chicago]"}     | ${"2024-02-28T18:00:00"}
     ${"2024-02-28T17:00:00-07:00[America/Phoenix]"}     | ${"2024-02-28T17:00:00"}
   `(
     "parses valid zoned date time string $value returning $expected",
+    ({ value, expected }) => {
+      expect(parseZonedDateTime(value)).toBe(expected);
+    },
+  );
+
+  // yesterday today tests
+  it.each`
+    value                                                                       | expected
+    ${"2024-02-29T00:00:00+00:00[UTC]"}                                         | ${"2024-02-29T00:00:00"}
+    ${`2024-02-29T12:00:00${TomorrowTimeZoneGmtOffset}[${TomorrowTimeZone}]`}   | ${"2024-02-29T12:00:00"}
+    ${`2024-02-28T12:00:00${YesterdayTimeZoneGmtOffset}[${YesterdayTimeZone}]`} | ${"2024-02-28T12:00:00"}
+  `(
+    "yesterday / today tests: parses valid zoned date time string $value returning $expected",
     ({ value, expected }) => {
       expect(parseZonedDateTime(value)).toBe(expected);
     },

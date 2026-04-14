@@ -1,4 +1,8 @@
-import { battleTestTimeZones } from "../../test";
+import {
+  battleTestTimeZones,
+  TomorrowTimeZone,
+  YesterdayTimeZone,
+} from "../../test";
 import { getZonedDate } from "./getZonedDate";
 
 describe("getZonedDate", () => {
@@ -12,6 +16,16 @@ describe("getZonedDate", () => {
       expect(getZonedDate(value, timeZone)).toBe(expected);
     },
   );
+
+  // yesterday today tests
+  it.each`
+    timeZone             | expected
+    ${"UTC"}             | ${"2024-02-29"}
+    ${YesterdayTimeZone} | ${"2024-02-29"}
+    ${TomorrowTimeZone}  | ${"2024-02-29"}
+  `("returns $expected for timeZone $timeZone", ({ timeZone, expected }) => {
+    expect(getZonedDate("2024-02-29", timeZone)).toBe(expected);
+  });
 
   it.each`
     timeZone
@@ -28,8 +42,6 @@ describe("getZonedDate", () => {
     ${"Asia/Shanghai"}
     ${"Australia/Lord_Howe"}
     ${"Pacific/Chatham"}
-    ${"Pacific/Apia"}
-    ${"Pacific/Niue"}
     ${"America/New_York"}
     ${"America/Chicago"}
     ${"America/Phoenix"}

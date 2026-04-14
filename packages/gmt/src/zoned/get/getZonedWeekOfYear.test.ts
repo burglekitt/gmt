@@ -1,3 +1,4 @@
+import { TomorrowTimeZone, YesterdayTimeZone } from "../../test";
 import { getZonedWeekOfYear } from "./getZonedWeekOfYear";
 
 describe("getZonedWeekOfYear", () => {
@@ -13,12 +14,12 @@ describe("getZonedWeekOfYear", () => {
   });
 
   it.each`
-    timeZone
-    ${"UTC"}
-    ${"Pacific/Apia"}
-    ${"Pacific/Niue"}
-  `("returns current week for timeZone $timeZone", ({ timeZone }) => {
-    expect(getZonedWeekOfYear(timeZone)).toBe(9);
+    timeZone             | expected
+    ${"UTC"}             | ${9}
+    ${YesterdayTimeZone} | ${9}
+    ${TomorrowTimeZone}  | ${9}
+  `("returns current week for timeZone $timeZone", ({ timeZone, expected }) => {
+    expect(getZonedWeekOfYear(timeZone)).toBe(expected);
   });
 
   it("returns null for invalid timeZone", () => {

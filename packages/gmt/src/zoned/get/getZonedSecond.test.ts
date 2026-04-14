@@ -1,3 +1,4 @@
+import { TomorrowTimeZone, YesterdayTimeZone } from "../../test";
 import { getZonedSecond } from "./getZonedSecond";
 
 describe("getZonedSecond", () => {
@@ -15,8 +16,8 @@ describe("getZonedSecond", () => {
   it.each`
     timeZone
     ${"UTC"}
-    ${"Pacific/Apia"}
-    ${"Pacific/Niue"}
+    ${YesterdayTimeZone}
+    ${TomorrowTimeZone}
   `("returns current second for timeZone $timeZone", ({ timeZone }) => {
     const result = getZonedSecond(timeZone);
     expect(result).toMatch(/^\d{2}$/);

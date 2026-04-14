@@ -1,3 +1,4 @@
+import { TomorrowTimeZone, YesterdayTimeZone } from "../../test";
 import { getZonedMinute } from "./getZonedMinute";
 
 describe("getZonedMinute", () => {
@@ -13,14 +14,17 @@ describe("getZonedMinute", () => {
   });
 
   it.each`
-    timeZone
-    ${"UTC"}
-    ${"Pacific/Apia"}
-    ${"Pacific/Niue"}
-  `("returns current minute for timeZone $timeZone", ({ timeZone }) => {
-    const result = getZonedMinute(timeZone);
-    expect(result).toMatch(/^\d{2}$/);
-  });
+    timeZone             | expected
+    ${"UTC"}             | ${"00"}
+    ${YesterdayTimeZone} | ${"00"}
+    ${TomorrowTimeZone}  | ${"00"}
+  `(
+    "returns current minute for timeZone $timeZone",
+    ({ timeZone, expected }) => {
+      const result = getZonedMinute(timeZone);
+      expect(result).toBe(expected);
+    },
+  );
 
   it("returns empty string for invalid timeZone", () => {
     expect(getZonedMinute("invalid")).toBe("");

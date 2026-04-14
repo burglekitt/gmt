@@ -1,3 +1,4 @@
+import { TomorrowTimeZone, YesterdayTimeZone } from "../../test";
 import { getMicrosecond } from "./getMicrosecond";
 import * as getSystemTimeZoneModule from "./getSystemTimeZone";
 
@@ -28,4 +29,18 @@ describe("getMicrosecond", () => {
     timeZoneSpy.mockReturnValue("");
     expect(getMicrosecond()).toBe("");
   });
+
+  it.each`
+    timeZone
+    ${"UTC"}
+    ${YesterdayTimeZone}
+    ${TomorrowTimeZone}
+  `(
+    "yesterday / today tests: returns a valid microsecond for system timeZone $timeZone",
+    ({ timeZone }) => {
+      timeZoneSpy.mockReturnValue(timeZone);
+      const result = getMicrosecond();
+      expect(result).toMatch(/^\d{3}$/);
+    },
+  );
 });

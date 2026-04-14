@@ -1,3 +1,4 @@
+import { TomorrowTimeZone, YesterdayTimeZone } from "../../test";
 import * as getSystemTimeZoneModule from "./getSystemTimeZone";
 import { getYear } from "./getYear";
 
@@ -27,4 +28,17 @@ describe("getYear", () => {
     timeZoneSpy.mockReturnValue("");
     expect(getYear()).toBe("");
   });
+
+  it.each`
+    timeZone             | expected
+    ${"UTC"}             | ${"2024"}
+    ${YesterdayTimeZone} | ${"2024"}
+    ${TomorrowTimeZone}  | ${"2024"}
+  `(
+    "yesterday / today tests: returns $expected for system timeZone $timeZone",
+    ({ timeZone, expected }) => {
+      timeZoneSpy.mockReturnValue(timeZone);
+      expect(getYear()).toBe(expected);
+    },
+  );
 });

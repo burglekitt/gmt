@@ -1,5 +1,10 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { battleTestTimeZones, fixedNowInstant } from "../../test";
+import {
+  battleTestTimeZones,
+  fixedNowInstant,
+  TomorrowTimeZone,
+  YesterdayTimeZone,
+} from "../../test";
 import { parseZonedTimezone } from "../parse";
 import { getZonedNow } from "./getZonedNow";
 
@@ -11,6 +16,21 @@ describe("getZonedNow", () => {
 
   afterEach(() => {
     vi.useRealTimers();
+  });
+
+  // yesterday today tests
+  it.each`
+    timeZone             | expected
+    ${"UTC"}             | ${"2024-02-29T00:00:00.000+00:00[UTC]"}
+    ${YesterdayTimeZone} | ${"2024-02-28T13:00:00.000-11:00[Pacific/Niue]"}
+    ${TomorrowTimeZone}  | ${"2024-02-29T13:00:00.000+13:00[Pacific/Apia]"}
+  `("returns $expected for timeZone $timeZone", ({ timeZone, expected }) => {
+    const value = getZonedNow(timeZone);
+    const normalizedValue = Temporal.ZonedDateTime.from(value).toString({
+      smallestUnit: "milliseconds",
+    });
+
+    expect(normalizedValue).toBe(expected);
   });
 
   it.each`
@@ -28,8 +48,8 @@ describe("getZonedNow", () => {
     ${"Asia/Shanghai"}       | ${"2024-02-29T08:00:00.000+08:00[Asia/Shanghai]"}
     ${"Australia/Lord_Howe"} | ${"2024-02-29T11:00:00.000+11:00[Australia/Lord_Howe]"}
     ${"Pacific/Chatham"}     | ${"2024-02-29T13:45:00.000+13:45[Pacific/Chatham]"}
-    ${"Pacific/Apia"}        | ${"2024-02-29T13:00:00.000+13:00[Pacific/Apia]"}
-    ${"Pacific/Niue"}        | ${"2024-02-28T13:00:00.000-11:00[Pacific/Niue]"}
+    ${TomorrowTimeZone}      | ${"2024-02-29T13:00:00.000+13:00[Pacific/Apia]"}
+    ${YesterdayTimeZone}     | ${"2024-02-28T13:00:00.000-11:00[Pacific/Niue]"}
     ${"America/New_York"}    | ${"2024-02-28T19:00:00.000-05:00[America/New_York]"}
     ${"America/Chicago"}     | ${"2024-02-28T18:00:00.000-06:00[America/Chicago]"}
     ${"America/Phoenix"}     | ${"2024-02-28T17:00:00.000-07:00[America/Phoenix]"}
@@ -37,12 +57,7 @@ describe("getZonedNow", () => {
     "returns an exact zoned datetime string for valid timeZone $timeZone",
     ({ timeZone, expected }) => {
       const value = getZonedNow(timeZone);
-
-      const normalizedValue = Temporal.ZonedDateTime.from(value).toString({
-        smallestUnit: "milliseconds",
-      });
-
-      expect(normalizedValue).toBe(expected);
+      expect(value).toBe(expected);
       expect(parseZonedTimezone(value)).toBe(timeZone);
     },
   );

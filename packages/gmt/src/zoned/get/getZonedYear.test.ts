@@ -1,3 +1,4 @@
+import { TomorrowTimeZone, YesterdayTimeZone } from "../../test";
 import { getZonedYear } from "./getZonedYear";
 
 describe("getZonedYear", () => {
@@ -13,12 +14,12 @@ describe("getZonedYear", () => {
   });
 
   it.each`
-    timeZone
-    ${"UTC"}
-    ${"Pacific/Apia"}
-    ${"Pacific/Niue"}
-  `("returns current year for timeZone $timeZone", ({ timeZone }) => {
-    expect(getZonedYear(timeZone)).toBe("2024");
+    timeZone             | expected
+    ${"UTC"}             | ${"2024"}
+    ${YesterdayTimeZone} | ${"2024"}
+    ${TomorrowTimeZone}  | ${"2024"}
+  `("returns current year for timeZone $timeZone", ({ timeZone, expected }) => {
+    expect(getZonedYear(timeZone)).toBe(expected);
   });
 
   it("returns empty string for invalid timeZone", () => {

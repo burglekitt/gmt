@@ -1,3 +1,4 @@
+import { TomorrowTimeZone, YesterdayTimeZone } from "../../test";
 import { getNanosecond } from "./getNanosecond";
 import * as getSystemTimeZoneModule from "./getSystemTimeZone";
 
@@ -28,4 +29,17 @@ describe("getNanosecond", () => {
     timeZoneSpy.mockReturnValue("");
     expect(getNanosecond()).toBe("");
   });
+
+  it.each`
+    timeZone             | expected
+    ${"UTC"}             | ${"000"}
+    ${YesterdayTimeZone} | ${"000"}
+    ${TomorrowTimeZone}  | ${"000"}
+  `(
+    "yesterday / today tests: returns $expected for system timeZone $timeZone",
+    ({ timeZone, expected }) => {
+      timeZoneSpy.mockReturnValue(timeZone);
+      expect(getNanosecond()).toBe(expected);
+    },
+  );
 });

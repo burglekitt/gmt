@@ -1,3 +1,4 @@
+import { TomorrowTimeZone, YesterdayTimeZone } from "../../test";
 import { getZonedMonth } from "./getZonedMonth";
 
 describe("getZonedMonth", () => {
@@ -13,10 +14,10 @@ describe("getZonedMonth", () => {
   });
 
   it.each`
-    timeZone          | expected
-    ${"UTC"}          | ${"02"}
-    ${"Pacific/Apia"} | ${"03"}
-    ${"Pacific/Niue"} | ${"02"}
+    timeZone             | expected
+    ${"UTC"}             | ${"02"}
+    ${YesterdayTimeZone} | ${"02"}
+    ${TomorrowTimeZone}  | ${"03"}
   `(
     "returns current month for timeZone $timeZone",
     ({ timeZone, expected }) => {

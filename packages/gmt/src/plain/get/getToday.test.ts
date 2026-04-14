@@ -1,3 +1,4 @@
+import { TomorrowTimeZone, YesterdayTimeZone } from "../../test";
 import { chopTime, chopUtc } from "../chop";
 import { areDatesEqual } from "../compare";
 import { isValidDate } from "../validate";
@@ -33,4 +34,17 @@ describe("getToday", () => {
     expect(isValidDate(getToday())).toBe(true);
     expect(getToday()).toBe(chopTime(getNow()));
   });
+
+  it.each`
+    timeZone             | expected
+    ${"UTC"}             | ${"2024-02-29"}
+    ${YesterdayTimeZone} | ${"2024-02-28"}
+    ${TomorrowTimeZone}  | ${"2024-02-29"}
+  `(
+    "yesterday / today tests: returns $expected for system timeZone $timeZone",
+    ({ timeZone, expected }) => {
+      timeZoneSpy.mockReturnValue(timeZone);
+      expect(getToday()).toBe(expected);
+    },
+  );
 });
