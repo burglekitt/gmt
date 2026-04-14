@@ -92,6 +92,42 @@
 | `boolean`   | Return `false` | `isValidDate("invalid") → false` |
 
 **Why**: Consistent, type-safe error handling without exceptions. Allows chaining and null-coalescing operators.
+
+### ⚠️ **Always Wrap Temporal Methods in Try-Catch**
+
+**Rule**: Any code that calls Temporal methods (`.from()`, `.add()`, `.subtract()`, `.since()`, `.until()`, etc.) **MUST be wrapped in try-catch**.
+
+**Why**: Temporal's static methods like `Temporal.PlainDate.from()` throw `RangeError` on invalid input (e.g., malformed strings, invalid calendars). These errors must be caught and converted to the appropriate sentinel value.
+
+**Pattern**:
+
+```ts
+export const getDay = (dateStr: string): number => {
+  try {
+    const date = Temporal.PlainDate.from(dateStr);
+    return date.day;
+  } catch {
+    return null;
+  }
+};
+```
+
+```ts
+export const addDays = (dateStr: string, days: number): string => {
+  try {
+    const date = Temporal.PlainDate.from(dateStr);
+    return date.add({ days }).toString();
+  } catch {
+    return "";
+  }
+};
+```
+
+**Key rules**:
+- Wrap the **entire block** after Zod validation (if any) that uses Temporal methods
+- Return `""` for string returns, `null` for number returns, `false` for boolean returns
+- Never let Temporal exceptions propagate to the caller
+- The catch block should have no arguments (`catch { ... }`) since we don't need the error
 ---
 
 ## 🔍 Code Review Checklist

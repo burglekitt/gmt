@@ -130,3 +130,41 @@ export function functionName(...): ... {}
 4. **No Date objects**: Use Temporal or ISO strings only (enforced elsewhere)
 5. **Match return sentinel**: `""` for strings, `null` for numbers, `false` for booleans
 
+## Error handling: Always wrap Temporal methods
+
+Any code that calls Temporal methods (`.from()`, `.add()`, `.subtract()`, `.since()`, `.until()`, etc.) **MUST be wrapped in try-catch**.
+
+Temporal's static methods like `Temporal.PlainDate.from()` throw `RangeError` on invalid input (e.g., malformed strings, invalid calendars). These errors must be caught and converted to the appropriate sentinel value.
+
+**Pattern for string returns**:
+
+```ts
+export const addDays = (dateStr: string, days: number): string => {
+  try {
+    const date = Temporal.PlainDate.from(dateStr);
+    return date.add({ days }).toString();
+  } catch {
+    return "";
+  }
+};
+```
+
+**Pattern for number returns**:
+
+```ts
+export const getDay = (dateStr: string): number => {
+  try {
+    const date = Temporal.PlainDate.from(dateStr);
+    return date.day;
+  } catch {
+    return null;
+  }
+};
+```
+
+**Key rules**:
+- Wrap the **entire block** after Zod validation (if any) that uses Temporal methods
+- Return `""` for string returns, `null` for number returns, `false` for boolean returns
+- Never let Temporal exceptions propagate to the caller
+- The catch block should have no arguments (`catch { ... }`) since we don't need the error
+
