@@ -12,5 +12,4 @@ export * from "./getSecond";
 export * from "./getSystemTimeZone";
 export * from "./getToday";
 export * from "./getWeekOfYear";
-export * from "./getWeekOfYear";
 export * from "./getYear";

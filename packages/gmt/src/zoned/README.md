@@ -43,10 +43,14 @@ Locale-aware timezone formatting:
 
 ### get
 
-Current time in specific timezone:
+Current in specific timezone:
 
-- `getZonedDate`, `getZonedDateTime`, `getZonedNow`
-- `getZonedNowUnit`, `getZonedToday`
+- `getZonedNow`, `getZonedNowUnit`, `getZonedToday`
+- `getZonedDate`, `getZonedDateTime`
+- `getZonedYear`, `getZonedMonth`, `getZonedDay`, `getZonedDayOfWeek`
+- `getZonedHour`, `getZonedMinute`, `getZonedSecond`
+- `getZonedMillisecond`, `getZonedMicrosecond`, `getZonedNanosecond`
+- `getZonedWeekOfYear`
 
 ### map
 

@@ -46,9 +46,13 @@ Locale-aware formatting:
 
 ### get
 
-Current time values:
+Current values:
 
-- `getNow`, `getSystemTimeZone`, `getToday`
+- `getNow`, `getNowUnit`, `getSystemTimeZone`, `getToday`
+- `getYear`, `getMonth`, `getDay`, `getDayOfWeek`
+- `getHour`, `getMinute`, `getSecond`
+- `getMillisecond`, `getMicrosecond`, `getNanosecond`
+- `getWeekOfYear`
 
 ### map
 
