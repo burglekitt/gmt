@@ -14,6 +14,9 @@ export function parseZonedTimezone(value: string): string {
   if (!isValidZonedDateTime(value)) {
     return "";
   }
-
-  return Temporal.ZonedDateTime.from(value).timeZoneId ?? "";
+  try {
+    return Temporal.ZonedDateTime.from(value).timeZoneId ?? "";
+  } catch {
+    return "";
+  }
 }

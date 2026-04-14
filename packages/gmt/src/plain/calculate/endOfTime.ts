@@ -34,66 +34,71 @@ export function endOfTime(
 
   if (!isValidTime(value) || !supported.includes(unit)) return "";
 
-  const source = Temporal.PlainTime.from(value);
-  let result: Temporal.PlainTime;
+  try {
+    const source = Temporal.PlainTime.from(value);
+    let result: Temporal.PlainTime;
 
-  switch (unit) {
-    case "day":
-      result = source.with({
-        hour: 23,
-        minute: 59,
-        second: 59,
-        millisecond: 999,
-        microsecond: 999,
-        nanosecond: 999,
-      });
-      break;
-    case "hour":
-      result = source.with({
-        minute: 59,
-        second: 59,
-        millisecond: 999,
-        microsecond: 999,
-        nanosecond: 999,
-      });
-      break;
-    case "minute":
-      result = source.with({
-        second: 59,
-        millisecond: 999,
-        microsecond: 999,
-        nanosecond: 999,
-      });
-      break;
-    case "second":
-      result = source.with({
-        millisecond: 999,
-        microsecond: 999,
-        nanosecond: 999,
-      });
-      break;
-    case "millisecond":
-      result = source.with({ microsecond: 999, nanosecond: 999 });
-      break;
-    case "microsecond":
-      result = source.with({ nanosecond: 999 });
-      break;
-    case "nanosecond":
-      result = source;
-      break;
-    default:
-      return "";
+    switch (unit) {
+      case "day":
+        result = source.with({
+          hour: 23,
+          minute: 59,
+          second: 59,
+          millisecond: 999,
+          microsecond: 999,
+          nanosecond: 999,
+        });
+        break;
+      case "hour":
+        result = source.with({
+          minute: 59,
+          second: 59,
+          millisecond: 999,
+          microsecond: 999,
+          nanosecond: 999,
+        });
+        break;
+      case "minute":
+        result = source.with({
+          second: 59,
+          millisecond: 999,
+          microsecond: 999,
+          nanosecond: 999,
+        });
+        break;
+      case "second":
+        result = source.with({
+          millisecond: 999,
+          microsecond: 999,
+          nanosecond: 999,
+        });
+        break;
+      case "millisecond":
+        result = source.with({ microsecond: 999, nanosecond: 999 });
+        break;
+      case "microsecond":
+        result = source.with({ nanosecond: 999 });
+        break;
+      case "nanosecond":
+        result = source;
+        break;
+      default:
+        return "";
+    }
+
+    // Handle default precision: 0 for > sec, 3 for ms, 6 for µs, 9 for ns
+    const precisionMap: Record<string, FractionalDigit> = {
+      millisecond: 3,
+      microsecond: 6,
+      nanosecond: 9,
+    };
+    const fractionalDigits =
+      fractionalSecondDigits ?? (precisionMap[unit] || 0);
+
+    return result.toString({
+      fractionalSecondDigits: fractionalDigits,
+    });
+  } catch {
+    return "";
   }
-
-  // Handle default precision: 0 for > sec, 3 for ms, 6 for µs, 9 for ns
-  const precisionMap: Record<string, FractionalDigit> = {
-    millisecond: 3,
-    microsecond: 6,
-    nanosecond: 9,
-  };
-  const fractionalDigits = fractionalSecondDigits ?? (precisionMap[unit] || 0);
-
-  return result.toString({
-    fractionalSecondDigits: fractionalDigits,
-  });
 }

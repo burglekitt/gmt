@@ -16,8 +16,12 @@ export function minUtc(utcDateTimes: string[]): string | null {
   const valid = utcDateTimes.filter(isValidUtc);
   if (!valid.length) return null;
 
-  const comparables = valid.map((d) => Temporal.Instant.from(d));
-  comparables.sort(Temporal.Instant.compare);
+  try {
+    const comparables = valid.map((d) => Temporal.Instant.from(d));
+    comparables.sort(Temporal.Instant.compare);
 
-  return comparables[0].toString();
+    return comparables[0].toString();
+  } catch {
+    return null;
+  }
 }

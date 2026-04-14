@@ -17,6 +17,10 @@ export function getMillisecond(): string {
     return "";
   }
 
-  const now = Temporal.Now.plainDateTimeISO(timeZone);
-  return (now.millisecond ?? 0).toString().padStart(3, "0");
+  try {
+    const now = Temporal.Now.plainDateTimeISO(timeZone);
+    return (now.millisecond ?? 0).toString().padStart(3, "0");
+  } catch {
+    return "";
+  }
 }

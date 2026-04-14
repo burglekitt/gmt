@@ -35,44 +35,49 @@ export function startOfTime(
   const fractionalSecondDigits = optionsArg?.fractionalSecondDigits;
   if (!isValidTime(value) || !supported.includes(unit)) return "";
 
-  const source = Temporal.PlainTime.from(value);
-  let result: Temporal.PlainTime;
+  try {
+    const source = Temporal.PlainTime.from(value);
+    let result: Temporal.PlainTime;
 
-  switch (unit) {
-    case "day":
-      result = source.with({ hour: 0, minute: 0, second: 0 });
-      break;
-    case "hour":
-      result = source.with({ minute: 0, second: 0 });
-      break;
-    case "minute":
-      result = source.with({ second: 0 });
-      break;
-    case "second":
-      result = source.with({ millisecond: 0, microsecond: 0, nanosecond: 0 });
-      break;
-    case "millisecond":
-      result = source.with({ millisecond: 0, microsecond: 0, nanosecond: 0 });
-      break;
-    case "microsecond":
-      result = source.with({ microsecond: 0, nanosecond: 0 });
-      break;
-    case "nanosecond":
-      result = source.with({ nanosecond: 0 });
-      break;
-    default:
-      return "";
+    switch (unit) {
+      case "day":
+        result = source.with({ hour: 0, minute: 0, second: 0 });
+        break;
+      case "hour":
+        result = source.with({ minute: 0, second: 0 });
+        break;
+      case "minute":
+        result = source.with({ second: 0 });
+        break;
+      case "second":
+        result = source.with({ millisecond: 0, microsecond: 0, nanosecond: 0 });
+        break;
+      case "millisecond":
+        result = source.with({ millisecond: 0, microsecond: 0, nanosecond: 0 });
+        break;
+      case "microsecond":
+        result = source.with({ microsecond: 0, nanosecond: 0 });
+        break;
+      case "nanosecond":
+        result = source.with({ nanosecond: 0 });
+        break;
+      default:
+        return "";
+    }
+
+    // Handle default precision: 0 for > sec, 3 for ms, 6 for µs, 9 for ns
+    const precisionMap: Record<string, FractionalDigit> = {
+      millisecond: 3,
+      microsecond: 6,
+      nanosecond: 9,
+    };
+    const fractionalDigits =
+      fractionalSecondDigits ?? (precisionMap[unit] || 0);
+
+    return result.toString({
+      fractionalSecondDigits: fractionalDigits,
+    });
+  } catch {
+    return "";
   }
-
-  // Handle default precision: 0 for > sec, 3 for ms, 6 for µs, 9 for ns
-  const precisionMap: Record<string, FractionalDigit> = {
-    millisecond: 3,
-    microsecond: 6,
-    nanosecond: 9,
-  };
-  const fractionalDigits = fractionalSecondDigits ?? (precisionMap[unit] || 0);
-
-  return result.toString({
-    fractionalSecondDigits: fractionalDigits,
-  });
 }

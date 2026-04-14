@@ -23,20 +23,24 @@ export function weekOfYear(
     : "monday";
   if (!isValidDate(value)) return null;
 
-  const date = Temporal.PlainDate.from(value);
+  try {
+    const date = Temporal.PlainDate.from(value);
 
-  // Get the day of the year (1-366)
-  const dayOfYear = date.dayOfYear;
+    // Get the day of the year (1-366)
+    const dayOfYear = date.dayOfYear;
 
-  // Get the weekday (1-7, where 1 is Monday and 7 is Sunday)
-  const dayOfWeek = date.dayOfWeek;
+    // Get the weekday (1-7, where 1 is Monday and 7 is Sunday)
+    const dayOfWeek = date.dayOfWeek;
 
-  // Calculate the offset based on the start of the week
-  //   const offset = weekStartsOn === "monday" ? dayOfWeek - 1 : dayOfWeek % 7;
-  const offset = weekStartsOn === "monday" ? dayOfWeek - 1 : dayOfWeek % 7;
+    // Calculate the offset based on the start of the week
+    //   const offset = weekStartsOn === "monday" ? dayOfWeek - 1 : dayOfWeek % 7;
+    const offset = weekStartsOn === "monday" ? dayOfWeek - 1 : dayOfWeek % 7;
 
-  // Calculate the week number
-  const weekNumber = Math.ceil((dayOfYear + offset) / 7);
+    // Calculate the week number
+    const weekNumber = Math.ceil((dayOfYear + offset) / 7);
 
-  return weekNumber;
+    return weekNumber;
+  } catch {
+    return null;
+  }
 }

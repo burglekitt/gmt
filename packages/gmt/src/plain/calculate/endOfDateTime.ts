@@ -52,49 +52,13 @@ export function endOfDateTime(
 
   if (!isValidDateTime(value) || !supported.includes(unit)) return "";
 
-  const source = Temporal.PlainDateTime.from(value);
-  let result: Temporal.PlainDateTime;
+  try {
+    const source = Temporal.PlainDateTime.from(value);
+    let result: Temporal.PlainDateTime;
 
-  switch (unit) {
-    case "year":
-      result = source.with({ month: 12, day: 31 }).withPlainTime({
-        hour: 23,
-        minute: 59,
-        second: 59,
-        millisecond: 999,
-        microsecond: 999,
-        nanosecond: 999,
-      });
-      break;
-    case "month": {
-      const lastDay = Temporal.PlainDate.from({
-        year: source.year,
-        month: source.month,
-        day: 1, // Start from day 1 to get daysInMonth
-      }).daysInMonth;
-      result = source.with({ day: lastDay }).withPlainTime({
-        hour: 23,
-        minute: 59,
-        second: 59,
-        millisecond: 999,
-        microsecond: 999,
-        nanosecond: 999,
-      });
-      break;
-    }
-    case "week": {
-      const daysToAdd =
-        weekStartsOn === "monday"
-          ? 7 - source.dayOfWeek
-          : (6 - source.dayOfWeek) % 7;
-      result = source
-        .with({
-          year: source.year,
-          month: source.month,
-          day: source.day,
-        })
-        .add({ days: daysToAdd })
-        .withPlainTime({
+    switch (unit) {
+      case "year":
+        result = source.with({ month: 12, day: 31 }).withPlainTime({
           hour: 23,
           minute: 59,
           second: 59,
@@ -102,64 +66,105 @@ export function endOfDateTime(
           microsecond: 999,
           nanosecond: 999,
         });
-      break;
+        break;
+      case "month": {
+        const lastDay = Temporal.PlainDate.from({
+          year: source.year,
+          month: source.month,
+          day: 1, // Start from day 1 to get daysInMonth
+        }).daysInMonth;
+        result = source.with({ day: lastDay }).withPlainTime({
+          hour: 23,
+          minute: 59,
+          second: 59,
+          millisecond: 999,
+          microsecond: 999,
+          nanosecond: 999,
+        });
+        break;
+      }
+      case "week": {
+        const daysToAdd =
+          weekStartsOn === "monday"
+            ? 7 - source.dayOfWeek
+            : (6 - source.dayOfWeek) % 7;
+        result = source
+          .with({
+            year: source.year,
+            month: source.month,
+            day: source.day,
+          })
+          .add({ days: daysToAdd })
+          .withPlainTime({
+            hour: 23,
+            minute: 59,
+            second: 59,
+            millisecond: 999,
+            microsecond: 999,
+            nanosecond: 999,
+          });
+        break;
+      }
+      case "day":
+        result = source.withPlainTime({
+          hour: 23,
+          minute: 59,
+          second: 59,
+          millisecond: 999,
+          microsecond: 999,
+          nanosecond: 999,
+        });
+        break;
+      case "hour":
+        result = source.with({
+          minute: 59,
+          second: 59,
+          millisecond: 999,
+          microsecond: 999,
+          nanosecond: 999,
+        });
+        break;
+      case "minute":
+        result = source.with({
+          second: 59,
+          millisecond: 999,
+          microsecond: 999,
+          nanosecond: 999,
+        });
+        break;
+      case "second":
+        result = source.with({
+          millisecond: 999,
+          microsecond: 999,
+          nanosecond: 999,
+        });
+        break;
+      case "millisecond":
+        result = source.with({ microsecond: 999, nanosecond: 999 });
+        break;
+      case "microsecond":
+        result = source.with({ nanosecond: 999 });
+        break;
+      case "nanosecond":
+        result = source;
+        break;
+      default:
+        return "";
     }
-    case "day":
-      result = source.withPlainTime({
-        hour: 23,
-        minute: 59,
-        second: 59,
-        millisecond: 999,
-        microsecond: 999,
-        nanosecond: 999,
-      });
-      break;
-    case "hour":
-      result = source.with({
-        minute: 59,
-        second: 59,
-        millisecond: 999,
-        microsecond: 999,
-        nanosecond: 999,
-      });
-      break;
-    case "minute":
-      result = source.with({
-        second: 59,
-        millisecond: 999,
-        microsecond: 999,
-        nanosecond: 999,
-      });
-      break;
-    case "second":
-      result = source.with({
-        millisecond: 999,
-        microsecond: 999,
-        nanosecond: 999,
-      });
-      break;
-    case "millisecond":
-      result = source.with({ microsecond: 999, nanosecond: 999 });
-      break;
-    case "microsecond":
-      result = source.with({ nanosecond: 999 });
-      break;
-    case "nanosecond":
-      result = source;
-      break;
-    default:
-      return "";
+
+    // Handle default precision: 0 for > sec, 3 for ms, 6 for µs, 9 for ns
+    const precisionMap: Record<string, FractionalDigit> = {
+      millisecond: 3,
+      microsecond: 6,
+      nanosecond: 9,
+    };
+    const fractionalDigits =
+      fractionalSecondDigits ?? (precisionMap[unit] || 0);
+
+    return result.toString({
+      fractionalSecondDigits: fractionalDigits,
+    });
+  } catch {
+    return "";
   }
-
-  // Handle default precision: 0 for > sec, 3 for ms, 6 for µs, 9 for ns
-  const precisionMap: Record<string, FractionalDigit> = {
-    millisecond: 3,
-    microsecond: 6,
-    nanosecond: 9,
-  };
-  const fractionalDigits = fractionalSecondDigits ?? (precisionMap[unit] || 0);
-
-  return result.toString({
-    fractionalSecondDigits: fractionalDigits,
-  });
 }

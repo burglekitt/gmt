@@ -44,5 +44,3 @@ export function areZonedEqual(value1: string, value2: string): boolean {
     return false;
   }
 }
-
-export const areZonedDateTimesEqual = areZonedEqual;

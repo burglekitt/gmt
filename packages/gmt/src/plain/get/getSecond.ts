@@ -17,6 +17,10 @@ export function getSecond(): string {
     return "";
   }
 
-  const now = Temporal.Now.plainDateTimeISO(timeZone);
-  return now.second.toString().padStart(2, "0");
+  try {
+    const now = Temporal.Now.plainDateTimeISO(timeZone);
+    return now.second.toString().padStart(2, "0");
+  } catch {
+    return "";
+  }
 }

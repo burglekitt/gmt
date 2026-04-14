@@ -29,33 +29,37 @@ export function endOfDate(
 
   if (!isValidDate(value) || !supported.includes(unit)) return "";
 
-  const source = Temporal.PlainDate.from(value);
-  let result: Temporal.PlainDate;
+  try {
+    const source = Temporal.PlainDate.from(value);
+    let result: Temporal.PlainDate;
 
-  switch (unit) {
-    case "year":
-      result = source.with({ month: 12, day: 31 });
-      break;
-    case "month": {
-      const firstOfNext = source.with({ day: 1 }).add({ months: 1 });
-      result = firstOfNext.subtract({ days: 1 });
-      break;
-    }
-    case "week": {
-      const daysToEndOfWeek =
-        weekStartsOn === "monday"
-          ? 7 - source.dayOfWeek
-          : (6 - source.dayOfWeek) % 7;
+    switch (unit) {
+      case "year":
+        result = source.with({ month: 12, day: 31 });
+        break;
+      case "month": {
+        const firstOfNext = source.with({ day: 1 }).add({ months: 1 });
+        result = firstOfNext.subtract({ days: 1 });
+        break;
+      }
+      case "week": {
+        const daysToEndOfWeek =
+          weekStartsOn === "monday"
+            ? 7 - source.dayOfWeek
+            : (6 - source.dayOfWeek) % 7;
 
-      result = source.add({ days: daysToEndOfWeek });
-      break;
+        result = source.add({ days: daysToEndOfWeek });
+        break;
+      }
+      case "day":
+        result = source;
+        break;
+      default:
+        return "";
     }
-    case "day":
-      result = source;
-      break;
-    default:
-      return "";
+
+    return result.toString();
+  } catch {
+    return "";
   }
-
-  return result.toString();
 }

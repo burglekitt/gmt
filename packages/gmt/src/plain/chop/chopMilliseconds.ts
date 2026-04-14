@@ -12,13 +12,19 @@ import { isValidDateTime, isValidTime } from "../validate";
  * @returns ISO string without milliseconds, or "" on invalid input
  */
 export function chopMilliseconds(value: string): string {
-  if (isValidDateTime(value)) {
-    return Temporal.PlainDateTime.from(value).toString({
-      smallestUnit: "second",
-    });
+  try {
+    if (isValidDateTime(value)) {
+      return Temporal.PlainDateTime.from(value).toString({
+        smallestUnit: "second",
+      });
+    }
+    if (isValidTime(value)) {
+      return Temporal.PlainTime.from(value).toString({
+        smallestUnit: "second",
+      });
+    }
+    return "";
+  } catch {
+    return "";
   }
-  if (isValidTime(value)) {
-    return Temporal.PlainTime.from(value).toString({ smallestUnit: "second" });
-  }
-  return "";
 }

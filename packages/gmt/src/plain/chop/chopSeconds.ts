@@ -12,13 +12,19 @@ import { isValidDateTime, isValidTime } from "../validate";
  * @returns ISO string trimmed to minutes or "" on invalid input
  */
 export function chopSeconds(value: string): string {
-  if (isValidDateTime(value)) {
-    return Temporal.PlainDateTime.from(value).toString({
-      smallestUnit: "minute",
-    });
+  try {
+    if (isValidDateTime(value)) {
+      return Temporal.PlainDateTime.from(value).toString({
+        smallestUnit: "minute",
+      });
+    }
+    if (isValidTime(value)) {
+      return Temporal.PlainTime.from(value).toString({
+        smallestUnit: "minute",
+      });
+    }
+    return "";
+  } catch {
+    return "";
   }
-  if (isValidTime(value)) {
-    return Temporal.PlainTime.from(value).toString({ smallestUnit: "minute" });
-  }
-  return "";
 }

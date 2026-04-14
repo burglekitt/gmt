@@ -21,17 +21,9 @@ export function isBeforeUtc(value1: string, value2: string): boolean {
     return false;
   }
 
-  let instant1: Temporal.Instant;
-  let instant2: Temporal.Instant;
-
   try {
-    instant1 = Temporal.Instant.from(value1);
-    instant2 = Temporal.Instant.from(value2);
-  } catch {
-    return false;
-  }
-
-  try {
+    const instant1 = Temporal.Instant.from(value1);
+    const instant2 = Temporal.Instant.from(value2);
     return Temporal.Instant.compare(instant1, instant2) === -1;
   } catch {
     return false;

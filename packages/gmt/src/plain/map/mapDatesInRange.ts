@@ -32,22 +32,25 @@ export function mapDatesInRange(
   if (!isValidDate(startDate) || !isValidDate(endDate)) {
     return [];
   }
+  try {
+    const start = Temporal.PlainDate.from(startDate);
+    const end = Temporal.PlainDate.from(endDate);
 
-  const start = Temporal.PlainDate.from(startDate);
-  const end = Temporal.PlainDate.from(endDate);
+    if (Temporal.PlainDate.compare(start, end) === 1) {
+      return [];
+    }
 
-  if (Temporal.PlainDate.compare(start, end) === 1) {
+    const result: string[] = [];
+    for (
+      let current = start;
+      Temporal.PlainDate.compare(current, end) <= 0;
+      current = current.add({ days: resolvedStepDays })
+    ) {
+      result.push(current.toString());
+    }
+
+    return result;
+  } catch {
     return [];
   }
-
-  const result: string[] = [];
-  for (
-    let current = start;
-    Temporal.PlainDate.compare(current, end) <= 0;
-    current = current.add({ days: resolvedStepDays })
-  ) {
-    result.push(current.toString());
-  }
-
-  return result;
 }

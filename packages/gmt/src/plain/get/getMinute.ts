@@ -17,6 +17,10 @@ export function getMinute(): string {
     return "";
   }
 
-  const now = Temporal.Now.plainDateTimeISO(timeZone);
-  return now.minute.toString().padStart(2, "0");
+  try {
+    const now = Temporal.Now.plainDateTimeISO(timeZone);
+    return now.minute.toString().padStart(2, "0");
+  } catch {
+    return "";
+  }
 }

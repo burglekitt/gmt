@@ -51,39 +51,38 @@ export function getZonedNowUnit(
     return "";
   }
 
-  let now: Temporal.ZonedDateTime;
   try {
-    now = Temporal.Now.zonedDateTimeISO(ianaTimezone);
+    const now = Temporal.Now.zonedDateTimeISO(ianaTimezone);
+
+    switch (unit) {
+      case "year":
+        return now.year.toString();
+      case "month":
+        return now.month.toString().padStart(2, "0");
+      case "week": {
+        const w = weekOfYear(now.toPlainDate().toString());
+        return w === null ? "" : w.toString();
+      }
+      case "day":
+        return now.day.toString().padStart(2, "0");
+      case "dayOfWeek":
+        return now.dayOfWeek.toString();
+      case "hour":
+        return now.hour.toString().padStart(2, "0");
+      case "minute":
+        return now.minute.toString().padStart(2, "0");
+      case "second":
+        return now.second.toString().padStart(2, "0");
+      case "millisecond":
+        return now.millisecond.toString().padStart(3, "0");
+      case "microsecond":
+        return (now.microsecond ?? 0).toString().padStart(3, "0");
+      case "nanosecond":
+        return (now.nanosecond ?? 0).toString().padStart(3, "0");
+      default:
+        return "";
+    }
   } catch {
     return "";
-  }
-
-  switch (unit) {
-    case "year":
-      return now.year.toString();
-    case "month":
-      return now.month.toString().padStart(2, "0");
-    case "week": {
-      const w = weekOfYear(now.toPlainDate().toString());
-      return w === null ? "" : w.toString();
-    }
-    case "day":
-      return now.day.toString().padStart(2, "0");
-    case "dayOfWeek":
-      return now.dayOfWeek.toString();
-    case "hour":
-      return now.hour.toString().padStart(2, "0");
-    case "minute":
-      return now.minute.toString().padStart(2, "0");
-    case "second":
-      return now.second.toString().padStart(2, "0");
-    case "millisecond":
-      return now.millisecond.toString().padStart(3, "0");
-    case "microsecond":
-      return (now.microsecond ?? 0).toString().padStart(3, "0");
-    case "nanosecond":
-      return (now.nanosecond ?? 0).toString().padStart(3, "0");
-    default:
-      return "";
   }
 }

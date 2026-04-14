@@ -24,24 +24,28 @@ export function parseDateTimeUnit(
     return "";
   }
 
-  const dateTime = Temporal.PlainDateTime.from(value);
+  try {
+    const dateTime = Temporal.PlainDateTime.from(value);
 
-  switch (unit) {
-    case "year":
-      return dateTime.year.toString();
-    case "month":
-      return dateTime.month.toString().padStart(2, "0");
-    case "day":
-      return dateTime.day.toString().padStart(2, "0");
-    case "hour":
-      return dateTime.hour.toString().padStart(2, "0");
-    case "minute":
-      return dateTime.minute.toString().padStart(2, "0");
-    case "second":
-      return dateTime.second.toString().padStart(2, "0");
-    case "millisecond":
-      return dateTime.millisecond.toString().padStart(3, "0");
-    default:
-      return "";
+    switch (unit) {
+      case "year":
+        return dateTime.year.toString();
+      case "month":
+        return dateTime.month.toString().padStart(2, "0");
+      case "day":
+        return dateTime.day.toString().padStart(2, "0");
+      case "hour":
+        return dateTime.hour.toString().padStart(2, "0");
+      case "minute":
+        return dateTime.minute.toString().padStart(2, "0");
+      case "second":
+        return dateTime.second.toString().padStart(2, "0");
+      case "millisecond":
+        return dateTime.millisecond.toString().padStart(3, "0");
+      default:
+        return "";
+    }
+  } catch {
+    return "";
   }
 }

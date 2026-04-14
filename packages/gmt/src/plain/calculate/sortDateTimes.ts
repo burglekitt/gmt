@@ -24,12 +24,16 @@ export function sortDateTimes(
   const valid = dateTimes.filter(isValidDateTime);
   if (!valid.length) return [];
 
-  const comparables = valid.map((d) => Temporal.PlainDateTime.from(d));
-  comparables.sort(Temporal.PlainDateTime.compare);
+  try {
+    const comparables = valid.map((d) => Temporal.PlainDateTime.from(d));
+    comparables.sort(Temporal.PlainDateTime.compare);
 
-  if (order === "desc") {
-    return comparables.reverse().map((d) => d.toString());
+    if (order === "desc") {
+      return comparables.reverse().map((d) => d.toString());
+    }
+
+    return comparables.map((d) => d.toString());
+  } catch {
+    return [];
   }
-
-  return comparables.map((d) => d.toString());
 }

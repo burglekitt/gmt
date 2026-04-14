@@ -38,65 +38,72 @@ export function startOfZoned(
 
   if (!isValidZonedDateTime(value) || !supported.includes(unit)) return "";
 
-  const source = Temporal.ZonedDateTime.from(value);
-  let result: Temporal.ZonedDateTime;
+  try {
+    const source = Temporal.ZonedDateTime.from(value);
+    let result: Temporal.ZonedDateTime;
 
-  switch (unit) {
-    case "year":
-      result = source.with({ month: 1, day: 1 }).withPlainTime();
-      break;
-    case "month":
-      result = source.with({ day: 1 }).withPlainTime();
-      break;
-    case "week": {
-      const daysToSubtract =
-        weekStartsOn === "monday" ? source.dayOfWeek - 1 : source.dayOfWeek % 7;
-      result = source.subtract({ days: daysToSubtract }).withPlainTime();
-      break;
+    switch (unit) {
+      case "year":
+        result = source.with({ month: 1, day: 1 }).withPlainTime();
+        break;
+      case "month":
+        result = source.with({ day: 1 }).withPlainTime();
+        break;
+      case "week": {
+        const daysToSubtract =
+          weekStartsOn === "monday"
+            ? source.dayOfWeek - 1
+            : source.dayOfWeek % 7;
+        result = source.subtract({ days: daysToSubtract }).withPlainTime();
+        break;
+      }
+      case "day":
+        result = source.withPlainTime();
+        break;
+      case "hour":
+        result = source.with({
+          minute: 0,
+          second: 0,
+          millisecond: 0,
+          microsecond: 0,
+          nanosecond: 0,
+        });
+        break;
+      case "minute":
+        result = source.with({
+          second: 0,
+          millisecond: 0,
+          microsecond: 0,
+          nanosecond: 0,
+        });
+        break;
+      case "second":
+        result = source.with({ millisecond: 0, microsecond: 0, nanosecond: 0 });
+        break;
+      case "millisecond":
+        result = source.with({ microsecond: 0, nanosecond: 0 });
+        break;
+      case "microsecond":
+        result = source.with({ nanosecond: 0 });
+        break;
+      case "nanosecond":
+        result = source; // Smallest unit, nothing to reset
+        break;
+      default:
+        return "";
     }
-    case "day":
-      result = source.withPlainTime();
-      break;
-    case "hour":
-      result = source.with({
-        minute: 0,
-        second: 0,
-        millisecond: 0,
-        microsecond: 0,
-        nanosecond: 0,
-      });
-      break;
-    case "minute":
-      result = source.with({
-        second: 0,
-        millisecond: 0,
-        microsecond: 0,
-        nanosecond: 0,
-      });
-      break;
-    case "second":
-      result = source.with({ millisecond: 0, microsecond: 0, nanosecond: 0 });
-      break;
-    case "millisecond":
-      result = source.with({ microsecond: 0, nanosecond: 0 });
-      break;
-    case "microsecond":
-      result = source.with({ nanosecond: 0 });
-      break;
-    case "nanosecond":
-      result = source; // Smallest unit, nothing to reset
-      break;
-    default:
-      return "";
+
+    // Handle default precision: 0 for > sec, 3 for ms, 6 for µs, 9 for ns
+    const precisionMap: Record<string, FractionalDigit> = {
+      millisecond: 3,
+      microsecond: 6,
+      nanosecond: 9,
+    };
+    const fractionalDigits =
+      fractionalSecondDigits ?? (precisionMap[unit] || 0);
+
+    return result.toString({ fractionalSecondDigits: fractionalDigits });
+  } catch {
+    return "";
   }
-
-  // Handle default precision: 0 for > sec, 3 for ms, 6 for µs, 9 for ns
-  const precisionMap: Record<string, FractionalDigit> = {
-    millisecond: 3,
-    microsecond: 6,
-    nanosecond: 9,
-  };
-  const fractionalDigits = fractionalSecondDigits ?? (precisionMap[unit] || 0);
-
-  return result.toString({ fractionalSecondDigits: fractionalDigits });
 }

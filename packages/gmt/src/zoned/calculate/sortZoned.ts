@@ -24,12 +24,16 @@ export function sortZoned(
   const valid = zonedDateTimes.filter(isValidZonedDateTime);
   if (!valid.length) return [];
 
-  const comparables = valid.map((d) => Temporal.ZonedDateTime.from(d));
-  comparables.sort(Temporal.ZonedDateTime.compare);
+  try {
+    const comparables = valid.map((d) => Temporal.ZonedDateTime.from(d));
+    comparables.sort(Temporal.ZonedDateTime.compare);
 
-  if (order === "desc") {
-    return comparables.reverse().map((d) => d.toString());
+    if (order === "desc") {
+      return comparables.reverse().map((d) => d.toString());
+    }
+
+    return comparables.map((d) => d.toString());
+  } catch {
+    return [];
   }
-
-  return comparables.map((d) => d.toString());
 }

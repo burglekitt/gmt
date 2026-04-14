@@ -17,18 +17,11 @@ import { isValidUtc } from "../validate";
  * @returns `true` if `value1` is after `value2`, otherwise `false`
  */
 export function isAfterUtc(value1: string, value2: string): boolean {
-  let instant1: Temporal.Instant;
-  let instant2: Temporal.Instant;
   if (!isValidUtc(value1) || !isValidUtc(value2)) return false;
 
   try {
-    instant1 = Temporal.Instant.from(value1);
-    instant2 = Temporal.Instant.from(value2);
-  } catch {
-    return false;
-  }
-
-  try {
+    const instant1 = Temporal.Instant.from(value1);
+    const instant2 = Temporal.Instant.from(value2);
     return Temporal.Instant.compare(instant1, instant2) === 1;
   } catch {
     return false;

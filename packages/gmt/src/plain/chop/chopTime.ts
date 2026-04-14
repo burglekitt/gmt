@@ -12,5 +12,9 @@ import { isValidDateTime } from "../validate";
  */
 export function chopTime(value: string): string {
   if (!isValidDateTime(value)) return "";
-  return Temporal.PlainDateTime.from(value).toPlainDate().toString();
+  try {
+    return Temporal.PlainDateTime.from(value).toPlainDate().toString();
+  } catch {
+    return "";
+  }
 }

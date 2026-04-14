@@ -34,13 +34,17 @@ export function mapZonedHoursInDay(anchor: string): string[] {
   const nextDay = start.add({ days: 1 });
 
   const result: string[] = [];
-  for (
-    let current = start;
-    Temporal.Instant.compare(current.toInstant(), nextDay.toInstant()) < 0;
-    current = current.add({ hours: 1 })
-  ) {
-    result.push(current.toString());
-  }
+  try {
+    for (
+      let current = start;
+      Temporal.Instant.compare(current.toInstant(), nextDay.toInstant()) < 0;
+      current = current.add({ hours: 1 })
+    ) {
+      result.push(current.toString());
+    }
 
-  return result;
+    return result;
+  } catch {
+    return [];
+  }
 }

@@ -20,8 +20,12 @@ export function maxDateTime(dateTimes: string[]): string | null {
   const valid = dateTimes.filter(isValidDateTime);
   if (!valid.length) return null;
 
-  const comparables = valid.map((d) => Temporal.PlainDateTime.from(d));
-  comparables.sort(Temporal.PlainDateTime.compare);
+  try {
+    const comparables = valid.map((d) => Temporal.PlainDateTime.from(d));
+    comparables.sort(Temporal.PlainDateTime.compare);
 
-  return comparables[comparables.length - 1].toString();
+    return comparables[comparables.length - 1].toString();
+  } catch {
+    return null;
+  }
 }

@@ -24,12 +24,16 @@ export function sortTimes(
   const valid = times.filter(isValidTime);
   if (!valid.length) return [];
 
-  const comparables = valid.map((t) => Temporal.PlainTime.from(t));
-  comparables.sort(Temporal.PlainTime.compare);
+  try {
+    const comparables = valid.map((t) => Temporal.PlainTime.from(t));
+    comparables.sort(Temporal.PlainTime.compare);
 
-  if (order === "desc") {
-    return comparables.reverse().map((t) => t.toString());
+    if (order === "desc") {
+      return comparables.reverse().map((t) => t.toString());
+    }
+
+    return comparables.map((t) => t.toString());
+  } catch {
+    return [];
   }
-
-  return comparables.map((t) => t.toString());
 }

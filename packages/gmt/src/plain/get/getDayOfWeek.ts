@@ -16,12 +16,10 @@ export function getDayOfWeek(): number | null {
   const timeZone = getSystemTimeZone();
   if (!timeZone) return null;
 
-  let now: Temporal.ZonedDateTime;
   try {
-    now = Temporal.Now.zonedDateTimeISO(timeZone);
+    const now = Temporal.Now.zonedDateTimeISO(timeZone);
+    return now.dayOfWeek;
   } catch {
     return null;
   }
-
-  return now.dayOfWeek;
 }

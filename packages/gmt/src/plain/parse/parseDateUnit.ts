@@ -24,16 +24,20 @@ export function parseDateUnit(
     return "";
   }
 
-  const date = Temporal.PlainDate.from(value);
+  try {
+    const date = Temporal.PlainDate.from(value);
 
-  switch (unit) {
-    case "year":
-      return date.year.toString();
-    case "month":
-      return date.month.toString().padStart(2, "0");
-    case "day":
-      return date.day.toString().padStart(2, "0");
-    default:
-      return "";
+    switch (unit) {
+      case "year":
+        return date.year.toString();
+      case "month":
+        return date.month.toString().padStart(2, "0");
+      case "day":
+        return date.day.toString().padStart(2, "0");
+      default:
+        return "";
+    }
+  } catch {
+    return "";
   }
 }

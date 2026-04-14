@@ -16,12 +16,10 @@ import { isValidTimeZone } from "../validate";
 export function getZonedDayOfWeek(ianaTimezone: string): number | null {
   if (!isValidTimeZone(ianaTimezone)) return null;
 
-  let now: Temporal.ZonedDateTime;
   try {
-    now = Temporal.Now.zonedDateTimeISO(ianaTimezone);
+    const now = Temporal.Now.zonedDateTimeISO(ianaTimezone);
+    return now.dayOfWeek;
   } catch {
     return null;
   }
-
-  return now.dayOfWeek;
 }

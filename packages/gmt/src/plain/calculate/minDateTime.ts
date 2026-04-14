@@ -20,8 +20,12 @@ export function minDateTime(dateTimes: string[]): string | null {
   const valid = dateTimes.filter(isValidDateTime);
   if (!valid.length) return null;
 
-  const comparables = valid.map((d) => Temporal.PlainDateTime.from(d));
-  comparables.sort(Temporal.PlainDateTime.compare);
+  try {
+    const comparables = valid.map((d) => Temporal.PlainDateTime.from(d));
+    comparables.sort(Temporal.PlainDateTime.compare);
 
-  return comparables[0].toString();
+    return comparables[0].toString();
+  } catch {
+    return null;
+  }
 }

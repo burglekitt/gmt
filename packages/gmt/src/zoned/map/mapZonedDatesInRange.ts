@@ -36,34 +36,38 @@ export function mapZonedDatesInRange(
     return [];
   }
 
-  let start: Temporal.ZonedDateTime;
-  let end: Temporal.ZonedDateTime;
   try {
-    start = Temporal.ZonedDateTime.from(startZonedDateTime);
-    end = Temporal.ZonedDateTime.from(endZonedDateTime);
+    let start: Temporal.ZonedDateTime;
+    let end: Temporal.ZonedDateTime;
+    try {
+      start = Temporal.ZonedDateTime.from(startZonedDateTime);
+      end = Temporal.ZonedDateTime.from(endZonedDateTime);
+    } catch {
+      return [];
+    }
+
+    if (start.timeZoneId !== end.timeZoneId) {
+      return [];
+    }
+
+    const startDate = start.toPlainDate();
+    const endDate = end.toPlainDate();
+
+    if (Temporal.PlainDate.compare(startDate, endDate) === 1) {
+      return [];
+    }
+
+    const result: string[] = [];
+    for (
+      let current = startDate;
+      Temporal.PlainDate.compare(current, endDate) <= 0;
+      current = current.add({ days: resolvedStepDays })
+    ) {
+      result.push(current.toString());
+    }
+
+    return result;
   } catch {
     return [];
   }
-
-  if (start.timeZoneId !== end.timeZoneId) {
-    return [];
-  }
-
-  const startDate = start.toPlainDate();
-  const endDate = end.toPlainDate();
-
-  if (Temporal.PlainDate.compare(startDate, endDate) === 1) {
-    return [];
-  }
-
-  const result: string[] = [];
-  for (
-    let current = startDate;
-    Temporal.PlainDate.compare(current, endDate) <= 0;
-    current = current.add({ days: resolvedStepDays })
-  ) {
-    result.push(current.toString());
-  }
-
-  return result;
 }

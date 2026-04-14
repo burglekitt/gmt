@@ -20,8 +20,12 @@ export function minTime(times: string[]): string | null {
   const valid = times.filter(isValidTime);
   if (!valid.length) return null;
 
-  const comparables = valid.map((t) => Temporal.PlainTime.from(t));
-  comparables.sort(Temporal.PlainTime.compare);
+  try {
+    const comparables = valid.map((t) => Temporal.PlainTime.from(t));
+    comparables.sort(Temporal.PlainTime.compare);
 
-  return comparables[0].toString();
+    return comparables[0].toString();
+  } catch {
+    return null;
+  }
 }
