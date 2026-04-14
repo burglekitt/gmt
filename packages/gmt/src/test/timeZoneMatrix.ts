@@ -9,7 +9,7 @@ export const YesterdayTimeZone = "Pacific/Niue";
 export const TomorrowTimeZoneGmtOffset = "+13:00";
 export const YesterdayTimeZoneGmtOffset = "-11:00";
 
-// Note: Pacific/Apia and Pacific/Niue do NOT observe DST
+// Note: Pacific/Apia and Pacific/Niue do not observe DST at the instants used in these tests
 
 /**
  * Canonical timeZone IDs that stress offset and date-boundary behavior.

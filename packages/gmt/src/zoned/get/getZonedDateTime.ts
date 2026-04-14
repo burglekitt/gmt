@@ -9,11 +9,15 @@ import { isValidTimeZone } from "../validate";
  * - `value` must be a plain datetime (no timeZone suffix).
  * - Returns empty string "" for invalid inputs.
  * - `optionsArg.smallestUnit` controls precision of the returned string.
+ * - Defaults to millisecond precision when not specified.
  *
  * @param value plain datetime string (e.g. "2024-02-29T14:30:45")
  * @param timeZone IANA timeZone identifier
  * @param optionsArg Optional formatting options. Supports `smallestUnit` to control precision.
- * @returns zoned ISO 8601 datetime string or empty string when invalid
+ * @returns zoned ISO 8601 datetime string or "" when invalid
+ * @example getZonedDateTime("2024-02-29T14:30:45", "America/New_York") // "2024-02-29T14:30:45.123-05:00[America/New_York]"
+ * @example getZonedDateTime("invalid", "America/New_York") // ""
+ * @example getZonedDateTime("2024-02-29T14:30:45", "Invalid/Zone") // ""
  */
 export function getZonedDateTime(
   value: string,

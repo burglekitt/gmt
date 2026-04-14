@@ -21,12 +21,10 @@ export function getZonedWeekOfYear(
 ): number | null {
   if (!isValidTimeZone(ianaTimezone)) return null;
 
-  let now: Temporal.ZonedDateTime;
   try {
-    now = Temporal.Now.zonedDateTimeISO(ianaTimezone);
+    const now = Temporal.Now.zonedDateTimeISO(ianaTimezone);
+    return weekOfYear(now.toPlainDate().toString(), { weekStartsOn });
   } catch {
     return null;
   }
-
-  return weekOfYear(now.toPlainDate().toString(), { weekStartsOn });
 }

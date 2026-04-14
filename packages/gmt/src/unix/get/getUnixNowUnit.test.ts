@@ -32,6 +32,19 @@ describe("getUnixNowUnit", () => {
   });
 
   it.each`
+    weekStartsOn | expected
+    ${"monday"}  | ${"9"}
+    ${"sunday"}  | ${"10"}
+  `(
+    "returns week $expected for weekStartsOn $weekStartsOn",
+    ({ weekStartsOn, expected }) => {
+      expect(getUnixNowUnit("week", weekStartsOn as "monday" | "sunday")).toBe(
+        expected,
+      );
+    },
+  );
+
+  it.each`
     invalidUnit
     ${""}
     ${null}

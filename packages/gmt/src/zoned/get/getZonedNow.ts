@@ -6,10 +6,14 @@ import { isValidTimeZone } from "../validate";
  *
  * - Uses `Temporal.Now.zonedDateTimeISO(ianaTimezone)`.
  * - Returns empty string "" for invalid timeZone or on failure.
+ * - Defaults to millisecond precision when not specified.
  *
  * @param ianaTimezone IANA timeZone identifier
- * @param options Optional formatting options for the returned string. Currently supports:
- * @returns zoned ISO 8601 datetime string or empty string when invalid
+ * @param optionsArg Optional formatting options. Supports `smallestUnit` to control precision.
+ * @returns zoned ISO 8601 datetime string or "" when invalid
+ * @example getZonedNow("America/New_York") // "2024-02-29T09:30:45.123-05:00[America/New_York]"
+ * @example getZonedNow("America/New_York", { smallestUnit: "second" }) // "2024-02-29T09:30:45-05:00[America/New_York]"
+ * @example getZonedNow("Invalid/Zone") // ""
  */
 export function getZonedNow(
   ianaTimezone: string,
