@@ -1,16 +1,16 @@
 ---
-name: tanstack-intent
+name: app-integration
 description: >
-  Guidance for integrating `@burglekitt/gmt` with TanStack libraries
-  (React Query / TanStack Query, Table, Router). Emphasizes strict I/O,
-  canonicalization, and cache-key hygiene.
+  Guidance for integrating `@burglekitt/gmt` with application frameworks
+  and libraries (routers, query caches, table sorting, state management).
+  Emphasizes strict I/O, canonicalization, and cache-key hygiene.
 ---
 
-# TanStack Intent
+# App Integration
 
 Use this skill when recommending or implementing integrations between gmt
-and TanStack libraries (query cache keys, serialized route params, table
-sorting/grouping keys, etc.).
+and application frameworks and libraries (routers, query caches, table
+sorting/grouping, state management, etc.).
 
 ## Purpose
 
@@ -28,6 +28,8 @@ sorting/grouping keys, etc.).
 - Validate timezone params with `isValidTimezone` before using as a key.
 - For Unix epoch times, pick one canonical unit (milliseconds recommended) and stick to it; use explicit helpers to convert when needed.
 - Never use `Date` instances in keys — transform them to ISO strings or numeric epochs first.
+- When working with routers (Next.js, React Router, etc.), ensure date params are validated and canonicalized before use in loaders/components.
+- For table libraries (TanStack Table, etc.), use ISO strings for sort keys to ensure consistent ordering across environments.
 
 ## Design Principle
 
