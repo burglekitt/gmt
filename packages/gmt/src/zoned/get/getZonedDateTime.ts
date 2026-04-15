@@ -31,7 +31,7 @@ export function getZonedDateTime(
   }
 
   const options = {
-    smallestUnit: "milliseconds",
+    smallestUnit: "millisecond",
     ...optionsArg,
   } as Partial<Temporal.ZonedDateTimeToStringOptions>;
 
