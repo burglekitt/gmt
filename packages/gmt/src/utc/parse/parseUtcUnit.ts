@@ -13,14 +13,12 @@ export type UtcUnit =
 /**
  * Extract a unit from a UTC datetime string.
  *
- * - `value` must be a valid UTC ISO datetime string (ending in Z).
- * - Valid units: year, month, day, hour, minute, second, millisecond.
- * - Returns empty string on invalid input.
- *
  * @param value ISO UTC datetime string (e.g., "2024-03-17T14:30:45Z")
  * @param unit unit to extract from the datetime
- * @example parseUtcUnit("2024-03-17T14:30:45Z", "month") // returns "03"
  * @returns string representation of the requested unit or "" on invalid input
+ *
+ * @example parseUtcUnit("2024-03-17T14:30:45Z", "month") // "03"
+ * @example parseUtcUnit("invalid", "month") // ""
  */
 export function parseUtcUnit(value: string, unit: UtcUnit): string {
   if (!isValidUtc(value)) {

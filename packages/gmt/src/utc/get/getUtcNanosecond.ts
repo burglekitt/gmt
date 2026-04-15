@@ -3,9 +3,10 @@ import { Temporal } from "@js-temporal/polyfill";
 /**
  * Return the current nanosecond from UTC as a zero-padded string.
  *
+ * @returns current nanosecond string (zero-padded to 3 digits) or "" on failure
+ *
  * @example getUtcNanosecond() // "789"
  * @example getUtcNanosecond() // "" (on failure)
- * @returns current nanosecond string (zero-padded to 3 digits) or "" on failure
  */
 export function getUtcNanosecond(): string {
   try {

@@ -4,12 +4,14 @@ import { isValidUtc } from "../validate/isValidUtc";
 /**
  * Sort an array of UTC datetime values in ascending or descending order.
  *
- * - Returns empty array if input is empty or contains no valid UTC datetimes.
- * - Validation is performed on each item in the array.
- *
  * @param utcDateTimes Array of ISO datetime strings (e.g. "2024-03-10T12:00:00Z")
  * @param order "asc" for ascending (earliest first) | "desc" for descending (latest first)
  * @returns Sorted array of UTC datetime strings
+ *
+ * @example sortUtc(["2024-03-12T12:00:00Z", "2024-03-10T12:00:00Z", "2024-03-15T12:00:00Z"]) // ["2024-03-10T12:00:00Z", "2024-03-12T12:00:00Z", "2024-03-15T12:00:00Z"]
+ * @example sortUtc(["2024-03-12T12:00:00Z", "2024-03-10T12:00:00Z", "2024-03-15T12:00:00Z"], "desc") // ["2024-03-15T12:00:00Z", "2024-03-12T12:00:00Z", "2024-03-10T12:00:00Z"]
+ * @example sortUtc(["invalid", "2024-03-10T12:00:00Z", "also invalid"]) // ["2024-03-10T12:00:00Z"]
+ * @example sortUtc([]) // []
  */
 export function sortUtc(
   utcDateTimes: string[],

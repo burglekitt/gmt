@@ -4,17 +4,13 @@ import { isValidUtc } from "../validate";
 /**
  * Return whether `value1` represents an instant strictly before `value2`.
  *
- * - Both inputs must be valid UTC ISO 8601 datetime strings (ending in Z).
- * - Comparison is performed using Temporal.Instant (same instant semantics),
- *   so differing representations of the same instant will compare as equal.
- * - Invalid inputs return `false`.
- *
  * @param value1 first UTC datetime string
  * @param value2 second UTC datetime string
+ * @returns `true` if `value1` is before `value2`, otherwise `false`
+ *
  * @example isBeforeUtc("2024-03-17T14:30:45Z", "2024-03-17T15:30:45Z") // true
  * @example isBeforeUtc("2024-03-17T14:30:45Z", "2024-03-17T14:30:45Z") // false
- * @example isBeforeUtc("2024-03-17T15:30:45Z", "2024-03-17T14:30:45Z") // false
- * @returns `true` if `value1` is before `value2`, otherwise `false`
+ * @example isBeforeUtc("2024-03-17T14:30:45Z", "invalid") // false
  */
 export function isBeforeUtc(value1: string, value2: string): boolean {
   if (!isValidUtc(value1) || !isValidUtc(value2)) {

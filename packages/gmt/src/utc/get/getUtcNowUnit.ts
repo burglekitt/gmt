@@ -12,13 +12,10 @@ function isValidUtcNowUnit(unit: string): unit is UtcNowUnit {
 /**
  * Return the requested unit value from the current UTC instant.
  *
- * - Uses the current UTC instant.
- * - Returns an empty string on invalid unit.
- * - For "week" unit, uses Monday as the start of the week.
- *
  * @param unit unit to extract from current utc instant
  * @param weekStartsOn optional start of week for week unit ("monday" | "sunday")
  * @returns string representation of the requested unit or "" when invalid
+ *
  * @example getUtcNowUnit("year") // "2024"
  * @example getUtcNowUnit("month") // "02"
  * @example getUtcNowUnit("invalid") // ""

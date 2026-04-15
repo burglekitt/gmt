@@ -4,11 +4,11 @@ import { isValidUtc } from "../validate";
 /**
  * Extract the date portion from a UTC datetime string.
  *
- * - `value` must be a valid UTC ISO datetime string (ending in Z).
- * - Returns empty string on invalid input.
- *
  * @param value ISO UTC datetime string (e.g., "2024-03-17T14:30:45Z")
  * @returns ISO date string (e.g., "2024-03-17") or "" on invalid input
+ *
+ * @example parseUtcDate("2024-03-17T14:30:45Z") // "2024-03-17"
+ * @example parseUtcDate("invalid") // ""
  */
 export function parseUtcDate(value: string): string {
   if (!isValidUtc(value)) {

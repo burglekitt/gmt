@@ -1,6 +1,15 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { isValidUtc } from "../validate/isValidUtc";
 
+/**
+ * Return the end of the quarter for a given UTC Instant string.
+ *
+ * @param value UTC Instant string
+ * @returns UTC Instant string for the end of the quarter, or "" on invalid input
+ *
+ * @example endOfQuarterForUtc("2024-03-15T12:00:00Z") // "2024-03-31T23:59:59.999Z"
+ * @example endOfQuarterForUtc("invalid") // ""
+ */
 export function endOfQuarterForUtc(value: string): string {
   if (!isValidUtc(value)) {
     return "";

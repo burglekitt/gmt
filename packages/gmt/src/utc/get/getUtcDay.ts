@@ -3,9 +3,10 @@ import { Temporal } from "@js-temporal/polyfill";
 /**
  * Return the current day from UTC as a zero-padded string.
  *
+ * @returns current day string (zero-padded to 2 digits) or "" on failure
+ *
  * @example getUtcDay() // "29"
  * @example getUtcDay() // "" (on failure)
- * @returns current day string (zero-padded to 2 digits) or "" on failure
  */
 export function getUtcDay(): string {
   try {
