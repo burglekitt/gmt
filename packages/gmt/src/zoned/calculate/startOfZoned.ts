@@ -4,17 +4,15 @@ import type { DateTimeUnit, FractionalDigit } from "../../types";
 import { isValidZonedDateTime } from "../validate";
 
 /**
- * Return the start of the specified date-time `unit` (year|month|day|hour|minute|...)
- * for a given zoned ISO 8601 datetime string.
+ * Return the start of the specified date-time `unit` for a given zoned ISO 8601 datetime string.
  *
  * @param value zoned ISO 8601 datetime string
- * @param unit Temporal.DateUnit|Temporal.TimeUnit to specify the unit for the start (e.g. "month")
- * @param options { weekStartsOn: "monday" | "sunday" = 'monday', fractionalSecondDigits?: number } - Optional parameter to specify the start of the week when unit is "week". Default is "monday". Optional parameter to specify fractionalSecondDigits for sub-second units (e.g. { fractionalSecondDigits: 3 } for milliseconds). Default is 0 for units larger than millisecond, 3 for millisecond, 6 for microsecond, and 9 for nanosecond.
- * @example startOfZoned("2024-02-29T12:34:56+00:00[UTC]", "month") => "2024-02-01T00:00:00+00:00[UTC]"
- * @example startOfZoned("2024-02-29T12:34:56+00:00[UTC]", "week", { weekStartsOn: "sunday" }) => "2024-02-25T00:00:00+00:00[UTC]"
- * @example startOfZoned("2024-02-29T12:34:56.789+00:00[UTC]", "second", { fractionalSecondDigits: 3 }) => "2024-02-29T12:34:56.000+00:00[UTC]"
- * @example startOfZoned("invalid", "month") => ""
- * @returns zoned ISO 8601 string representing the start of the specified unit, or empty string on invalid input
+ * @param unit Temporal.DateUnit|Temporal.TimeUnit to specify the unit for the start
+ * @param options optional: weekStartsOn ("monday" | "sunday"), fractionalSecondDigits (number)
+ * @returns zoned ISO 8601 string representing the start of the specified unit, or "" on invalid input
+ *
+ * @example startOfZoned("2024-02-29T12:34:56+00:00[UTC]", "month") // "2024-02-01T00:00:00+00:00[UTC]"
+ * @example startOfZoned("invalid", "month") // ""
  */
 export function startOfZoned(
   value: string,

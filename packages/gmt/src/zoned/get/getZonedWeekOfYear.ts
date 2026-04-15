@@ -5,15 +5,12 @@ import { isValidTimeZone } from "../validate";
 /**
  * Return the current week of year for the specified IANA timeZone.
  *
- * - Returns null for invalid timeZone.
- * - Returns null when timeZone cannot be resolved.
- *
  * @param ianaTimezone IANA timeZone identifier
- * @param weekStartsOn "monday" | "sunday" - Optional, defaults to "monday"
+ * @param weekStartsOn optional: "monday" | "sunday" (defaults to "monday")
+ * @returns current week number (1-53) or null when invalid
+ *
  * @example getZonedWeekOfYear("America/New_York") // 9
- * @example getZonedWeekOfYear("UTC") // 9
  * @example getZonedWeekOfYear("invalid") // null
- * @returns current week number or null when invalid
  */
 export function getZonedWeekOfYear(
   ianaTimezone: string,

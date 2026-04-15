@@ -4,15 +4,11 @@ import { isValidTimeZone } from "../validate";
 /**
  * Return today's date in the given IANA timeZone as an ISO date string.
  *
- * - Uses `Temporal.Now.zonedDateTimeISO(ianaTimezone)` and returns
- *   `toPlainDate().toString()`.
- * - Returns empty string "" for invalid timeZone or on failure.
- *
  * @param ianaTimezone IANA timeZone identifier
+ * @returns ISO date string (YYYY-MM-DD) or "" when invalid
+ *
  * @example getZonedToday("America/New_York") // "2024-02-29"
- * @example getZonedToday("UTC") // "2024-02-29"
  * @example getZonedToday("invalid") // ""
- * @returns ISO date string (YYYY-MM-DD) or empty string when invalid
  */
 export function getZonedToday(ianaTimezone: string): string {
   if (!isValidTimeZone(ianaTimezone)) {

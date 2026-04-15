@@ -5,15 +5,13 @@ import { isValidZonedDateTime } from "../validate";
 /**
  * Return the start of the quarter for a given zoned ISO datetime.
  *
- * - Validates input using isValidZonedDateTime.
- * - Returns an empty string for invalid inputs.
- *
  * @param value ISO ZonedDateTime string
+ * @returns ISO ZonedDateTime string for the start of the quarter, or empty string on invalid input
+ * 
  * @example startOfQuarterForZoned("2024-02-15T14:30:00+00:00[UTC]") // "2024-01-01T00:00:00+00:00[UTC]"
  * @example startOfQuarterForZoned("2024-05-10T10:00:00+00:00[UTC]") // "2024-04-01T00:00:00+00:00[UTC]"
  * @example startOfQuarterForZoned("2024-11-20T08:00:00+00:00[UTC]") // "2024-10-01T00:00:00+00:00[UTC]"
  * @example startOfQuarterForZoned("invalid") // ""
- * @returns ISO ZonedDateTime string for the start of the quarter, or empty string on invalid input
  */
 export function startOfQuarterForZoned(value: string): string {
   if (!isValidZonedDateTime(value)) {

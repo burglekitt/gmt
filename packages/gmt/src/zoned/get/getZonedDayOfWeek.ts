@@ -4,14 +4,11 @@ import { isValidTimeZone } from "../validate";
 /**
  * Return the current day of week for the specified IANA timeZone.
  *
- * - Returns null for invalid timeZone.
- * - Returns null when timeZone cannot be resolved.
- *
  * @param ianaTimezone IANA timeZone identifier
+ * @returns current day of week number (1-7) or null when invalid
+ *
  * @example getZonedDayOfWeek("America/New_York") // 3
- * @example getZonedDayOfWeek("UTC") // 4
  * @example getZonedDayOfWeek("invalid") // null
- * @returns current day of week number or null when invalid
  */
 export function getZonedDayOfWeek(ianaTimezone: string): number | null {
   if (!isValidTimeZone(ianaTimezone)) return null;

@@ -6,6 +6,7 @@ import { isLeapSecond } from "../../plain/validate/isLeapSecond";
  *
  * @param value candidate zoned datetime string
  * @returns boolean indicating validity
+ * 
  * @example isValidZonedDateTime("2024-02-29T12:34:56.789+00:00[UTC]") // true
  * @example isValidZonedDateTime("2024-06-30T23:59:60+00:00[UTC]") // false (leap second)
  * @example isValidZonedDateTime("invalid") // false

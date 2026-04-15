@@ -4,14 +4,11 @@ import { isValidTimeZone } from "../validate";
 /**
  * Return the current nanosecond for the specified IANA timeZone.
  *
- * - Returns empty string for invalid timeZone.
- * - Returns empty string when timeZone cannot be resolved.
- *
  * @param ianaTimezone IANA timeZone identifier
- * @example getZonedNanosecond("America/New_York") // "000"
- * @example getZonedNanosecond("UTC") // "000"
- * @example getZonedNanosecond("invalid") // ""
  * @returns current nanosecond string (zero-padded to 3 digits) or "" when invalid
+ *
+ * @example getZonedNanosecond("America/New_York") // "000"
+ * @example getZonedNanosecond("invalid") // ""
  */
 export function getZonedNanosecond(ianaTimezone: string): string {
   if (!isValidTimeZone(ianaTimezone)) return "";

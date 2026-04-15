@@ -1,32 +1,18 @@
 import { Temporal } from "@js-temporal/polyfill";
+import { isValidDateTimeUnit } from "../../plain";
 import type { FractionalDigit } from "../../types";
 import { isValidZonedDateTime } from "../validate";
 
-const supported: (Temporal.DateUnit | Temporal.TimeUnit)[] = [
-  "year",
-  "month",
-  "week",
-  "day",
-  "hour",
-  "minute",
-  "second",
-  "millisecond",
-  "microsecond",
-  "nanosecond",
-];
-
 /**
- * Return the end of the specified date-time `unit` (year|month|day|hour|minute|...)
- * for a given zoned ISO 8601 datetime string.
+ * Return the end of the specified date-time `unit` for a given zoned ISO 8601 datetime string.
  *
  * @param value zoned ISO 8601 datetime string
- * @param unit Temporal.DateUnit|Temporal.TimeUnit to specify the unit for the end (e.g. "month")
- * @param options { weekStartsOn: "monday" | "sunday", fractionalSecondDigits?: number } - Optional parameter to specify the start of the week when unit is "week". Default is "monday". Optional parameter to specify fractionalSecondDigits for sub-second units (e.g. { fractionalSecondDigits: 3 } for milliseconds). Default is 0 for units larger than millisecond, 3 for millisecond, 6 for microsecond, and 9 for nanosecond.
- * @example endOfZoned("2024-02-29T12:34:56+00:00[UTC]", "month") => "2024-02-29T23:59:59.999999999+00:00[UTC]"
- * @example endOfZoned("2024-02-29T12:34:56+00:00[UTC]", "week", { weekStartsOn: "sunday" }) => "2024-03-02T23:59:59.999999999+00:00[UTC]"
- * @example endOfZoned("2024-02-29T12:34:56.789+00:00[UTC]", "second", { fractionalSecondDigits: 3 }) => "2024-02-29T12:34:56.999+00:00[UTC]"
- * @example endOfZoned("invalid", "month") => ""
- * @returns zoned ISO 8601 string representing the end of the specified unit, or empty string on invalid input
+ * @param unit Temporal.DateUnit|Temporal.TimeUnit to specify the unit for the end
+ * @param options optional: weekStartsOn ("monday" | "sunday"), fractionalSecondDigits (number)
+ * @returns zoned ISO 8601 string representing the end of the specified unit, or "" on invalid input
+ *
+ * @example endOfZoned("2024-02-29T12:34:56+00:00[UTC]", "month") // "2024-02-29T23:59:59.999999999+00:00[UTC]"
+ * @example endOfZoned("invalid", "month") // ""
  */
 export function endOfZoned(
   value: string,
@@ -39,7 +25,7 @@ export function endOfZoned(
   const weekStartsOn = optionsArg?.weekStartsOn ?? "monday";
   const fractionalSecondDigits = optionsArg?.fractionalSecondDigits;
 
-  if (!isValidZonedDateTime(value) || !supported.includes(unit)) return "";
+  if (!isValidZonedDateTime(value) || !isValidDateTimeUnit(unit)) return "";
 
   try {
     const source = Temporal.ZonedDateTime.from(value);

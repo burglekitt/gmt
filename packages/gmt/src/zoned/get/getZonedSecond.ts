@@ -4,14 +4,11 @@ import { isValidTimeZone } from "../validate";
 /**
  * Return the current second for the specified IANA timeZone.
  *
- * - Returns empty string for invalid timeZone.
- * - Returns empty string when timeZone cannot be resolved.
- *
  * @param ianaTimezone IANA timeZone identifier
+ * @returns current second string (zero-padded to 2 digits) or "" when invalid
+ *
  * @example getZonedSecond("America/New_York") // "00"
- * @example getZonedSecond("UTC") // "00"
  * @example getZonedSecond("invalid") // ""
- * @returns current second string (zero-padded) or "" when invalid
  */
 export function getZonedSecond(ianaTimezone: string): string {
   if (!isValidTimeZone(ianaTimezone)) return "";

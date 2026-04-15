@@ -38,11 +38,10 @@ function isValidZonedNowUnit(unit: string): unit is ZonedNowUnit {
  *
  * @param ianaTimezone IANA timeZone identifier
  * @param unit unit to extract from current zoned time
- * @example getZonedNowUnit("America/New_York", "hour") // "07" (or other current hour in New York)
- * @example getZonedNowUnit("UTC", "minute") // "34" (or other current minute in UTC)
- * @example getZonedNowUnit("invalid", "hour") // "" (invalid timeZone)
- * @example getZonedNowUnit("America/New_York", "invalidUnit") // "" (invalid unit)
  * @returns string representation of the requested unit or "" when invalid
+ *
+ * @example getZonedNowUnit("America/New_York", "hour") // "07"
+ * @example getZonedNowUnit("invalid", "hour") // ""
  */
 export function getZonedNowUnit(
   ianaTimezone: string,
