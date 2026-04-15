@@ -96,10 +96,11 @@ All public methods must have comprehensive JSDoc comments with `@example` tags. 
  * - Each bullet on its own line.
  *
  * @param paramName Description of the parameter
+ * @returns Description of return value, or "or <sentinel> on invalid input"
+ * 
  * @example functionName(input) // expected output
  * @example functionName(input, options) // expected output
  * @example functionName(invalidInput) // expected output (error case)
- * @returns Description of return value, or "or <sentinel> on invalid input"
  */
 export function functionName(...): ... {}
 ```
@@ -114,11 +115,12 @@ export function functionName(...): ... {}
  * - Validation is performed on each item in the array.
  *
  * @param dates Array of ISO PlainDate strings (e.g. "2024-03-10")
+ * @returns The latest date string, or null on invalid input
+ * 
  * @example maxDate(["2024-03-10", "2024-03-15", "2024-03-12"]) // "2024-03-15"
  * @example maxDate(["invalid", "2024-03-15", "2024-03-12"]) // "2024-03-15"
  * @example maxDate(["invalid", "also invalid"]) // null
  * @example maxDate([]) // null
- * @returns The latest date string, or null on invalid input
  */
 ```
 
