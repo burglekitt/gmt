@@ -3,8 +3,10 @@ import { Temporal } from "@js-temporal/polyfill";
 import { isValidDateTime } from "../validate";
 
 /**
- * Return true if two PlainDateTime ISO strings represent the same instant of
- * local date/time components.
+ * Return true if two PlainDateTime ISO strings represent the same instant of local date/time components.
+ *
+ * - Compares all date and time components.
+ * - Returns false if either input is invalid.
  *
  * @param value1 first ISO PlainDateTime string
  * @param value2 second ISO PlainDateTime string

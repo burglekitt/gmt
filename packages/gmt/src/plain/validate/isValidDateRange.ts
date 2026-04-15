@@ -11,18 +11,21 @@ interface IsValidDateRangeProps {
 }
 
 /**
- * Return whether `value1` is before `value2`. If `options.allowEqual` is
- * true then equality is considered valid as well.
+ * Return whether `value1` is before `value2`.
+ *
+ * - Validates both dates using regex and Temporal.PlainDate.from().
+ * - Rejects leap seconds in either date.
+ * - When `options.allowEqual` is true, equality is considered valid as well.
  *
  * @param value1 first ISO PlainDate string
  * @param value2 second ISO PlainDate string
  * @param options optional allowEqual flag
  * @returns boolean indicating whether the date range is valid
  *
- * @example isValidDateRange({ value1: "2024-02-28", value2: "2024-02-29" }) => true
- * @example isValidDateRange({ value1: "2024-02-29", value2: "2024-02-28" }) => false
- * @example isValidDateRange({ value1: "2024-02-29", value2: "2024-02-29" }) => false
- * @example isValidDateRange({ value1: "2024-02-29", value2: "2024-02-29", options: { allowEqual: true } }) => true
+ * @example isValidDateRange({ value1: "2024-02-28", value2: "2024-02-29" }) // true
+ * @example isValidDateRange({ value1: "2024-02-29", value2: "2024-02-28" }) // false
+ * @example isValidDateRange({ value1: "2024-02-29", value2: "2024-02-29" }) // false
+ * @example isValidDateRange({ value1: "2024-02-29", value2: "2024-02-29", options: { allowEqual: true } }) // true
  */
 export function isValidDateRange({
   value1,

@@ -2,7 +2,10 @@ import { Temporal } from "@js-temporal/polyfill";
 import { isValidDate } from "../validate";
 
 /**
- * Return true if the first ISO PlainDate string represents a date after the second
+ * Return true if the first ISO PlainDate string represents a date after the second.
+ *
+ * - Uses Temporal.PlainDate.compare to compare dates.
+ * - Returns false if either input is invalid.
  *
  * @param value1 first ISO PlainDate string
  * @param value2 second ISO PlainDate string

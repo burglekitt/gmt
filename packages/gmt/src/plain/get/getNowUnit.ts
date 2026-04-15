@@ -13,8 +13,12 @@ function isValidPlainNowUnit(unit: string): unit is NowUnit {
 /**
  * Return the requested current unit value using the system timeZone.
  *
+ * - Valid units: "year", "month", "week", "day", "dayOfWeek", "hour", "minute", "second", "millisecond", "microsecond", "nanosecond".
+ * - Uses Temporal.Now.zonedDateTimeISO to get current time in system timezone.
+ * - Returns "" when unit is invalid or system timezone is unavailable.
+ *
  * @param unit unit to extract from current local time
- * @returns string representation of the requested unit or "" when invalid
+ * @returns string representation of the requested unit or "" on invalid
  *
  * @example getNowUnit("year") // "2024"
  * @example getNowUnit("month") // "03"

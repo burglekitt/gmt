@@ -5,6 +5,10 @@ import { isValidDateTime } from "../validate";
 /**
  * Return a specific unit extracted from a PlainDateTime string.
  *
+ * - Extracts "year", "month", "day", "hour", "minute", "second", or "millisecond" from a PlainDateTime.
+ * - Returns zero-padded string for most units.
+ * - Returns "" for invalid input.
+ *
  * @param value ISO PlainDateTime string
  * @param unit unit to extract from the datetime
  * @returns string representation of the requested unit or "" on invalid input

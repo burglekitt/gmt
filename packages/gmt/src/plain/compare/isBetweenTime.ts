@@ -5,9 +5,11 @@ import { isValidTime } from "../validate";
 /**
  * Return true when `time` is between `start` and `end` (inclusive by default).
  *
- * - Validates inputs and then compares using Temporal.PlainTime.compare.
- * - Returns false for invalid inputs.
- * - Note: PlainTime comparison does not account for day overflow - wrap in PlainDateTime for day-spanning ranges.
+ * - Uses Temporal.PlainTime.compare to compare times.
+ * - Returns false if start > end (invalid range).
+ * - Returns false if any input is invalid.
+ * - Use options.inclusiveStart and options.inclusiveEnd to control boundary inclusivity.
+ * - Note: PlainTime comparison does not account for day overflow.
  *
  * @param time ISO PlainTime string to check
  * @param start ISO PlainTime string for the start of the range

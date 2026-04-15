@@ -3,6 +3,9 @@ import type { TimeUnit } from "../../types";
 /**
  * Return true when `unit` is a valid TimeUnit.
  *
+ * - Valid units are: "hour", "minute", "second", "millisecond", "microsecond", "nanosecond".
+ * - Uses type assertion to narrow the type.
+ *
  * @param unit candidate string
  * @returns boolean indicating validity
  *

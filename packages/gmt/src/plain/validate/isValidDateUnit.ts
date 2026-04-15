@@ -3,6 +3,9 @@ import type { DateUnit } from "../../types";
 /**
  * Return true when `unit` is a valid DateUnit.
  *
+ * - Valid units are: "year", "month", "week", "day".
+ * - Uses type assertion to narrow the type.
+ *
  * @param unit candidate string
  * @returns boolean indicating validity
  *

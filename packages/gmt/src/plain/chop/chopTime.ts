@@ -4,6 +4,9 @@ import { isValidDateTime } from "../validate";
 /**
  * Return the PlainDate portion extracted from an ISO PlainDateTime string.
  *
+ * - Extracts date components from a PlainDateTime.
+ * - Returns "" for invalid input.
+ *
  * @param value ISO PlainDateTime string
  * @returns ISO PlainDate string or "" on invalid input
  *

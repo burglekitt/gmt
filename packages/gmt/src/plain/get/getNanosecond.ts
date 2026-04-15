@@ -4,7 +4,11 @@ import { getSystemTimeZone } from "./getSystemTimeZone";
 /**
  * Return the current nanosecond using the system timeZone.
  *
- * @returns current nanosecond string (zero-padded to 3 digits) or "" when invalid
+ * - Uses Temporal.Now.plainDateTimeISO to get current nanosecond in system timezone.
+ * - Returns zero-padded string to 3 digits (e.g., "789").
+ * - Returns "" when system timezone is unavailable.
+ *
+ * @returns current nanosecond string (zero-padded to 3 digits) or "" on invalid
  *
  * @example getNanosecond() // "000"
  * @example getNanosecond() // "" (when system timeZone unavailable)

@@ -5,8 +5,12 @@ import { isValidDate } from "../validate";
 /**
  * Return the first day of the quarter for a given ISO date.
  *
+ * - Returns the first day (month and day set to 1) of the quarter containing the input date.
+ * - Q1 returns "01-01", Q2 returns "04-01", Q3 returns "07-01", Q4 returns "10-01".
+ * - Validates input using isValidDate.
+ *
  * @param value ISO PlainDate string
- * @returns ISO PlainDate string for the first day of the quarter, or empty string on invalid input
+ * @returns ISO PlainDate string for the first day of the quarter, or "" on invalid input
  *
  * @example startOfQuarterForDate("2024-03-15") // "2024-01-01"
  * @example startOfQuarterForDate("2024-06-15") // "2024-04-01"

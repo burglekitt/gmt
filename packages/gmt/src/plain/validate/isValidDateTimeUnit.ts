@@ -3,6 +3,9 @@ import type { DateTimeUnit } from "../../types";
 /**
  * Return true when `unit` is a valid DateTimeUnit.
  *
+ * - Valid units are: "year", "month", "week", "day", "hour", "minute", "second", "millisecond", "microsecond", "nanosecond".
+ * - Uses type assertion to narrow the type.
+ *
  * @param unit candidate string
  * @returns boolean indicating validity
  *

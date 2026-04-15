@@ -4,21 +4,17 @@ import { isValidDate } from "../validate";
 const supported: Temporal.DateUnit[] = ["year", "month", "week", "day"];
 
 /**
- * Return the end of the specified date `unit` (year|month|week|day) for a given ISO 8601 date string.
- * - Uses Temporal.PlainDate
- * - Returns an empty string "" for invalid inputs or units.
+ * Return the end of the specified date `unit` for a given ISO 8601 date string.
+ *
+ * - Returns "" for invalid inputs.
  *
  * @param value ISO 8601 date string
- * @param unit Temporal.DateUnit to specify the unit for the end (e.g. "month")
- * @param options { weekStartsOn: "monday" | "sunday" } - Optional parameter to specify the start of the week when unit is "week". Default is "monday".
- * @returns ISO 8601 string representing the end of the specified unit, or empty string on invalid input
+ * @param unit Temporal.DateUnit to specify the unit for the end
+ * @param optionsArg optional: weekStartsOn ("monday" | "sunday")
+ * @returns ISO 8601 string representing the end of the specified unit, or "" on invalid input
  *
- * @example endOfDate("2024-02-29", "month") => "2024-02-29"
- * @example endOfDate("2024-02-29", "year") => "2024-12-31"
- * @example endOfDate("2024-02-29", "week", { weekStartsOn: "monday" }) => "2024-03-03"
- * @example endOfDate("2024-02-29", "week", { weekStartsOn: "sunday" }) => "2024-03-02"
- * @example endOfDate("2024-02-29", "day") => "2024-02-29"
- * @example endOfDate("invalid-date", "month") => ""
+ * @example endOfDate("2024-02-29", "month") // "2024-02-29"
+ * @example endOfDate("invalid-date", "month") // ""
  */
 export function endOfDate(
   value: string,

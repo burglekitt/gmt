@@ -4,7 +4,10 @@ import { getSystemTimeZone } from "./getSystemTimeZone";
 /**
  * Return the current PlainDate as an ISO string in the system timeZone.
  *
- * @returns ISO 8601 PlainDate string or an empty string on error
+ * - Uses Temporal.Now.zonedDateTimeISO to get current date in system timezone.
+ * - Returns "" when system timezone is unavailable.
+ *
+ * @returns ISO 8601 PlainDate string or "" on error
  *
  * @example getToday() // "2024-03-15" (current date)
  */

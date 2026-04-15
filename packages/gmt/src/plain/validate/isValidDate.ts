@@ -5,6 +5,10 @@ import { isLeapSecond } from "./isLeapSecond";
 /**
  * Return true if `value` is a valid ISO PlainDate string.
  *
+ * - Uses regex to check format before parsing.
+ * - Rejects leap seconds (e.g., "2024-12-31T23:59:60").
+ * - Rejects invalid dates (e.g., "2024-02-30").
+ *
  * @param value ISO PlainDate string
  * @returns boolean indicating validity
  *

@@ -5,6 +5,10 @@ import { isValidDate } from "../validate";
 /**
  * Return a specific date unit extracted from a PlainDate string.
  *
+ * - Extracts "year", "month", or "day" from a PlainDate.
+ * - Returns zero-padded string for month and day.
+ * - Returns "" for invalid input.
+ *
  * @param value ISO PlainDate string
  * @param unit unit to extract from the date
  * @returns string representation of the requested unit or "" on invalid input

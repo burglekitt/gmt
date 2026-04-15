@@ -5,6 +5,9 @@ import { isValidTime } from "../validate";
 /**
  * Return true when `value1` is strictly after `value2` for PlainTime values.
  *
+ * - Uses Temporal.PlainTime.compare to compare times.
+ * - Returns false if either input is invalid.
+ *
  * @param value1 ISO PlainTime string for the first value
  * @param value2 ISO PlainTime string for the second value
  * @returns boolean indicating whether value1 > value2

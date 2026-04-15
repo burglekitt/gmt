@@ -16,28 +16,17 @@ const supported = [
 ];
 
 /**
- * Return the end of the specified date-time `unit` (year|month|day|hour|minute|...)
- * for a given ISO 8601 datetime string.
- * - Uses Temporal.PlainDateTime
- * - Returns an empty string "" for invalid inputs or units.
+ * Return the end of the specified date-time `unit` for a given ISO 8601 datetime string.
+ *
+ * - Returns "" for invalid inputs.
  *
  * @param value ISO 8601 datetime string
- * @param unit Temporal.DateUnit | Temporal.TimeUnit to specify the unit for the end (e.g. "month")
- * @param options { weekStartsOn: "monday" | "sunday", fractionalSecondDigits?: number } - Optional parameter to specify the start of the week when unit is "week". Default is "monday". Optional parameter to specify fractionalSecondDigits for sub-second units (e.g. { fractionalSecondDigits: 3 } for milliseconds). Default is 0 for units larger than millisecond, 3 for millisecond, 6 for microsecond, and 9 for nanosecond.
- * @returns ISO 8601 string representing the end of the specified unit, or empty string on invalid input
+ * @param unit Temporal.DateUnit | Temporal.TimeUnit to specify the unit for the end
+ * @param optionsArg optional: weekStartsOn ("monday" | "sunday"), fractionalSecondDigits (number)
+ * @returns ISO 8601 string representing the end of the specified unit, or "" on invalid input
  *
- * @example endOfDateTime("2024-02-29T12:34:56", "month") => "2024-02-29T23:59:59.999999999"
- * @example endOfDateTime("2024-02-29T12:34:56", "year") => "2024-12-31T23:59:59.999999999"
- * @example endOfDateTime("2024-02-29T12:34:56", "week", { weekStartsOn: "monday" }) => "2024-03-03T23:59:59.999999999"
- * @example endOfDateTime("2024-02-29T12:34:56", "week", { weekStartsOn: "sunday" }) => "2024-03-02T23:59:59.999999999"
- * @example endOfDateTime("2024-02-29T12:34:56", "day") => "2024-02-29T23:59:59.999999999"
- * @example endOfDateTime("2024-02-29T12:34:56", "hour") => "2024-02-29T12:59:59.999999999"
- * @example endOfDateTime("2024-02-29T12:34:56", "minute") => "2024-02-29T12:34:59.999999999"
- * @example endOfDateTime("2024-02-29T12:34:56", "second") => "2024-02-29T12:34:56.999999999"
- * @example endOfDateTime("2024-02-29T12:34:56.789", "millisecond") => "2024-02-29T12:34:56.789999999"
- * @example endOfDateTime("2024-02-29T12:34:56.789123", "microsecond") => "2024-02-29T12:34:56.789123999"
- * @example endOfDateTime("2024-02-29T12:34:56.789123456", "nanosecond") => "2024-02-29T12:34:56.789123456"
- * @example endOfDateTime("invalid-date", "month") => ""
+ * @example endOfDateTime("2024-02-29T12:34:56", "month") // "2024-02-29T23:59:59.999999999"
+ * @example endOfDateTime("invalid-date", "month") // ""
  */
 export function endOfDateTime(
   value: string,

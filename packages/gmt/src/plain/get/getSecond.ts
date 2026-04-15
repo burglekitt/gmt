@@ -4,7 +4,11 @@ import { getSystemTimeZone } from "./getSystemTimeZone";
 /**
  * Return the current second using the system timeZone.
  *
- * @returns current second string (zero-padded) or "" when invalid
+ * - Uses Temporal.Now.plainDateTimeISO to get current second in system timezone.
+ * - Returns zero-padded string (e.g., "45").
+ * - Returns "" when system timezone is unavailable.
+ *
+ * @returns current second string (zero-padded) or "" on invalid
  *
  * @example getSecond() // "00"
  * @example getSecond() // "" (when system timeZone unavailable)

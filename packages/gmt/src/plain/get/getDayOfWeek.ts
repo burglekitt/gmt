@@ -4,11 +4,11 @@ import { getSystemTimeZone } from "./getSystemTimeZone";
 /**
  * Return the current ISO day of the week as a number in the system timeZone.
  *
- * - Uses the runtime system timeZone via `getSystemTimeZone()`.
- * - Returns `null` when the system timeZone cannot be determined or the current time cannot be read.
- * - ISO day of week: 1 (Monday) to 7 (Sunday).
+ * - Uses Temporal.Now.zonedDateTimeISO to get current day in system timezone.
+ * - Returns ISO day of week: 1 (Monday) to 7 (Sunday).
+ * - Returns null when system timezone is unavailable.
  *
- * @returns current ISO day of week number (1-7) or null when invalid
+ * @returns current ISO day of week number (1-7) or null on invalid
  *
  * @example getDayOfWeek() // 4
  * @example getDayOfWeek() // null (when system timeZone unavailable)

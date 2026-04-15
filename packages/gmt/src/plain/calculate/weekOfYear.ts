@@ -5,16 +5,20 @@ import { isValidDate } from "../validate";
 /**
  * Calculate the week number of the year for a given ISO 8601 date string.
  *
+ * - Returns the week number (1-53) based on the ISO week dating system.
+ * - Week 1 is the first week of the year with at least 4 days.
+ * - Accepts optional weekStartsOn option: "monday" (default) or "sunday".
+ *
  * @param value ISO 8601 date string
  * @param optionsArg { weekStartsOn: "monday" | "sunday" } - Optional parameter to specify the start of the week. Default is "monday".
  * @returns Week number of the year (1-53), or null for invalid input
  *
- * @example weekOfYear("2024-01-01") => 1
- * @example weekOfYear("2024-01-07") => 1
- * @example weekOfYear("2024-01-08") => 2
- * @example weekOfYear("2024-12-31") => 1 (since it falls in the first week of 2025 if week starts on Monday)
- * @example weekOfYear("2024-12-31", { weekStartsOn: "sunday" }) => 53 (since it falls in the last week of 2024 if week starts on Sunday)
- * @example weekOfYear("invalid-date") => null
+ * @example weekOfYear("2024-01-01") // 1
+ * @example weekOfYear("2024-01-07") // 1
+ * @example weekOfYear("2024-01-08") // 2
+ * @example weekOfYear("2024-12-31") // 1 (since it falls in the first week of 2025 if week starts on Monday)
+ * @example weekOfYear("2024-12-31", { weekStartsOn: "sunday" }) // 53 (since it falls in the last week of 2024 if week starts on Sunday)
+ * @example weekOfYear("invalid-date") // null
  */
 export function weekOfYear(
   value: string,

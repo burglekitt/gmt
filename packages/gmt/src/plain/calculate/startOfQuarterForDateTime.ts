@@ -5,8 +5,12 @@ import { isValidDateTime } from "../validate";
 /**
  * Return the start of the quarter for a given ISO datetime.
  *
+ * - Returns the first day of the quarter with time set to 00:00:00.
+ * - Q1 returns "01-01T00:00:00", Q2 returns "04-01T00:00:00", etc.
+ * - Validates input using isValidDateTime.
+ *
  * @param value ISO PlainDateTime string
- * @returns ISO PlainDateTime string for the start of the quarter, or empty string on invalid input
+ * @returns ISO PlainDateTime string for the start of the quarter, or "" on invalid input
  *
  * @example startOfQuarterForDateTime("2024-03-15T12:00:00") // "2024-01-01T00:00:00"
  * @example startOfQuarterForDateTime("2024-06-15T12:00:00") // "2024-04-01T00:00:00"

@@ -5,6 +5,10 @@ import { isValidTime } from "../validate";
 /**
  * Return a specific time unit extracted from a PlainTime string.
  *
+ * - Extracts "hour", "minute", "second", or "millisecond" from a PlainTime.
+ * - Returns zero-padded string for hour, minute, second (2 digits) and millisecond (3 digits).
+ * - Returns "" for invalid input.
+ *
  * @param value ISO PlainTime string
  * @param unit unit to extract from the time
  * @returns string representation of the requested unit or "" on invalid input

@@ -5,6 +5,10 @@ import { isValidDateTime } from "../validate";
 /**
  * Return a localized string for a PlainDateTime ISO input using Intl options.
  *
+ * - Uses Temporal.PlainDateTime.toLocaleString for formatting.
+ * - Accepts optional BCP 47 locale and Intl.DateTimeFormatOptions.
+ * - Returns "" for invalid input.
+ *
  * @param value ISO PlainDateTime string
  * @param locale optional BCP 47 locale identifier
  * @param options optional Intl.DateTimeFormatOptions

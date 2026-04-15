@@ -5,6 +5,11 @@ import { isValidDateTime } from "../validate";
 /**
  * Return true when `dateTime` is between `start` and `end` (inclusive by default).
  *
+ * - Uses Temporal.PlainDateTime.compare to compare date-times.
+ * - Returns false if start > end (invalid range).
+ * - Returns false if any input is invalid.
+ * - Use options.inclusiveStart and options.inclusiveEnd to control boundary inclusivity.
+ *
  * @param dateTime ISO PlainDateTime string to check
  * @param start ISO PlainDateTime string for the start of the range
  * @param end ISO PlainDateTime string for the end of the range

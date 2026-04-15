@@ -4,7 +4,11 @@ import { getSystemTimeZone } from "./getSystemTimeZone";
 /**
  * Return the current minute using the system timeZone.
  *
- * @returns current minute string (zero-padded) or "" when invalid
+ * - Uses Temporal.Now.plainDateTimeISO to get current minute in system timezone.
+ * - Returns zero-padded string (e.g., "30").
+ * - Returns "" when system timezone is unavailable.
+ *
+ * @returns current minute string (zero-padded) or "" on invalid
  *
  * @example getMinute() // "00"
  * @example getMinute() // "" (when system timeZone unavailable)

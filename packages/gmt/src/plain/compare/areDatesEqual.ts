@@ -5,6 +5,10 @@ import { isValidIsoDateLike } from "../validate";
 /**
  * Compare two ISO date-like strings for equality, ignoring time components.
  *
+ * - Accepts both PlainDate and PlainDateTime strings.
+ * - Extracts date components only for comparison.
+ * - Returns false if either input is invalid.
+ *
  * @param value1 ISO date-like string
  * @param value2 ISO date-like string
  * @returns true if the dates are equal, false otherwise

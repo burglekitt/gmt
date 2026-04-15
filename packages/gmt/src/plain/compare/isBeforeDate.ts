@@ -5,6 +5,9 @@ import { isValidDate } from "../validate";
 /**
  * Return true when `value1` is strictly before `value2` for PlainDate values.
  *
+ * - Uses Temporal.PlainDate.compare to compare dates.
+ * - Returns false if either input is invalid.
+ *
  * @param value1 ISO PlainDate string for the first value
  * @param value2 ISO PlainDate string for the second value
  * @returns boolean indicating whether value1 < value2

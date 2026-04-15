@@ -4,7 +4,11 @@ import { getSystemTimeZone } from "./getSystemTimeZone";
 /**
  * Return the current microsecond using the system timeZone.
  *
- * @returns current microsecond string (zero-padded to 3 digits) or "" when invalid
+ * - Uses Temporal.Now.plainDateTimeISO to get current microsecond in system timezone.
+ * - Returns zero-padded string to 3 digits (e.g., "456").
+ * - Returns "" when system timezone is unavailable.
+ *
+ * @returns current microsecond string (zero-padded to 3 digits) or "" on invalid
  *
  * @example getMicrosecond() // "000"
  * @example getMicrosecond() // "" (when system timeZone unavailable)

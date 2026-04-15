@@ -2,8 +2,11 @@ import { Temporal } from "@js-temporal/polyfill";
 import { isValidDateTime, isValidTime } from "../validate";
 
 /**
- * Return a string with millisecond precision removed from an ISO PlainDateTime
- * or PlainTime.
+ * Return a string with millisecond precision removed from a PlainDateTime or PlainTime value.
+ *
+ * - Truncates to second precision.
+ * - Accepts both PlainDateTime and PlainTime formats.
+ * - Returns "" for invalid input.
  *
  * @param value ISO PlainDateTime or PlainTime string
  * @returns ISO string without milliseconds, or "" on invalid input

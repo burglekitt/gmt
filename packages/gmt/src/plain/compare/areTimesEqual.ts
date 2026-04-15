@@ -4,6 +4,9 @@ import { isValidTime } from "../validate";
 /**
  * Return true if two PlainTime ISO strings represent the same time components.
  *
+ * - Compares all time components: hour, minute, second, millisecond, microsecond, nanosecond.
+ * - Returns false if either input is invalid.
+ *
  * @param value1 first ISO PlainTime string
  * @param value2 second ISO PlainTime string
  * @returns boolean indicating whether both times are equal component-wise

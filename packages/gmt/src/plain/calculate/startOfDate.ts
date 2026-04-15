@@ -4,19 +4,17 @@ import { isValidDate } from "../validate";
 const supported: Temporal.DateUnit[] = ["year", "month", "week"];
 
 /**
- * Return the start of the specified date-time `unit` (year|month|day|hour|minute|...)
- * for a given ISO 8601 date string.
+ * Return the start of the specified date `unit` for a given ISO 8601 date string.
+ *
+ * - Returns "" for invalid inputs.
  *
  * @param value ISO 8601 date string
- * @param unit Temporal.DateUnit to specify the unit for the start (e.g. "month")
- * @options { weekStartsOn: "monday" | "sunday" = 'monday' } - Optional parameter to specify the start of the week when unit is "week". Default is "monday".
- * @returns ISO 8601 string representing the start of the specified unit, or empty string on invalid input
+ * @param unit Temporal.DateUnit to specify the unit for the start
+ * @param optionsArg optional: weekStartsOn ("monday" | "sunday")
+ * @returns ISO 8601 string representing the start of the specified unit, or "" on invalid input
  *
- * @example startOfDate("2024-02-29", "month") => "2024-02-01"
- * @example startOfDate("2024-02-29", "year") => "2024-01-01"
- * @example startOfDate("2024-02-29", "week") => "2024-02-26" (Monday start)
- * @example startOfDate("2024-02-29", "week", { weekStartsOn: "sunday" }) => "2024-02-25" (Sunday start)
- * @example startOfDate("invalid-date", "month") => "" (invalid date input)
+ * @example startOfDate("2024-02-29", "month") // "2024-02-01"
+ * @example startOfDate("invalid-date", "month") // ""
  */
 export function startOfDate(
   value: string,

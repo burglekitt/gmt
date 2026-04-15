@@ -3,20 +3,22 @@ import { Temporal } from "@js-temporal/polyfill";
 import { isValidDate } from "../validate";
 
 /**
- * Return an array of ISO PlainDate strings between `startDate` and `endDate`
- * inclusive, stepping by `stepDays`.
+ * Return an array of ISO PlainDate strings between `startDate` and `endDate` inclusive.
+ *
+ * - Generates dates with optional step (default 1 day).
+ * - Returns [] if start > end, invalid inputs, or step <= 0.
  *
  * @param startDate ISO PlainDate string for the first date
  * @param endDate ISO PlainDate string for the last date (inclusive)
  * @param stepDays optional number of days to step between results
- * @returns array of ISO PlainDate strings, or an empty array on invalid input
+ * @returns array of ISO PlainDate strings, or [] on invalid input
  *
  * @example mapDatesInRange("2024-03-01", "2024-03-05") // ["2024-03-01", "2024-03-02", "2024-03-03", "2024-03-04", "2024-03-05"]
  * @example mapDatesInRange("2024-03-01", "2024-03-05", 2) // ["2024-03-01", "2024-03-03", "2024-03-05"]
- * @example mapDatesInRange("2024-03-05", "2024-03-01") // [] (end before start)
- * @example mapDatesInRange("invalid", "2024-03-05") // [] (invalid start date)
- * @example mapDatesInRange("2024-03-01", "invalid") // [] (invalid end date)
- * @example mapDatesInRange("2024-03-01", "2024-03-05", 0) // [] (invalid step)
+ * @example mapDatesInRange("2024-03-05", "2024-03-01") // []
+ * @example mapDatesInRange("invalid", "2024-03-05") // []
+ * @example mapDatesInRange("2024-03-01", "invalid") // []
+ * @example mapDatesInRange("2024-03-01", "2024-03-05", 0) // []
  */
 export function mapDatesInRange(
   startDate: string,
