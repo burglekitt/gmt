@@ -1,3 +1,4 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { getUnixDay } from "./getUnixDay";
 
 describe("getUnixDay", () => {
@@ -8,9 +9,19 @@ describe("getUnixDay", () => {
 
   afterEach(() => {
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it("returns current day", () => {
     expect(getUnixDay()).toBe("29");
+  });
+
+  it("returns empty string on failure", () => {
+    vi.useRealTimers();
+    vi.spyOn(Temporal.Now, "instant").mockImplementation(() => {
+      throw new Error("simulated failure");
+    });
+    const result = getUnixDay();
+    expect(result).toBe("");
   });
 });

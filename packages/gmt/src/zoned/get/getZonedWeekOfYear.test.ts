@@ -1,3 +1,4 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { TomorrowTimeZone, YesterdayTimeZone } from "../../test";
 import { getZonedWeekOfYear } from "./getZonedWeekOfYear";
 
@@ -11,8 +12,10 @@ describe("getZonedWeekOfYear", () => {
 
   afterEach(() => {
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
+  // yesterday tomorrow tests
   it.each`
     timeZone             | expected
     ${"UTC"}             | ${9}
@@ -24,5 +27,13 @@ describe("getZonedWeekOfYear", () => {
 
   it("returns null for invalid timeZone", () => {
     expect(getZonedWeekOfYear("invalid")).toBe(null);
+  });
+  it("returns null on failure", () => {
+    vi.useRealTimers();
+    vi.spyOn(Temporal.Now, "zonedDateTimeISO").mockImplementation(() => {
+      throw new Error("simulated failure");
+    });
+    const result = getZonedWeekOfYear("America/New_York");
+    expect(result).toBe(null);
   });
 });

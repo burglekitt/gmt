@@ -1,3 +1,4 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { getZonedNowUnit } from "./getZonedNowUnit";
 
 describe("getZonedNowUnit", () => {
@@ -10,6 +11,7 @@ describe("getZonedNowUnit", () => {
 
   afterEach(() => {
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it.each`
@@ -92,5 +94,14 @@ describe("getZonedNowUnit", () => {
     ${"invalid"}
   `("returns empty string for invalid unit $invalidUnit", ({ invalidUnit }) => {
     expect(getZonedNowUnit("UTC", invalidUnit as never)).toBe("");
+  });
+
+  it("returns empty string on failure", () => {
+    vi.useRealTimers();
+    vi.spyOn(Temporal.Now, "zonedDateTimeISO").mockImplementation(() => {
+      throw new Error("simulated failure");
+    });
+    const result = getZonedNowUnit("America/New_York", "year");
+    expect(result).toBe("");
   });
 });

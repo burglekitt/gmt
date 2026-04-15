@@ -16,9 +16,10 @@ describe("getZonedNow", () => {
 
   afterEach(() => {
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
-  // yesterday today tests
+  // yesterday tomorrow tests
   it.each`
     timeZone             | expected
     ${"UTC"}             | ${"2024-02-29T00:00:00.000+00:00[UTC]"}
@@ -91,4 +92,13 @@ describe("getZonedNow", () => {
       expect(parseZonedTimezone(value)).toBe(timeZone);
     });
   }
+
+  it("returns empty string on failure", () => {
+    vi.useRealTimers();
+    vi.spyOn(Temporal.Now, "zonedDateTimeISO").mockImplementation(() => {
+      throw new Error("simulated failure");
+    });
+    const result = getZonedNow("America/New_York");
+    expect(result).toBe("");
+  });
 });

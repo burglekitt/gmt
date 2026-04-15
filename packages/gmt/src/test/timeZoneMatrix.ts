@@ -212,6 +212,7 @@ export const localRangeBattleCases = battleTestTimeZones.map((timeZone) => ({
 }));
 
 // Stable fake "now" instant used by now/today related tests.
+// Equivalent to Unix time 1709164800000, which is 2024-02-29T00:00:00Z.
 export const fixedNowInstant = "2024-02-29T00:00:00.000Z";
 
 // Test for leap year handling in timeZone conversions. 2024-02-29T00:00:00Z is 1709164800000 in unix milliseconds.

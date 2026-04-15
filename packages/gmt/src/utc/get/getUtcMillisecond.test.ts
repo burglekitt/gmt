@@ -1,3 +1,4 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { getUtcMillisecond } from "./getUtcMillisecond";
 
 describe("getUtcMillisecond", () => {
@@ -8,9 +9,19 @@ describe("getUtcMillisecond", () => {
 
   afterEach(() => {
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it("returns current millisecond", () => {
     expect(getUtcMillisecond()).toBe("123");
+  });
+
+  it("returns empty string on failure", () => {
+    vi.useRealTimers();
+    vi.spyOn(Temporal.Now, "instant").mockImplementation(() => {
+      throw new Error("simulated failure");
+    });
+    const result = getUtcMillisecond();
+    expect(result).toBe("");
   });
 });

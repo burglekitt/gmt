@@ -36,7 +36,7 @@ describe("getNow", () => {
     expect(chopTime(now)).toBe(getToday());
   });
 
-  // yesterday today tests
+  // yesterday tomorrow tests
   it.each`
     timeZone             | expected
     ${"UTC"}             | ${"2024-02-29T00:00:00"}

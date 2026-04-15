@@ -1,3 +1,4 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { TomorrowTimeZone, YesterdayTimeZone } from "../../test";
 import { getZonedMonth } from "./getZonedMonth";
 
@@ -11,8 +12,10 @@ describe("getZonedMonth", () => {
 
   afterEach(() => {
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
+  // yesterday tomorrow tests
   it.each`
     timeZone             | expected
     ${"UTC"}             | ${"02"}
@@ -27,5 +30,14 @@ describe("getZonedMonth", () => {
 
   it("returns empty string for invalid timeZone", () => {
     expect(getZonedMonth("invalid")).toBe("");
+  });
+
+  it("returns empty string on failure", () => {
+    vi.useRealTimers();
+    vi.spyOn(Temporal.Now, "zonedDateTimeISO").mockImplementation(() => {
+      throw new Error("simulated failure");
+    });
+    const result = getZonedMonth("America/New_York");
+    expect(result).toBe("");
   });
 });

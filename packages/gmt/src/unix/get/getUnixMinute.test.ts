@@ -1,3 +1,4 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { getUnixMinute } from "./getUnixMinute";
 
 describe("getUnixMinute", () => {
@@ -8,9 +9,19 @@ describe("getUnixMinute", () => {
 
   afterEach(() => {
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it("returns current minute", () => {
     expect(getUnixMinute()).toBe("30");
+  });
+
+  it("returns empty string on failure", () => {
+    vi.useRealTimers();
+    vi.spyOn(Temporal.Now, "instant").mockImplementation(() => {
+      throw new Error("simulated failure");
+    });
+    const result = getUnixMinute();
+    expect(result).toBe("");
   });
 });

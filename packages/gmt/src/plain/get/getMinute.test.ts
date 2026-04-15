@@ -1,3 +1,4 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { TomorrowTimeZone, YesterdayTimeZone } from "../../test";
 import { getMinute } from "./getMinute";
 import * as getSystemTimeZoneModule from "./getSystemTimeZone";
@@ -18,6 +19,7 @@ describe("getMinute", () => {
   afterEach(() => {
     timeZoneSpy.mockRestore();
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it("returns current minute", () => {
@@ -41,4 +43,13 @@ describe("getMinute", () => {
       expect(getMinute()).toBe(expected);
     },
   );
+
+  it("returns empty string on failure", () => {
+    vi.useRealTimers();
+    vi.spyOn(Temporal.Now, "plainDateTimeISO").mockImplementation(() => {
+      throw new Error("simulated failure");
+    });
+    const result = getMinute();
+    expect(result).toBe("");
+  });
 });

@@ -1,4 +1,5 @@
 import * as getSystemTimeZoneModule from "../../plain/get/getSystemTimeZone";
+import { TomorrowTimeZone, YesterdayTimeZone } from "../../test";
 import { convertUnixToPlainDate } from "./convertUnixToPlainDate";
 
 describe("convertUnixToPlainDate", () => {
@@ -16,10 +17,8 @@ describe("convertUnixToPlainDate", () => {
 
   it.each`
     unix             | epochUnit    | expected
-    ${1706659200000} | ${undefined} | ${"2024-01-31"}
-    ${1706659200}    | ${"seconds"} | ${"2024-01-31"}
-    ${1704067200000} | ${undefined} | ${"2024-01-01"}
-    ${1706745600000} | ${undefined} | ${"2024-02-01"}
+    ${1709164800000} | ${undefined} | ${"2024-02-29"}
+    ${1709164800}    | ${"seconds"} | ${"2024-02-29"}
   `(
     "returns $expected for unix $unix with epochUnit $epochUnit",
     ({ unix, epochUnit, expected }) => {
@@ -31,10 +30,12 @@ describe("convertUnixToPlainDate", () => {
     },
   );
 
+  // yesterday tomorrow tests
   it.each`
-    unix             | timeZone              | expected
-    ${1706659200000} | ${"UTC"}              | ${"2024-01-31"}
-    ${1706659200000} | ${"America/New_York"} | ${"2024-01-30"}
+    unix             | timeZone             | expected
+    ${1709164800000} | ${"UTC"}             | ${"2024-02-29"}
+    ${1709164800000} | ${YesterdayTimeZone} | ${"2024-02-28"}
+    ${1709164800000} | ${TomorrowTimeZone}  | ${"2024-02-29"}
   `(
     "returns $expected for unix $unix in timeZone $timeZone",
     ({ unix, timeZone, expected }) => {

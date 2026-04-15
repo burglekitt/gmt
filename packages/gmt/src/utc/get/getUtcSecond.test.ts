@@ -1,3 +1,4 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { getUtcSecond } from "./getUtcSecond";
 
 describe("getUtcSecond", () => {
@@ -8,9 +9,19 @@ describe("getUtcSecond", () => {
 
   afterEach(() => {
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it("returns current second", () => {
     expect(getUtcSecond()).toBe("45");
+  });
+
+  it("returns empty string on failure", () => {
+    vi.useRealTimers();
+    vi.spyOn(Temporal.Now, "instant").mockImplementation(() => {
+      throw new Error("simulated failure");
+    });
+    const result = getUtcSecond();
+    expect(result).toBe("");
   });
 });

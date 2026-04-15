@@ -18,7 +18,7 @@ describe("getZonedDateTime", () => {
     },
   );
 
-  // yesterday today tests
+  // yesterday tomorrow tests
   it.each`
     timeZone             | expected
     ${"UTC"}             | ${"2024-02-29T14:30:45.000+00:00[UTC]"}

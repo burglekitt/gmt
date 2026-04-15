@@ -1,3 +1,4 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { TomorrowTimeZone, YesterdayTimeZone } from "../../test";
 import { getDayOfWeek } from "./getDayOfWeek";
 import * as getSystemTimeZoneModule from "./getSystemTimeZone";
@@ -18,6 +19,7 @@ describe("getDayOfWeek", () => {
   afterEach(() => {
     timeZoneSpy.mockRestore();
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it("returns current day of week", () => {
@@ -41,4 +43,13 @@ describe("getDayOfWeek", () => {
       expect(getDayOfWeek()).toBe(expected);
     },
   );
+
+  it("returns null on failure", () => {
+    vi.useRealTimers();
+    vi.spyOn(Temporal.Now, "zonedDateTimeISO").mockImplementation(() => {
+      throw new Error("simulated failure");
+    });
+    const result = getDayOfWeek();
+    expect(result).toBe(null);
+  });
 });

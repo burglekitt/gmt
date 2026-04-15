@@ -1,3 +1,4 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { getUtcMonth } from "./getUtcMonth";
 
 describe("getUtcMonth", () => {
@@ -8,9 +9,19 @@ describe("getUtcMonth", () => {
 
   afterEach(() => {
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it("returns current month", () => {
     expect(getUtcMonth()).toBe("02");
+  });
+
+  it("returns empty string on failure", () => {
+    vi.useRealTimers();
+    vi.spyOn(Temporal.Now, "instant").mockImplementation(() => {
+      throw new Error("simulated failure");
+    });
+    const result = getUtcMonth();
+    expect(result).toBe("");
   });
 });

@@ -1,3 +1,4 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { TomorrowTimeZone, YesterdayTimeZone } from "../../test";
 import { chopTime, chopUtc } from "../chop";
 import { areDatesEqual } from "../compare";
@@ -21,6 +22,7 @@ describe("getToday", () => {
   afterEach(() => {
     timeZoneSpy.mockRestore();
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it("returns an exact plain date for the mocked system timeZone", () => {
@@ -47,4 +49,13 @@ describe("getToday", () => {
       expect(getToday()).toBe(expected);
     },
   );
+
+  it("returns empty string on failure", () => {
+    vi.useRealTimers();
+    vi.spyOn(Temporal.Now, "zonedDateTimeISO").mockImplementation(() => {
+      throw new Error("simulated failure");
+    });
+    const result = getToday();
+    expect(result).toBe("");
+  });
 });

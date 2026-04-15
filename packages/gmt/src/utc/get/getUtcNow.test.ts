@@ -11,6 +11,7 @@ describe("getUtcNow", () => {
 
   afterEach(() => {
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it("returns the exact mocked UTC datetime string", () => {
@@ -29,5 +30,14 @@ describe("getUtcNow", () => {
 
     expect(convertUtcToUnix(value, "milliseconds")).toBe(1709164800000);
     expect(convertUtcToUnix(value, "seconds")).toBe(1709164800);
+  });
+
+  it("returns empty string on failure", () => {
+    vi.useRealTimers();
+    vi.spyOn(Temporal.Now, "instant").mockImplementation(() => {
+      throw new Error("simulated failure");
+    });
+    const result = getUtcNow();
+    expect(result).toBe("");
   });
 });

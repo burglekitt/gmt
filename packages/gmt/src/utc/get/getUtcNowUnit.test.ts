@@ -1,3 +1,4 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { getUtcNowUnit } from "./getUtcNowUnit";
 
 describe("getUtcNowUnit", () => {
@@ -8,6 +9,7 @@ describe("getUtcNowUnit", () => {
 
   afterEach(() => {
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it.each`
@@ -52,5 +54,14 @@ describe("getUtcNowUnit", () => {
     ${"invalid"}
   `("returns empty string for invalid unit $invalidUnit", ({ invalidUnit }) => {
     expect(getUtcNowUnit(invalidUnit as never)).toBe("");
+  });
+
+  it("returns empty string on failure", () => {
+    vi.useRealTimers();
+    vi.spyOn(Temporal.Now, "instant").mockImplementation(() => {
+      throw new Error("simulated failure");
+    });
+    const result = getUtcNowUnit("year");
+    expect(result).toBe("");
   });
 });

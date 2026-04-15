@@ -1,3 +1,4 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { TomorrowTimeZone, YesterdayTimeZone } from "../../test";
 import { getMonth } from "./getMonth";
 import * as getSystemTimeZoneModule from "./getSystemTimeZone";
@@ -18,6 +19,7 @@ describe("getMonth", () => {
   afterEach(() => {
     timeZoneSpy.mockRestore();
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it("returns current month", () => {
@@ -41,4 +43,13 @@ describe("getMonth", () => {
       expect(getMonth()).toBe(expected);
     },
   );
+
+  it("returns empty string on failure", () => {
+    vi.useRealTimers();
+    vi.spyOn(Temporal.Now, "zonedDateTimeISO").mockImplementation(() => {
+      throw new Error("simulated failure");
+    });
+    const result = getMonth();
+    expect(result).toBe("");
+  });
 });

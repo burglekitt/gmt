@@ -9,6 +9,7 @@ describe("getUtcYear", () => {
 
   afterEach(() => {
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it("returns current year", () => {

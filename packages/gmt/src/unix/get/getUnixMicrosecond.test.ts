@@ -1,3 +1,4 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { getUnixMicrosecond } from "./getUnixMicrosecond";
 
 describe("getUnixMicrosecond", () => {
@@ -8,10 +9,20 @@ describe("getUnixMicrosecond", () => {
 
   afterEach(() => {
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it("returns current microsecond", () => {
     const result = getUnixMicrosecond();
     expect(result).toMatch(/^\d{3}$/);
+  });
+
+  it("returns empty string on failure", () => {
+    vi.useRealTimers();
+    vi.spyOn(Temporal.Now, "instant").mockImplementation(() => {
+      throw new Error("simulated failure");
+    });
+    const result = getUnixMicrosecond();
+    expect(result).toBe("");
   });
 });
