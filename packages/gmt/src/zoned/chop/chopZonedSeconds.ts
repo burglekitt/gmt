@@ -10,13 +10,9 @@ import { isValidZonedDateTime } from "../validate/isValidZonedDateTime";
  * - Uses `Temporal.ZonedDateTime.prototype.toString({ smallestUnit: 'minute' })`
  *   to drop seconds and sub-second precision.
  *
- * Example:
- * ```ts
- * chopZonedSeconds("2024-02-29T12:30:45.123-05:00[America/New_York]")
- * // => "2024-02-29T12:30-05:00[America/New_York]" (minute precision)
- * ```
- *
  * @param value - ISO 8601 zoned datetime string
+ * @example chopZonedSeconds("2024-02-29T14:30:45.123-05:00[America/New_York]") // "2024-02-29T14:30-05:00[America/New_York]"
+ * @example chopZonedSeconds("invalid") // ""
  * @returns Zoned datetime string at minute precision or an empty string for invalid input
  */
 export function chopZonedSeconds(value: string): string {

@@ -9,6 +9,9 @@ import { isValidTimeZone } from "../validate";
  * - Returns empty string "" for invalid timeZone or on failure.
  *
  * @param ianaTimezone IANA timeZone identifier
+ * @example getZonedToday("America/New_York") // "2024-02-29"
+ * @example getZonedToday("UTC") // "2024-02-29"
+ * @example getZonedToday("invalid") // ""
  * @returns ISO date string (YYYY-MM-DD) or empty string when invalid
  */
 export function getZonedToday(ianaTimezone: string): string {

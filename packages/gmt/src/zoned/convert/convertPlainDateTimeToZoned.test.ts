@@ -4,9 +4,9 @@ import {
   YesterdayTimeZone,
 } from "../../test";
 import { parseZonedTimezone } from "../parse";
-import { getZonedDateTime } from "./getZonedDateTime";
+import { convertPlainDateTimeToZoned } from "./convertPlainDateTimeToZoned";
 
-describe("getZonedDateTime", () => {
+describe("convertPlainDateTimeToZoned", () => {
   it.each`
     value                    | timeZone              | expected
     ${"2024-02-29T14:30:45"} | ${"UTC"}              | ${"2024-02-29T14:30:45.000+00:00[UTC]"}
@@ -14,7 +14,7 @@ describe("getZonedDateTime", () => {
   `(
     "returns $expected for $value in $timeZone",
     ({ value, timeZone, expected }) => {
-      expect(getZonedDateTime(value, timeZone)).toBe(expected);
+      expect(convertPlainDateTimeToZoned(value, timeZone)).toBe(expected);
     },
   );
 
@@ -25,7 +25,9 @@ describe("getZonedDateTime", () => {
     ${YesterdayTimeZone} | ${"2024-02-29T14:30:45.000-11:00[Pacific/Niue]"}
     ${TomorrowTimeZone}  | ${"2024-02-29T14:30:45.000+13:00[Pacific/Apia]"}
   `("returns $expected for timeZone $timeZone", ({ timeZone, expected }) => {
-    expect(getZonedDateTime("2024-02-29T14:30:45", timeZone)).toBe(expected);
+    expect(convertPlainDateTimeToZoned("2024-02-29T14:30:45", timeZone)).toBe(
+      expected,
+    );
   });
 
   // smallestUnit option tests
@@ -40,7 +42,7 @@ describe("getZonedDateTime", () => {
     "returns $expected with smallestUnit $smallestUnit",
     ({ smallestUnit, expected }) => {
       expect(
-        getZonedDateTime("2024-02-29T14:30:45.123456789", "UTC", {
+        convertPlainDateTimeToZoned("2024-02-29T14:30:45.123456789", "UTC", {
           smallestUnit,
         }),
       ).toBe(expected);
@@ -68,7 +70,9 @@ describe("getZonedDateTime", () => {
   `(
     "attaches $timeZone offset to the plain datetime 2024-02-29T14:30:45",
     ({ timeZone, expected }: { timeZone: string; expected: string }) => {
-      expect(getZonedDateTime("2024-02-29T14:30:45", timeZone)).toBe(expected);
+      expect(convertPlainDateTimeToZoned("2024-02-29T14:30:45", timeZone)).toBe(
+        expected,
+      );
     },
   );
 
@@ -81,7 +85,9 @@ describe("getZonedDateTime", () => {
   `(
     "returns an empty string for invalid datetime $invalidValue",
     ({ invalidValue }) => {
-      expect(getZonedDateTime(invalidValue as never, "UTC")).toBe("");
+      expect(convertPlainDateTimeToZoned(invalidValue as never, "UTC")).toBe(
+        "",
+      );
     },
   );
 
@@ -95,14 +101,20 @@ describe("getZonedDateTime", () => {
     "returns an empty string for invalid timeZone $invalidTimeZone",
     ({ invalidTimeZone }) => {
       expect(
-        getZonedDateTime("2024-02-29T14:30:45", invalidTimeZone as never),
+        convertPlainDateTimeToZoned(
+          "2024-02-29T14:30:45",
+          invalidTimeZone as never,
+        ),
       ).toBe("");
     },
   );
 
   for (const timeZone of battleTestTimeZones) {
     it(`creates a zoned datetime in battle-test timeZone ${timeZone}`, () => {
-      const value = getZonedDateTime("2024-02-29T00:00:00", timeZone);
+      const value = convertPlainDateTimeToZoned(
+        "2024-02-29T00:00:00",
+        timeZone,
+      );
       expect(value).not.toBe("");
       expect(parseZonedTimezone(value)).toBe(timeZone);
     });

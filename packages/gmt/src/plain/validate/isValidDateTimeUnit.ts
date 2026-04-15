@@ -4,11 +4,12 @@ import type { DateTimeUnit } from "../../types";
  * Return true when `unit` is a valid DateTimeUnit.
  *
  * @param unit candidate string
+ * @returns boolean indicating validity
+ * 
  * @example isValidDateTimeUnit("year") // true
  * @example isValidDateTimeUnit("month") // true
  * @example isValidDateTimeUnit("weeks") // false
  * @example isValidDateTimeUnit("invalid") // false
- * @returns boolean indicating validity
  */
 
 export function isValidDateTimeUnit(unit: string): unit is DateTimeUnit {

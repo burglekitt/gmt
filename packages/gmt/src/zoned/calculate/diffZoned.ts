@@ -15,6 +15,10 @@ import { isValidZonedDateTime } from "../validate";
  * @param value1 zoned ISO 8601 datetime string (start)
  * @param value2 zoned ISO 8601 datetime string (end)
  * @param units DateTimeDurationUnit | DateTimeDurationUnit[] to measure the difference (e.g. "hours" | ["years", "months", "hours"])
+ * @example diffZoned("2024-02-28T14:30:00+00:00[UTC]", "2024-03-01T15:30:00+00:00[UTC]", "days") // 2
+ * @example diffZoned("2024-02-28T14:30:00+00:00[UTC]", "2024-03-01T15:30:00+00:00[UTC]", ["days", "hours"]) // { days: 2, hours: 1 }
+ * @example diffZoned("2024-02-28T14:30:00+00:00[UTC]", "2024-03-01T15:30:00+00:00[UTC]", "invalidUnit") // null
+ * @example diffZoned("invalid", "2024-03-01T15:30:00+00:00[UTC]", "days") // null
  * @returns numeric difference in the requested unit, or null on invalid input
  */
 export function diffZoned(

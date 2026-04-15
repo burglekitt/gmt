@@ -12,6 +12,11 @@ import { isValidZonedDateTime } from "../validate";
  *
  * @param value1 first zoned datetime string
  * @param value2 second zoned datetime string
+ * @example isAfterZoned("2024-02-29T12:34:56.789+00:00[UTC]", "2024-02-29T12:34:56.788+00:00[UTC]") // true
+ * @example isAfterZoned("2024-02-29T12:34:56.789+00:00[UTC]", "2024-02-29T12:34:56.789+00:00[UTC]") // false
+ * @example isAfterZoned("2024-02-29T12:34:56.789+00:00[UTC]", "2024-02-29T12:34:56.790+00:00[UTC]") // false
+ * @example isAfterZoned("2024-02-29T12:34:56.789+00:00[UTC]", "2024-02-29T07:34:56.789-05:00[America/New_York]") // false (same instant, different timeZone)
+ * @example isAfterZoned("invalid", "2024-02-29T12:34:56.789+00:00[UTC]") // false (invalid input)
  * @returns `true` if `value1` is after `value2`, otherwise `false`
  */
 export function isAfterZoned(value1: string, value2: string): boolean {

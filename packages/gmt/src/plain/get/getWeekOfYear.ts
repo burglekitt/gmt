@@ -5,14 +5,13 @@ import { getSystemTimeZone } from "./getSystemTimeZone";
 /**
  * Get the ISO week number of the current date.
  *
- * - Returns null if the system timezone cannot be determined.
- * - Defaults to week starting on Monday (ISO standard).
+ * @returns The ISO week number (1-53), or null if timezone unavailable
  *
  * @param weekStartsOnArg Optional override for week starting day ("monday" or "sunday").
  * @example getWeekOfYear() // 15 (example output)
  * @example getWeekOfYear("monday") // 15 (example output)
  * @example getWeekOfYear("sunday") // 14 (example output)
- * @returns The ISO week number (1-53), or null if timezone unavailable
+ * @example getWeekOfYear() // null (when system timeZone unavailable)
  */
 export function getWeekOfYear(
   weekStartsOnArg?: "monday" | "sunday",

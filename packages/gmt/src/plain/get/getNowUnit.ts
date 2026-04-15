@@ -13,12 +13,21 @@ function isValidPlainNowUnit(unit: string): unit is NowUnit {
 /**
  * Return the requested current unit value using the system timeZone.
  *
- * - Uses the runtime system timeZone via `getSystemTimeZone()`.
- * - Returns an empty string on invalid unit or when the system timeZone
- *   cannot be determined.
- *
  * @param unit unit to extract from current local time
  * @returns string representation of the requested unit or "" when invalid
+ * 
+ * @example getNowUnit("year") // "2024"
+ * @example getNowUnit("month") // "03"
+ * @example getNowUnit("week") // "11"
+ * @example getNowUnit("day") // "15"
+ * @example getNowUnit("dayOfWeek") // "5"
+ * @example getNowUnit("hour") // "14"
+ * @example getNowUnit("minute") // "30"
+ * @example getNowUnit("second") // "45"
+ * @example getNowUnit("millisecond") // "000"
+ * @example getNowUnit("microsecond") // "000"
+ * @example getNowUnit("nanosecond") // "000"
+ * @example getNowUnit("invalid") // ""
  */
 export function getNowUnit(unit: NowUnit): string {
   if (!isValidPlainNowUnit(String(unit ?? ""))) return "";

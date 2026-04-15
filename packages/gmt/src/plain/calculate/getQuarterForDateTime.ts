@@ -10,12 +10,13 @@ import { isValidDateTime } from "../validate";
  * - Returns null for invalid inputs.
  *
  * @param value ISO PlainDateTime string
+ * @returns number (1-4) or null for invalid input
+ * 
  * @example getQuarterForDateTime("2024-01-15T12:00:00") // 1
  * @example getQuarterForDateTime("2024-04-15T12:00:00") // 2
  * @example getQuarterForDateTime("2024-07-15T12:00:00") // 3
  * @example getQuarterForDateTime("2024-10-15T12:00:00") // 4
  * @example getQuarterForDateTime("invalid") // null
- * @returns number (1-4) or null for invalid input
  */
 export function getQuarterForDateTime(value: string): number | null {
   if (!isValidDateTime(value)) {

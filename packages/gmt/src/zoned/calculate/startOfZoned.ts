@@ -1,19 +1,9 @@
 import { Temporal } from "@js-temporal/polyfill";
-import type { FractionalDigit } from "../../types";
+import type { DateTimeUnit, FractionalDigit } from "../../types";
 import { isValidZonedDateTime } from "../validate";
+import { isValidDateTimeUnit } from "../..";
 
-const supported: (Temporal.DateUnit | Temporal.TimeUnit)[] = [
-  "year",
-  "month",
-  "week",
-  "day",
-  "hour",
-  "minute",
-  "second",
-  "millisecond",
-  "microsecond",
-  "nanosecond",
-];
+
 
 /**
  * Return the start of the specified date-time `unit` (year|month|day|hour|minute|...)
@@ -23,11 +13,14 @@ const supported: (Temporal.DateUnit | Temporal.TimeUnit)[] = [
  * @param unit Temporal.DateUnit|Temporal.TimeUnit to specify the unit for the start (e.g. "month")
  * @param options { weekStartsOn: "monday" | "sunday" = 'monday', fractionalSecondDigits?: number } - Optional parameter to specify the start of the week when unit is "week". Default is "monday". Optional parameter to specify fractionalSecondDigits for sub-second units (e.g. { fractionalSecondDigits: 3 } for milliseconds). Default is 0 for units larger than millisecond, 3 for millisecond, 6 for microsecond, and 9 for nanosecond.
  * @example startOfZoned("2024-02-29T12:34:56+00:00[UTC]", "month") => "2024-02-01T00:00:00+00:00[UTC]"
+ * @example startOfZoned("2024-02-29T12:34:56+00:00[UTC]", "week", { weekStartsOn: "sunday" }) => "2024-02-25T00:00:00+00:00[UTC]"
+ * @example startOfZoned("2024-02-29T12:34:56.789+00:00[UTC]", "second", { fractionalSecondDigits: 3 }) => "2024-02-29T12:34:56.000+00:00[UTC]"
+ * @example startOfZoned("invalid", "month") => ""
  * @returns zoned ISO 8601 string representing the start of the specified unit, or empty string on invalid input
  */
 export function startOfZoned(
   value: string,
-  unit: Temporal.DateUnit | Temporal.TimeUnit,
+  unit: DateTimeUnit,
   optionsArg?: {
     weekStartsOn?: "monday" | "sunday";
     fractionalSecondDigits?: FractionalDigit;
@@ -36,7 +29,7 @@ export function startOfZoned(
   const weekStartsOn = optionsArg?.weekStartsOn ?? "monday";
   const fractionalSecondDigits = optionsArg?.fractionalSecondDigits;
 
-  if (!isValidZonedDateTime(value) || !supported.includes(unit)) return "";
+  if (!isValidZonedDateTime(value) || !isValidDateTimeUnit(unit)) return "";
 
   try {
     const source = Temporal.ZonedDateTime.from(value);

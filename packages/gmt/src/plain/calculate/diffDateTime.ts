@@ -14,9 +14,11 @@ import { getLargestDateTimeDurationUnit } from "./getLargestDateTimeDurationUnit
  * @param dateTime1 ISO PlainDateTime string for the start
  * @param dateTime2 ISO PlainDateTime string for the end
  * @param units DateTimeDurationUnit|DateTimeDurationUnit[] to measure the difference (e.g. ["years", "months", "hours"])
- * @example diffDateTime("2024-03-10T12:00:00", "2024-03-15T12:00:00", "day") // 5
- * @example diffDateTime("2024-03-10T12:00:00", "2025-04-10T15:30:00", ["year", "month", "hour"]) // { year: 1, month: 1, hour: 3 }
  * @returns numeric difference in the requested unit, or null on invalid input
+ * 
+ * @example diffDateTime("2024-03-10T12:00:00", "2024-03-15T12:00:00", "day") // 5
+ * @example diffDateTime("2024-03-10T12:00:00", "2025-04-10T15:30:00", ["year", "month", "hour"]) // { year: 1, month: 1, hour: 3 
+ * @example diffDateTime("invalid", "2024-03-15T12:00:00", "day") // null}
  */
 export function diffDateTime(
   dateTime1: string,

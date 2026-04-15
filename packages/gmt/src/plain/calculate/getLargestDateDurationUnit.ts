@@ -6,8 +6,12 @@ import type { DateDurationUnit } from "../../types";
  * If no valid unit is found, defaults to "days" (though this case should be prevented by validation).
  *
  * @param units array of DateDurationUnits to evaluate
- * @example getLargestDateDurationUnit(["months", "days"]) => "months"
  * @returns the largest DateDurationUnit found in the array, or "days" if none are valid
+ * 
+ * @example getLargestDateDurationUnit(["months", "days"]) => "months"
+ * @example getLargestDateDurationUnit(["weeks", "days"]) => "weeks"
+ * @example getLargestDateDurationUnit(["days"]) => "days"
+ * @example getLargestDateDurationUnit([]) => "days" (defaults to "days" if no valid unit found)
  */
 
 export function getLargestDateDurationUnit(

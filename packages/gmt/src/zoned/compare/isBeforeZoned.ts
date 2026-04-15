@@ -14,6 +14,9 @@ import { isValidZonedDateTime } from "../validate";
  * @param value2 second zoned datetime string
  * @example isBeforeZoned("2024-03-17T14:30:45-05:00[America/New_York]", "2024-03-17T15:30:45-05:00[America/New_York]") // true
  * @example isBeforeZoned("2024-03-17T14:30:45-05:00[America/New_York]", "2024-03-17T14:30:45-05:00[America/New_York]") // false
+ * @example isBeforeZoned("2024-03-17T14:30:45-05:00[America/New_York]", "2024-03-17T13:30:45-05:00[America/New_York]") // false
+ * @example isBeforeZoned("2024-03-17T14:30:45-05:00[America/New_York]", "2024-03-17T19:30:45+00:00[UTC]") // false (same instant, different timeZone)
+ * @example isBeforeZoned("invalid", "2024-03-17T14:30:45-05:00[America/New_York]") // false (invalid input)
  * @returns `true` if `value1` is before `value2`, otherwise `false`
  */
 export function isBeforeZoned(value1: string, value2: string): boolean {

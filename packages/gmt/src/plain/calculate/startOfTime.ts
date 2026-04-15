@@ -17,15 +17,19 @@ const supported: StartOfTimeUnit[] = [
 /**
  * Return the start of the specified time `unit` (hour|minute|second|...) for a given ISO 8601 time string.
  *
- * - Uses Temporal.PlainTime
- * - Returns an empty string "" for invalid inputs or units.
- *
  * @param value ISO 8601 time string
  * @param unit StartOfTimeUnit to specify the unit for the start (e.g. "hour")
  * @param options { fractionalSecondDigits?: number } - Optional parameter to specify fractionalSecondDigits for sub-second units (e.g. { fractionalSecondDigits: 3 } for milliseconds). Default is 0 for units larger than millisecond, 3 for millisecond, 6 for microsecond, and 9 for nanosecond.
- * @example startOfTime("12:34:56", "hour") => "12:00:00"
- *
  * @returns ISO 8601 string representing the start of the specified unit, or empty string on invalid input
+ * 
+ * @example startOfTime("12:34:56", "hour") => "12:00:00"
+ * @example startOfTime("12:34:56.789", "minute") => "12:34:00"
+ * @example startOfTime("12:34:56.789", "second") => "12:34:56"
+ * @example startOfTime("12:34:56.789", "millisecond") => "12:34:56.000"
+ * @example startOfTime("12:34:56.789123", "microsecond", { fractionalSecondDigits: 6 }) => "12:34:56.789000"
+ * @example startOfTime("12:34:56.789123456", "nanosecond", { fractionalSecondDigits: 9 }) => "12:34:56.789123000"
+ * @example startOfTime("invalid", "hour") => ""
+ * @example startOfTime("12:34:56", "invalidUnit") => ""
  */
 export function startOfTime(
   value: string,

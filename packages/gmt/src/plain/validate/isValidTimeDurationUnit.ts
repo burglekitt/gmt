@@ -4,11 +4,12 @@ import type { TimeDurationUnit } from "../../types";
  * Return true when `unit` is a valid TimeDurationUnit.
  *
  * @param unit string candidate
+ * @returns boolean indicating whether the unit is valid
+ * 
  * @example isValidTimeDurationUnit("hours") // true
  * @example isValidTimeDurationUnit("minutes") // true
  * @example isValidTimeDurationUnit("seconds") // true
  * @example isValidTimeDurationUnit("invalid") // false
- * @returns boolean indicating whether the unit is valid
  */
 export const isValidTimeDurationUnit = (
   unit: string,

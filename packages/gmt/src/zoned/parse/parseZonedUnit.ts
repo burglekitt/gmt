@@ -35,6 +35,17 @@ function isValidZonedUnit(unit: string): unit is ZonedParseUnit {
  *
  * @param value zoned ISO 8601 datetime string
  * @param unit unit to extract
+ * @example parseZonedUnit("2024-02-29T12:34:56.789+00:00[UTC]", "year") // "2024"
+ * @example parseZonedUnit("2024-02-29T12:34:56.789+00:00[UTC]", "month") // "02"
+ * @example parseZonedUnit("2024-02-29T12:34:56.789+00:00[UTC]", "day") // "29"
+ * @example parseZonedUnit("2024-02-29T12:34:56.789+00:00[UTC]", "hour") // "12"
+ * @example parseZonedUnit("2024-02-29T12:34:56.789+00:00[UTC]", "minute") // "34"
+ * @example parseZonedUnit("2024-02-29T12:34:56.789+00:00[UTC]", "second") // "56"
+ * @example parseZonedUnit("2024-02-29T12:34:56.789+00:00[UTC]", "millisecond") // "789"
+ * @example parseZonedUnit("2024-02-29T12:34:56.789+00:00[UTC]", "nanosecond") // "000"
+ * @example parseZonedUnit("2024-02-29T12:34:56.789+00:00[UTC]", "timeZone") // "UTC"
+ * @example parseZonedUnit("invalid", "year") // "" (invalid zoned datetime)
+ * @example parseZonedUnit("2024-02-29T12:34:56.789+00:00[UTC]", "invalidUnit") // "" (invalid unit)
  * @returns string representation of the requested unit or empty string when invalid
  */
 export function parseZonedUnit(value: string, unit: ZonedParseUnit): string {

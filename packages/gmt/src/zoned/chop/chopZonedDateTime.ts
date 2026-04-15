@@ -8,13 +8,9 @@ import { isValidZonedDateTime } from "../validate/isValidZonedDateTime";
  * - Uses `isValidZonedDateTime` to validate input first (includes leap-second guard).
  * - On success returns the timeZone id from the parsed ZonedDateTime (`timeZoneId`).
  *
- * Example:
- * ```ts
- * chopZonedDateTime("2024-02-29T12:30:45+01:00[Europe/Paris]")
- * // => "Europe/Paris"
- * ```
- *
  * @param value - ISO 8601 zoned datetime string
+ * @example chopZonedDateTime("2024-02-29T12:30:45+01:00[Europe/Paris]") // "Europe/Paris"
+ * @example chopZonedDateTime("invalid") // ""
  * @returns IANA timeZone id (e.g. `Europe/Paris`) or an empty string for invalid input
  */
 export function chopZonedDateTime(value: string): string {

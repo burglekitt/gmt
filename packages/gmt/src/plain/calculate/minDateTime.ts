@@ -4,15 +4,13 @@ import { isValidDateTime } from "../validate";
 /**
  * Return the earliest (minimum) of the given PlainDateTime values.
  *
- * - Returns null if the array is empty or contains no valid datetimes.
- * - Validation is performed on each item in the array.
- *
  * @param dateTimes Array of ISO PlainDateTime strings (e.g. "2024-03-10T12:00:00")
+ * @returns The earliest datetime string, or null on invalid input
+ * 
  * @example minDateTime(["2024-03-10T12:00:00", "2024-03-15T12:00:00", "2024-03-12T12:00:00"]) // "2024-03-10T12:00:00"
  * @example minDateTime(["invalid", "2024-03-15T12:00:00"]) // "2024-03-15T12:00:00"
  * @example minDateTime(["invalid", "also invalid"]) // null
  * @example minDateTime([]) // null
- * @returns The earliest datetime string, or null on invalid input
  */
 export function minDateTime(dateTimes: string[]): string | null {
   if (!dateTimes.length) return null;

@@ -6,8 +6,12 @@ import type { TimeDurationUnit } from "../../types";
  * If no valid unit is found, defaults to "seconds" (though this case should be prevented by validation).
  *
  * @param units array of TimeDurationUnits to evaluate
- * @example getLargestTimeDurationUnit(["minutes", "seconds"]) => "minutes"
  * @returns the largest TimeDurationUnit found in the array, or "seconds" if none are valid
+ * 
+ * @example getLargestTimeDurationUnit(["minutes", "seconds"]) => "minutes"
+ * @example getLargestTimeDurationUnit(["seconds", "milliseconds"]) => "seconds"
+ * @example getLargestTimeDurationUnit(["milliseconds", "microseconds"]) => "milliseconds"
+ * @example getLargestTimeDurationUnit([]) => "seconds" (defaults to "seconds" if no valid unit found)
  */
 export function getLargestTimeDurationUnit(
   units: TimeDurationUnit[],

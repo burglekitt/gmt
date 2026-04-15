@@ -9,6 +9,9 @@ import { isValidZonedDateTime } from "../validate";
  * - Returns an empty array for invalid anchor input.
  *
  * @param anchor zoned ISO 8601 datetime string used as anchor
+ * @example mapZonedHoursInDay("2024-02-29T12:34:56.789+00:00[UTC]") // ["2024-02-29T00:00:00+00:00[UTC]", "2024-02-29T01:00:00+00:00[UTC]", ..., "2024-02-29T23:00:00+00:00[UTC]"]
+ * @example mapZonedHoursInDay("2024-03-10T12:34:56.789-05:00[America/New_York]") // ["2024-03-10T00:00:00-05:00[America/New_York]", "2024-03-10T01:00:00-05:00[America/New_York]", "2024-03-10T03:00:00-04:00[America/New_York]", ..., "2024-03-10T23:00:00-04:00[America/New_York]"] (skips 2 AM due to DST)
+ * @example mapZonedHoursInDay("invalid") // [] (invalid input)
  * @returns array of zoned ISO 8601 strings for each hour in the day
  */
 export function mapZonedHoursInDay(anchor: string): string[] {

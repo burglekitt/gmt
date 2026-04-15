@@ -6,8 +6,12 @@ import type { DateTimeDurationUnit } from "../../types";
  * If no valid unit is found, defaults to "seconds" (though this case should be prevented by validation).
  *
  * @param units array of DateTimeDurationUnit to evaluate
- * @example getLargestDateTimeDurationUnit(["hours", "minutes", "seconds"]) => "hours"
  * @returns the largest DateTimeDurationUnit found, or "seconds" if none are valid
+ * 
+ * @example getLargestDateTimeDurationUnit(["hours", "minutes", "seconds"]) => "hours"
+ * @example getLargestDateTimeDurationUnit(["minutes", "seconds"]) => "minutes"
+ * @example getLargestDateTimeDurationUnit(["seconds"]) => "seconds"
+ * @example getLargestDateTimeDurationUnit([]) => "seconds" (defaults to "seconds" if no valid unit found)
  */
 export function getLargestDateTimeDurationUnit(
   units: DateTimeDurationUnit[],

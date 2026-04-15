@@ -1,5 +1,3 @@
-export * from "./getZonedDate";
-export * from "./getZonedDateTime";
 export * from "./getZonedDay";
 export * from "./getZonedDayOfWeek";
 export * from "./getZonedHour";

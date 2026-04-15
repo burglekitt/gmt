@@ -33,6 +33,8 @@ Timezone-aware comparison:
 
 Timezone/format conversion:
 
+- `convertPlainDateTimeToZoned`
+- `convertZonedToPlainDateTime`
 - `convertZonedToUnix`, `convertZonedToUtc`, `convertZonedToZoned`
 
 ### format
@@ -46,7 +48,6 @@ Locale-aware timezone formatting:
 Current in specific timezone:
 
 - `getZonedNow`, `getZonedNowUnit`, `getZonedToday`
-- `getZonedDate`, `getZonedDateTime`
 - `getZonedYear`, `getZonedMonth`, `getZonedDay`, `getZonedDayOfWeek`
 - `getZonedHour`, `getZonedMinute`, `getZonedSecond`
 - `getZonedMillisecond`, `getZonedMicrosecond`, `getZonedNanosecond`

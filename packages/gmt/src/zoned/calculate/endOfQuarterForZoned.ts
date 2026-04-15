@@ -5,10 +5,11 @@ import { isValidZonedDateTime } from "../validate";
 /**
  * Return the end of the quarter for a given zoned ISO datetime.
  *
- * - Validates input using isValidZonedDateTime.
- * - Returns an empty string for invalid inputs.
- *
  * @param value ISO ZonedDateTime string
+ * @example endOfQuarterForZoned("2024-02-15T14:30:00+00:00[UTC]") // "2024-03-31T23:59:59.999-05:00[America/New_York]"
+ * @example endOfQuarterForZoned("2024-05-10T10:00:00+00:00[UTC]") // "2024-06-30T23:59:59.999-05:00[America/New_York]"
+ * @example endOfQuarterForZoned("2024-11-20T08:00:00+00:00[UTC]") // "2024-12-31T23:59:59.999-05:00[America/New_York]"
+ * @example endOfQuarterForZoned("invalid") // ""
  * @returns ISO ZonedDateTime string for the end of the quarter (last moment), or empty string on invalid input
  */
 export function endOfQuarterForZoned(value: string): string {

@@ -5,11 +5,12 @@ import { isValidDateTime, isValidTime } from "../validate";
  * Return an ISO string with second precision removed (rounded/truncated to
  * minutes) for PlainDateTime or PlainTime values.
  *
- * - Converts inputs to minute precision.
- * - Returns an empty string for invalid input.
- *
  * @param value ISO PlainDateTime or PlainTime string
  * @returns ISO string trimmed to minutes or "" on invalid input
+ * 
+ * @example chopSeconds("2024-02-29T12:34:56") // "2024-02-29T12:34"
+ * @example chopSeconds("12:34:56") // "12:34"
+ * @example chopSeconds("invalid") // ""
  */
 export function chopSeconds(value: string): string {
   try {

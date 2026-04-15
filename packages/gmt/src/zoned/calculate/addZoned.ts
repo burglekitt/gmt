@@ -13,14 +13,13 @@ import { isValidZonedDateTime } from "../validate";
  * - On invalid input (bad zoned datetime, amount, or unit) this returns an
  *   empty string "" (consistent with library error handling semantics).
  *
- * Examples:
- * ```ts
- * addZoned("2024-02-29T14:30:00+00:00[UTC]", {years: 1}) // => "2025-02-28T14:30:00+00:00[UTC]"
- * // => "2025-02-28T14:30:00+00:00[UTC]"
- * ```
- *
  * @param value ISO 8601 zoned datetime string
  * @param units Partial<Record<DateTimeDurationUnit, number>> object specifying units to add (e.g. { days: 1, months: 2 })
+ * @example addZoned("2024-02-29T14:30:45.123-05:00[America/New_York]", { days: 1 }) // "2024-03-01T14:30:45.123-05:00[America/New_York]"
+ * @example addZoned("2024-02-29T14:30:45.123-05:00[America/New_York]", { months: 1, years: 1 }) // "2025-03-29T14:30:45.123-05:00[America/New_York]"
+ * @example addZoned("invalid", { days: 1 }) // ""
+ * @example addZoned("2024-02-29T14:30:45.123-05:00[America/New_York]", { invalidUnit: 1 }) // ""
+ * @example addZoned("2024-02-29T14:30:45.123-05:00[America/New_York]", { days: -999999999999 }) // ""
  * @returns zoned ISO 8601 string on success, or empty string on invalid input
  */
 export function addZoned(

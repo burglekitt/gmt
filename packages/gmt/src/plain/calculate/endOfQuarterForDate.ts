@@ -9,12 +9,13 @@ import { isValidDate } from "../validate";
  * - Returns an empty string for invalid inputs.
  *
  * @param value ISO PlainDate string
+ * @returns ISO PlainDate string for the last day of the quarter, or empty string on invalid input
+ * 
  * @example endOfQuarterForDate("2024-03-15") // "2024-03-31"
  * @example endOfQuarterForDate("2024-06-15") // "2024-06-30"
  * @example endOfQuarterForDate("2024-09-15") // "2024-09-30"
  * @example endOfQuarterForDate("2024-12-15") // "2024-12-31"
  * @example endOfQuarterForDate("invalid") // ""
- * @returns ISO PlainDate string for the last day of the quarter, or empty string on invalid input
  */
 export function endOfQuarterForDate(value: string): string {
   if (!isValidDate(value)) {

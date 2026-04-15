@@ -1,32 +1,28 @@
 import { Temporal } from "@js-temporal/polyfill";
 import type { FractionalDigit } from "../../types";
-import { isValidDateTime } from "../validate";
+import { isValidDateTime, isValidDateTimeUnit } from "../validate";
 
-const supported = [
-  "year",
-  "month",
-  "week",
-  "day",
-  "hour",
-  "minute",
-  "second",
-  "millisecond",
-  "microsecond",
-  "nanosecond",
-];
+
 
 /**
  * Return the start of the specified date-time `unit` (year|month|day|hour|minute|...)
  * for a given ISO 8601 datetime string.
  *
- * - Uses Temporal.PlainDateTime
- * - Returns an empty string "" for invalid inputs or units.
  *
  * @param value ISO 8601 datetime string
  * @param unit Temporal.DateUnit|Temporal.TimeUnit to specify the unit for the start (e.g. "month")
  * @param options { weekStartsOn: "monday" | "sunday" = 'monday', fractionalSecondDigits?: number } - Optional parameter to specify the start of the week when unit is "week". Default is "monday". Optional parameter to specify fractionalSecondDigits for sub-second units (e.g. { fractionalSecondDigits: 3 } for milliseconds). Default is 0 for units larger than millisecond, 3 for millisecond, 6 for microsecond, and 9 for nanosecond.
- * @example startOfDateTime("2024-02-29T12:34:56", "month") => "2024-02-01T00:00:00"
  * @returns ISO 8601 string representing the start of the specified unit, or empty string on invalid input
+ * 
+ * @example startOfDateTime("2024-02-29T12:34:56", "month") => "2024-02-01T00:00:00" 
+ * @example startOfDateTime("2024-02-29T12:34:56", "year") => "2024-01-01T00:00:00"
+ * @example startOfDateTime("2024-02-29T12:34:56", "week") => "2024-02-26T00:00:00" (Monday start)
+ * @example startOfDateTime("2024-02-29T12:34:56", "week", { weekStartsOn: "sunday" }) => "2024-02-25T00:00:00" (Sunday start)
+ * @example startOfDateTime("2024-02-29T12:34:56.789", "second") => "2024-02-29T12:34:56.000"
+ * @example startOfDateTime("2024-02-29T12:34:56.789", "millisecond") => "2024-02-29T12:34:56.789"
+ * @example startOfDateTime("2024-02-29T12:34:56.789", "microsecond") => "2024-02-29T12:34:56.789000"
+ * @example startOfDateTime("2024-02-29T12:34:56.789", "nanosecond") => "2024-02-29T12:34:56.789000000"
+ * @example startOfDateTime("invalid-datetime", "month") => "" (invalid datetime input)
  */
 export function startOfDateTime(
   value: string,
@@ -39,7 +35,7 @@ export function startOfDateTime(
   const weekStartsOn = optionsArg?.weekStartsOn ?? "monday";
   const fractionalSecondDigits = optionsArg?.fractionalSecondDigits;
 
-  if (!isValidDateTime(value) || !supported.includes(unit)) return "";
+  if (!isValidDateTime(value) || !isValidDateTimeUnit(unit)) return "";
 
   try {
     const source = Temporal.PlainDateTime.from(value);

@@ -4,12 +4,10 @@ import { getSystemTimeZone } from "./getSystemTimeZone";
 /**
  * Return the current year as a zero-padded string in the system timeZone.
  *
- * - Uses the system timeZone resolved via Intl.
- * - Returns an empty string on failure.
+ * @returns current year string (zero-padded) or "" when invalid
  *
  * @example getYear() // "2024"
  * @example getYear() // "" (when system timeZone unavailable)
- * @returns current year string (zero-padded) or "" when invalid
  */
 export function getYear(): string {
   const timeZone = getSystemTimeZone();

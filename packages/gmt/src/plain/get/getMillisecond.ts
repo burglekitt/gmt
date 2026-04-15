@@ -4,12 +4,11 @@ import { getSystemTimeZone } from "./getSystemTimeZone";
 /**
  * Return the current millisecond using the system timeZone.
  *
- * - Uses the runtime system timeZone via `getNowUnit()`.
- * - Returns empty string when the system timeZone cannot be determined.
+ * @returns current millisecond string (zero-padded to 3 digits) or "" when invalid
  *
  * @example getMillisecond() // "000"
  * @example getMillisecond() // "" (when system timeZone unavailable)
- * @returns current millisecond string (zero-padded to 3 digits) or "" when invalid
+ * 
  */
 export function getMillisecond(): string {
   const timeZone = getSystemTimeZone();

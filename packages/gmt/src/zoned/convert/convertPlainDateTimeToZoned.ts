@@ -15,11 +15,11 @@ import { isValidTimeZone } from "../validate";
  * @param timeZone IANA timeZone identifier
  * @param optionsArg Optional formatting options. Supports `smallestUnit` to control precision.
  * @returns zoned ISO 8601 datetime string or "" when invalid
- * @example getZonedDateTime("2024-02-29T14:30:45", "America/New_York") // "2024-02-29T14:30:45.123-05:00[America/New_York]"
- * @example getZonedDateTime("invalid", "America/New_York") // ""
- * @example getZonedDateTime("2024-02-29T14:30:45", "Invalid/Zone") // ""
+ * @example convertPlainDateTimeToZoned("2024-02-29T14:30:45", "America/New_York") // "2024-02-29T14:30:45.123-05:00[America/New_York]"
+ * @example convertPlainDateTimeToZoned("invalid", "America/New_York") // ""
+ * @example convertPlainDateTimeToZoned("2024-02-29T14:30:45", "Invalid/Zone") // ""
  */
-export function getZonedDateTime(
+export function convertPlainDateTimeToZoned(
   value: string,
   timeZone: string,
   optionsArg?: {
@@ -31,7 +31,7 @@ export function getZonedDateTime(
   }
 
   const options = {
-    smallestUnit: "millisecond",
+    smallestUnit: "milliseconds",
     ...optionsArg,
   } as Partial<Temporal.ZonedDateTimeToStringOptions>;
 

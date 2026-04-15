@@ -4,12 +4,10 @@ import { getSystemTimeZone } from "./getSystemTimeZone";
 /**
  * Return the current minute using the system timeZone.
  *
- * - Uses the runtime system timeZone via `getNowUnit()`.
- * - Returns empty string when the system timeZone cannot be determined.
+ * @returns current minute string (zero-padded) or "" when invalid
  *
  * @example getMinute() // "00"
  * @example getMinute() // "" (when system timeZone unavailable)
- * @returns current minute string (zero-padded) or "" when invalid
  */
 export function getMinute(): string {
   const timeZone = getSystemTimeZone();

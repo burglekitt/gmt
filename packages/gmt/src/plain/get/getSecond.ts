@@ -4,12 +4,10 @@ import { getSystemTimeZone } from "./getSystemTimeZone";
 /**
  * Return the current second using the system timeZone.
  *
- * - Uses the runtime system timeZone via `getNowUnit()`.
- * - Returns empty string when the system timeZone cannot be determined.
+ * @returns current second string (zero-padded) or "" when invalid
  *
  * @example getSecond() // "00"
  * @example getSecond() // "" (when system timeZone unavailable)
- * @returns current second string (zero-padded) or "" when invalid
  */
 export function getSecond(): string {
   const timeZone = getSystemTimeZone();

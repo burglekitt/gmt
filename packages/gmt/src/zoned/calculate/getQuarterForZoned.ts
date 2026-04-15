@@ -10,6 +10,10 @@ import { isValidZonedDateTime } from "../validate";
  * - Returns null for invalid inputs.
  *
  * @param value ISO ZonedDateTime string
+ * @example getQuarterForZoned("2024-02-15T14:30:00+00:00[UTC]") // 1
+ * @example getQuarterForZoned("2024-05-10T10:00:00+00:00[UTC]") // 2
+ * @example getQuarterForZoned("2024-11-20T08:00:00+00:00[UTC]") // 4
+ * @example getQuarterForZoned("invalid") // null
  * @returns number (1-4) or null for invalid input
  */
 export function getQuarterForZoned(value: string): number | null {

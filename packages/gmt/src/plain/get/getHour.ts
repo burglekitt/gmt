@@ -4,12 +4,10 @@ import { getSystemTimeZone } from "./getSystemTimeZone";
 /**
  * Return the current hour using the system timeZone.
  *
- * - Uses the runtime system timeZone via `getSystemTimeZone()`.
- * - Returns empty string when the system timeZone cannot be determined.
- *
+ * @returns current hour string (zero-padded) or "" when invalid
+ * 
  * @example getHour() // "00"
  * @example getHour() // "" (when system timeZone unavailable)
- * @returns current hour string (zero-padded) or "" when invalid
  */
 export function getHour(): string {
   const timeZone = getSystemTimeZone();

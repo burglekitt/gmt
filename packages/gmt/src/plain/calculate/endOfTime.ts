@@ -22,8 +22,14 @@ const supported: EndOfTimeUnit[] = [
  * @param value ISO 8601 time string
  * @param unit EndOfTimeUnit to specify the unit for the end (e.g. "hour")
  * @param options { fractionalSecondDigits?: number } - Optional parameter to specify fractionalSecondDigits for sub-second units (e.g. { fractionalSecondDigits: 3 } for milliseconds). Default is 0 for units larger than millisecond, 3 for millisecond, 6 for microsecond, and 9 for nanosecond.
- * @example endOfTime("12:34:56", "hour") => "12:59:59.999999999"
  * @returns ISO 8601 string representing the end of the specified unit, or empty string on invalid input
+ * 
+ * @example endOfTime("12:34:56", "hour") => "12:59:59.999999999"
+ * @example endOfTime("12:34:56", "minute") => "12:34:59.999999999"
+ * @example endOfTime("12:34:56.789", "second", { fractionalSecondDigits: 3 }) => "12:34:56.999"
+ * @example endOfTime("12:34:56.789123", "microsecond") => "12:34:56.789123999"
+ * @example endOfTime("12:34:56.789123456", "nanosecond") => "12:34:56.789123456"
+ * @example endOfTime("invalid", "hour") => ""
  */
 export function endOfTime(
   value: string,

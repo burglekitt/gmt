@@ -12,6 +12,16 @@ import { isValidZonedDateTime } from "../validate";
  * @param startZonedDateTime start zoned ISO 8601 datetime string
  * @param endZonedDateTime end zoned ISO 8601 datetime string
  * @param stepDays optional positive integer step in days
+ * @example mapZonedDatesInRange("2024-02-28T12:00:00+00:00[UTC]", "2024-03-02T12:00:00+00:00[UTC]") // ["2024-02-28", "2024-02-29", "2024-03-01", "2024-03-02"]
+ * @example mapZonedDatesInRange("2024-02-28T12:00:00+00:00[UTC]", "2024-03-02T12:00:00+00:00[UTC]", 2) // ["2024-02-28", "2024-03-01"]
+ * @example mapZonedDatesInRange("2024-02-28T12:00:00+00:00[UTC]", "2024-02-28T12:00:00+00:00[UTC]") // ["2024-02-28"]
+ * @example mapZonedDatesInRange("2024-02-28T12:00:00+00:00[UTC]", "2024-02-27T12:00:00+00:00[UTC]") // [] (start > end)
+ * @example mapZonedDatesInRange("2024-02-28T12:00:00+00:00[UTC]", "2024-03-02T12:00:00+00:00[UTC]", 0) // [] (invalid stepDays)
+ * @example mapZonedDatesInRange("2024-02-28T12:00:00+00:00[UTC]", "2024-03-02T12:00:00+00:00[UTC]", -1) // [] (invalid stepDays)
+ * @example mapZonedDatesInRange("2024-02-28T12:00:00+00:00[UTC]", "2024-03-02T12:00:00+00:00[UTC]", 1.5) // [] (invalid stepDays)
+ * @example mapZonedDatesInRange("invalid", "2024-03-02T12:00:00+00:00[UTC]") // [] (invalid start)
+ * @example mapZonedDatesInRange("2024-02-28T12:00:00+00:00[UTC]", "invalid") // [] (invalid end)
+ * @example mapZonedDatesInRange("2024-02-28T12:00:00+00:00[UTC]", "2024-03-02T12:00:00+01:00[Invalid/Zone]") // [] (mismatched timeZones)
  * @returns array of ISO date strings or empty array when invalid
  */
 export function mapZonedDatesInRange(

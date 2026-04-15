@@ -10,6 +10,10 @@ import { isValidZonedDateTime } from "../validate/isValidZonedDateTime";
  * - Invalid inputs return an empty string.
  *
  * @param value zoned ISO 8601 datetime string
+ * @example parseZonedDateTime("2024-02-29T12:34:56.789+00:00[UTC]") // "2024-02-29T12:34:56.789"
+ * @example parseZonedDateTime("2024-03-10T12:34:56.789-05:00[America/New_York]") // "2024-03-10T12:34:56.789"
+ * @example parseZonedDateTime("2024-06-30T23:59:60+00:00[UTC]") // "" (leap second)
+ * @example parseZonedDateTime("invalid") // "" (invalid input)
  * @returns plain local datetime string or empty string when invalid
  */
 export const parseZonedDateTime = (value: string): string => {

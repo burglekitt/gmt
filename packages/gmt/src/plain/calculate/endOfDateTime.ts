@@ -24,6 +24,8 @@ const supported = [
  * @param value ISO 8601 datetime string
  * @param unit Temporal.DateUnit | Temporal.TimeUnit to specify the unit for the end (e.g. "month")
  * @param options { weekStartsOn: "monday" | "sunday", fractionalSecondDigits?: number } - Optional parameter to specify the start of the week when unit is "week". Default is "monday". Optional parameter to specify fractionalSecondDigits for sub-second units (e.g. { fractionalSecondDigits: 3 } for milliseconds). Default is 0 for units larger than millisecond, 3 for millisecond, 6 for microsecond, and 9 for nanosecond.
+ * @returns ISO 8601 string representing the end of the specified unit, or empty string on invalid input
+ * 
  * @example endOfDateTime("2024-02-29T12:34:56", "month") => "2024-02-29T23:59:59.999999999"
  * @example endOfDateTime("2024-02-29T12:34:56", "year") => "2024-12-31T23:59:59.999999999"
  * @example endOfDateTime("2024-02-29T12:34:56", "week", { weekStartsOn: "monday" }) => "2024-03-03T23:59:59.999999999"
@@ -36,8 +38,6 @@ const supported = [
  * @example endOfDateTime("2024-02-29T12:34:56.789123", "microsecond") => "2024-02-29T12:34:56.789123999"
  * @example endOfDateTime("2024-02-29T12:34:56.789123456", "nanosecond") => "2024-02-29T12:34:56.789123456"
  * @example endOfDateTime("invalid-date", "month") => ""
- * @example endOfDateTime("2024-02-29T12:34:56", "invalid-unit") => ""
- * @returns ISO 8601 string representing the end of the specified unit, or empty string on invalid input
  */
 export function endOfDateTime(
   value: string,
