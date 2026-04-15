@@ -1,3 +1,4 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { getUtcYear } from "./getUtcYear";
 
 describe("getUtcYear", () => {
@@ -16,7 +17,10 @@ describe("getUtcYear", () => {
 
   it("returns empty string on failure", () => {
     vi.useRealTimers();
+    vi.spyOn(Temporal.Now, "instant").mockImplementation(() => {
+      throw new Error("simulated failure");
+    });
     const result = getUtcYear();
-    expect(result).toMatch(/^(\d{4}|)$/);
+    expect(result).toBe("");
   });
 });
