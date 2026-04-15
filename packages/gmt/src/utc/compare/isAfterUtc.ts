@@ -4,6 +4,9 @@ import { isValidUtc } from "../validate";
 /**
  * Return whether `value1` represents an instant strictly after `value2`.
  *
+ * - Uses Temporal.Instant.compare for comparison.
+ * - Returns false if either input is invalid.
+ *
  * @param value1 first UTC datetime string
  * @param value2 second UTC datetime string
  * @returns `true` if `value1` is after `value2`, otherwise `false`

@@ -7,8 +7,9 @@ import { isValidTimeZone } from "../../zoned/validate";
 /**
  * Return the end of the specified unit for a Unix timestamp.
  *
- * - Accepts Unix timestamps in milliseconds (default) or seconds.
- * - Returns null for invalid inputs.
+ * - Converts to ZonedDateTime, sets to end of unit, converts back to epoch.
+ * - Supports: "year", "month", "week", "day", "hour", "minute", "second", "millisecond", "microsecond", "nanosecond".
+ * - Returns null for invalid input.
  *
  * @param value Unix timestamp (number)
  * @param unit Temporal.DateUnit | Temporal.TimeUnit to specify the end

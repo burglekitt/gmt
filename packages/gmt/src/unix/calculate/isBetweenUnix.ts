@@ -5,6 +5,10 @@ import { isValidTimeZone } from "../../zoned/validate";
 /**
  * Return true when the Unix timestamp is between start and end (inclusive by default).
  *
+ * - Uses Temporal.Instant.compare for comparison.
+ * - Returns false if start > end or inputs are invalid.
+ * - Use options.inclusiveStart/inclusiveEnd to control boundaries.
+ *
  * @param value Unix timestamp to check
  * @param start Unix timestamp for range start
  * @param end Unix timestamp for range end

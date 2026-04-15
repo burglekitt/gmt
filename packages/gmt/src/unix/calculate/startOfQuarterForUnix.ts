@@ -6,6 +6,10 @@ import { isValidTimeZone } from "../../zoned/validate";
 /**
  * Return the start of the quarter for a Unix timestamp.
  *
+ * - Converts to ZonedDateTime, calculates quarter start, converts back to epoch.
+ * - Q1 returns month 1, Q2 returns month 4, Q3 returns month 7, Q4 returns month 10.
+ * - Returns null for invalid input.
+ *
  * @param value Unix timestamp (number)
  * @param options optional: epochUnit ("seconds" | "milliseconds"), timeZone (IANA)
  * @returns Unix epoch number representing the start of the quarter, or null on invalid input

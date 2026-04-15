@@ -6,6 +6,10 @@ import { isValidZonedDateTime } from "../validate";
 /**
  * Return the start of the specified date-time `unit` for a given zoned ISO 8601 datetime string.
  *
+ * - Converts to ZonedDateTime, sets to start of unit, converts back to string.
+ * - Supports: "year", "month", "week", "day", "hour", "minute", "second", "millisecond", "microsecond", "nanosecond".
+ * - Returns "" for invalid input.
+ *
  * @param value zoned ISO 8601 datetime string
  * @param unit Temporal.DateUnit|Temporal.TimeUnit to specify the unit for the start
  * @param options optional: weekStartsOn ("monday" | "sunday"), fractionalSecondDigits (number)

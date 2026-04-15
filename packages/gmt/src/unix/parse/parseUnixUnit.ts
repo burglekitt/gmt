@@ -21,6 +21,10 @@ export type PlainNowUnit =
 /**
  * Extract a unit from a unix epoch value.
  *
+ * - Valid units: "year", "month", "week", "day", "dayOfWeek", "hour", "minute", "second", "millisecond", "microsecond", "nanosecond".
+ * - Converts to ZonedDateTime then extracts the unit.
+ * - Returns "" for invalid input.
+ *
  * @param value unix epoch in milliseconds or seconds (number or string)
  * @param unit unit to extract (e.g. "year", "month", "hour")
  * @param options optional: epochUnit ("seconds" | "milliseconds"), timeZone (IANA)

@@ -4,8 +4,11 @@ import { isValidTimeZone } from "../validate";
 /**
  * Return the current second for the specified IANA timeZone.
  *
+ * - Uses Temporal.Now.zonedDateTimeISO to get the current time.
+ * - Validation is performed on the timezone.
+ *
  * @param ianaTimezone IANA timeZone identifier
- * @returns current second string (zero-padded to 2 digits) or "" when invalid
+ * @returns current second string (zero-padded to 2 digits) or "" on invalid input
  *
  * @example getZonedSecond("America/New_York") // "00"
  * @example getZonedSecond("invalid") // ""

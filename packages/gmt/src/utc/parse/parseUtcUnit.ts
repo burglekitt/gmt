@@ -13,6 +13,10 @@ export type UtcUnit =
 /**
  * Extract a unit from a UTC datetime string.
  *
+ * - Valid units: "year", "month", "day", "hour", "minute", "second", "millisecond".
+ * - Uses Temporal.Instant.from to parse, converts to UTC.
+ * - Returns "" for invalid input.
+ *
  * @param value ISO UTC datetime string (e.g., "2024-03-17T14:30:45Z")
  * @param unit unit to extract from the datetime
  * @returns string representation of the requested unit or "" on invalid input

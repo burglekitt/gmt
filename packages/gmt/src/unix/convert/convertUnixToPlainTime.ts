@@ -9,7 +9,11 @@ import {
 
 /**
  * Convert a Unix timestamp to a plain time string in the format "HH:mm:ss".
- *   
+ *
+ * - Converts to PlainTime using the specified or system timezone.
+ * - Validates epoch unit ("seconds" | "milliseconds").
+ * - Returns "" for invalid input.
+ *
  * @param unix Unix timestamp (number)
  * @param options optional: epochUnit ("seconds" | "milliseconds"), timeZone (IANA)
  * @returns plain time string in "HH:mm:ss" format or "" on invalid input

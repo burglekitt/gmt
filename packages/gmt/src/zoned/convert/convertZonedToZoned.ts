@@ -4,6 +4,9 @@ import { isValidTimeZone, isValidZonedDateTime } from "../validate";
 /**
  * Convert a zoned ISO 8601 datetime string to the same instant in a different `timeZone`.
  *
+ * - Uses Temporal.ZonedDateTime.withTimeZone to convert.
+ * - Returns "" for invalid input.
+ *
  * @param value zoned ISO 8601 datetime string
  * @param timeZone target IANA timeZone identifier
  * @returns zoned ISO 8601 string in target timeZone or "" when invalid

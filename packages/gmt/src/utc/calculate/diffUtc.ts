@@ -5,8 +5,11 @@ import type { DateTimeDurationUnit } from "../../types";
 import { isValidUtc } from "../validate/isValidUtc";
 
 /**
- * Return the difference between two UTC datetimes measured in the given
- * date-time `unit`.
+ * Return the difference between two UTC datetimes measured in the given date-time unit.
+ *
+ * - Uses Temporal.Instant.until() to calculate the difference.
+ * - Supports single unit or array of units.
+ * - Returns null for invalid input.
  *
  * @param value1 UTC ISO datetime string (start)
  * @param value2 UTC ISO datetime string (end)

@@ -4,6 +4,9 @@ import { isValidZonedDateTime } from "../validate";
 /**
  * Extract the plain date portion from an ISO 8601 zoned datetime string.
  *
+ * - Extracts date components from a ZonedDateTime.
+ * - Returns "" for invalid input.
+ *
  * @param value zoned ISO 8601 datetime string
  * @returns plain ISO date string (YYYY-MM-DD) or "" when invalid
  *

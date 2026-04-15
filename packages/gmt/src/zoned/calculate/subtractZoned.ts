@@ -7,6 +7,10 @@ import { isValidZonedDateTime } from "../validate";
 /**
  * Subtract a temporal amount from a zoned ISO 8601 datetime string and return a zoned ISO 8601 string.
  *
+ * - Uses Temporal.ZonedDateTime.subtract to subtract duration.
+ * - Validates duration units and values.
+ * - Returns "" for invalid input.
+ *
  * @param value ISO 8601 zoned datetime string
  * @param units Partial<Record<DateTimeDurationUnit, number>> object specifying units to subtract
  * @returns zoned ISO 8601 string on success, or "" on invalid input

@@ -3,8 +3,8 @@ import { isValidAmount } from "../../internal";
 /**
  * Return the earliest (minimum) of the given Unix timestamp values.
  *
- * - Returns null if the array is empty.
- * - Accepts Unix timestamps in seconds or milliseconds.
+ * - Filters invalid values before finding minimum.
+ * - Returns null if array is empty or has no valid values.
  *
  * @param unixValues Array of Unix timestamps (e.g. 1699531200)
  * @returns The earliest Unix timestamp, or null on invalid input

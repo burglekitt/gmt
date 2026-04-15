@@ -3,6 +3,9 @@ import { isValidAmount } from "../../internal";
 /**
  * Return the latest (maximum) of the given Unix timestamp values.
  *
+ * - Filters invalid values before finding maximum.
+ * - Returns null if array is empty or has no valid values.
+ *
  * @param unixValues Array of Unix timestamps (e.g. 1699531200)
  * @returns The latest Unix timestamp, or null on invalid input
  *

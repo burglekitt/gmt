@@ -10,6 +10,10 @@ import {
 /**
  * Convert a Unix timestamp to a plain datetime string in the format "YYYY-MM-DDTHH:mm:ss".
  *
+ * - Converts to PlainDateTime using the specified or system timezone.
+ * - Validates epoch unit ("seconds" | "milliseconds").
+ * - Returns "" for invalid input.
+ *
  * @param unix Unix timestamp (number)
  * @param options optional: epochUnit ("seconds" | "milliseconds"), timeZone (IANA)
  * @returns plain datetime string in "YYYY-MM-DDTHH:mm:ss" format or "" on invalid input

@@ -3,6 +3,10 @@ import { Temporal } from "@js-temporal/polyfill";
 /**
  * Return the current year from the Unix timestamp in UTC as a zero-padded string.
  *
+ * - Uses Temporal.Now.instant() converted to UTC zoned date time.
+ * - Returns zero-padded string to 4 digits.
+ * - Returns "" on failure.
+ *
  * @returns current year string (zero-padded to 4 digits) or "" on failure
  *
  * @example getUnixYear() // "2024"

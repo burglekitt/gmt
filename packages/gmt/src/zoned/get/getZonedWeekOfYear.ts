@@ -5,9 +5,13 @@ import { isValidTimeZone } from "../validate";
 /**
  * Return the current week of year for the specified IANA timeZone.
  *
+ * - Uses Temporal.Now.zonedDateTimeISO to get the current time.
+ * - Uses weekOfYear helper to calculate ISO week number.
+ * - Validation is performed on the timezone.
+ *
  * @param ianaTimezone IANA timeZone identifier
  * @param weekStartsOn optional: "monday" | "sunday" (defaults to "monday")
- * @returns current week number (1-53) or null when invalid
+ * @returns current week number (1-53) or null on invalid input
  *
  * @example getZonedWeekOfYear("America/New_York") // 9
  * @example getZonedWeekOfYear("invalid") // null

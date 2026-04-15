@@ -3,6 +3,9 @@ import { isValidUtc } from "../validate";
 /**
  * Return the UTC datetime string with a trailing Z removed if present.
  *
+ * - Uses regex to remove trailing "z" or "Z".
+ * - Returns "" for invalid input.
+ *
  * @param value UTC datetime string (ISO 8601)
  * @returns UTC datetime string without trailing Z or "" on invalid input
  *

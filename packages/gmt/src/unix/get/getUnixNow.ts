@@ -4,6 +4,10 @@ import { isValidUnixUnit, type UnixUnit } from "../validate/isValidUnixUnit";
 /**
  * Return the current Unix timestamp in either seconds or milliseconds.
  *
+ * - Uses Temporal.Now.instant() to get current time.
+ * - Defaults to "milliseconds" if no unit specified.
+ * - Returns 0 on failure.
+ *
  * @param unit optional unit specifier: "seconds" | "milliseconds"
  * @returns number (unix timestamp)
  *

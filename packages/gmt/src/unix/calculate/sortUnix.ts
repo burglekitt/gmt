@@ -3,6 +3,10 @@ import { isValidAmount } from "../../internal";
 /**
  * Sort an array of Unix timestamp values in ascending or descending order.
  *
+ * - Filters invalid values before sorting.
+ * - Supports "asc" (earliest first) or "desc" (latest first).
+ * - Returns [] if array is empty or has no valid values.
+ *
  * @param unixValues Array of Unix timestamps (e.g. 1699531200)
  * @param order "asc" for ascending (earliest first) | "desc" for descending (latest first)
  * @returns Sorted array of Unix timestamps

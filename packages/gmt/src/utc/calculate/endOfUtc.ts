@@ -6,7 +6,9 @@ import { isValidUtc } from "../validate/isValidUtc";
 /**
  * Return the end of the specified date-time `unit` for a given UTC datetime string.
  *
- * - Returns empty string for invalid inputs or units.
+ * - Converts to ZonedDateTime, sets to end of unit, converts back to Instant.
+ * - Supports: "year", "month", "week", "day", "hour", "minute", "second", "millisecond", "microsecond", "nanosecond".
+ * - Returns "" for invalid input.
  *
  * @param value ISO UTC datetime string
  * @param unit Temporal.DateUnit | Temporal.TimeUnit to specify the end

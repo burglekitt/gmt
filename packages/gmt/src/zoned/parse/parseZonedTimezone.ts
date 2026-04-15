@@ -4,6 +4,9 @@ import { isValidZonedDateTime } from "../validate";
 /**
  * Extract the IANA timeZone identifier from an ISO 8601 zoned datetime string.
  *
+ * - Extracts timezone id from a ZonedDateTime.
+ * - Returns "" for invalid input.
+ *
  * @param value zoned ISO 8601 datetime string
  * @returns IANA timeZone id or "" when invalid
  *

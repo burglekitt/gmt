@@ -34,11 +34,13 @@ function isValidZonedNowUnit(unit: string): unit is ZonedNowUnit {
 /**
  * Return the requested current unit value for the specified IANA timeZone.
  *
- * - Returns empty string for invalid timeZone or unit.
+ * - Uses Temporal.Now.zonedDateTimeISO to get the current time.
+ * - Uses weekOfYear helper for week calculations.
+ * - Validation is performed on timezone and unit.
  *
  * @param ianaTimezone IANA timeZone identifier
  * @param unit unit to extract from current zoned time
- * @returns string representation of the requested unit or "" when invalid
+ * @returns string representation of the requested unit or "" on invalid input
  *
  * @example getZonedNowUnit("America/New_York", "hour") // "07"
  * @example getZonedNowUnit("invalid", "hour") // ""

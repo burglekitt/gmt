@@ -5,6 +5,10 @@ import { utcDateTime } from "../../regex/utc-date-time";
 /**
  * Return true when the provided string is a valid ISO 8601 UTC datetime.
  *
+ * - Uses regex to check format before parsing.
+ * - Rejects leap seconds (e.g., "2024-12-31T23:59:60Z").
+ * - Uses Temporal.Instant.from for validation.
+ *
  * @param value input UTC datetime string (ISO 8601)
  * @returns boolean indicating whether the input is a valid UTC datetime
  *

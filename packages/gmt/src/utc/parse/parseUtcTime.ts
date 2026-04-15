@@ -5,6 +5,10 @@ import { isValidUtc } from "../validate";
 /**
  * Extract the time portion from a UTC datetime string.
  *
+ * - Uses Temporal.Instant.from to parse, converts to specified timezone.
+ * - Defaults to UTC if no timezone specified.
+ * - Returns "" for invalid input.
+ *
  * @param value ISO UTC datetime string (e.g., "2024-03-17T14:30:45Z")
  * @param options optional: timeZone (IANA)
  * @returns ISO time string (e.g., "14:30:45") or "" on invalid input

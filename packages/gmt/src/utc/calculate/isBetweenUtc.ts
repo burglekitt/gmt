@@ -4,6 +4,10 @@ import { isValidUtc } from "../validate";
 /**
  * Return true when `value` is between `start` and `end` (inclusive by default).
  *
+ * - Uses Temporal.Instant.compare for comparison.
+ * - Returns false if start > end or inputs are invalid.
+ * - Use options.inclusiveStart/inclusiveEnd to control boundaries.
+ *
  * @param value ISO UTC datetime string to check
  * @param start ISO UTC datetime string for range start
  * @param end ISO UTC datetime string for range end

@@ -8,6 +8,10 @@ import { isValidTimeZone } from "../../zoned/validate";
 /**
  * Return the difference between two Unix timestamps measured in the given unit.
  *
+ * - Uses Temporal.Instant.until() to calculate the difference.
+ * - Supports single unit or array of units.
+ * - Returns null for invalid input.
+ *
  * @param value1 first Unix timestamp
  * @param value2 second Unix timestamp
  * @param units DateTimeDurationUnit | DateTimeDurationUnit[] to measure the difference

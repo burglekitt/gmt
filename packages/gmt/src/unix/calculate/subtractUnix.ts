@@ -8,6 +8,10 @@ import { isValidTimeZone } from "../../zoned/validate";
 /**
  * Subtract a temporal amount from a Unix epoch value and return the resulting epoch.
  *
+ * - Converts to ZonedDateTime, subtracts the duration, then converts back to epoch.
+ * - Validates duration units and values.
+ * - Returns null for invalid input.
+ *
  * @param value Unix timestamp (number)
  * @param units Partial<Record<DateTimeDurationUnit, number>> object specifying units to subtract
  * @param options optional: epochUnit ("seconds" | "milliseconds"), timeZone (IANA)

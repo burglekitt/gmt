@@ -12,8 +12,8 @@ export type ZonedParseUnit =
   | "nanosecond"
   | "timeZone";
 
-  // TODO is duplicated
-  
+// TODO is duplicated
+
 function isValidZonedUnit(unit: string): unit is ZonedParseUnit {
   return [
     "year",
@@ -30,6 +30,10 @@ function isValidZonedUnit(unit: string): unit is ZonedParseUnit {
 
 /**
  * Return the requested unit value from an ISO 8601 zoned datetime string.
+ *
+ * - Valid units: "year", "month", "day", "hour", "minute", "second", "millisecond", "nanosecond", "timeZone".
+ * - Uses Temporal.ZonedDateTime.from to parse.
+ * - Returns "" for invalid input.
  *
  * @param value zoned ISO 8601 datetime string
  * @param unit unit to extract

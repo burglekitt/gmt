@@ -6,6 +6,10 @@ import { convertUnixToZoned } from "../../unix/convert";
 /**
  * Extract the time portion from a unix epoch value.
  *
+ * - Converts to ZonedDateTime then extracts the PlainTime.
+ * - Uses system timezone if not specified.
+ * - Returns "" for invalid input.
+ *
  * @param value unix epoch in milliseconds or seconds (number)
  * @param options optional: epochUnit ("seconds" | "milliseconds"), timeZone (IANA)
  * @returns ISO time string (e.g., "14:30:45") or "" on invalid input

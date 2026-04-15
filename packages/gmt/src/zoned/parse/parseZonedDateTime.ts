@@ -4,7 +4,11 @@ import { isValidZonedDateTime } from "../validate/isValidZonedDateTime";
 
 /**
  * Parse a zoned datetime and return the plain local datetime portion as an ISO plain datetime string.
- * 
+ *
+ * - Uses Temporal.ZonedDateTime.from to parse.
+ * - Rejects leap seconds.
+ * - Returns "" for invalid input.
+ *
  * @param value zoned ISO 8601 datetime string
  * @returns plain local datetime string or "" when invalid
  *

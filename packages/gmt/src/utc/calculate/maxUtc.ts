@@ -4,6 +4,9 @@ import { isValidUtc } from "../validate/isValidUtc";
 /**
  * Return the latest (maximum) of the given UTC datetime values.
  *
+ * - Filters invalid values before finding maximum.
+ * - Returns null if array is empty or has no valid values.
+ *
  * @param utcDateTimes Array of ISO datetime strings (e.g. "2024-03-10T12:00:00Z")
  * @returns The latest UTC datetime string, or null on invalid input
  *

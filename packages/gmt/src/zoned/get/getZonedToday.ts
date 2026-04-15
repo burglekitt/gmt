@@ -4,6 +4,9 @@ import { isValidTimeZone } from "../validate";
 /**
  * Return today's date in the given IANA timeZone as an ISO date string.
  *
+ * - Uses Temporal.Now.zonedDateTimeISO to get current date in timezone.
+ * - Returns "" for invalid timezone.
+ *
  * @param ianaTimezone IANA timeZone identifier
  * @returns ISO date string (YYYY-MM-DD) or "" when invalid
  *

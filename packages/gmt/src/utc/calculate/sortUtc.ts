@@ -4,6 +4,10 @@ import { isValidUtc } from "../validate/isValidUtc";
 /**
  * Sort an array of UTC datetime values in ascending or descending order.
  *
+ * - Filters invalid values before sorting.
+ * - Supports "asc" (earliest first) or "desc" (latest first).
+ * - Returns [] if array is empty or has no valid values.
+ *
  * @param utcDateTimes Array of ISO datetime strings (e.g. "2024-03-10T12:00:00Z")
  * @param order "asc" for ascending (earliest first) | "desc" for descending (latest first)
  * @returns Sorted array of UTC datetime strings

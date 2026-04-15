@@ -4,6 +4,9 @@ import { isValidUtc } from "../validate";
 /**
  * Return whether `value1` and `value2` represent the same instant.
  *
+ * - Uses Temporal.Instant.compare for equality check.
+ * - Returns false if either input is invalid.
+ *
  * @param value1 first UTC datetime string
  * @param value2 second UTC datetime string
  * @returns `true` if `value1` equals `value2`, otherwise `false`

@@ -7,6 +7,10 @@ import { isValidZonedDateTime } from "../validate";
 /**
  * Add a temporal amount to a zoned ISO 8601 datetime string and return a zoned ISO 8601 string.
  *
+ * - Uses Temporal.ZonedDateTime.add to add duration.
+ * - Validates duration units and values.
+ * - Returns "" for invalid input.
+ *
  * @param value ISO 8601 zoned datetime string
  * @param units Partial<Record<DateTimeDurationUnit, number>> object specifying units to add
  * @returns zoned ISO 8601 string on success, or "" on invalid input

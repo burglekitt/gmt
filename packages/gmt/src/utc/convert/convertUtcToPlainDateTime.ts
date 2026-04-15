@@ -5,6 +5,10 @@ import { isValidUtc } from "../validate";
 /**
  * Convert a UTC datetime string to a plain datetime string in the format "YYYY-MM-DDTHH:mm:ss".
  *
+ * - Converts to specified timezone before extracting datetime.
+ * - Defaults to UTC if no timezone specified.
+ * - Returns "" for invalid input.
+ *
  * @param value UTC datetime string (e.g., "2024-02-29T00:00:00Z")
  * @param options optional: timeZone (IANA)
  * @returns plain datetime string in "YYYY-MM-DDTHH:mm:ss" format or "" on invalid input

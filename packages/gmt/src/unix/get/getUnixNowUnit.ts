@@ -12,9 +12,13 @@ function isValidUnixNowUnit(unit: string): unit is UnixNowUnit {
 /**
  * Return the requested unit value from the current Unix timestamp in UTC.
  *
+ * - Valid units: "year", "month", "week", "day", "dayOfWeek", "hour", "minute", "second", "millisecond", "microsecond", "nanosecond".
+ * - Uses Temporal.Now.instant() converted to UTC zoned date time.
+ * - Returns "" on invalid unit or failure.
+ *
  * @param unit unit to extract from current unix timestamp
  * @param weekStartsOn optional start of week for week unit ("monday" | "sunday")
- * @returns string representation of the requested unit or "" when invalid
+ * @returns string representation of the requested unit or "" on invalid
  *
  * @example getUnixNowUnit("year") // "2024"
  * @example getUnixNowUnit("month") // "02"

@@ -7,6 +7,10 @@ import { isValidTimeZone } from "../../zoned/validate";
 /**
  * Return the start of the specified unit for a Unix timestamp.
  *
+ * - Converts to ZonedDateTime, sets to start of unit, converts back to epoch.
+ * - Supports: "year", "month", "week", "day", "hour", "minute", "second", "millisecond", "microsecond", "nanosecond".
+ * - Returns null for invalid input.
+ *
  * @param value Unix timestamp (number)
  * @param unit Temporal.DateUnit | Temporal.TimeUnit to specify the start
  * @param options optional: epochUnit ("seconds" | "milliseconds"), timeZone (IANA), weekStartsOn ("monday" | "sunday")

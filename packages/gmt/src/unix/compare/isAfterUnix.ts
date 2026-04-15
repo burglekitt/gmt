@@ -5,9 +5,8 @@ import type { UnixUnit } from "../validate/isValidUnixUnit";
 /**
  * Return whether `value1` represents an instant strictly after `value2`.
  *
- * - Both inputs must be valid unix epoch numbers.
- * - Comparison is performed using Temporal.Instant (same instant semantics).
- * - Invalid inputs return `false`.
+ * - Uses Temporal.Instant.compare to check ordering.
+ * - Returns false if either input is invalid.
  *
  * @param value1 first unix epoch value
  * @param value2 second unix epoch value

@@ -12,9 +12,13 @@ function isValidUtcNowUnit(unit: string): unit is UtcNowUnit {
 /**
  * Return the requested unit value from the current UTC instant.
  *
+ * - Valid units: "year", "month", "week", "day", "dayOfWeek", "hour", "minute", "second", "millisecond", "microsecond", "nanosecond".
+ * - Uses Temporal.Now.instant() converted to UTC.
+ * - Returns "" on invalid unit or failure.
+ *
  * @param unit unit to extract from current utc instant
  * @param weekStartsOn optional start of week for week unit ("monday" | "sunday")
- * @returns string representation of the requested unit or "" when invalid
+ * @returns string representation of the requested unit or "" on invalid
  *
  * @example getUtcNowUnit("year") // "2024"
  * @example getUtcNowUnit("month") // "02"

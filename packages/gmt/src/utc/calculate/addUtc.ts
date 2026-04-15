@@ -7,6 +7,10 @@ import { isValidUtc } from "../validate/isValidUtc";
 /**
  * Add a temporal amount to a UTC datetime string and return a new UTC Instant string.
  *
+ * - Uses Temporal.Instant.from to parse, adds duration, returns new Instant.
+ * - Validates duration units and values.
+ * - Returns "" for invalid input.
+ *
  * @param value ISO UTC datetime string (e.g. "2024-03-10T12:00:00Z")
  * @param units Partial<Record<DateTimeDurationUnit, number>> object specifying units to add
  * @returns UTC Instant string after addition, or "" on invalid input

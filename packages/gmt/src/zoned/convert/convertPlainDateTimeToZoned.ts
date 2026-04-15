@@ -5,6 +5,9 @@ import { isValidTimeZone } from "../validate";
 /**
  * Attach the specified `timeZone` to a plain datetime string and return a zoned ISO 8601 datetime string.
  *
+ * - Combines plain datetime with timezone to create ZonedDateTime.
+ * - Returns "" for invalid input.
+ *
  * @param value plain datetime string (e.g. "2024-02-29T14:30:45")
  * @param timeZone IANA timeZone identifier
  * @param optionsArg optional: smallestUnit

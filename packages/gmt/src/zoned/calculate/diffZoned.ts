@@ -5,7 +5,12 @@ import type { DateTimeDurationUnit } from "../../types";
 import { isValidZonedDateTime } from "../validate";
 
 /**
- * Return the difference between two zoned datetimes measured in the given date-time `unit`.
+ * Return the difference between two zoned datetimes measured in the given date-time unit.
+ *
+ * - Uses Temporal.ZonedDateTime.until to calculate difference.
+ * - Converts both to UTC for consistent calculation.
+ * - Supports single unit or array of units.
+ * - Returns null for invalid input.
  *
  * @param value1 zoned ISO 8601 datetime string (start)
  * @param value2 zoned ISO 8601 datetime string (end)

@@ -4,6 +4,9 @@ import { isValidZonedDateTime } from "../validate";
 /**
  * Convert an ISO 8601 zoned datetime string to a UTC Instant string (ISO).
  *
+ * - Uses Temporal.ZonedDateTime.toInstant to convert.
+ * - Returns "" for invalid input.
+ *
  * @param value zoned ISO 8601 datetime string
  * @returns UTC Instant ISO string or "" when invalid
  *
