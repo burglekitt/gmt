@@ -152,7 +152,10 @@ export const addDays = (dateStr: string, days: number): string => {
 **Pattern for number returns**:
 
 ```ts
-export const getDay = (dateStr: string): number => {
+export function getDay = (dateStr: string): number | null {
+  if (!isValidDate(dateStr)) {
+    return null;
+  }
   try {
     const date = Temporal.PlainDate.from(dateStr);
     return date.day;
