@@ -7,7 +7,7 @@ import { leapSecond } from "../../regex/leap-second";
  *
  * @param value
  * @returns boolean indicating whether the input string is a valid leap second datetime
- * 
+ *
  * @example isLeapSecond("2024-12-31T23:59:60Z") // true
  * @example isLeapSecond("2024-12-31T23:59:60.123Z") // true
  * @example isLeapSecond("2024-12-31T23:59:60+00:00") // true

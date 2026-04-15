@@ -10,7 +10,7 @@ import { isValidDate } from "../validate";
  * @param end ISO PlainDate string for the end of the range
  * @param options { inclusiveStart?: boolean = true, inclusiveEnd?: boolean = true }
  * @returns boolean indicating whether date is between start and end
- * 
+ *
  * @example isBetweenDate("2024-02-29", "2024-02-01", "2024-02-28") // false
  * @example isBetweenDate("2024-02-29", "2024-02-01", "2024-02-29") // true
  * @example isBetweenDate("2024-02-29", "2024-02-29", "2024-02-28") // false

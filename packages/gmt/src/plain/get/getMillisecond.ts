@@ -8,7 +8,7 @@ import { getSystemTimeZone } from "./getSystemTimeZone";
  *
  * @example getMillisecond() // "000"
  * @example getMillisecond() // "" (when system timeZone unavailable)
- * 
+ *
  */
 export function getMillisecond(): string {
   const timeZone = getSystemTimeZone();

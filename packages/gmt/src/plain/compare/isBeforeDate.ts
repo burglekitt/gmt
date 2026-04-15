@@ -8,7 +8,7 @@ import { isValidDate } from "../validate";
  * @param value1 ISO PlainDate string for the first value
  * @param value2 ISO PlainDate string for the second value
  * @returns boolean indicating whether value1 < value2
- * 
+ *
  * @example isBeforeDate("2024-02-28", "2024-02-29") // true
  * @example isBeforeDate("2024-02-29", "2024-02-29") // false
  * @example isBeforeDate("2024-02-29", "2024-02-28") // false

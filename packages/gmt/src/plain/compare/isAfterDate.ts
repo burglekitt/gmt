@@ -3,11 +3,11 @@ import { isValidDate } from "../validate";
 
 /**
  * Return true if the first ISO PlainDate string represents a date after the second
- * 
+ *
  * @param value1 first ISO PlainDate string
  * @param value2 second ISO PlainDate string
  * @returns boolean indicating whether value1 is after value2
- * 
+ *
  * @example isAfterDate("2024-03-01", "2024-02-29") // true
  * @example isAfterDate("2024-02-28", "2024-02-29") // false
  * @example isAfterDate("invalid", "2024-02-29") // false

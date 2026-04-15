@@ -13,7 +13,7 @@ import { isValidTime, isValidTimeDurationUnit } from "../validate";
  * @param value ISO PlainTime string
  * @param units Partial record of TimeDurationUnit with numeric values to add
  * @returns ISO PlainTime string with amount added, or "" on invalid input
- * 
+ *
  * @example addTime("12:00:00", { hour: 1 }) // "13:00:00"
  * @example addTime("12:00:00", { minute: 30 }) // "12:30:00"
  * @example addTime("12:00:00", { second: 45 }) // "12:00:45"

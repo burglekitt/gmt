@@ -7,7 +7,7 @@ import type { TimeDurationUnit } from "../../types";
  *
  * @param units array of TimeDurationUnits to evaluate
  * @returns the largest TimeDurationUnit found in the array, or "seconds" if none are valid
- * 
+ *
  * @example getLargestTimeDurationUnit(["minutes", "seconds"]) => "minutes"
  * @example getLargestTimeDurationUnit(["seconds", "milliseconds"]) => "seconds"
  * @example getLargestTimeDurationUnit(["milliseconds", "microseconds"]) => "milliseconds"

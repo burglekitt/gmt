@@ -7,7 +7,7 @@ import type { DateDurationUnit } from "../../types";
  *
  * @param units array of DateDurationUnits to evaluate
  * @returns the largest DateDurationUnit found in the array, or "days" if none are valid
- * 
+ *
  * @example getLargestDateDurationUnit(["months", "days"]) => "months"
  * @example getLargestDateDurationUnit(["weeks", "days"]) => "weeks"
  * @example getLargestDateDurationUnit(["days"]) => "days"

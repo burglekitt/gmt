@@ -4,11 +4,11 @@ import { isValidIsoDateLike } from "../validate";
 
 /**
  * Compare two ISO date-like strings for equality, ignoring time components.
- * 
+ *
  * @param value1 ISO date-like string
  * @param value2 ISO date-like string
  * @returns true if the dates are equal, false otherwise
- * 
+ *
  * @example areDatesEqual("2024-02-29", "2024-02-29T12:34:56") // true
  * @example areDatesEqual("2024-02-29", "2024-03-01") // false
  * @example areDatesEqual("invalid", "2024-02-29") // false

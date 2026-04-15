@@ -8,7 +8,7 @@ import { isValidTime } from "../validate";
  * @param value1 ISO PlainTime string for the first value
  * @param value2 ISO PlainTime string for the second value
  * @returns boolean indicating whether value1 < value2
- * 
+ *
  * @example isBeforeTime("12:34:56", "13:34:56") // true
  * @example isBeforeTime("12:34:56", "12:34:56") // false
  * @example isBeforeTime("13:34:56", "12:34:56") // false

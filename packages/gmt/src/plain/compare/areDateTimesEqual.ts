@@ -9,7 +9,7 @@ import { isValidDateTime } from "../validate";
  * @param value1 first ISO PlainDateTime string
  * @param value2 second ISO PlainDateTime string
  * @returns boolean indicating whether both date-times are equal component-wise
- * 
+ *
  * @example areDateTimesEqual("2024-02-29T12:34:56", "2024-02-29T12:34:56") // true
  * @example areDateTimesEqual("2024-02-29T12:34:56", "2024-02-29T12:34:57") // false
  * @example areDateTimesEqual("2024-02-29T12:34:56", "invalid") // false

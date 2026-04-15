@@ -9,7 +9,7 @@ import { getSystemTimeZone } from "./getSystemTimeZone";
  * - ISO day of week: 1 (Monday) to 7 (Sunday).
  *
  * @returns current ISO day of week number (1-7) or null when invalid
- * 
+ *
  * @example getDayOfWeek() // 4
  * @example getDayOfWeek() // null (when system timeZone unavailable)
  */

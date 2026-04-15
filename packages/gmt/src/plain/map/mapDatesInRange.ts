@@ -10,7 +10,7 @@ import { isValidDate } from "../validate";
  * @param endDate ISO PlainDate string for the last date (inclusive)
  * @param stepDays optional number of days to step between results
  * @returns array of ISO PlainDate strings, or an empty array on invalid input
- * 
+ *
  * @example mapDatesInRange("2024-03-01", "2024-03-05") // ["2024-03-01", "2024-03-02", "2024-03-03", "2024-03-04", "2024-03-05"]
  * @example mapDatesInRange("2024-03-01", "2024-03-05", 2) // ["2024-03-01", "2024-03-03", "2024-03-05"]
  * @example mapDatesInRange("2024-03-05", "2024-03-01") // [] (end before start)

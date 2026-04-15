@@ -7,7 +7,7 @@ import { isLeapSecond } from "./isLeapSecond";
  *
  * @param value ISO PlainDate or PlainDateTime string
  * @returns boolean indicating validity
- * 
+ *
  * @example isValidIsoDateLike("2024-02-29") => true
  * @example isValidIsoDateLike("2024-02-30") => false (invalid date)
  * @example isValidIsoDateLike("2024-02-29T12:34:56") => true

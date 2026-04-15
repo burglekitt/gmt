@@ -8,7 +8,7 @@ import { isValidDate } from "../validate";
  * @param value ISO PlainDate string
  * @param unit unit to extract from the date
  * @returns string representation of the requested unit or "" on invalid input
- * 
+ *
  * @example parseDateUnit("2024-03-15", "year") // "2024"
  * @example parseDateUnit("2024-03-15", "month") // "03"
  * @example parseDateUnit("2024-03-15", "day") // "15"

@@ -7,7 +7,7 @@ import { isValidDate } from "../validate";
  *
  * @param value ISO PlainDate string
  * @returns number (1-4) or null for invalid input
- * 
+ *
  * @example getQuarterForDate("2024-01-15") // 1
  * @example getQuarterForDate("2024-04-15") // 2
  * @example getQuarterForDate("2024-07-15") // 3

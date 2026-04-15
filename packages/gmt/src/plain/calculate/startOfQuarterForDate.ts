@@ -7,7 +7,7 @@ import { isValidDate } from "../validate";
  *
  * @param value ISO PlainDate string
  * @returns ISO PlainDate string for the first day of the quarter, or empty string on invalid input
- * 
+ *
  * @example startOfQuarterForDate("2024-03-15") // "2024-01-01"
  * @example startOfQuarterForDate("2024-06-15") // "2024-04-01"
  * @example startOfQuarterForDate("2024-09-15") // "2024-07-01"

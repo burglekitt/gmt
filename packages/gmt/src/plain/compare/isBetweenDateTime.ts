@@ -10,7 +10,7 @@ import { isValidDateTime } from "../validate";
  * @param end ISO PlainDateTime string for the end of the range
  * @param options { inclusiveStart?: boolean = true, inclusiveEnd?: boolean = true }
  * @returns boolean indicating whether dateTime is between start and end
- * 
+ *
  * @example isBetweenDateTime("2024-02-29T12:00:00", "2024-02-01T00:00:00", "2024-02-28T23:59:59") // false
  * @example isBetweenDateTime("2024-02-29T12:00:00", "2024-02-01T00:00:00", "2024-02-29T12:00:00") // true
  * @example isBetweenDateTime("2024-02-29T12:00:00", "2024-02-29T12:00:00", "2024-02-28T23:59:59") // false

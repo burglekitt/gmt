@@ -7,7 +7,7 @@ import { isValidDateTime } from "../validate";
  * @param dateTimes Array of ISO PlainDateTime strings (e.g. "2024-03-10T12:00:00")
  * @param order "asc" for ascending (earliest first) | "desc" for descending (latest first)
  * @returns Sorted array of datetime strings
- * 
+ *
  * @example sortDateTimes(["2024-03-10T12:00:00", "2024-01-01T08:00:00", "2024-02-15T15:30:00"]) // ["2024-01-01T08:00:00", "2024-02-15T15:30:00", "2024-03-10T12:00:00"]
  * @example sortDateTimes(["2024-03-10T12:00:00", "2024-01-01T08:00:00", "2024-02-15T15:30:00"], "desc") // ["2024-03-10T12:00:00", "2024-02-15T15:30:00", "2024-01-01T08:00:00"]
  * @example sortDateTimes(["invalid", "2024-01-01T08:00:00"]) // ["2024-01-01T08:00:00"]

@@ -9,7 +9,7 @@ import { isValidDateTime } from "../validate";
  * @param value1 ISO PlainDateTime string for the first value
  * @param value2 ISO PlainDateTime string for the second value
  * @returns boolean indicating whether value1 > value2
- * 
+ *
  * @example isAfterDateTime("2024-02-29T12:34:56", "2024-02-28T12:34:56") // true
  * @example isAfterDateTime("2024-02-29T12:34:56", "2024-02-29T12:34:56") // false
  * @example isAfterDateTime("2024-02-28T12:34:56", "2024-02-29T12:34:56") // false

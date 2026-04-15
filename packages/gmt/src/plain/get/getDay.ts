@@ -5,7 +5,7 @@ import { getSystemTimeZone } from "./getSystemTimeZone";
  * Return the current day of month using the system timeZone.
  *
  * @returns current day string (zero-padded) or "" when invalid
- * 
+ *
  * @example getDay() // "29"
  * @example getDay() // "" (when system timeZone unavailable)
  */

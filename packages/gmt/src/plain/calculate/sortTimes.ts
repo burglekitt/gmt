@@ -7,7 +7,7 @@ import { isValidTime } from "../validate";
  * @param times Array of ISO PlainTime strings (e.g. "14:30:00")
  * @param order "asc" for ascending (earliest first) | "desc" for descending (latest first)
  * @returns Sorted array of time strings
- * 
+ *
  * @example sortTimes(["14:30:00", "09:00:00", "20:45:00"]) // ["09:00:00", "14:30:00", "20:45:00"]
  * @example sortTimes(["14:30:00", "09:00:00", "20:45:00"], "desc") // ["20:45:00", "14:30:00", "09:00:00"]
  * @example sortTimes(["invalid", "09:00:00", "20:45:00"]) // ["09:00:00", "20:45:00"]

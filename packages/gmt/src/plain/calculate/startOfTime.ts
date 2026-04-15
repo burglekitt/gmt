@@ -21,7 +21,7 @@ const supported: StartOfTimeUnit[] = [
  * @param unit StartOfTimeUnit to specify the unit for the start (e.g. "hour")
  * @param options { fractionalSecondDigits?: number } - Optional parameter to specify fractionalSecondDigits for sub-second units (e.g. { fractionalSecondDigits: 3 } for milliseconds). Default is 0 for units larger than millisecond, 3 for millisecond, 6 for microsecond, and 9 for nanosecond.
  * @returns ISO 8601 string representing the start of the specified unit, or empty string on invalid input
- * 
+ *
  * @example startOfTime("12:34:56", "hour") => "12:00:00"
  * @example startOfTime("12:34:56.789", "minute") => "12:34:00"
  * @example startOfTime("12:34:56.789", "second") => "12:34:56"

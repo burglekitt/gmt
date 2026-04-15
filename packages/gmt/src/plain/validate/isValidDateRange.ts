@@ -18,7 +18,7 @@ interface IsValidDateRangeProps {
  * @param value2 second ISO PlainDate string
  * @param options optional allowEqual flag
  * @returns boolean indicating whether the date range is valid
- * 
+ *
  * @example isValidDateRange({ value1: "2024-02-28", value2: "2024-02-29" }) => true
  * @example isValidDateRange({ value1: "2024-02-29", value2: "2024-02-28" }) => false
  * @example isValidDateRange({ value1: "2024-02-29", value2: "2024-02-29" }) => false

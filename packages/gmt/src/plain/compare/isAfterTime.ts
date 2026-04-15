@@ -8,7 +8,7 @@ import { isValidTime } from "../validate";
  * @param value1 ISO PlainTime string for the first value
  * @param value2 ISO PlainTime string for the second value
  * @returns boolean indicating whether value1 > value2
- * 
+ *
  * @example isAfterTime("12:34:56", "11:34:56") // true
  * @example isAfterTime("12:34:56", "12:34:56") // false
  * @example isAfterTime("11:34:56", "12:34:56") // false

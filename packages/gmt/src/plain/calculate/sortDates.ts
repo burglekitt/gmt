@@ -7,7 +7,7 @@ import { isValidDate } from "../validate";
  * @param dates Array of ISO PlainDate strings (e.g. "2024-03-10")
  * @param order "asc" for ascending (earliest first) | "desc" for descending (latest first)
  * @returns Sorted array of date strings
- * 
+ *
  * @example sortDates(["2024-03-10", "2024-01-01", "2024-02-15"]) // ["2024-01-01", "2024-02-15", "2024-03-10"]
  * @example sortDates(["2024-03-10", "2024-01-01", "2024-02-15"], "desc") // ["2024-03-10", "2024-02-15", "2024-01-01"]
  * @example sortDates(["invalid", "2024-01-01", "2024-02-15"]) // ["2024-01-01", "2024-02-15"]

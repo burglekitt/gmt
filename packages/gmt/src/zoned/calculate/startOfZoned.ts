@@ -1,9 +1,7 @@
 import { Temporal } from "@js-temporal/polyfill";
+import { isValidDateTimeUnit } from "../..";
 import type { DateTimeUnit, FractionalDigit } from "../../types";
 import { isValidZonedDateTime } from "../validate";
-import { isValidDateTimeUnit } from "../..";
-
-
 
 /**
  * Return the start of the specified date-time `unit` (year|month|day|hour|minute|...)

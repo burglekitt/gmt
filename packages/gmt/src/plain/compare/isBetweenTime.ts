@@ -14,7 +14,7 @@ import { isValidTime } from "../validate";
  * @param end ISO PlainTime string for the end of the range
  * @param options { inclusiveStart?: boolean = true, inclusiveEnd?: boolean = true }
  * @returns boolean indicating whether time is between start and end
- * 
+ *
  * @example isBetweenTime("12:34:56", "12:00:00", "13:00:00") // true
  * @example isBetweenTime("12:34:56", "12:34:56", "13:00:00") // true
  * @example isBetweenTime("12:34:56", "12:34:57", "13:00:00") // false

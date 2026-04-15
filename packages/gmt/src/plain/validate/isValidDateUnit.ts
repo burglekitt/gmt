@@ -5,7 +5,7 @@ import type { DateUnit } from "../../types";
  *
  * @param unit candidate string
  * @returns boolean indicating validity
- * 
+ *
  * @example isValidDateUnit("year") // true
  * @example isValidDateUnit("month") // true
  * @example isValidDateUnit("week") // true

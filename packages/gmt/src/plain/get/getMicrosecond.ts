@@ -5,7 +5,7 @@ import { getSystemTimeZone } from "./getSystemTimeZone";
  * Return the current microsecond using the system timeZone.
  *
  * @returns current microsecond string (zero-padded to 3 digits) or "" when invalid
- * 
+ *
  * @example getMicrosecond() // "000"
  * @example getMicrosecond() // "" (when system timeZone unavailable)
  */

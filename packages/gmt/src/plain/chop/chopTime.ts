@@ -6,7 +6,7 @@ import { isValidDateTime } from "../validate";
  *
  * @param value ISO PlainDateTime string
  * @returns ISO PlainDate string or "" on invalid input
- * 
+ *
  * @example chopTime("2024-02-29T12:34:56") // "2024-02-29"
  * @example chopTime("invalid") // ""
  */

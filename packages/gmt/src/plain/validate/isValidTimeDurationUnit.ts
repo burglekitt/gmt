@@ -5,7 +5,7 @@ import type { TimeDurationUnit } from "../../types";
  *
  * @param unit string candidate
  * @returns boolean indicating whether the unit is valid
- * 
+ *
  * @example isValidTimeDurationUnit("hours") // true
  * @example isValidTimeDurationUnit("minutes") // true
  * @example isValidTimeDurationUnit("seconds") // true

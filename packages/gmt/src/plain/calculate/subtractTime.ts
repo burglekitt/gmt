@@ -10,7 +10,7 @@ import { isValidTime, isValidTimeDurationUnit } from "../validate";
  * @param value ISO PlainTime string
  * @param units Partial record of TimeDurationUnits with numeric values to subtract
  * @returns ISO PlainTime string with amount subtracted, or "" on invalid input
- * 
+ *
  * @example subtractTime("14:30:00", { hour: 1 }) // "13:30:00"
  * @example subtractTime("14:30:00", { minute: 30 }) // "14:00:00"
  * @example subtractTime("14:30:00", { second: 45 }) // "14:29:15"

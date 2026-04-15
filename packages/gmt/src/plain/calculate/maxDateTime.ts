@@ -6,7 +6,7 @@ import { isValidDateTime } from "../validate";
  *
  * @param dateTimes Array of ISO PlainDateTime strings (e.g. "2024-03-10T12:00:00")
  * @returns The latest datetime string, or null on invalid input
- * 
+ *
  * @example maxDateTime(["2024-03-10T12:00:00", "2024-03-15T12:00:00", "2024-03-12T12:00:00"]) // "2024-03-15T12:00:00"
  * @example maxDateTime(["invalid", "2024-03-15T12:00:00"]) // "2024-03-15T12:00:00"
  * @example maxDateTime(["invalid", "also invalid"]) // null

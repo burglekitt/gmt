@@ -7,7 +7,7 @@ import { isValidDateTime, isValidTime } from "../validate";
  *
  * @param value ISO PlainDateTime or PlainTime string
  * @returns ISO string trimmed to minutes or "" on invalid input
- * 
+ *
  * @example chopSeconds("2024-02-29T12:34:56") // "2024-02-29T12:34"
  * @example chopSeconds("12:34:56") // "12:34"
  * @example chopSeconds("invalid") // ""

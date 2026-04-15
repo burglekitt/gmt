@@ -11,7 +11,7 @@ import { isValidDateTime } from "../validate";
  *
  * @param value ISO PlainDateTime string
  * @returns number (1-4) or null for invalid input
- * 
+ *
  * @example getQuarterForDateTime("2024-01-15T12:00:00") // 1
  * @example getQuarterForDateTime("2024-04-15T12:00:00") // 2
  * @example getQuarterForDateTime("2024-07-15T12:00:00") // 3

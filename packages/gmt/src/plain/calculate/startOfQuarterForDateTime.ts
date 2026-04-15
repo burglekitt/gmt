@@ -7,7 +7,7 @@ import { isValidDateTime } from "../validate";
  *
  * @param value ISO PlainDateTime string
  * @returns ISO PlainDateTime string for the start of the quarter, or empty string on invalid input
- * 
+ *
  * @example startOfQuarterForDateTime("2024-03-15T12:00:00") // "2024-01-01T00:00:00"
  * @example startOfQuarterForDateTime("2024-06-15T12:00:00") // "2024-04-01T00:00:00"
  * @example startOfQuarterForDateTime("invalid") // ""

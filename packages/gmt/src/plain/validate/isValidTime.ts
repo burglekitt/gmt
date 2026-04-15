@@ -7,7 +7,7 @@ import { isLeapSecond } from "./isLeapSecond";
  *
  * @param value ISO PlainTime string`
  * @returns boolean indicating validity
- * 
+ *
  * @example isValidTime("12:34:56") => true
  * @example isValidTime("24:00:00") => false (invalid hour)
  * @example isValidTime("23:60:00") => false (invalid minute)

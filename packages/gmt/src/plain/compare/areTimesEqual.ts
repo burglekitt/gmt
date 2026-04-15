@@ -3,11 +3,11 @@ import { isValidTime } from "../validate";
 
 /**
  * Return true if two PlainTime ISO strings represent the same time components.
- * 
+ *
  * @param value1 first ISO PlainTime string
  * @param value2 second ISO PlainTime string
  * @returns boolean indicating whether both times are equal component-wise
- * 
+ *
  * @example areTimesEqual("12:34:56", "12:34:56") // true
  * @example areTimesEqual("12:34:56", "12:34:57") // false
  * @example areTimesEqual("12:34:56.789", "12:34:56.789") // true

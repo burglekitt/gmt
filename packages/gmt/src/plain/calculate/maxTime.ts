@@ -6,7 +6,7 @@ import { isValidTime } from "../validate";
  *
  * @param times Array of ISO PlainTime strings (e.g. "14:30:00")
  * @returns The latest time string, or null on invalid input
- * 
+ *
  * @example maxTime(["14:30:00", "09:00:00", "20:45:00"]) // "20:45:00"
  * @example maxTime(["invalid", "09:00:00", "20:45:00"]) // "20:45:00"
  * @example maxTime(["invalid", "also invalid"]) // null

@@ -6,7 +6,7 @@ import { Temporal } from "@js-temporal/polyfill";
  *
  * @param month ISO PlainYearMonth string (YYYY-MM)
  * @returns array of ISO PlainDate strings for each day in the month
- * 
+ *
  * @example mapDaysInMonth("2024-02") // ["2024-02-01", "2024-02-02", ..., "2024-02-29"]
  * @example mapDaysInMonth("2024-04") // ["2024-04-01", "2024-04-02", ..., "2024-04-30"]
  * @example mapDaysInMonth("invalid") // [] (invalid input)

@@ -15,7 +15,7 @@ function isValidPlainNowUnit(unit: string): unit is NowUnit {
  *
  * @param unit unit to extract from current local time
  * @returns string representation of the requested unit or "" when invalid
- * 
+ *
  * @example getNowUnit("year") // "2024"
  * @example getNowUnit("month") // "03"
  * @example getNowUnit("week") // "11"

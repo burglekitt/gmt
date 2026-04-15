@@ -8,7 +8,7 @@ import { isLeapSecond } from "./isLeapSecond";
  *
  * @param value string candidate
  * @returns boolean indicating whether the value is a valid PlainDateTime string
- * 
+ *
  * @example isValidDateTime("2024-02-29T12:34:56") => true
  * @example isValidDateTime("2024-02-30T12:34:56") => false (invalid date)
  * @example isValidDateTime("2024-02-29T24:00:00") => false (invalid time)

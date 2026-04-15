@@ -5,7 +5,7 @@ import { getSystemTimeZone } from "./getSystemTimeZone";
  * Return the current hour using the system timeZone.
  *
  * @returns current hour string (zero-padded) or "" when invalid
- * 
+ *
  * @example getHour() // "00"
  * @example getHour() // "" (when system timeZone unavailable)
  */

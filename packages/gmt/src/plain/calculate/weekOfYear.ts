@@ -8,7 +8,7 @@ import { isValidDate } from "../validate";
  * @param value ISO 8601 date string
  * @param optionsArg { weekStartsOn: "monday" | "sunday" } - Optional parameter to specify the start of the week. Default is "monday".
  * @returns Week number of the year (1-53), or null for invalid input
- * 
+ *
  * @example weekOfYear("2024-01-01") => 1
  * @example weekOfYear("2024-01-07") => 1
  * @example weekOfYear("2024-01-08") => 2
