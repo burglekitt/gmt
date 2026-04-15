@@ -23,7 +23,7 @@ export function getZonedNow(
   },
 ): string {
   const options = {
-    smallestUnit: "milliseconds",
+    smallestUnit: "millisecond",
     ...optionsArg,
   } as Partial<Temporal.ZonedDateTimeToStringOptions>;
   if (!isValidTimeZone(ianaTimezone)) {

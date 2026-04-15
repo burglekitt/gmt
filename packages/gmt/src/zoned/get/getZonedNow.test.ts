@@ -28,7 +28,7 @@ describe("getZonedNow", () => {
   `("returns $expected for timeZone $timeZone", ({ timeZone, expected }) => {
     const value = getZonedNow(timeZone);
     const normalizedValue = Temporal.ZonedDateTime.from(value).toString({
-      smallestUnit: "milliseconds",
+      smallestUnit: "millisecond",
     });
 
     expect(normalizedValue).toBe(expected);
@@ -85,7 +85,7 @@ describe("getZonedNow", () => {
         .toString({ smallestUnit: "milliseconds" });
 
       const normalizedValue = Temporal.ZonedDateTime.from(value).toString({
-        smallestUnit: "milliseconds",
+        smallestUnit: "millisecond",
       });
 
       expect(normalizedValue).toBe(expected);
