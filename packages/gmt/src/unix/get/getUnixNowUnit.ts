@@ -12,13 +12,10 @@ function isValidUnixNowUnit(unit: string): unit is UnixNowUnit {
 /**
  * Return the requested unit value from the current Unix timestamp in UTC.
  *
- * - Uses the current Unix timestamp in UTC.
- * - Returns an empty string on invalid unit.
- * - For "week" unit, uses Monday as the start of the week.
- *
  * @param unit unit to extract from current unix timestamp
  * @param weekStartsOn optional start of week for week unit ("monday" | "sunday")
  * @returns string representation of the requested unit or "" when invalid
+ *
  * @example getUnixNowUnit("year") // "2024"
  * @example getUnixNowUnit("month") // "02"
  * @example getUnixNowUnit("invalid") // ""

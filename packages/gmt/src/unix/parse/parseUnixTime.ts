@@ -6,14 +6,13 @@ import { convertUnixToZoned } from "../../unix/convert";
 /**
  * Extract the time portion from a unix epoch value.
  *
- * - `value` is a numeric epoch in milliseconds by default, or seconds when
- *   `epochUnit` is "seconds".
- * - Uses system timeZone to interpret the epoch by default, or the provided IANA timeZone.
- * - Returns empty string on invalid input.
- *
  * @param value unix epoch in milliseconds or seconds (number)
- * @param options epochUnit optional unit specifier: "seconds" | "milliseconds", timeZone optional IANA timeZone
+ * @param options optional: epochUnit ("seconds" | "milliseconds"), timeZone (IANA)
  * @returns ISO time string (e.g., "14:30:45") or "" on invalid input
+ *
+ * @example parseUnixTime(1700000000000) // "04:13:20"
+ * @example parseUnixTime(1700000000, { epochUnit: "seconds" }) // "04:13:20"
+ * @example parseUnixTime(-1) // ""
  */
 export function parseUnixTime(
   value: number,

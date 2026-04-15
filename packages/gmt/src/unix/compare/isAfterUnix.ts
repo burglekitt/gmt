@@ -11,10 +11,12 @@ import type { UnixUnit } from "../validate/isValidUnixUnit";
  *
  * @param value1 first unix epoch value
  * @param value2 second unix epoch value
- * @param options epoch unit and options
+ * @param options optional: epochUnit ("seconds" | "milliseconds")
+ * @returns `true` if `value1` is after `value2`, otherwise `false`
+ *
  * @example isAfterUnix(1706659200, 1704067200) // true
  * @example isAfterUnix(1706659200, 1706659200) // false
- * @returns `true` if `value1` is after `value2`, otherwise `false`
+ * @example isAfterUnix(-1, 0) // false
  */
 export function isAfterUnix(
   value1: number,

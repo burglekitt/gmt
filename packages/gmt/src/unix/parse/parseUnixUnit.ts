@@ -21,11 +21,14 @@ export type PlainNowUnit =
 /**
  * Extract a unit from a unix epoch value.
  *
- * - `value` is a numeric epoch in milliseconds by default, or seconds when
- *   `epochUnit` is "seconds".
- * - Accepts both number and string inputs.
- * - Uses system timeZone to interpret the epoch by default, or the provided IANA timeZone.
- * - Returns empty string on invalid input.
+ * @param value unix epoch in milliseconds or seconds (number or string)
+ * @param unit unit to extract (e.g. "year", "month", "hour")
+ * @param options optional: epochUnit ("seconds" | "milliseconds"), timeZone (IANA)
+ * @returns extracted unit value as string, or "" on invalid input
+ *
+ * @example parseUnixUnit(1700000000000, "year") // "2023"
+ * @example parseUnixUnit(1700000000, "hour", { epochUnit: "seconds" }) // "12"
+ * @example parseUnixUnit(-1, "year") // ""
  */
 export function parseUnixUnit(
   value: number | string,

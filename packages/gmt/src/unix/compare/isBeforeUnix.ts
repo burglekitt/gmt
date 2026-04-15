@@ -11,10 +11,12 @@ import type { UnixUnit } from "../validate/isValidUnixUnit";
  *
  * @param value1 first unix epoch value
  * @param value2 second unix epoch value
- * @param options epoch unit and options
+ * @param options optional: epochUnit ("seconds" | "milliseconds")
+ * @returns `true` if `value1` is before `value2`, otherwise `false`
+ *
  * @example isBeforeUnix(1704067200, 1706659200) // true
  * @example isBeforeUnix(1706659200, 1706659200) // false
- * @returns `true` if `value1` is before `value2`, otherwise `false`
+ * @example isBeforeUnix(-1, 0) // false
  */
 export function isBeforeUnix(
   value1: number,

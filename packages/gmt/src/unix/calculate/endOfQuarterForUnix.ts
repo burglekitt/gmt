@@ -10,10 +10,11 @@ import { isValidTimeZone } from "../../zoned/validate";
  * - Returns null for invalid inputs.
  *
  * @param value Unix timestamp (number)
- * @param options epochUnit optional "seconds" | "milliseconds", timeZone optional IANA timeZone
- * @example endOfQuarterForUnix(1706659200000) // 1711977599999
- * @example endOfQuarterForUnix(1706659200, { epochUnit: "seconds" }) // 1711977599
+ * @param options optional: epochUnit ("seconds" | "milliseconds"), timeZone (IANA)
  * @returns Unix epoch number representing the end of the quarter, or null on invalid input
+ *
+ * @example endOfQuarterForUnix(1706659200000) // 1711977599999
+ * @example endOfQuarterForUnix(-1) // null
  */
 export function endOfQuarterForUnix(
   value: number,

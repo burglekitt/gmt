@@ -3,9 +3,10 @@
  * - Must be a non-negative integer.
  *
  * @param timestamp number candidate
- * @example isValidUnixSeconds(1700000000) => true
- * @example isValidUnixSeconds(-1) => false
  * @returns boolean indicating whether the timestamp is a valid Unix seconds value
+ *
+ * @example isValidUnixSeconds(1700000000) // true
+ * @example isValidUnixSeconds(-1) // false
  */
 export function isValidUnixSeconds(timestamp: unknown): boolean {
   if (typeof timestamp === "number") {

@@ -6,14 +6,12 @@ import { isValidTimeZone } from "../../zoned/validate";
 /**
  * Return the start of the quarter for a Unix timestamp.
  *
- * - Accepts Unix timestamps in milliseconds (default) or seconds.
- * - Returns null for invalid inputs.
- *
  * @param value Unix timestamp (number)
- * @param options epochUnit optional "seconds" | "milliseconds", timeZone optional IANA timeZone
- * @example startOfQuarterForUnix(1706659200000) // 1704067200000
- * @example startOfQuarterForUnix(1706659200, { epochUnit: "seconds" }) // 1704067200
+ * @param options optional: epochUnit ("seconds" | "milliseconds"), timeZone (IANA)
  * @returns Unix epoch number representing the start of the quarter, or null on invalid input
+ *
+ * @example startOfQuarterForUnix(1706659200000) // 1704067200000
+ * @example startOfQuarterForUnix(-1) // null
  */
 export function startOfQuarterForUnix(
   value: number,

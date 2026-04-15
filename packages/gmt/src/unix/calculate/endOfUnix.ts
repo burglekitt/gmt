@@ -1,20 +1,8 @@
 import { Temporal } from "@js-temporal/polyfill";
+import { isValidDateTimeUnit } from "../../plain";
 import { getSystemTimeZone } from "../../plain/get";
 import { isValidUnixUnit } from "../../unix/validate/isValidUnixUnit";
 import { isValidTimeZone } from "../../zoned/validate";
-
-const supported: (Temporal.DateUnit | Temporal.TimeUnit)[] = [
-  "year",
-  "month",
-  "week",
-  "day",
-  "hour",
-  "minute",
-  "second",
-  "millisecond",
-  "microsecond",
-  "nanosecond",
-];
 
 /**
  * Return the end of the specified unit for a Unix timestamp.
@@ -24,11 +12,13 @@ const supported: (Temporal.DateUnit | Temporal.TimeUnit)[] = [
  *
  * @param value Unix timestamp (number)
  * @param unit Temporal.DateUnit | Temporal.TimeUnit to specify the end
- * @param options epochUnit optional "seconds" | "milliseconds", timeZone optional IANA timeZone, weekStartsOn optional "monday" | "sunday"
+ * @param options optional: epochUnit ("seconds" | "milliseconds"), timeZone (IANA), weekStartsOn ("monday" | "sunday")
+ * @returns Unix epoch number representing the end of the unit, or null on invalid input
+ *
  * @example endOfUnix(1706659200000, "year") // 1735689600000
  * @example endOfUnix(1706659200000, "month") // 1708012800000
  * @example endOfUnix(1706659200, "day", { epochUnit: "seconds" }) // 1706736000
- * @returns Unix epoch number representing the end of the unit, or null on invalid input
+ * @example endOfUnix(-1, "year") // null
  */
 export function endOfUnix(
   value: number,
@@ -45,7 +35,7 @@ export function endOfUnix(
 
   if (
     !timeZone ||
-    !supported.includes(unit) ||
+    !isValidDateTimeUnit(unit) ||
     !isValidTimeZone(timeZone) ||
     !isValidUnixUnit(epochUnit)
   ) {

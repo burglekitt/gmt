@@ -5,12 +5,13 @@ import { isValidUnixUnit, type UnixUnit } from "../validate/isValidUnixUnit";
 /**
  * Convert a unix epoch value to a UTC Instant ISO string.
  *
- * - `value` is numeric milliseconds (default) or seconds when `unit` is "seconds".
- * - Returns empty string "" for invalid inputs.
- *
  * @param value epoch value (number)
  * @param unit optional unit, "seconds" or "milliseconds"
  * @returns UTC Instant string or empty string when invalid
+ *
+ * @example convertUnixToUtc(1709164800000) // "2024-02-29T00:00:00Z"
+ * @example convertUnixToUtc(1709164800, "seconds") // "2024-02-29T00:00:00Z"
+ * @example convertUnixToUtc(-1) // ""
  */
 export function convertUnixToUtc(
   value: number,
