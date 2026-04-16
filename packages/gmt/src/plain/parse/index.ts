@@ -9,7 +9,7 @@ export * from "./parseMonthFromDate";
 export * from "./parseMonthFromDateTime";
 export * from "./parseSecondFromTime";
 export * from "./parseUnitFromDate";
-export * from "./parseUnitFromDateTime.ts";
+export * from "./parseUnitFromDateTime";
 export * from "./parseUnitFromTime";
 export * from "./parseWeekFromDate";
 export * from "./parseWeekFromDateTime";
