@@ -1,0 +1,142 @@
+name: GMT — TZ Matrix Tests
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'packages/gmt/**'
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/gmt/**'
+
+concurrency:
+  group: gmt-matrix-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  gmt-matrix:
+    name: GMT TZ — Node ${{ matrix.node-version }} / ${{ matrix.timezone }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [20, 22, 24]
+        timezone: ["UTC", "Pacific/Apia", "Pacific/Niue"]
+    timeout-minutes: 120
+    env:
+      TZ: ${{ matrix.timezone }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.32.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: pnpm
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-store-gmt-${{ matrix.node-version }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-gmt-${{ matrix.node-version }}-
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Cache Nx
+        uses: actions/cache@v4
+        with:
+          path: .nx/cache
+          key: ${{ runner.os }}-nx-cache-gmt-${{ matrix.node-version }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-nx-cache-gmt-${{ matrix.node-version }}-
+            ${{ runner.os }}-nx-cache-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - uses: nrwl/nx-set-shas@v4
+
+      - name: Run @burglekitt/gmt tests
+        run: pnpm -w exec nx run @burglekitt/gmt:test
+
+      - name: Collect GMT test artifacts
+        if: always()
+        run: |
+          mkdir -p artifact || true
+          if [ -d packages/gmt/test-results ]; then cp -r packages/gmt/test-results artifact/ || true; fi
+          if [ -f packages/gmt/vitest-junit.xml ]; then cp packages/gmt/vitest-junit.xml artifact/ || true; fi
+          if [ -d packages/gmt/coverage ]; then cp -r packages/gmt/coverage artifact/ || true; fi
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gmt-artifacts-${{ matrix.node-version }}-${{ matrix.timezone }}
+          path: artifact
+name: GMT Matrix Tests
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'packages/gmt/**'
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/gmt/**'
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  gmt-matrix:
+    name: GMT TZ — Node ${{ matrix.node-version }} / ${{ matrix.timezone }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20, 22, 24]
+        timezone: ["UTC", "Pacific/Apia", "Pacific/Niue"]
+    env:
+      TZ: ${{ matrix.timezone }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.32.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: pnpm
+
+      - name: Approve pnpm build scripts
+        run: pnpm approve-builds --all
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Clean stale build artifacts
+        run: |
+          find . -name "*.tsbuildinfo" -delete 2>/dev/null || true
+          rm -rf .nx/cache 2>/dev/null || true
+
+      - uses: nrwl/nx-set-shas@v4
+
+      - name: Run @burglekitt/gmt tests
+        run: pnpm -w exec nx run @burglekitt/gmt:test
