@@ -53,11 +53,11 @@ jobs:
           # Check each config package; pack if any files changed in that package
           for dir in packages/gmt packages/gmt-biome packages/gmt-eslint packages/gmt-oxlint; do
             if echo "$CHANGED_FILES" | grep -q "^$dir/"; then
-              PKG_NAME=$(node -e "console.log(require(process.argv[1]).name)" "$dir/package.json")
+              PKG_NAME=$(node -e "console.log(JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8')).name" "$dir/package.json")
               echo "Packing $dir ($PKG_NAME) — files changed"
               (cd "$dir" && npm pack --dry-run)
             else
-              PKG_NAME=$(node -e "console.log(require(process.argv[1]).name)" "$dir/package.json")
+              PKG_NAME=$(node -e "console.log(JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8')).name" "$dir/package.json")
               echo "Skipping $dir ($PKG_NAME) — no changes"
             fi
           done
