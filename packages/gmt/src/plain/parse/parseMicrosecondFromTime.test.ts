@@ -1,5 +1,5 @@
 import { mockTemporalPlainTimeFromThrow } from "../../test/mocks";
-import { parseMicrosecondFrom } from "./parseMicrosecondFromTime";
+import { parseMicrosecondFromTime } from "./parseMicrosecondFromTime";
 
 describe("parseMicrosecondFromTime", () => {
   it.each`
@@ -8,7 +8,7 @@ describe("parseMicrosecondFromTime", () => {
     ${"14:30:45.123"}    | ${"000"}
     ${"14:30:45.123456"} | ${"456"}
   `("returns $expected for $value", ({ value, expected }) => {
-    expect(parseMicrosecondFrom(value)).toBe(expected);
+    expect(parseMicrosecondFromTime(value)).toBe(expected);
   });
 
   it.each`
@@ -18,13 +18,13 @@ describe("parseMicrosecondFromTime", () => {
   `(
     "returns empty string for invalid time $invalidValue",
     ({ invalidValue }) => {
-      expect(parseMicrosecondFrom(invalidValue)).toBe("");
+      expect(parseMicrosecondFromTime(invalidValue)).toBe("");
     },
   );
 
   it("returns empty string on failure", () => {
     mockTemporalPlainTimeFromThrow();
-    const result = parseMicrosecondFrom("14:30:45");
+    const result = parseMicrosecondFromTime("14:30:45");
     expect(result).toBe("");
   });
 });
