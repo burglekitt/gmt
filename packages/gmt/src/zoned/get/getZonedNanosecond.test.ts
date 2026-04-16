@@ -1,4 +1,4 @@
-import { Temporal } from "@js-temporal/polyfill";
+import { mockTemporalNowZonedDateTimeISOThrow } from "../../test/mocks";
 import { getZonedNanosecond } from "./getZonedNanosecond";
 
 describe("getZonedNanosecond", () => {
@@ -11,7 +11,6 @@ describe("getZonedNanosecond", () => {
 
   afterEach(() => {
     vi.useRealTimers();
-    vi.restoreAllMocks();
   });
 
   it("returns current nanosecond", () => {
@@ -26,9 +25,7 @@ describe("getZonedNanosecond", () => {
 
   it("returns empty string on failure", () => {
     vi.useRealTimers();
-    vi.spyOn(Temporal.Now, "zonedDateTimeISO").mockImplementation(() => {
-      throw new Error("simulated failure");
-    });
+    mockTemporalNowZonedDateTimeISOThrow();
     const result = getZonedNanosecond("America/New_York");
     expect(result).toBe("");
   });

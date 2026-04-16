@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
+import { mockTemporalNowInstantThrow } from "../../test/mocks";
 import { convertUtcToUnix } from "../convert";
-
 import { getUtcNow } from "./getUtcNow";
 
 describe("getUtcNow", () => {
@@ -11,7 +11,6 @@ describe("getUtcNow", () => {
 
   afterEach(() => {
     vi.useRealTimers();
-    vi.restoreAllMocks();
   });
 
   it("returns the exact mocked UTC datetime string", () => {
@@ -20,6 +19,7 @@ describe("getUtcNow", () => {
     expect(utcNow).toBeTruthy();
   });
 
+  // TODO should this be added to all tests...
   it("returns a parseable Temporal instant", () => {
     const value = getUtcNow();
     expect(() => Temporal.Instant.from(value)).not.toThrow();
@@ -34,9 +34,7 @@ describe("getUtcNow", () => {
 
   it("returns empty string on failure", () => {
     vi.useRealTimers();
-    vi.spyOn(Temporal.Now, "instant").mockImplementation(() => {
-      throw new Error("simulated failure");
-    });
+    mockTemporalNowInstantThrow();
     const result = getUtcNow();
     expect(result).toBe("");
   });

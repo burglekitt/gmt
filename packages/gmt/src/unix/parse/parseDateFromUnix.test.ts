@@ -1,11 +1,10 @@
-import { Temporal } from "@js-temporal/polyfill";
 import * as getSystemTimeZoneModule from "../../plain/get/getSystemTimeZone";
 import {
   battleTestLeapYearUnix,
   battleTestLeapYearUnixSeconds,
   MustTestDstTimeZones,
 } from "../../test";
-
+import { mockTemporalZonedDateTimeFromThrow } from "../../test/mocks";
 import { parseDateFromUnix } from "./parseDateFromUnix";
 
 describe("parseDateFromUnix", () => {
@@ -24,7 +23,6 @@ describe("parseDateFromUnix", () => {
   afterEach(() => {
     timeZoneSpy.mockRestore();
     vi.useRealTimers();
-    vi.restoreAllMocks();
   });
 
   it.each`
@@ -84,9 +82,7 @@ describe("parseDateFromUnix", () => {
   );
 
   it("returns empty string on failure", () => {
-    vi.spyOn(Temporal.ZonedDateTime, "from").mockImplementation(() => {
-      throw new Error("simulated failure");
-    });
+    mockTemporalZonedDateTimeFromThrow();
     const result = parseDateFromUnix(battleTestLeapYearUnix);
     expect(result).toBe("");
   });

@@ -1,5 +1,5 @@
-import { Temporal } from "@js-temporal/polyfill";
 import { TomorrowTimeZone, YesterdayTimeZone } from "../../test";
+import { mockTemporalNowZonedDateTimeISOThrow } from "../../test/mocks";
 import { getZonedYear } from "./getZonedYear";
 
 describe("getZonedYear", () => {
@@ -31,9 +31,7 @@ describe("getZonedYear", () => {
 
   it("returns empty string on failure", () => {
     vi.useRealTimers();
-    vi.spyOn(Temporal.Now, "zonedDateTimeISO").mockImplementation(() => {
-      throw new Error("simulated failure");
-    });
+    mockTemporalNowZonedDateTimeISOThrow();
     const result = getZonedYear("America/New_York");
     expect(result).toBe("");
   });

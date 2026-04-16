@@ -1,11 +1,7 @@
-import { Temporal } from "@js-temporal/polyfill";
+import { mockTemporalPlainTimeFromThrow } from "../../test/mocks";
 import { parseNanosecondFromTime } from "./parseNanosecondFromTime";
 
 describe("parseNanosecondFromTime", () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   it.each`
     value                   | expected
     ${"14:30:45"}           | ${"000"}
@@ -28,9 +24,7 @@ describe("parseNanosecondFromTime", () => {
   );
 
   it("returns empty string on failure", () => {
-    vi.spyOn(Temporal.PlainTime, "from").mockImplementation(() => {
-      throw new Error("simulated failure");
-    });
+    mockTemporalPlainTimeFromThrow();
     const result = parseNanosecondFromTime("14:30:45.123456789");
     expect(result).toBe("");
   });

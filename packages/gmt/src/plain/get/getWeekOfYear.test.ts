@@ -1,5 +1,5 @@
-import { Temporal } from "@js-temporal/polyfill";
 import { TomorrowTimeZone, YesterdayTimeZone } from "../../test";
+import { mockTemporalNowPlainDateTimeISOThrow } from "../../test/mocks";
 import * as getSystemTimeZoneModule from "./getSystemTimeZone";
 import { getWeekOfYear } from "./getWeekOfYear";
 
@@ -19,7 +19,6 @@ describe("getWeekOfYear", () => {
   afterEach(() => {
     timeZoneSpy.mockRestore();
     vi.useRealTimers();
-    vi.restoreAllMocks();
   });
 
   it("returns current week of year", () => {
@@ -46,9 +45,7 @@ describe("getWeekOfYear", () => {
 
   it("returns null on failure", () => {
     vi.useRealTimers();
-    vi.spyOn(Temporal.Now, "plainDateTimeISO").mockImplementation(() => {
-      throw new Error("simulated failure");
-    });
+    mockTemporalNowPlainDateTimeISOThrow();
     const result = getWeekOfYear();
     expect(result).toBeNull();
   });

@@ -1,4 +1,4 @@
-import { Temporal } from "@js-temporal/polyfill";
+import { mockTemporalNowInstantThrow } from "../../test/mocks";
 import { getUtcMinute } from "./getUtcMinute";
 
 describe("getUtcMinute", () => {
@@ -9,7 +9,6 @@ describe("getUtcMinute", () => {
 
   afterEach(() => {
     vi.useRealTimers();
-    vi.restoreAllMocks();
   });
 
   it("returns current minute", () => {
@@ -18,9 +17,7 @@ describe("getUtcMinute", () => {
 
   it("returns empty string on failure", () => {
     vi.useRealTimers();
-    vi.spyOn(Temporal.Now, "instant").mockImplementation(() => {
-      throw new Error("simulated failure");
-    });
+    mockTemporalNowInstantThrow(); // TODO tell AGENTS.md and CONTRIBUTING.md to use these mocks
     const result = getUtcMinute();
     expect(result).toBe("");
   });

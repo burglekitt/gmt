@@ -5,6 +5,7 @@ import {
   TomorrowTimeZone,
   YesterdayTimeZone,
 } from "../../test";
+import { mockTemporalNowZonedDateTimeISOThrow } from "../../test/mocks";
 import { parseTimeZoneFromZoned } from "../parse";
 import { getZonedNow } from "./getZonedNow";
 
@@ -16,7 +17,6 @@ describe("getZonedNow", () => {
 
   afterEach(() => {
     vi.useRealTimers();
-    vi.restoreAllMocks();
   });
 
   // yesterday tomorrow tests
@@ -95,9 +95,7 @@ describe("getZonedNow", () => {
 
   it("returns empty string on failure", () => {
     vi.useRealTimers();
-    vi.spyOn(Temporal.Now, "zonedDateTimeISO").mockImplementation(() => {
-      throw new Error("simulated failure");
-    });
+    mockTemporalNowZonedDateTimeISOThrow();
     const result = getZonedNow("America/New_York");
     expect(result).toBe("");
   });

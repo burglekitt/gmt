@@ -6,5 +6,6 @@ export default defineConfig({
     globals: true,
     // Support running from repository root or package cwd
     include: ["packages/gmt/src/**/*.test.ts", "src/**/*.test.ts"],
+    setupFiles: ["packages/gmt/src/test/setupTests.ts"],
   },
 });

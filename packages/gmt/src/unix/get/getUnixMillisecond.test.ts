@@ -1,4 +1,4 @@
-import { Temporal } from "@js-temporal/polyfill";
+import { mockTemporalNowInstantThrow } from "../../test/mocks";
 import { getUnixMillisecond } from "./getUnixMillisecond";
 
 describe("getUnixMillisecond", () => {
@@ -9,7 +9,6 @@ describe("getUnixMillisecond", () => {
 
   afterEach(() => {
     vi.useRealTimers();
-    vi.restoreAllMocks();
   });
 
   it("returns current millisecond", () => {
@@ -18,9 +17,7 @@ describe("getUnixMillisecond", () => {
 
   it("returns empty string on failure", () => {
     vi.useRealTimers();
-    vi.spyOn(Temporal.Now, "instant").mockImplementation(() => {
-      throw new Error("simulated failure");
-    });
+    mockTemporalNowInstantThrow();
     const result = getUnixMillisecond();
     expect(result).toBe("");
   });

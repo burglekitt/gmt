@@ -1,4 +1,4 @@
-import { Temporal } from "@js-temporal/polyfill";
+import { mockTemporalNowInstantThrow } from "../../test/mocks";
 import { getUnixMonth } from "./getUnixMonth";
 
 describe("getUnixMonth", () => {
@@ -9,7 +9,6 @@ describe("getUnixMonth", () => {
 
   afterEach(() => {
     vi.useRealTimers();
-    vi.restoreAllMocks();
   });
 
   it("returns current month", () => {
@@ -18,9 +17,7 @@ describe("getUnixMonth", () => {
 
   it("returns empty string on failure", () => {
     vi.useRealTimers();
-    vi.spyOn(Temporal.Now, "instant").mockImplementation(() => {
-      throw new Error("simulated failure");
-    });
+    mockTemporalNowInstantThrow();
     const result = getUnixMonth();
     expect(result).toBe("");
   });

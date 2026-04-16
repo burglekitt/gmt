@@ -1,4 +1,4 @@
-import { Temporal } from "@js-temporal/polyfill";
+import { mockTemporalNowInstantThrow } from "../../test/mocks";
 import { getUnixSecond } from "./getUnixSecond";
 
 describe("getUnixSecond", () => {
@@ -9,7 +9,6 @@ describe("getUnixSecond", () => {
 
   afterEach(() => {
     vi.useRealTimers();
-    vi.restoreAllMocks();
   });
 
   it("returns current second", () => {
@@ -17,10 +16,9 @@ describe("getUnixSecond", () => {
   });
 
   it("returns empty string on failure", () => {
+    // TODO CC is this even needed? the useRealTimers
     vi.useRealTimers();
-    vi.spyOn(Temporal.Now, "instant").mockImplementation(() => {
-      throw new Error("simulated failure");
-    });
+    mockTemporalNowInstantThrow();
     const result = getUnixSecond();
     expect(result).toBe("");
   });

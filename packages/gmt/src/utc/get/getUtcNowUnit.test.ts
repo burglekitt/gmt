@@ -1,4 +1,4 @@
-import { Temporal } from "@js-temporal/polyfill";
+import { mockTemporalNowInstantThrow } from "../../test/mocks";
 import { getUtcNowUnit } from "./getUtcNowUnit";
 
 describe("getUtcNowUnit", () => {
@@ -9,7 +9,6 @@ describe("getUtcNowUnit", () => {
 
   afterEach(() => {
     vi.useRealTimers();
-    vi.restoreAllMocks();
   });
 
   it.each`
@@ -46,9 +45,7 @@ describe("getUtcNowUnit", () => {
 
   it("returns empty string on failure", () => {
     vi.useRealTimers();
-    vi.spyOn(Temporal.Now, "instant").mockImplementation(() => {
-      throw new Error("simulated failure");
-    });
+    mockTemporalNowInstantThrow();
     const result = getUtcNowUnit("year");
     expect(result).toBe("");
   });

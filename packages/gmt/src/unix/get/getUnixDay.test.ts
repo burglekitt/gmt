@@ -1,4 +1,4 @@
-import { Temporal } from "@js-temporal/polyfill";
+import { mockTemporalNowInstantThrow } from "../../test/mocks";
 import { getUnixDay } from "./getUnixDay";
 
 describe("getUnixDay", () => {
@@ -9,7 +9,6 @@ describe("getUnixDay", () => {
 
   afterEach(() => {
     vi.useRealTimers();
-    vi.restoreAllMocks();
   });
 
   it("returns current day", () => {
@@ -18,9 +17,7 @@ describe("getUnixDay", () => {
 
   it("returns empty string on failure", () => {
     vi.useRealTimers();
-    vi.spyOn(Temporal.Now, "instant").mockImplementation(() => {
-      throw new Error("simulated failure");
-    });
+    mockTemporalNowInstantThrow();
     const result = getUnixDay();
     expect(result).toBe("");
   });

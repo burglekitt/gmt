@@ -1,17 +1,13 @@
-import { Temporal } from "@js-temporal/polyfill";
 import {
   TomorrowTimeZone,
   TomorrowTimeZoneGmtOffset,
   YesterdayTimeZone,
   YesterdayTimeZoneGmtOffset,
 } from "../../test";
+import { mockTemporalZonedDateTimeFromThrow } from "../../test/mocks";
 import { parseDateTimeFromZoned } from "./parseDateTimeFromZoned";
 
 describe("parseDateTimeFromZoned", () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   it.each`
     value                                               | expected
     ${"2024-02-29T00:00:00+00:00[UTC]"}                 | ${"2024-02-29T00:00:00"}
@@ -71,9 +67,7 @@ describe("parseDateTimeFromZoned", () => {
   });
 
   it("returns empty string on failure", () => {
-    vi.spyOn(Temporal.ZonedDateTime, "from").mockImplementation(() => {
-      throw new Error("simulated failure");
-    });
+    mockTemporalZonedDateTimeFromThrow();
     const result = parseDateTimeFromZoned("2024-02-29T00:00:00+00:00[UTC]");
     expect(result).toBe("");
   });

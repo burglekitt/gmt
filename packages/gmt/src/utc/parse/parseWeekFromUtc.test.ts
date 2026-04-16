@@ -1,10 +1,10 @@
-import { Temporal } from "@js-temporal/polyfill";
+import {
+  mockTemporalInstantFromThrow,
+  mockTemporalPlainDateFromThrow,
+} from "../../test/mocks";
 import { parseWeekFromUtc } from "./parseWeekFromUtc";
 
 describe("parseWeekFromUtc", () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
   it.each`
     value                     | expected
     ${"2024-03-17T14:30:45Z"} | ${11}
@@ -38,12 +38,9 @@ describe("parseWeekFromUtc", () => {
   });
 
   it("returns null on failure", () => {
-    vi.spyOn(Temporal.Instant, "from").mockImplementation(() => {
-      throw new Error("simulated failure");
-    });
-    vi.spyOn(Temporal.PlainDate, "from").mockImplementation(() => {
-      throw new Error("simulated failure");
-    });
+    // TODO CC figure out better try catch here in actual file
+    mockTemporalInstantFromThrow();
+    mockTemporalPlainDateFromThrow();
     const result = parseWeekFromUtc("2024-03-17T14:30:45Z");
     expect(result).toBeNull();
   });

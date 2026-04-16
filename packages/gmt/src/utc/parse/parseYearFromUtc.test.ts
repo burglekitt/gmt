@@ -1,11 +1,7 @@
-import { Temporal } from "@js-temporal/polyfill";
+import { mockTemporalInstantFromThrow } from "../../test/mocks";
 import { parseYearFromUtc } from "./parseYearFromUtc";
 
 describe("parseYearFromUtc", () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   it.each`
     value                     | expected
     ${"2024-03-17T14:30:45Z"} | ${"2024"}
@@ -25,9 +21,7 @@ describe("parseYearFromUtc", () => {
   });
 
   it("returns empty string on failure", () => {
-    vi.spyOn(Temporal.Instant, "from").mockImplementation(() => {
-      throw new Error("simulated failure");
-    });
+    mockTemporalInstantFromThrow();
     const result = parseYearFromUtc("2024-03-17T14:30:45Z");
     expect(result).toBe("");
   });

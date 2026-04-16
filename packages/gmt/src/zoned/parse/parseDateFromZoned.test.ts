@@ -1,12 +1,8 @@
-import { Temporal } from "@js-temporal/polyfill";
 import { localNoonBattleCases } from "../../test";
+import { mockTemporalZonedDateTimeFromThrow } from "../../test/mocks";
 import { parseDateFromZoned } from "./parseDateFromZoned";
 
 describe("parseDateFromZoned", () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   it.each`
     value                                                | expected
     ${"2024-02-29T14:30:45.123-05:00[America/New_York]"} | ${"2024-02-29"}
@@ -69,9 +65,7 @@ describe("parseDateFromZoned", () => {
   }
 
   it("returns empty string on failure", () => {
-    vi.spyOn(Temporal.ZonedDateTime, "from").mockImplementation(() => {
-      throw new Error("simulated failure");
-    });
+    mockTemporalZonedDateTimeFromThrow();
     const result = parseDateFromZoned(
       "2024-02-29T14:30:45.123-05:00[America/New_York]",
     );
