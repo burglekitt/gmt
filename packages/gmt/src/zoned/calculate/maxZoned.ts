@@ -22,10 +22,14 @@ export function maxZoned(zonedDateTimes: string[]): string | null {
   if (!valid.length) return null;
 
   try {
-    const comparables = valid.map((d) => Temporal.ZonedDateTime.from(d));
-    comparables.sort(Temporal.ZonedDateTime.compare);
+    const max = valid.reduce((currentMax, candidateStr) => {
+      const candidate = Temporal.ZonedDateTime.from(candidateStr);
+      return Temporal.ZonedDateTime.compare(candidate, currentMax) > 0
+        ? candidate
+        : currentMax;
+    }, Temporal.ZonedDateTime.from(valid[0]));
 
-    return comparables[comparables.length - 1].toString();
+    return max.toString();
   } catch {
     return null;
   }

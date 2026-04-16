@@ -22,10 +22,14 @@ export function minZoned(zonedDateTimes: string[]): string | null {
   if (!valid.length) return null;
 
   try {
-    const comparables = valid.map((d) => Temporal.ZonedDateTime.from(d));
-    comparables.sort(Temporal.ZonedDateTime.compare);
+    const min = valid.reduce((currentMin, candidateStr) => {
+      const candidate = Temporal.ZonedDateTime.from(candidateStr);
+      return Temporal.ZonedDateTime.compare(candidate, currentMin) < 0
+        ? candidate
+        : currentMin;
+    }, Temporal.ZonedDateTime.from(valid[0]));
 
-    return comparables[0].toString();
+    return min.toString();
   } catch {
     return null;
   }

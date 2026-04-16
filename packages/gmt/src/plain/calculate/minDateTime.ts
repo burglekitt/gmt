@@ -20,10 +20,14 @@ export function minDateTime(dateTimes: string[]): string | null {
   if (!valid.length) return null;
 
   try {
-    const comparables = valid.map((d) => Temporal.PlainDateTime.from(d));
-    comparables.sort(Temporal.PlainDateTime.compare);
+    const min = valid.reduce((currentMin, candidateStr) => {
+      const candidate = Temporal.PlainDateTime.from(candidateStr);
+      return Temporal.PlainDateTime.compare(candidate, currentMin) < 0
+        ? candidate
+        : currentMin;
+    }, Temporal.PlainDateTime.from(valid[0]));
 
-    return comparables[0].toString();
+    return min.toString();
   } catch {
     return null;
   }

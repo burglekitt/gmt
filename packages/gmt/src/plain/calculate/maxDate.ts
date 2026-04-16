@@ -20,10 +20,14 @@ export function maxDate(dates: string[]): string | null {
   if (!valid.length) return null;
 
   try {
-    const comparables = valid.map((d) => Temporal.PlainDate.from(d));
-    comparables.sort(Temporal.PlainDate.compare);
+    const max = valid.reduce((currentMax, candidateStr) => {
+      const candidate = Temporal.PlainDate.from(candidateStr);
+      return Temporal.PlainDate.compare(candidate, currentMax) > 0
+        ? candidate
+        : currentMax;
+    }, Temporal.PlainDate.from(valid[0]));
 
-    return comparables[comparables.length - 1].toString();
+    return max.toString();
   } catch {
     return null;
   }

@@ -22,10 +22,14 @@ export function maxUtc(utcDateTimes: string[]): string | null {
   if (!valid.length) return null;
 
   try {
-    const comparables = valid.map((d) => Temporal.Instant.from(d));
-    comparables.sort(Temporal.Instant.compare);
+    const max = valid.reduce((currentMax, candidateStr) => {
+      const candidate = Temporal.Instant.from(candidateStr);
+      return Temporal.Instant.compare(candidate, currentMax) > 0
+        ? candidate
+        : currentMax;
+    }, Temporal.Instant.from(valid[0]));
 
-    return comparables[comparables.length - 1].toString();
+    return max.toString();
   } catch {
     return null;
   }
