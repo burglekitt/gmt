@@ -13,13 +13,13 @@ import { isValidTime } from "../validate";
  * @param unit unit to extract from the time
  * @returns string representation of the requested unit or "" on invalid input
  *
- * @example parseTimeUnit("14:30:45.123", "hour") // "14"
- * @example parseTimeUnit("14:30:45.123", "minute") // "30"
- * @example parseTimeUnit("14:30:45.123", "second") // "45"
- * @example parseTimeUnit("14:30:45.123", "millisecond") // "123"
- * @example parseTimeUnit("invalid", "hour") // ""
+ * @example parseUnitFromTime("14:30:45.123", "hour") // "14"
+ * @example parseUnitFromTime("14:30:45.123", "minute") // "30"
+ * @example parseUnitFromTime("14:30:45.123", "second") // "45"
+ * @example parseUnitFromTime("14:30:45.123", "millisecond") // "123"
+ * @example parseUnitFromTime("invalid", "hour") // ""
  */
-export function parseTimeUnit(
+export function parseUnitFromTime(
   value: string,
   unit: "hour" | "minute" | "second" | "millisecond",
 ): string {

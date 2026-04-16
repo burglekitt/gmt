@@ -1,6 +1,11 @@
-import { parseTimeUnit } from "./parseTimeUnit";
+import { Temporal } from "@js-temporal/polyfill";
+import { parseUnitFromTime } from "./parseUnitFromTime";
 
-describe("parseTimeUnit", () => {
+describe("parseUnitFromTime", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it.each`
     value             | unit             | expected
     ${"14:30:45.123"} | ${"hour"}        | ${"14"}
@@ -8,7 +13,7 @@ describe("parseTimeUnit", () => {
     ${"14:30:45.123"} | ${"second"}      | ${"45"}
     ${"14:30:45.123"} | ${"millisecond"} | ${"123"}
   `("returns $expected for valid unit $unit", ({ value, unit, expected }) => {
-    expect(parseTimeUnit(value, unit)).toBe(expected);
+    expect(parseUnitFromTime(value, unit)).toBe(expected);
   });
 
   it.each`
@@ -19,7 +24,7 @@ describe("parseTimeUnit", () => {
   `(
     "returns $expected for edge case unit $unit",
     ({ value, unit, expected }) => {
-      expect(parseTimeUnit(value, unit)).toBe(expected);
+      expect(parseUnitFromTime(value, unit)).toBe(expected);
     },
   );
 
@@ -34,7 +39,7 @@ describe("parseTimeUnit", () => {
   `(
     "returns an empty string for invalid time $invalidValue",
     ({ invalidValue }) => {
-      expect(parseTimeUnit(invalidValue as never, "hour")).toBe("");
+      expect(parseUnitFromTime(invalidValue as never, "hour")).toBe("");
     },
   );
 
@@ -46,6 +51,14 @@ describe("parseTimeUnit", () => {
     ${null}          | ${""}
     ${undefined}     | ${""}
   `("returns an empty string for invalid unit $unit", ({ unit, expected }) => {
-    expect(parseTimeUnit("14:30:45.123", unit as never)).toBe(expected);
+    expect(parseUnitFromTime("14:30:45.123", unit as never)).toBe(expected);
+  });
+
+  it("returns an empty string on failure", () => {
+    vi.spyOn(Temporal.PlainTime, "from").mockImplementation(() => {
+      throw new Error("simulated failure");
+    });
+    const result = parseUnitFromTime("14:30:45.123", "hour");
+    expect(result).toBe("");
   });
 });
