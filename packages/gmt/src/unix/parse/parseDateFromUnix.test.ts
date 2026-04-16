@@ -1,3 +1,4 @@
+import { Temporal } from "@js-temporal/polyfill";
 import * as getSystemTimeZoneModule from "../../plain/get/getSystemTimeZone";
 import {
   battleTestLeapYearUnix,
@@ -23,7 +24,9 @@ describe("parseDateFromUnix", () => {
   afterEach(() => {
     timeZoneSpy.mockRestore();
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
+
   it.each`
     value                            | options                          | expected
     ${battleTestLeapYearUnix}        | ${undefined}                     | ${"2024-02-29"}
@@ -79,4 +82,12 @@ describe("parseDateFromUnix", () => {
       expect(parseDateFromUnix(invalidValue as unknown as number)).toBe("");
     },
   );
+
+  it("returns empty string on failure", () => {
+    vi.spyOn(Temporal.ZonedDateTime, "from").mockImplementation(() => {
+      throw new Error("simulated failure");
+    });
+    const result = parseDateFromUnix(battleTestLeapYearUnix);
+    expect(result).toBe("");
+  });
 });

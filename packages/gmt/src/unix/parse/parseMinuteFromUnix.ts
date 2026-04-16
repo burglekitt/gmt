@@ -5,20 +5,19 @@ import { convertUnixToZoned } from "../convert";
 import type { UnixUnit } from "../validate";
 
 /**
- * Return the month (1-12) from a unix epoch value.
+ * Return the minute (0-59) from a unix epoch value.
  *
- * - Converts to ZonedDateTime then extracts the month.
+ * - Converts to ZonedDateTime then extracts the minute.
  * - Returns "" for invalid input.
  *
  * @param value unix epoch in milliseconds or seconds (number or string)
  * @param options optional: epochUnit ("seconds" | "milliseconds"), timeZone (IANA)
- * @returns Month (01-12) or "" on invalid input
+ * @returns Minute (00-59) or "" on invalid input
  *
- * @example parseMonthFromUnix(1700000000000) // "09"
- * @example parseMonthFromUnix(1704067200000) // "01"
- * @example parseMonthFromUnix(-1) // ""
+ * @example parseMinuteFromUnix(1700000000000) // "26"
+ * @example parseMinuteFromUnix(-1) // ""
  */
-export function parseMonthFromUnix(
+export function parseMinuteFromUnix(
   value: number | string,
   options?: {
     epochUnit?: UnixUnit;
@@ -39,7 +38,7 @@ export function parseMonthFromUnix(
 
   try {
     const zdt = Temporal.ZonedDateTime.from(zoned);
-    return zdt.month.toString().padStart(2, "0");
+    return zdt.minute.toString().padStart(2, "0");
   } catch {
     return "";
   }
