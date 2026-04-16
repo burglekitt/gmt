@@ -1,25 +1,23 @@
-
-name: CI — Core (Option A — Minimal)
-
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches: [main]
-
-permissions:
-  actions: read
-  contents: read
-
 name: CI — Core
 
 on:
   push:
     branches:
       - main
+    paths:
+      - 'packages/**'
+      - '.github/workflows/**'
+      - 'nx.json'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
   pull_request:
     branches: [main]
+    paths:
+      - 'packages/**'
+      - '.github/workflows/**'
+      - 'nx.json'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -69,16 +67,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Clean stale build artifacts
-        run: |
-          find . -name "*.tsbuildinfo" -delete 2>/dev/null || true
-          rm -rf .nx/cache 2>/dev/null || true
-
-      - name: Debug Nx modules
-        run: |
-          ls -la node_modules/@nrwl || echo "Nx modules not found in node_modules/@nrwl"
-          ls -la node_modules/.bin/nx || echo "Nx binary not found in node_modules/.bin"
-
       - uses: nrwl/nx-set-shas@v4
 
       - name: Run affected lint/typecheck/build (PR)
@@ -90,7 +78,8 @@ jobs:
         run: pnpm -w exec nx run-many -t lint typecheck build
 
       - name: Run gmt-oxlint tests (Node 24 only)
-        run: pnpm run test:gmt-oxlint || true
+        continue-on-error: true
+        run: pnpm run test:gmt-oxlint
 
       - name: Verify packable config packages (Node 24)
         run: |
@@ -167,4 +156,3 @@ jobs:
         with:
           name: test-artifacts-${{ matrix.node-version }}
           path: artifact
-
