@@ -1,6 +1,5 @@
 export * from "./parseDateFromZoned";
 export * from "./parseDateTimeFromZoned";
-export * from "./parseDateTimeFromZoned";
 export * from "./parseDayFromZoned";
 export * from "./parseDayOfWeekFromZoned";
 export * from "./parseHourFromZoned";
@@ -10,6 +9,7 @@ export * from "./parseMinuteFromZoned";
 export * from "./parseMonthFromZoned";
 export * from "./parseNanosecondFromZoned";
 export * from "./parseSecondFromZoned";
+export * from "./parseTimeFromZoned";
 export * from "./parseTimeZoneFromZoned";
 export * from "./parseUnitFromZoned";
 export * from "./parseWeekFromZoned";
