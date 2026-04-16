@@ -1,6 +1,10 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { parseUnitFromUtc } from "./parseUnitFromUtc";
 
 describe("parseUnitFromUtc", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   it.each`
     value                         | unit             | expected
     ${"2024-03-17T14:30:45Z"}     | ${"year"}        | ${"2024"}
@@ -33,4 +37,12 @@ describe("parseUnitFromUtc", () => {
       expect(parseUnitFromUtc(invalidValue, "year")).toBe("");
     },
   );
+
+  it("returns empty string on failure", () => {
+    vi.spyOn(Temporal.Instant, "from").mockImplementation(() => {
+      throw new Error("simulated failure");
+    });
+    const result = parseUnitFromUtc("2024-03-17T14:30:45Z", "year");
+    expect(result).toBe("");
+  });
 });

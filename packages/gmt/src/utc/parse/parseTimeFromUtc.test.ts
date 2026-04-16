@@ -1,7 +1,11 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { battleTestLeapYearUtc, MustTestDstTimeZones } from "../../test";
 import { parseTimeFromUtc } from "./parseTimeFromUtc";
 
 describe("parseTimeFromUtc", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   it.each`
     value                         | expected
     ${"2024-03-17T14:30:45Z"}     | ${"14:30:45"}
@@ -47,4 +51,12 @@ describe("parseTimeFromUtc", () => {
       expect(parseTimeFromUtc(invalidValue as never)).toBe("");
     },
   );
+
+  it("returns empty string on failure", () => {
+    vi.spyOn(Temporal.Instant, "from").mockImplementation(() => {
+      throw new Error("simulated failure");
+    });
+    const result = parseTimeFromUtc("2024-03-17T14:30:45Z");
+    expect(result).toBe("");
+  });
 });
