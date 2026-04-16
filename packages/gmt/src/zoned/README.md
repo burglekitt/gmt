@@ -70,7 +70,7 @@ Extract timezone components:
 - `parseMinuteFromZoned`
 - `parseMonthFromZoned`
 - `parseNanosecondFromZoned`, `parseSecondFromZoned`
-- `parseTimeZoneFromZoned`
+- `parseTimeFromZoned`, `parseTimeZoneFromZoned`
 - `parseUnitFromZoned`
 - `parseWeekFromZoned`
 - `parseYearFromZoned`

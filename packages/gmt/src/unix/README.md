@@ -37,7 +37,7 @@ Parse Unix timestamps:
 
 - `parseDateFromUnix`, `parseDayFromUnix`, `parseDayOfWeekFromUnix`
 - `parseHourFromUnix`
-- `parseMicrosecondFromUnix`
+- `parseMicrosecondFromUnix`, `parseNanosecondFromUnix`
 - `parseMonthFromUnix`, `parseSecondFromUnix`
 - `parseTimeFromUnix`
 - `parseUnitFromUnix`
