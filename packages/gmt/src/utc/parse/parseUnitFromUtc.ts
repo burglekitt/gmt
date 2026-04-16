@@ -25,12 +25,12 @@ export type UtcUnit =
  * @param optionsArg optional: weekStartsOn ("monday" | "sunday") for week calculations
  * @returns string representation of the requested unit or "" on invalid input
  *
- * @example parseUtcUnit("2024-03-17T14:30:45Z", "month") // "03"
- * @example parseUtcUnit("2024-01-01T00:00:00Z", "week") // "1"
- * @example parseUtcUnit("2024-01-01T00:00:00Z", "week", { weekStartsOn: "sunday" }) // "1"
- * @example parseUtcUnit("invalid", "month") // ""
+ * @example parseUnitFromUtc("2024-03-17T14:30:45Z", "month") // "03"
+ * @example parseUnitFromUtc("2024-01-01T00:00:00Z", "week") // "1"
+ * @example parseUnitFromUtc("2024-01-01T00:00:00Z", "week", { weekStartsOn: "sunday" }) // "1"
+ * @example parseUnitFromUtc("invalid", "month") // ""
  */
-export function parseUtcUnit(
+export function parseUnitFromUtc(
   value: string,
   unit: UtcUnit,
   optionsArg?: { weekStartsOn?: "monday" | "sunday" },

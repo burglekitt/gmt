@@ -1,3 +1,3 @@
-export * from "./parseUtcDate";
-export * from "./parseUtcTime";
-export * from "./parseUtcUnit";
+export * from "./parseDateFromUtc";
+export * from "./parseTimeFromUtc";
+export * from "./parseUnitFromUtc";

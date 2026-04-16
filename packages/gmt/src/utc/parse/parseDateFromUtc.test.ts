@@ -1,13 +1,13 @@
-import { parseUtcDate } from "./parseUtcDate";
+import { parseDateFromUtc } from "./parseDateFromUtc";
 
-describe("parseUtcDate", () => {
+describe("parseDateFromUtc", () => {
   it.each`
     value                     | expected
     ${"2024-03-17T14:30:45Z"} | ${"2024-03-17"}
     ${"2024-01-01T00:00:00Z"} | ${"2024-01-01"}
     ${"2024-12-31T23:59:59Z"} | ${"2024-12-31"}
   `("returns $expected for $value", ({ value, expected }) => {
-    expect(parseUtcDate(value)).toBe(expected);
+    expect(parseDateFromUtc(value)).toBe(expected);
   });
 
   it.each`
@@ -23,7 +23,7 @@ describe("parseUtcDate", () => {
   `(
     "returns empty string for invalid value $invalidValue",
     ({ invalidValue }) => {
-      expect(parseUtcDate(invalidValue)).toBe("");
+      expect(parseDateFromUtc(invalidValue)).toBe("");
     },
   );
 });

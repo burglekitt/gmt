@@ -13,11 +13,11 @@ import { isValidUtc } from "../validate";
  * @param options optional: timeZone (IANA)
  * @returns ISO time string (e.g., "14:30:45") or "" on invalid input
  *
- * @example parseUtcTime("2024-03-17T14:30:45Z") // "14:30:45"
- * @example parseUtcTime("2024-03-17T14:30:45Z", { timeZone: "America/New_York" }) // "10:30:45"
- * @example parseUtcTime("invalid") // ""
+ * @example parseTimeFromUtc("2024-03-17T14:30:45Z") // "14:30:45"
+ * @example parseTimeFromUtc("2024-03-17T14:30:45Z", { timeZone: "America/New_York" }) // "10:30:45"
+ * @example parseTimeFromUtc("invalid") // ""
  */
-export function parseUtcTime(
+export function parseTimeFromUtc(
   value: string,
   options?: { timeZone?: string },
 ): string {

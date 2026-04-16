@@ -1,6 +1,6 @@
-import { parseUtcUnit } from "./parseUtcUnit";
+import { parseUnitFromUtc } from "./parseUnitFromUtc";
 
-describe("parseUtcUnit", () => {
+describe("parseUnitFromUtc", () => {
   it.each`
     value                         | unit             | expected
     ${"2024-03-17T14:30:45Z"}     | ${"year"}        | ${"2024"}
@@ -13,7 +13,7 @@ describe("parseUtcUnit", () => {
   `(
     "returns $expected for $value and unit $unit",
     ({ value, unit, expected }) => {
-      expect(parseUtcUnit(value, unit)).toBe(expected);
+      expect(parseUnitFromUtc(value, unit)).toBe(expected);
     },
   );
 
@@ -30,7 +30,7 @@ describe("parseUtcUnit", () => {
   `(
     "returns empty string for invalid value $invalidValue",
     ({ invalidValue }) => {
-      expect(parseUtcUnit(invalidValue, "year")).toBe("");
+      expect(parseUnitFromUtc(invalidValue, "year")).toBe("");
     },
   );
 });

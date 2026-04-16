@@ -1,7 +1,7 @@
 import { battleTestLeapYearUtc, MustTestDstTimeZones } from "../../test";
-import { parseUtcTime } from "./parseUtcTime";
+import { parseTimeFromUtc } from "./parseTimeFromUtc";
 
-describe("parseUtcTime", () => {
+describe("parseTimeFromUtc", () => {
   it.each`
     value                         | expected
     ${"2024-03-17T14:30:45Z"}     | ${"14:30:45"}
@@ -10,7 +10,7 @@ describe("parseUtcTime", () => {
     ${"2024-01-01T12:00:00Z"}     | ${"12:00:00"}
     ${"2024-02-29T14:30:00Z"}     | ${"14:30:00"}
   `("returns $expected for $value", ({ value, expected }) => {
-    expect(parseUtcTime(value)).toBe(expected);
+    expect(parseTimeFromUtc(value)).toBe(expected);
   });
 
   it.each`
@@ -30,7 +30,7 @@ describe("parseUtcTime", () => {
   `(
     "returns $expected for $value with timeZone $timeZone",
     ({ value, timeZone, expected }) => {
-      expect(parseUtcTime(value, { timeZone })).toBe(expected);
+      expect(parseTimeFromUtc(value, { timeZone })).toBe(expected);
     },
   );
 
@@ -44,7 +44,7 @@ describe("parseUtcTime", () => {
   `(
     "returns empty string for invalid value $invalidValue",
     ({ invalidValue }) => {
-      expect(parseUtcTime(invalidValue as never)).toBe("");
+      expect(parseTimeFromUtc(invalidValue as never)).toBe("");
     },
   );
 });
