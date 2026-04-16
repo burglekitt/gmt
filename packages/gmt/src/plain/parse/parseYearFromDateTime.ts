@@ -3,7 +3,7 @@ import { isValidDateTime } from "../validate";
 
 /**
  * Return the year for a given ISO 8601 datetime string.
- * 
+ *
  * - Returns the year as a string (e.g., "2024").
  * - Returns "" for invalid input.
  *
