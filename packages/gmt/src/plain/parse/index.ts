@@ -3,6 +3,8 @@ export * from "./parseDayFromDateTime";
 export * from "./parseDayOfWeekFromDate";
 export * from "./parseDayOfWeekFromDateTime";
 export * from "./parseHourFromTime";
+export * from "./parseMicrosecondFromDateTime";
+export * from "./parseMicrosecondFromTime";
 export * from "./parseMillisecondFromTime";
 export * from "./parseMinuteFromTime";
 export * from "./parseMonthFromDate";
