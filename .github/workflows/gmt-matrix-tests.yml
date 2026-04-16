@@ -69,15 +69,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - uses: nrwl/nx-set-shas@v4
-
-      - name: Run affected GMT tests (PR)
-        if: github.event_name == 'pull_request'
-        run: pnpm -w exec nx affected -t test --base=$NX_BASE --head=$NX_HEAD --projects=@burglekitt/gmt
-
-      - name: Run all GMT tests (push)
-        if: github.event_name == 'push'
-        run: pnpm -w exec nx run @burglekitt/gmt:test
+      - name: Run GMT tests
+        run: pnpm -w exec vitest run --config packages/gmt/vitest.config.ts
 
       - name: Collect GMT test artifacts
         if: always()

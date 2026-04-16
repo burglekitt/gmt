@@ -138,11 +138,11 @@ jobs:
 
       - name: Run affected tests (PR)
         if: github.event_name == 'pull_request'
-        run: pnpm -w exec nx affected -t test --base=$NX_BASE --head=$NX_HEAD --exclude=@burglekitt/gmt
+        run: pnpm -w exec nx affected -t test --base=$NX_BASE --head=$NX_HEAD --exclude=@burglekitt/gmt --plain
 
       - name: Run all tests (push)
         if: github.event_name == 'push'
-        run: pnpm -w exec nx run-many -t test --exclude=@burglekitt/gmt
+        run: pnpm -w exec nx run-many -t test --exclude=@burglekitt/gmt --plain
 
       - name: Collect test artifacts
         if: always()

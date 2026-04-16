@@ -47,19 +47,17 @@ jobs:
 
       - name: Determine affected packages
         run: |
-          # Get list of projects affected for build (no builds executed)
-          AFFECTED=$(pnpm -w exec nx affected --target=build --base=$NX_BASE --head=$NX_HEAD --select=projects --plain || true)
-          echo "Affected projects: $AFFECTED"
+          # Get list of changed files
+          CHANGED_FILES=$(git diff --name-only $NX_BASE $NX_HEAD)
 
-          # Check each config package; pack if affected
+          # Check each config package; pack if any files changed in that package
           for dir in packages/gmt packages/gmt-biome packages/gmt-eslint packages/gmt-oxlint; do
-            if [ -f "$dir/package.json" ]; then
+            if echo "$CHANGED_FILES" | grep -q "^$dir/"; then
               PKG_NAME=$(node -e "console.log(require(process.argv[1]).name)" "$dir/package.json")
-              if echo "$AFFECTED" | grep -qx "$PKG_NAME"; then
-                echo "Packing $dir ($PKG_NAME) — affected"
-                (cd "$dir" && npm pack --dry-run)
-              else
-                echo "Skipping $dir ($PKG_NAME) — not affected"
-              fi
+              echo "Packing $dir ($PKG_NAME) — files changed"
+              (cd "$dir" && npm pack --dry-run)
+            else
+              PKG_NAME=$(node -e "console.log(require(process.argv[1]).name)" "$dir/package.json")
+              echo "Skipping $dir ($PKG_NAME) — no changes"
             fi
           done
