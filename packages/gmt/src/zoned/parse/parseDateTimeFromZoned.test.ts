@@ -1,12 +1,17 @@
+import { Temporal } from "@js-temporal/polyfill";
 import {
   TomorrowTimeZone,
   TomorrowTimeZoneGmtOffset,
   YesterdayTimeZone,
   YesterdayTimeZoneGmtOffset,
 } from "../../test";
-import { parseZonedDateTime } from "./parseZonedDateTime";
+import { parseDateTimeFromZoned } from "./parseDateTimeFromZoned";
 
-describe("parseZonedDateTime", () => {
+describe("parseDateTimeFromZoned", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it.each`
     value                                               | expected
     ${"2024-02-29T00:00:00+00:00[UTC]"}                 | ${"2024-02-29T00:00:00"}
@@ -28,7 +33,7 @@ describe("parseZonedDateTime", () => {
   `(
     "parses valid zoned date time string $value returning $expected",
     ({ value, expected }) => {
-      expect(parseZonedDateTime(value)).toBe(expected);
+      expect(parseDateTimeFromZoned(value)).toBe(expected);
     },
   );
 
@@ -41,7 +46,7 @@ describe("parseZonedDateTime", () => {
   `(
     "yesterday / today tests: parses valid zoned date time string $value returning $expected",
     ({ value, expected }) => {
-      expect(parseZonedDateTime(value)).toBe(expected);
+      expect(parseDateTimeFromZoned(value)).toBe(expected);
     },
   );
 
@@ -57,11 +62,19 @@ describe("parseZonedDateTime", () => {
   `(
     "returns an empty string for invalid zoned date time string $invalidValue",
     ({ invalidValue }) => {
-      expect(parseZonedDateTime(invalidValue as never)).toBe("");
+      expect(parseDateTimeFromZoned(invalidValue as never)).toBe("");
     },
   );
 
   it("returns an empty string for a leap second zoned date time string", () => {
-    expect(parseZonedDateTime("2024-06-30T23:59:60+00:00[UTC]")).toBe("");
+    expect(parseDateTimeFromZoned("2024-06-30T23:59:60+00:00[UTC]")).toBe("");
+  });
+
+  it("returns empty string on failure", () => {
+    vi.spyOn(Temporal.ZonedDateTime, "from").mockImplementation(() => {
+      throw new Error("simulated failure");
+    });
+    const result = parseDateTimeFromZoned("2024-02-29T00:00:00+00:00[UTC]");
+    expect(result).toBe("");
   });
 });

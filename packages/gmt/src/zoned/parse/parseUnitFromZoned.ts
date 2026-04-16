@@ -45,10 +45,10 @@ function isValidZonedUnit(unit: string): unit is ZonedParseUnit {
  * @param options optional settings (e.g. weekStartsOn for week calculations)
  * @returns string representation of the requested unit or "" when invalid
  *
- * @example parseZonedUnit("2024-02-29T12:34:56.789+00:00[UTC]", "year") // "2024"
- * @example parseZonedUnit("invalid", "year") // ""
+ * @example parseUnitFromZoned("2024-02-29T12:34:56.789+00:00[UTC]", "year") // "2024"
+ * @example parseUnitFromZoned("invalid", "year") // ""
  */
-export function parseZonedUnit(
+export function parseUnitFromZoned(
   value: string,
   unit: ZonedParseUnit,
   optionsArg?: { weekStartsOn?: "monday" | "sunday" },

@@ -1,7 +1,12 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { sameInstantBattleCases } from "../../test";
-import { parseZonedUnit } from "./parseZonedUnit";
+import { parseUnitFromZoned } from "./parseUnitFromZoned";
 
-describe("parseZonedUnit", () => {
+describe("parseUnitFromZoned", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it.each`
     value                                               | unit             | expected
     ${"2024-02-29T14:30:45.123+02:00[Europe/Helsinki]"} | ${"year"}        | ${"2024"}
@@ -13,7 +18,7 @@ describe("parseZonedUnit", () => {
     ${"2024-02-29T14:30:45.123+02:00[Europe/Helsinki]"} | ${"millisecond"} | ${"123"}
     ${"2024-02-29T14:30:45.123+02:00[Europe/Helsinki]"} | ${"timeZone"}    | ${"Europe/Helsinki"}
   `("returns $expected for valid unit $unit", ({ value, unit, expected }) => {
-    expect(parseZonedUnit(value, unit)).toBe(expected);
+    expect(parseUnitFromZoned(value, unit)).toBe(expected);
   });
 
   it.each`
@@ -22,7 +27,7 @@ describe("parseZonedUnit", () => {
   `(
     "returns $expected for edge case unit $unit",
     ({ value, unit, expected }) => {
-      expect(parseZonedUnit(value, unit)).toBe(expected);
+      expect(parseUnitFromZoned(value, unit)).toBe(expected);
     },
   );
 
@@ -36,7 +41,7 @@ describe("parseZonedUnit", () => {
   `(
     "returns an empty string for invalid zoned datetime $invalidValue",
     ({ invalidValue }) => {
-      expect(parseZonedUnit(invalidValue as never, "year")).toBe("");
+      expect(parseUnitFromZoned(invalidValue as never, "year")).toBe("");
     },
   );
 
@@ -50,7 +55,7 @@ describe("parseZonedUnit", () => {
     "returns an empty string for invalid unit $invalidUnit",
     ({ invalidUnit }) => {
       expect(
-        parseZonedUnit(
+        parseUnitFromZoned(
           "2024-02-29T14:30:45.123+02:00[Europe/Helsinki]",
           invalidUnit as never,
         ),
@@ -65,7 +70,7 @@ describe("parseZonedUnit", () => {
   `(
     "returns $expected for unit $unit with weekStartsOn $weekStartsOn",
     ({ value, unit, weekStartsOn, expected }) => {
-      expect(parseZonedUnit(value, unit as never, { weekStartsOn })).toBe(
+      expect(parseUnitFromZoned(value, unit as never, { weekStartsOn })).toBe(
         expected,
       );
     },
@@ -94,13 +99,24 @@ describe("parseZonedUnit", () => {
   `(
     "returns timeZone $expected for battle-test $value (2024-02-29T00:00:00Z)",
     ({ value, expected }: { value: string; expected: string }) => {
-      expect(parseZonedUnit(value, "timeZone")).toBe(expected);
+      expect(parseUnitFromZoned(value, "timeZone")).toBe(expected);
     },
   );
 
   for (const { timeZone, value } of sameInstantBattleCases) {
     it(`returns timeZone unit for battle-test timeZone ${timeZone}`, () => {
-      expect(parseZonedUnit(value, "timeZone")).toBe(timeZone);
+      expect(parseUnitFromZoned(value, "timeZone")).toBe(timeZone);
     });
   }
+
+  it("returns empty string on failure", () => {
+    vi.spyOn(Temporal.ZonedDateTime, "from").mockImplementation(() => {
+      throw new Error("simulated failure");
+    });
+    const result = parseUnitFromZoned(
+      "2024-02-29T14:30:45.123+02:00[Europe/Helsinki]",
+      "year",
+    );
+    expect(result).toBe("");
+  });
 });

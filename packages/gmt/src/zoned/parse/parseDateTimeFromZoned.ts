@@ -12,10 +12,10 @@ import { isValidZonedDateTime } from "../validate/isValidZonedDateTime";
  * @param value zoned ISO 8601 datetime string
  * @returns plain local datetime string or "" when invalid
  *
- * @example parseZonedDateTime("2024-02-29T12:34:56.789+00:00[UTC]") // "2024-02-29T12:34:56.789"
- * @example parseZonedDateTime("invalid") // ""
+ * @example parseDateTimeFromZoned("2024-02-29T12:34:56.789+00:00[UTC]") // "2024-02-29T12:34:56.789"
+ * @example parseDateTimeFromZoned("invalid") // ""
  */
-export const parseZonedDateTime = (value: string): string => {
+export const parseDateTimeFromZoned = (value: string): string => {
   if (!isValidZonedDateTime(value) || isLeapSecond(value)) {
     return "";
   }

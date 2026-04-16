@@ -1,19 +1,24 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { localNoonBattleCases } from "../../test";
-import { parseZonedDate } from "./parseZonedDate";
+import { parseDateFromZoned } from "./parseDateFromZoned";
 
-describe("parseZonedDate", () => {
+describe("parseDateFromZoned", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it.each`
     value                                                | expected
     ${"2024-02-29T14:30:45.123-05:00[America/New_York]"} | ${"2024-02-29"}
   `("returns the plain date portion for $value", ({ value, expected }) => {
-    expect(parseZonedDate(value)).toBe(expected);
+    expect(parseDateFromZoned(value)).toBe(expected);
   });
 
   it.each`
     value                                            | expected
     ${"2024-03-10T00:30:00-05:00[America/New_York]"} | ${"2024-03-10"}
   `("returns edge case date portion for $value", ({ value, expected }) => {
-    expect(parseZonedDate(value)).toBe(expected);
+    expect(parseDateFromZoned(value)).toBe(expected);
   });
 
   it.each`
@@ -26,7 +31,7 @@ describe("parseZonedDate", () => {
   `(
     "returns an empty string for invalid zoned datetime $invalidValue",
     ({ invalidValue }) => {
-      expect(parseZonedDate(invalidValue as never)).toBe("");
+      expect(parseDateFromZoned(invalidValue as never)).toBe("");
     },
   );
 
@@ -53,13 +58,23 @@ describe("parseZonedDate", () => {
   `(
     "returns local date $expected for local-noon battle-test $value",
     ({ value, expected }: { value: string; expected: string }) => {
-      expect(parseZonedDate(value)).toBe(expected);
+      expect(parseDateFromZoned(value)).toBe(expected);
     },
   );
 
   for (const { timeZone, value } of localNoonBattleCases) {
     it(`returns the local date for battle-test timeZone ${timeZone}`, () => {
-      expect(parseZonedDate(value)).toBe("2024-02-29");
+      expect(parseDateFromZoned(value)).toBe("2024-02-29");
     });
   }
+
+  it("returns empty string on failure", () => {
+    vi.spyOn(Temporal.ZonedDateTime, "from").mockImplementation(() => {
+      throw new Error("simulated failure");
+    });
+    const result = parseDateFromZoned(
+      "2024-02-29T14:30:45.123-05:00[America/New_York]",
+    );
+    expect(result).toBe("");
+  });
 });

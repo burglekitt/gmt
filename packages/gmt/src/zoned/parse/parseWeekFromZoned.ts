@@ -1,28 +1,35 @@
 import { Temporal } from "@js-temporal/polyfill";
+import { getWeekNumber } from "../../plain/calculate/getWeekNumber";
 import { isValidZonedDateTime } from "../validate";
 
 /**
  * Return the week of the year (1-53) for a given ISO 8601 zoned datetime string.
  *
- * - Returns string for week number.
- * - Returns "" for invalid input.
+ * - By default uses ISO weeks (Monday-based).
+ * - Returns null for invalid input.
  *
  * @param value ISO zoned datetime string
- * @returns Week number as string or "" on invalid input
+ * @param optionsArg optional: weekStartsOn ("monday" | "sunday") for week calculations
+ * @returns Week number (1-53) or null on invalid input
  *
- * @example parseWeekFromZoned("2024-01-01T14:30:45.123+00:00[UTC]") // "1"
- * @example parseWeekFromZoned("2024-01-08T14:30:45.123+00:00[UTC]") // "2"
- * @example parseWeekFromZoned("invalid") // ""
+ * @example parseWeekFromZoned("2024-01-01T14:30:45.123+00:00[UTC]") // 1
+ * @example parseWeekFromZoned("2024-01-08T14:30:45.123+00:00[UTC]") // 2
+ * @example parseWeekFromZoned("invalid") // null
  */
-export function parseWeekFromZoned(value: string): string {
+export function parseWeekFromZoned(
+  value: string,
+  optionsArg?: { weekStartsOn?: "monday" | "sunday" },
+): number | null {
   if (!isValidZonedDateTime(value)) {
-    return "";
+    return null;
   }
+
+  const weekStartsOn = optionsArg?.weekStartsOn ?? "monday";
 
   try {
     const zonedDateTime = Temporal.ZonedDateTime.from(value);
-    return (zonedDateTime.weekOfYear ?? 0).toString();
+    return getWeekNumber(zonedDateTime.toPlainDate(), weekStartsOn);
   } catch {
-    return "";
+    return null;
   }
 }

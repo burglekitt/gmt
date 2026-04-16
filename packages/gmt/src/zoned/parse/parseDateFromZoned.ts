@@ -10,10 +10,10 @@ import { isValidZonedDateTime } from "../validate";
  * @param value zoned ISO 8601 datetime string
  * @returns plain ISO date string (YYYY-MM-DD) or "" when invalid
  *
- * @example parseZonedDate("2024-02-29T12:34:56.789+00:00[UTC]") // "2024-02-29"
- * @example parseZonedDate("invalid") // ""
+ * @example parseDateFromZoned("2024-02-29T12:34:56.789+00:00[UTC]") // "2024-02-29"
+ * @example parseDateFromZoned("invalid") // ""
  */
-export function parseZonedDate(value: string): string {
+export function parseDateFromZoned(value: string): string {
   if (!isValidZonedDateTime(value)) {
     return "";
   }

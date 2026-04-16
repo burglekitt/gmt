@@ -5,6 +5,7 @@ describe("parseYearFromUtc", () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });
+
   it.each`
     value                     | expected
     ${"2024-03-17T14:30:45Z"} | ${"2024"}
