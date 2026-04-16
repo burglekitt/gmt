@@ -14,6 +14,7 @@ Arithmetic and date manipulation:
 - `endOfQuarterForDate`, `endOfQuarterForDateTime`
 - `getLargestDateDurationUnit`, `getLargestDateTimeDurationUnit`, `getLargestTimeDurationUnit`
 - `getQuarterForDate`, `getQuarterForDateTime`
+- `getWeekNumber`
 - `maxDate`, `maxDateTime`, `maxTime`
 - `minDate`, `minDateTime`, `minTime`
 - `sortDates`, `sortDateTimes`, `sortTimes`
@@ -64,7 +65,17 @@ Generate multiple values:
 
 Extract components:
 
-- `parseDateTimeUnit`, `parseDateUnit`, `parseTimeUnit`
+- `parseDayFromDate`, `parseDayFromDateTime`
+- `parseDayOfWeekFromDate`, `parseDayOfWeekFromDateTime`
+- `parseHourFromTime`
+- `parseMicrosecondFromDateTime`, `parseMicrosecondFromTime`
+- `parseMillisecondFromTime`
+- `parseMinuteFromTime`
+- `parseMonthFromDate`, `parseMonthFromDateTime`
+- `parseSecondFromTime`
+- `parseUnitFromDate`, `parseUnitFromDateTime`, `parseUnitFromTime`
+- `parseWeekFromDate`, `parseWeekFromDateTime`
+- `parseYearFromDate`, `parseYearFromDateTime`
 
 ### validate
 
@@ -72,4 +83,5 @@ Validation helpers:
 
 - `isLeapSecond`, `isValidDate`, `isValidDateDurationUnit`
 - `isValidDateRange`, `isValidDateTime`, `isValidDateTimeDurationUnit`
-- `isValidIsoDateLike`, `isValidTime`, `isValidTimeDurationUnit`
+- `isValidDateTimeUnit`, `isValidDateUnit`
+- `isValidIsoDateLike`, `isValidTime`, `isValidTimeDurationUnit`, `isValidTimeUnit`

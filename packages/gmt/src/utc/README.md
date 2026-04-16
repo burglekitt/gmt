@@ -32,13 +32,16 @@ UTC conversion:
 
 Current UTC time:
 
-- `getUtcNow`
+- `getUtcNow`, `getUtcNowUnit`
+- `getUtcYear`, `getUtcMonth`, `getUtcDay`
+- `getUtcHour`, `getUtcMinute`, `getUtcSecond`
+- `getUtcMillisecond`, `getUtcMicrosecond`, `getUtcNanosecond`
 
 ### parse
 
 Parse UTC components:
 
-- `parseUtcDate`, `parseUtcTime`, `parseUtcUnit`
+- `parseDateFromUtc`, `parseTimeFromUtc`, `parseUnitFromUtc`
 
 ### validate
 
