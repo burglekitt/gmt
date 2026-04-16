@@ -136,13 +136,27 @@ jobs:
 
       - uses: nrwl/nx-set-shas@v4
 
-      - name: Run affected tests (PR)
+      - name: Check if non-GMT packages changed (PR)
         if: github.event_name == 'pull_request'
-        run: pnpm -w exec nx affected -t test --base=$NX_BASE --head=$NX_HEAD --exclude=@burglekitt/gmt --plain
+        id: check-changes
+        run: |
+          # Get changed files
+          CHANGED=$(git diff --name-only $NX_BASE $NX_HEAD)
+          # Filter out GMT packages
+          NON_GMT=$(echo "$CHANGED" | grep -v '^packages/gmt/' | grep -v '^packages/gmt-oxlint/')
+          if [ -z "$NON_GMT" ]; then
+            echo "run_tests=false" >> $GITHUB_OUTPUT
+          else
+            echo "run_tests=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run affected tests (PR)
+        if: github.event_name == 'pull_request' && steps.check-changes.outputs.run_tests == 'true'
+        run: pnpm -w exec nx affected -t test --base=$NX_BASE --head=$NX_HEAD --exclude=@burglekitt/gmt,@burglekitt/gmt-oxlint --plain
 
       - name: Run all tests (push)
         if: github.event_name == 'push'
-        run: pnpm -w exec nx run-many -t test --exclude=@burglekitt/gmt --plain
+        run: pnpm -w exec nx run-many -t test --exclude=@burglekitt/gmt,@burglekitt/gmt-oxlint --plain
 
       - name: Collect test artifacts
         if: always()
