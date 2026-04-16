@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 import type { DateTimeUnit } from "../../types";
-import { weekOfYear } from "../calculate/weekOfYear";
+import { parseWeekFromDate } from "../parse";
 import { isValidDateTimeUnit } from "../validate";
 import { getSystemTimeZone } from "./getSystemTimeZone";
 
@@ -52,7 +52,7 @@ export function getNowUnit(unit: NowUnit): string {
     case "month":
       return now.month.toString().padStart(2, "0");
     case "week": {
-      const w = weekOfYear(now.toPlainDate().toString());
+      const w = parseWeekFromDate(now.toPlainDate().toString());
       return w === null ? "" : w.toString();
     }
     case "day":

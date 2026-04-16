@@ -28,7 +28,7 @@ describe("getDayOfWeek", () => {
 
   it("returns null when system timeZone cannot be determined", () => {
     timeZoneSpy.mockReturnValue("");
-    expect(getDayOfWeek()).toBe(null);
+    expect(getDayOfWeek()).toBeNull();
   });
 
   it.each`
@@ -50,6 +50,6 @@ describe("getDayOfWeek", () => {
       throw new Error("simulated failure");
     });
     const result = getDayOfWeek();
-    expect(result).toBe(null);
+    expect(result).toBeNull();
   });
 });

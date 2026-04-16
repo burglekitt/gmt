@@ -50,6 +50,6 @@ describe("getWeekOfYear", () => {
       throw new Error("simulated failure");
     });
     const result = getWeekOfYear();
-    expect(result).toBe(null);
+    expect(result).toBeNull();
   });
 });
