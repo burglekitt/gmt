@@ -71,7 +71,12 @@ jobs:
 
       - uses: nrwl/nx-set-shas@v4
 
-      - name: Run @burglekitt/gmt tests
+      - name: Run affected GMT tests (PR)
+        if: github.event_name == 'pull_request'
+        run: pnpm -w exec nx affected -t test --base=$NX_BASE --head=$NX_HEAD --projects=@burglekitt/gmt
+
+      - name: Run all GMT tests (push)
+        if: github.event_name == 'push'
         run: pnpm -w exec nx run @burglekitt/gmt:test
 
       - name: Collect GMT test artifacts

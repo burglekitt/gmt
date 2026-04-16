@@ -45,19 +45,21 @@ jobs:
 
       - uses: nrwl/nx-set-shas@v4
 
-      - name: Determine and pack affected build projects
+      - name: Determine affected packages
         run: |
-          AFFECTED=$(pnpm -w exec nx affected --target=build --base=$NX_BASE --head=$NX_HEAD --plain || true)
-          echo "Affected: $AFFECTED"
+          # Get list of projects affected for build (no builds executed)
+          AFFECTED=$(pnpm -w exec nx affected --target=build --base=$NX_BASE --head=$NX_HEAD --select=projects --plain || true)
+          echo "Affected projects: $AFFECTED"
 
+          # Check each config package; pack if affected
           for dir in packages/gmt packages/gmt-biome packages/gmt-eslint packages/gmt-oxlint; do
             if [ -f "$dir/package.json" ]; then
               PKG_NAME=$(node -e "console.log(require(process.argv[1]).name)" "$dir/package.json")
-              if echo "$AFFECTED" | grep -q "$PKG_NAME" || echo "$AFFECTED" | grep -q "$(basename $dir)"; then
-                echo "Packing $dir ($PKG_NAME)"
+              if echo "$AFFECTED" | grep -qx "$PKG_NAME"; then
+                echo "Packing $dir ($PKG_NAME) — affected"
                 (cd "$dir" && npm pack --dry-run)
               else
-                echo "Skipping $dir ($PKG_NAME)"
+                echo "Skipping $dir ($PKG_NAME) — not affected"
               fi
             fi
           done
