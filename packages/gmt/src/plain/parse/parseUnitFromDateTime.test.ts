@@ -1,5 +1,5 @@
-import { mockTemporalPlainDateTimeFromThrow } from "../../test/mocks/index.ts";
-import { parseUnitFromDateTime } from "./parseUnitFromDateTime.ts";
+import { mockTemporalPlainDateTimeFromThrow } from "../../test/mocks";
+import { parseUnitFromDateTime } from "./parseUnitFromDateTime";
 
 describe("parseUnitFromDateTime", () => {
   it.each`
