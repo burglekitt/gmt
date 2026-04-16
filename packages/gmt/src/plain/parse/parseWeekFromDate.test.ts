@@ -1,4 +1,4 @@
-import { Temporal } from "@js-temporal/polyfill";
+import { mockTemporalPlainDateFromThrow } from "../../test/mocks";
 import { parseWeekFromDate } from "./parseWeekFromDate";
 
 describe("parseWeekFromDate", () => {
@@ -25,9 +25,7 @@ describe("parseWeekFromDate", () => {
   });
 
   it("returns null on failure", () => {
-    vi.spyOn(Temporal.PlainDate, "from").mockImplementation(() => {
-      throw new Error("simulated failure");
-    });
+    mockTemporalPlainDateFromThrow();
     const result = parseWeekFromDate("2024-02-29");
     expect(result).toBeNull();
   });

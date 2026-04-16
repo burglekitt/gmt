@@ -1,11 +1,7 @@
-import { Temporal } from "@js-temporal/polyfill";
+import { mockTemporalPlainDateTimeFromThrow } from "../../test/mocks";
 import { parseHourFromDateTime } from "./parseHourFromDateTime";
 
 describe("parseHourFromDateTime", () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   it.each`
     value                    | expected
     ${"2024-03-15T14:30:45"} | ${"14"}
@@ -27,9 +23,7 @@ describe("parseHourFromDateTime", () => {
   );
 
   it("returns empty string on failure", () => {
-    vi.spyOn(Temporal.PlainDateTime, "from").mockImplementation(() => {
-      throw new Error("simulated failure");
-    });
+    mockTemporalPlainDateTimeFromThrow();
     const result = parseHourFromDateTime("2024-02-29T00:00:00");
     expect(result).toBe("");
   });

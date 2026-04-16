@@ -1,11 +1,7 @@
-import { Temporal } from "@js-temporal/polyfill";
+import { mockTemporalPlainDateTimeFromThrow } from "../../test/mocks/index.ts";
 import { parseUnitFromDateTime } from "./parseUnitFromDateTime.ts";
 
 describe("parseUnitFromDateTime", () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   it.each`
     value                        | unit             | expected
     ${"2024-02-29T14:30:45.123"} | ${"year"}        | ${"2024"}
@@ -61,9 +57,7 @@ describe("parseUnitFromDateTime", () => {
   });
 
   it("returns an empty string on failure", () => {
-    vi.spyOn(Temporal.PlainDateTime, "from").mockImplementation(() => {
-      throw new Error("simulated failure");
-    });
+    mockTemporalPlainDateTimeFromThrow();
     const result = parseUnitFromDateTime("2024-02-29T14:30:45.123", "year");
     expect(result).toBe("");
   });
