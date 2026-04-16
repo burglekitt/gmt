@@ -82,6 +82,31 @@ For copyable commands and a quick reference, see [PUBLISHING.md](./PUBLISHING.md
 - Keep APIs string-in/string-out and Temporal-only.
 - Add or update tests for behavior changes.
 
+## Testing: Pre-built Mock Functions for Error Path Testing
+
+Use the pre-built mock functions from `packages/gmt/src/test/mocks` to test error handling paths that throw.
+
+**Available mocks**:
+- `mockTemporalNowInstantThrow()` — mocks `Temporal.Now.instant()` to throw
+- `mockTemporalNowPlainDateTimeISOThrow()` — mocks `Temporal.Now.plainDateTimeISO()` to throw
+- `mockTemporalNowZonedDateTimeISOThrow()` — mocks `Temporal.Now.zonedDateTimeISO()` to throw
+- `mockTemporalPlainDateFromThrow()` — mocks `Temporal.PlainDate.from()` to throw
+- `mockTemporalPlainDateTimeFromThrow()` — mocks `Temporal.PlainDateTime.from()` to throw
+- `mockTemporalPlainTimeFromThrow()` — mocks `Temporal.PlainTime.from()` to throw
+- `mockTemporalZonedDateTimeFromThrow()` — mocks `Temporal.ZonedDateTime.from()` to throw
+- `mockTemporalInstantFromThrow()` — mocks `Temporal.Instant.from()` to throw
+
+**Usage**:
+```ts
+import { mockTemporalPlainDateFromThrow } from "@gmt/test/mocks";
+
+it("returns empty string when Temporal.PlainDate.from throws", () => {
+  mockTemporalPlainDateFromThrow();
+  const result = addDays("2024-03-10", 1);
+  expect(result).toBe("");
+});
+```
+
 ## JSDoc conventions
 
 All public methods must have comprehensive JSDoc comments with `@example` tags. This ensures proper documentation generation and helps users understand usage patterns.

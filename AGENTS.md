@@ -46,11 +46,35 @@
    - **Enforcement**: ESLint `vitest/prefer-it-each` rule (configured in `.eslintrc.json`).
 
 2. **Never Override Real Functions in Tests**
-    - **Rule**: Do not directly reassign or monkey-patch real functions (for example, `foo = ...`, `Temporal.Now.instant = ...`, `Intl.DateTimeFormat.prototype.resolvedOptions = ...`).
-    - **Use instead**:
-       - `vi.useFakeTimers()` + `vi.setSystemTime(...)` + `vi.useRealTimers()` for deterministic "now" behavior.
-       - `vi.spyOn(...).mockReturnValue(...)`, `mockReturnValueOnce(...)`, `mockImplementation(...)`, `mockResolvedValue(...)`, `mockRejectedValue(...)` for controlled behavior.
-    - **Why**: Keeps tests deterministic without mutating runtime globals in unsafe ways.
+     - **Rule**: Do not directly reassign or monkey-patch real functions (for example, `foo = ...`, `Temporal.Now.instant = ...`, `Intl.DateTimeFormat.prototype.resolvedOptions = ...`).
+     - **Use instead**:
+        - `vi.useFakeTimers()` + `vi.setSystemTime(...)` + `vi.useRealTimers()` for deterministic "now" behavior.
+        - `vi.spyOn(...).mockReturnValue(...)`, `mockReturnValueOnce(...)`, `mockImplementation(...)`, `mockResolvedValue(...)`, `mockRejectedValue(...)` for controlled behavior.
+        - **Pre-built mock functions** for testing error paths (see section below).
+     - **Why**: Keeps tests deterministic without mutating runtime globals in unsafe ways.
+
+3. **Use Pre-built Mock Functions for Error Path Testing**
+     - **Rule**: Use the pre-built mock functions from `packages/gmt/src/test/mocks` to test error handling paths that throw.
+     - **Available mocks**:
+       - `mockTemporalNowInstantThrow()` — mocks `Temporal.Now.instant()` to throw
+       - `mockTemporalNowPlainDateTimeISOThrow()` — mocks `Temporal.Now.plainDateTimeISO()` to throw
+       - `mockTemporalNowZonedDateTimeISOThrow()` — mocks `Temporal.Now.zonedDateTimeISO()` to throw
+       - `mockTemporalPlainDateFromThrow()` — mocks `Temporal.PlainDate.from()` to throw
+       - `mockTemporalPlainDateTimeFromThrow()` — mocks `Temporal.PlainDateTime.from()` to throw
+       - `mockTemporalPlainTimeFromThrow()` — mocks `Temporal.PlainTime.from()` to throw
+       - `mockTemporalZonedDateTimeFromThrow()` — mocks `Temporal.ZonedDateTime.from()` to throw
+       - `mockTemporalInstantFromThrow()` — mocks `Temporal.Instant.from()` to throw
+     - **Usage**:
+       ```ts
+       import { mockTemporalPlainDateFromThrow } from "@gmt/test/mocks";
+       
+       it("returns empty string when Temporal.PlainDate.from throws", () => {
+         mockTemporalPlainDateFromThrow();
+         const result = addDays("2024-03-10", 1);
+         expect(result).toBe("");
+       });
+       ```
+     - **Why**: Ensures consistent error handling testing across all functions without duplicating mock logic.
 
 3. **Locale Matrix Coverage Is Mandatory for Locale-Aware APIs**
       - **Rule**: Any function that accepts a `locale` argument MUST test the full locale matrix:
