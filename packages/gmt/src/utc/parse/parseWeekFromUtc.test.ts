@@ -17,9 +17,9 @@ describe("parseWeekFromUtc", () => {
   });
 
   it.each`
-    value            | weekStartsOn | expected
-    ${"2024-01-01Z"} | ${"monday"}  | ${1}
-    ${"2024-01-01Z"} | ${"sunday"}  | ${1}
+    value                     | weekStartsOn | expected
+    ${"2024-01-01T00:00:00Z"} | ${"monday"}  | ${1}
+    ${"2024-01-01T00:00:00Z"} | ${"sunday"}  | ${1}
   `(
     "returns $expected for $value with weekStartsOn $weekStartsOn",
     ({ value, weekStartsOn, expected }) => {

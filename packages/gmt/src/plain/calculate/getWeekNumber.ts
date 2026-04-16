@@ -26,9 +26,8 @@ export function getWeekNumber(
   });
 
   const firstDayOfWeek = yearStart.dayOfWeek;
-  const daysSinceSunday = firstDayOfWeek === 7 ? 0 : firstDayOfWeek + 1;
+  const daysSinceSunday = firstDayOfWeek === 7 ? 0 : firstDayOfWeek;
   const daysSinceJan1 = date.dayOfYear - 1;
-  const weeksSinceJan1 = daysSinceJan1 - daysSinceSunday;
-  const result = Math.floor(weeksSinceJan1 / 7) + 1;
-  return result < 1 ? 1 : result;
+  const result = Math.floor((daysSinceJan1 + daysSinceSunday) / 7) + 1;
+  return result;
 }
