@@ -179,10 +179,11 @@ All public methods MUST have comprehensive JSDoc comments with `@example` tags. 
  * - Each bullet on its own line with proper indentation.
  *
  * @param paramName Description of the parameter
- * @returns Description of return value, or "or <sentinel> on invalid input"
- * 
+ * @param optionsArg Optional: { optionName: Type } Description
+ * @returns Description of return value, or <sentinel> on invalid input
+ *
  * @example functionName(input) // expected output
- * @example functionName(input, options) // expected output
+ * @example functionName(input, { optionName: value }) // expected output
  * @example functionName(invalidInput) // expected output (error case)
  */
 export function functionName(...): ... {}

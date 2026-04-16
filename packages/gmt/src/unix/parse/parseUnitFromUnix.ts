@@ -1,8 +1,8 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { isValidAmount } from "../../internal";
-import { weekOfYear } from "../../plain/calculate";
+import { getWeekNumber } from "../../plain/calculate/getWeekNumber";
 import { getSystemTimeZone } from "../../plain/get";
-import { convertUnixToZoned } from "../../unix/convert";
+import { convertUnixToZoned } from "../convert";
 import type { UnixUnit } from "../validate";
 
 export type PlainNowUnit =
@@ -27,19 +27,22 @@ export type PlainNowUnit =
  *
  * @param value unix epoch in milliseconds or seconds (number or string)
  * @param unit unit to extract (e.g. "year", "month", "hour")
- * @param options optional: epochUnit ("seconds" | "milliseconds"), timeZone (IANA)
+ * @param options optional: epochUnit ("seconds" | "milliseconds"), timeZone (IANA), weekStartsOn ("monday" | "sunday")
  * @returns extracted unit value as string, or "" on invalid input
  *
- * @example parseUnixUnit(1700000000000, "year") // "2023"
- * @example parseUnixUnit(1700000000, "hour", { epochUnit: "seconds" }) // "12"
- * @example parseUnixUnit(-1, "year") // ""
+ * @example parseUnitFromUnix(1700000000000, "year") // "2023"
+ * @example parseUnitFromUnix(1700000000, "hour", { epochUnit: "seconds" }) // "12"
+ * @example parseUnitFromUnix(1704067200000, "week") // "1"
+ * @example parseUnitFromUnix(1704067200000, "week", { weekStartsOn: "sunday" }) // "1"
+ * @example parseUnitFromUnix(-1, "year") // ""
  */
-export function parseUnixUnit(
+export function parseUnitFromUnix(
   value: number | string,
   unit: PlainNowUnit,
   options?: {
     epochUnit?: UnixUnit;
     timeZone?: string;
+    weekStartsOn?: "monday" | "sunday";
   },
 ): string {
   const numValue = typeof value === "string" ? Number(value) : value;
@@ -54,6 +57,8 @@ export function parseUnixUnit(
       : convertUnixToZoned(numValue, timeZone, options.epochUnit);
   if (!zoned) return "";
 
+  const weekStartsOn = options?.weekStartsOn ?? "monday";
+
   try {
     const zdt = Temporal.ZonedDateTime.from(zoned);
     switch (unit) {
@@ -62,8 +67,7 @@ export function parseUnixUnit(
       case "month":
         return zdt.month.toString().padStart(2, "0");
       case "week": {
-        const w = weekOfYear(zdt.toPlainDate().toString());
-        return w === null ? "" : w.toString();
+        return getWeekNumber(zdt.toPlainDate(), weekStartsOn).toString();
       }
       case "day":
         return zdt.day.toString().padStart(2, "0");

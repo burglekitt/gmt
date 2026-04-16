@@ -1,13 +1,13 @@
 import { sameInstantBattleCases } from "../../test";
-import { parseZonedTimezone } from "./parseZonedTimezone";
+import { parseTimeZoneFromZoned } from "./parseTimeZoneFromZoned";
 
-describe("parseZonedTimezone", () => {
+describe("parseTimeZoneFromZoned", () => {
   it.each`
     value                                                | expected
     ${"2024-02-29T14:30:45.123-05:00[America/New_York]"} | ${"America/New_York"}
     ${"2024-02-29T14:30:45Z[UTC]"}                       | ${"UTC"}
   `("returns timeZone $expected for $value", ({ value, expected }) => {
-    expect(parseZonedTimezone(value)).toBe(expected);
+    expect(parseTimeZoneFromZoned(value)).toBe(expected);
   });
 
   it.each`
@@ -16,7 +16,7 @@ describe("parseZonedTimezone", () => {
   `(
     "returns edge case timeZone $expected for $value",
     ({ value, expected }) => {
-      expect(parseZonedTimezone(value)).toBe(expected);
+      expect(parseTimeZoneFromZoned(value)).toBe(expected);
     },
   );
 
@@ -30,7 +30,7 @@ describe("parseZonedTimezone", () => {
   `(
     "returns an empty string for invalid zoned datetime $invalidValue",
     ({ invalidValue }) => {
-      expect(parseZonedTimezone(invalidValue as never)).toBe("");
+      expect(parseTimeZoneFromZoned(invalidValue as never)).toBe("");
     },
   );
 
@@ -57,13 +57,13 @@ describe("parseZonedTimezone", () => {
   `(
     "returns $expected for battle-test $value (2024-02-29T00:00:00Z)",
     ({ value, expected }: { value: string; expected: string }) => {
-      expect(parseZonedTimezone(value)).toBe(expected);
+      expect(parseTimeZoneFromZoned(value)).toBe(expected);
     },
   );
 
   for (const { timeZone, value } of sameInstantBattleCases) {
     it(`returns the battle-test timeZone ${timeZone}`, () => {
-      expect(parseZonedTimezone(value)).toBe(timeZone);
+      expect(parseTimeZoneFromZoned(value)).toBe(timeZone);
     });
   }
 });

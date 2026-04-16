@@ -1,5 +1,4 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { calculateWeekOfYear } from "../../internal/calculateWeekOfYear";
 import { isValidDateTimeUnit } from "../../plain/validate";
 import type { DateTimeUnit } from "../../types";
 
@@ -17,17 +16,13 @@ function isValidUtcNowUnit(unit: string): unit is UtcNowUnit {
  * - Returns "" on invalid unit or failure.
  *
  * @param unit unit to extract from current utc instant
- * @param weekStartsOn optional start of week for week unit ("monday" | "sunday")
  * @returns string representation of the requested unit or "" on invalid
  *
  * @example getUtcNowUnit("year") // "2024"
  * @example getUtcNowUnit("month") // "02"
  * @example getUtcNowUnit("invalid") // ""
  */
-export function getUtcNowUnit(
-  unit: UtcNowUnit,
-  weekStartsOn?: "monday" | "sunday",
-): string {
+export function getUtcNowUnit(unit: UtcNowUnit): string {
   if (!isValidUtcNowUnit(String(unit ?? ""))) return "";
 
   try {
@@ -44,9 +39,8 @@ export function getUtcNowUnit(
         return plainDateTime.year.toString();
       case "month":
         return plainDateTime.month.toString().padStart(2, "0");
-      case "week": {
-        return calculateWeekOfYear(plainDate, weekStartsOn).toString();
-      }
+      case "week":
+        return (plainDate.weekOfYear ?? 0).toString();
       case "day":
         return plainDateTime.day.toString().padStart(2, "0");
       case "dayOfWeek":

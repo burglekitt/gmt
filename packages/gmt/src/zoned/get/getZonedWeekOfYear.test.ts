@@ -26,7 +26,7 @@ describe("getZonedWeekOfYear", () => {
   });
 
   it("returns null for invalid timeZone", () => {
-    expect(getZonedWeekOfYear("invalid")).toBe(null);
+    expect(getZonedWeekOfYear("invalid")).toBeNull();
   });
   it("returns null on failure", () => {
     vi.useRealTimers();
@@ -34,6 +34,6 @@ describe("getZonedWeekOfYear", () => {
       throw new Error("simulated failure");
     });
     const result = getZonedWeekOfYear("America/New_York");
-    expect(result).toBe(null);
+    expect(result).toBeNull();
   });
 });

@@ -5,7 +5,7 @@ import {
   TomorrowTimeZone,
   YesterdayTimeZone,
 } from "../../test";
-import { parseZonedTimezone } from "../parse";
+import { parseTimeZoneFromZoned } from "../parse";
 import { getZonedNow } from "./getZonedNow";
 
 describe("getZonedNow", () => {
@@ -59,7 +59,7 @@ describe("getZonedNow", () => {
     ({ timeZone, expected }) => {
       const value = getZonedNow(timeZone);
       expect(value).toBe(expected);
-      expect(parseZonedTimezone(value)).toBe(timeZone);
+      expect(parseTimeZoneFromZoned(value)).toBe(timeZone);
     },
   );
 
@@ -89,7 +89,7 @@ describe("getZonedNow", () => {
       });
 
       expect(normalizedValue).toBe(expected);
-      expect(parseZonedTimezone(value)).toBe(timeZone);
+      expect(parseTimeZoneFromZoned(value)).toBe(timeZone);
     });
   }
 

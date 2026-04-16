@@ -3,7 +3,7 @@ import {
   TomorrowTimeZone,
   YesterdayTimeZone,
 } from "../../test";
-import { parseZonedTimezone } from "../parse";
+import { parseTimeZoneFromZoned } from "../parse";
 import { convertPlainDateTimeToZoned } from "./convertPlainDateTimeToZoned";
 
 describe("convertPlainDateTimeToZoned", () => {
@@ -116,7 +116,7 @@ describe("convertPlainDateTimeToZoned", () => {
         timeZone,
       );
       expect(value).not.toBe("");
-      expect(parseZonedTimezone(value)).toBe(timeZone);
+      expect(parseTimeZoneFromZoned(value)).toBe(timeZone);
     });
   }
 });

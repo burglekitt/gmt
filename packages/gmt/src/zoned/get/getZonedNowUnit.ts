@@ -1,5 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { weekOfYear } from "../../plain/calculate/weekOfYear";
+import { parseWeekFromDate } from "../../plain/parse";
 import { isValidTimeZone } from "../validate";
 
 export type ZonedNowUnit =
@@ -65,7 +65,7 @@ export function getZonedNowUnit(
       case "month":
         return now.month.toString().padStart(2, "0");
       case "week": {
-        const w = weekOfYear(now.toPlainDate().toString());
+        const w = parseWeekFromDate(now.toPlainDate().toString());
         return w === null ? "" : w.toString();
       }
       case "day":

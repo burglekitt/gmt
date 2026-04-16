@@ -26,7 +26,7 @@ describe("getZonedDayOfWeek", () => {
   });
 
   it("returns null for invalid timeZone", () => {
-    expect(getZonedDayOfWeek("invalid")).toBe(null);
+    expect(getZonedDayOfWeek("invalid")).toBeNull();
   });
 
   it("returns null on failure", () => {
@@ -35,6 +35,6 @@ describe("getZonedDayOfWeek", () => {
       throw new Error("simulated failure");
     });
     const result = getZonedDayOfWeek("America/New_York");
-    expect(result).toBe(null);
+    expect(result).toBeNull();
   });
 });

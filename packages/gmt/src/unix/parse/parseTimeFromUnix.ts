@@ -1,45 +1,43 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { isValidAmount } from "../../internal";
 import { getSystemTimeZone } from "../../plain/get";
-import { convertUnixToZoned } from "../../unix/convert";
+import { convertUnixToZoned } from "../convert";
 
 /**
- * Extract the date portion from a unix epoch value.
+ * Extract the time portion from a unix epoch value.
  *
- * - Converts to ZonedDateTime then extracts the PlainDate.
+ * - Converts to ZonedDateTime then extracts the PlainTime.
  * - Uses system timezone if not specified.
  * - Returns "" for invalid input.
  *
  * @param value unix epoch in milliseconds or seconds (number)
  * @param options optional: epochUnit ("seconds" | "milliseconds"), timeZone (IANA)
- * @returns ISO date string (e.g., "2024-03-17") or "" on invalid input
+ * @returns ISO time string (e.g., "14:30:45") or "" on invalid input
  *
- * @example parseUnixDate(1700000000000) // "2023-11-15"
- * @example parseUnixDate(1700000000, { epochUnit: "seconds" }) // "2023-11-15"
- * @example parseUnixDate(-1) // ""
+ * @example parseTimeFromUnix(1700000000000) // "04:13:20"
+ * @example parseTimeFromUnix(1700000000, { epochUnit: "seconds" }) // "04:13:20"
+ * @example parseTimeFromUnix(-1) // ""
  */
-export function parseUnixDate(
+export function parseTimeFromUnix(
   value: number,
   options?: {
     epochUnit?: "seconds" | "milliseconds";
     timeZone?: string;
   },
 ): string {
-  const { epochUnit = "milliseconds", timeZone = getSystemTimeZone() } =
-    options ?? {};
-
   if (!isValidAmount(value)) return "";
 
+  const timeZone = options?.timeZone ?? getSystemTimeZone();
   if (!timeZone) return "";
 
-  const zoned = epochUnit
-    ? convertUnixToZoned(value, timeZone, epochUnit)
+  const zoned = options?.epochUnit
+    ? convertUnixToZoned(value, timeZone, options.epochUnit)
     : convertUnixToZoned(value, timeZone);
   if (!zoned) return "";
 
   try {
     const zdt = Temporal.ZonedDateTime.from(zoned);
-    return zdt.toPlainDate().toString();
+    return zdt.toPlainTime().toString();
   } catch {
     return "";
   }

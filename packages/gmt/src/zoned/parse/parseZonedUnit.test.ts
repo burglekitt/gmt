@@ -42,7 +42,6 @@ describe("parseZonedUnit", () => {
 
   it.each`
     invalidUnit
-    ${"week"}
     ${"microsecond"}
     ${""}
     ${null}
@@ -56,6 +55,19 @@ describe("parseZonedUnit", () => {
           invalidUnit as never,
         ),
       ).toBe("");
+    },
+  );
+
+  it.each`
+    value                                               | unit      | weekStartsOn | expected
+    ${"2024-02-29T14:30:45.123+02:00[Europe/Helsinki]"} | ${"week"} | ${"monday"}  | ${"9"}
+    ${"2024-01-01T00:00:00+00:00[UTC]"}                 | ${"week"} | ${"sunday"}  | ${"1"}
+  `(
+    "returns $expected for unit $unit with weekStartsOn $weekStartsOn",
+    ({ value, unit, weekStartsOn, expected }) => {
+      expect(parseZonedUnit(value, unit as never, { weekStartsOn })).toBe(
+        expected,
+      );
     },
   );
 

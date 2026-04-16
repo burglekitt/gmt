@@ -1,7 +1,7 @@
 import * as getSystemTimeZoneModule from "../../plain/get/getSystemTimeZone";
-import { parseUnixUnit } from "./parseUnixUnit";
+import { parseUnitFromUnix } from "./parseUnitFromUnix";
 
-describe("parseUnixUnit", () => {
+describe("parseUnitFromUnix", () => {
   const systemTime = "2024-02-29T00:00:00.000Z";
   let timeZoneSpy: ReturnType<typeof vi.spyOn>;
 
@@ -35,7 +35,7 @@ describe("parseUnixUnit", () => {
     ${"microsecond"} | ${"000"}
     ${"nanosecond"}  | ${"000"}
   `("returns $expected for unit $unit from ms epoch", ({ unit, expected }) => {
-    const val = parseUnixUnit(epochMs, unit as never);
+    const val = parseUnitFromUnix(epochMs, unit as never);
     if (unit === "microsecond" || unit === "nanosecond") {
       expect(val).toMatch(/^\d{3}$/);
     } else {
@@ -45,13 +45,15 @@ describe("parseUnixUnit", () => {
 
   it("supports seconds epoch unit", () => {
     const epochSec = 1709164800;
-    expect(parseUnixUnit(epochSec, "year", { epochUnit: "seconds" })).toBe(
+    expect(parseUnitFromUnix(epochSec, "year", { epochUnit: "seconds" })).toBe(
       "2024",
     );
   });
 
   it("supports optional timeZone", () => {
-    expect(parseUnixUnit(epochMs, "year", { timeZone: "UTC" })).toBe("2024");
+    expect(parseUnitFromUnix(epochMs, "year", { timeZone: "UTC" })).toBe(
+      "2024",
+    );
   });
 
   it.each`
@@ -61,7 +63,7 @@ describe("parseUnixUnit", () => {
   `(
     "returns empty string for invalid epoch $invalidValue",
     ({ invalidValue }) => {
-      expect(parseUnixUnit(invalidValue as never, "year")).toBe("");
+      expect(parseUnitFromUnix(invalidValue as never, "year")).toBe("");
     },
   );
 });

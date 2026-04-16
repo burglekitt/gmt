@@ -1,30 +1,25 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { weekOfYear } from "../../plain/calculate/weekOfYear";
 import { isValidTimeZone } from "../validate";
 
 /**
  * Return the current week of year for the specified IANA timeZone.
  *
  * - Uses Temporal.Now.zonedDateTimeISO to get the current time.
- * - Uses weekOfYear helper to calculate ISO week number.
+ * - Uses Temporal.PlainDate.weekOfYear for ISO week number.
  * - Validation is performed on the timezone.
  *
  * @param ianaTimezone IANA timeZone identifier
- * @param weekStartsOn optional: "monday" | "sunday" (defaults to "monday")
  * @returns current week number (1-53) or null on invalid input
  *
  * @example getZonedWeekOfYear("America/New_York") // 9
  * @example getZonedWeekOfYear("invalid") // null
  */
-export function getZonedWeekOfYear(
-  ianaTimezone: string,
-  weekStartsOn?: "monday" | "sunday",
-): number | null {
+export function getZonedWeekOfYear(ianaTimezone: string): number | null {
   if (!isValidTimeZone(ianaTimezone)) return null;
 
   try {
     const now = Temporal.Now.zonedDateTimeISO(ianaTimezone);
-    return weekOfYear(now.toPlainDate().toString(), { weekStartsOn });
+    return now.toPlainDate().weekOfYear ?? null;
   } catch {
     return null;
   }

@@ -1,5 +1,4 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { calculateWeekOfYear } from "../../internal/calculateWeekOfYear";
 import { isValidDateTimeUnit } from "../../plain/validate";
 import type { DateTimeUnit } from "../../types";
 
@@ -17,17 +16,13 @@ function isValidUnixNowUnit(unit: string): unit is UnixNowUnit {
  * - Returns "" on invalid unit or failure.
  *
  * @param unit unit to extract from current unix timestamp
- * @param weekStartsOn optional start of week for week unit ("monday" | "sunday")
  * @returns string representation of the requested unit or "" on invalid
  *
  * @example getUnixNowUnit("year") // "2024"
  * @example getUnixNowUnit("month") // "02"
  * @example getUnixNowUnit("invalid") // ""
  */
-export function getUnixNowUnit(
-  unit: UnixNowUnit,
-  weekStartsOn?: "monday" | "sunday",
-): string {
+export function getUnixNowUnit(unit: UnixNowUnit): string {
   if (!isValidUnixNowUnit(String(unit ?? ""))) return "";
 
   try {
@@ -44,9 +39,8 @@ export function getUnixNowUnit(
         return plainDateTime.year.toString();
       case "month":
         return plainDateTime.month.toString().padStart(2, "0");
-      case "week": {
-        return calculateWeekOfYear(plainDate, weekStartsOn).toString();
-      }
+      case "week":
+        return (plainDate.weekOfYear ?? 0).toString();
       case "day":
         return plainDateTime.day.toString().padStart(2, "0");
       case "dayOfWeek":

@@ -1,51 +1,56 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { isWeekStartsOn } from "../../internal/isWeekStartsOn";
-import { isValidDate } from "../validate";
+import { isValidDate, isValidDateTime } from "../validate";
 
 /**
- * Calculate the week number of the year for a given ISO 8601 date string.
+ * Return the ISO week number for a given ISO 8601 date string.
  *
- * - Returns the week number (1-53) based on the ISO week dating system.
- * - Week 1 is the first week of the year with at least 4 days.
- * - Accepts optional weekStartsOn option: "monday" (default) or "sunday".
+ * - Uses Temporal.PlainDate.weekOfYear (Monday-based ISO weeks).
+ * - Returns null for invalid input.
  *
  * @param value ISO 8601 date string
- * @param optionsArg { weekStartsOn: "monday" | "sunday" } - Optional parameter to specify the start of the week. Default is "monday".
- * @returns Week number of the year (1-53), or null for invalid input
+ * @returns Week number (1-53) or null on invalid input
  *
- * @example weekOfYear("2024-01-01") // 1
- * @example weekOfYear("2024-01-07") // 1
- * @example weekOfYear("2024-01-08") // 2
- * @example weekOfYear("2024-12-31") // 1 (since it falls in the first week of 2025 if week starts on Monday)
- * @example weekOfYear("2024-12-31", { weekStartsOn: "sunday" }) // 53 (since it falls in the last week of 2024 if week starts on Sunday)
- * @example weekOfYear("invalid-date") // null
+ * @example weekOfYearForDate("2024-01-01") // 1
+ * @example weekOfYearForDate("2024-01-07") // 1
+ * @example weekOfYearForDate("2024-01-08") // 2
+ * @example weekOfYearForDate("2024-12-31") // 1
+ * @example weekOfYearForDate("invalid") // null
  */
-export function weekOfYear(
-  value: string,
-  optionsArg?: { weekStartsOn?: "monday" | "sunday" },
-): number | null {
-  const weekStartsOn = isWeekStartsOn(optionsArg?.weekStartsOn)
-    ? optionsArg?.weekStartsOn
-    : "monday";
+export function weekOfYearForDate(value: string): number | null {
   if (!isValidDate(value)) return null;
 
   try {
     const date = Temporal.PlainDate.from(value);
+    return date.weekOfYear ?? null;
+  } catch {
+    return null;
+  }
+}
 
-    // Get the day of the year (1-366)
-    const dayOfYear = date.dayOfYear;
+/**
+ * Return the ISO week number for a given ISO 8601 datetime string.
+ *
+ * - Uses Temporal.PlainDate.weekOfYear (Monday-based ISO weeks).
+ * - Returns null for invalid input.
+ *
+ * @param value ISO 8601 datetime string
+ * @returns Week number (1-53) or null on invalid input
+ *
+ * @example weekOfYearForDateTime("2024-01-01T12:00:00") // 1
+ * @example weekOfYearForDateTime("2024-01-08T00:00:00") // 2
+ * @example weekOfYearForDateTime("invalid") // null
+ */
+export function weekOfYearForDateTime(value: string): number | null {
+  if (!isValidDateTime(value)) return null;
 
-    // Get the weekday (1-7, where 1 is Monday and 7 is Sunday)
-    const dayOfWeek = date.dayOfWeek;
-
-    // Calculate the offset based on the start of the week
-    //   const offset = weekStartsOn === "monday" ? dayOfWeek - 1 : dayOfWeek % 7;
-    const offset = weekStartsOn === "monday" ? dayOfWeek - 1 : dayOfWeek % 7;
-
-    // Calculate the week number
-    const weekNumber = Math.ceil((dayOfYear + offset) / 7);
-
-    return weekNumber;
+  try {
+    const dateTime = Temporal.PlainDateTime.from(value);
+    const date = Temporal.PlainDate.from({
+      year: dateTime.year,
+      month: dateTime.month,
+      day: dateTime.day,
+    });
+    return date.weekOfYear ?? null;
   } catch {
     return null;
   }

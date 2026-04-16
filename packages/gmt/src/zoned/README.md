@@ -64,7 +64,7 @@ Generate multiple timezone values:
 Extract timezone components:
 
 - `parseZonedDate`, `parseZonedDateTime`, `parseZonedTime`
-- `parseZonedTimezone`, `parseZonedUnit`
+- `parseTimeFromZoned`, `parseZonedUnit`
 
 ### validate
 

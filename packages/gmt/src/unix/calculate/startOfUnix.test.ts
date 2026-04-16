@@ -53,7 +53,7 @@ describe("startOfUnix", () => {
     ${null}
     ${undefined}
   `("returns null for invalid value $invalidValue", ({ invalidValue }) => {
-    expect(startOfUnix(invalidValue as never, "day" as never)).toBe(null);
+    expect(startOfUnix(invalidValue as never, "day" as never)).toBeNull();
   });
 
   it.each`
@@ -63,6 +63,6 @@ describe("startOfUnix", () => {
     ${null}
     ${undefined}
   `("returns null for invalid unit $invalidUnit", ({ invalidUnit }) => {
-    expect(startOfUnix(1706659200, invalidUnit as never)).toBe(null);
+    expect(startOfUnix(1706659200, invalidUnit as never)).toBeNull();
   });
 });

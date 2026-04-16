@@ -5,9 +5,9 @@ import {
   MustTestDstTimeZones,
 } from "../../test";
 
-import { parseUnixDate } from "./parseUnixDate";
+import { parseDateFromUnix } from "./parseDateFromUnix";
 
-describe("parseUnixDate", () => {
+describe("parseDateFromUnix", () => {
   const systemTime = "2024-02-29T00:00:00.000Z";
   let timeZoneSpy: ReturnType<typeof vi.spyOn>;
 
@@ -35,7 +35,7 @@ describe("parseUnixDate", () => {
   `(
     "returns $expected for $value and options $options",
     ({ value, options, expected }) => {
-      expect(parseUnixDate(value, options)).toBe(expected);
+      expect(parseDateFromUnix(value, options)).toBe(expected);
     },
   );
 
@@ -62,7 +62,7 @@ describe("parseUnixDate", () => {
   `(
     "returns $expected for $value with timeZone $timeZone",
     ({ value, timeZone, expected }) => {
-      expect(parseUnixDate(value, { timeZone })).toBe(expected);
+      expect(parseDateFromUnix(value, { timeZone })).toBe(expected);
     },
   );
 
@@ -76,7 +76,7 @@ describe("parseUnixDate", () => {
   `(
     "returns empty string for invalid value $invalidValue",
     ({ invalidValue }) => {
-      expect(parseUnixDate(invalidValue as unknown as number)).toBe("");
+      expect(parseDateFromUnix(invalidValue as unknown as number)).toBe("");
     },
   );
 });

@@ -36,6 +36,6 @@ describe("addUnix", () => {
     ${1709164800000} | ${{ invalidUnit: 1 }} | ${undefined}
     ${1709164800000} | ${{ days: "1" }}      | ${undefined}
   `("returns null for invalid input", ({ value, units, options }) => {
-    expect(addUnix(value as never, units as never, options)).toBe(null);
+    expect(addUnix(value as never, units as never, options)).toBeNull();
   });
 });

@@ -16,6 +16,7 @@ describe("getUnixNowUnit", () => {
     ${"month"}       | ${"02"}
     ${"day"}         | ${"29"}
     ${"dayOfWeek"}   | ${"4"}
+    ${"week"}        | ${"9"}
     ${"hour"}        | ${"00"}
     ${"minute"}      | ${"00"}
     ${"second"}      | ${"00"}
@@ -30,19 +31,6 @@ describe("getUnixNowUnit", () => {
       expect(val).toBe(expected);
     }
   });
-
-  it.each`
-    weekStartsOn | expected
-    ${"monday"}  | ${"9"}
-    ${"sunday"}  | ${"10"}
-  `(
-    "returns week $expected for weekStartsOn $weekStartsOn",
-    ({ weekStartsOn, expected }) => {
-      expect(getUnixNowUnit("week", weekStartsOn as "monday" | "sunday")).toBe(
-        expected,
-      );
-    },
-  );
 
   it.each`
     invalidUnit

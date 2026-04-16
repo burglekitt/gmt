@@ -21,9 +21,9 @@ export function endOfDate(
   unit: Temporal.DateUnit,
   optionsArg?: { weekStartsOn?: "monday" | "sunday" },
 ): string {
-  const weekStartsOn = optionsArg?.weekStartsOn ?? "monday";
-
   if (!isValidDate(value) || !supported.includes(unit)) return "";
+
+  const weekStartsOn = optionsArg?.weekStartsOn ?? "monday";
 
   try {
     const source = Temporal.PlainDate.from(value);

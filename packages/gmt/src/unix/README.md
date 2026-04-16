@@ -32,7 +32,7 @@ Current Unix timestamps:
 
 Parse Unix timestamps:
 
-- `parseUnixDate`, `parseUnixTime`, `parseUnixUnit`
+- `parseDateFromUnix`, `parseTimeFromUnix`, `parseUnitFromUnix`
 
 ### validate
 

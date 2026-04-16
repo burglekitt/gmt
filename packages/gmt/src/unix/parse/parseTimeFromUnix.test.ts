@@ -1,9 +1,8 @@
 import * as getSystemTimeZoneModule from "../../plain/get/getSystemTimeZone";
 import { battleTestLeapYearUnix, MustTestDstTimeZones } from "../../test";
+import { parseTimeFromUnix } from "./parseTimeFromUnix";
 
-import { parseUnixTime } from "./parseUnixTime";
-
-describe("parseUnixTime", () => {
+describe("parseTimeFromUnix", () => {
   const systemTime = "2024-02-29T00:00:00.000Z";
   let timeZoneSpy: ReturnType<typeof vi.spyOn>;
 
@@ -31,7 +30,7 @@ describe("parseUnixTime", () => {
   `(
     "returns $expected for $value and options $options",
     ({ value, options, expected }) => {
-      expect(parseUnixTime(value, options)).toBe(expected);
+      expect(parseTimeFromUnix(value, options)).toBe(expected);
     },
   );
 
@@ -52,7 +51,7 @@ describe("parseUnixTime", () => {
   `(
     "returns $expected for $value with timeZone $timeZone",
     ({ value, timeZone, expected }) => {
-      expect(parseUnixTime(value, { timeZone })).toBe(expected);
+      expect(parseTimeFromUnix(value, { timeZone })).toBe(expected);
     },
   );
 
@@ -66,7 +65,7 @@ describe("parseUnixTime", () => {
   `(
     "returns empty string for invalid value $invalidValue",
     ({ invalidValue }) => {
-      expect(parseUnixTime(invalidValue as unknown as number)).toBe("");
+      expect(parseTimeFromUnix(invalidValue as unknown as number)).toBe("");
     },
   );
 });
