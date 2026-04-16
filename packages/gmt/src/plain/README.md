@@ -67,12 +67,13 @@ Extract components:
 
 - `parseDayFromDate`, `parseDayFromDateTime`
 - `parseDayOfWeekFromDate`, `parseDayOfWeekFromDateTime`
-- `parseHourFromTime`
+- `parseHourFromDateTime`, `parseHourFromTime`
 - `parseMicrosecondFromDateTime`, `parseMicrosecondFromTime`
-- `parseMillisecondFromTime`
-- `parseMinuteFromTime`
+- `parseMillisecondFromDateTime`, `parseMillisecondFromTime`
+- `parseMinuteFromDateTime`, `parseMinuteFromTime`
 - `parseMonthFromDate`, `parseMonthFromDateTime`
-- `parseSecondFromTime`
+- `parseNanosecondFromDateTime`, `parseNanosecondFromTime`
+- `parseSecondFromDateTime`, `parseSecondFromTime`
 - `parseUnitFromDate`, `parseUnitFromDateTime`, `parseUnitFromTime`
 - `parseWeekFromDate`, `parseWeekFromDateTime`
 - `parseYearFromDate`, `parseYearFromDateTime`

@@ -4,6 +4,7 @@ export * from "./parseDayOfWeekFromUnix";
 export * from "./parseHourFromUnix";
 export * from "./parseMicrosecondFromUnix";
 export * from "./parseMonthFromUnix";
+export * from "./parseNanosecondFromUnix";
 export * from "./parseSecondFromUnix";
 export * from "./parseTimeFromUnix";
 export * from "./parseUnitFromUnix";

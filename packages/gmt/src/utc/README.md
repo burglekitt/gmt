@@ -41,7 +41,16 @@ Current UTC time:
 
 Parse UTC components:
 
-- `parseDateFromUtc`, `parseTimeFromUtc`, `parseUnitFromUtc`
+- `parseDateFromUtc`
+- `parseDayFromUtc`, `parseDayOfWeekFromUtc`
+- `parseHourFromUtc`
+- `parseMicrosecondFromUtc`, `parseMillisecondFromUtc`
+- `parseMinuteFromUtc`
+- `parseMonthFromUtc`
+- `parseNanosecondFromUtc`, `parseSecondFromUtc`
+- `parseTimeFromUtc`
+- `parseUnitFromUtc`
+- `parseWeekFromUtc`, `parseYearFromUtc`
 
 ### validate
 
