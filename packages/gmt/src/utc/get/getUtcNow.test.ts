@@ -1,4 +1,3 @@
-import { Temporal } from "@js-temporal/polyfill";
 import { mockTemporalNowInstantThrow } from "../../test/mocks";
 import { convertUtcToUnix } from "../convert";
 import { getUtcNow } from "./getUtcNow";
