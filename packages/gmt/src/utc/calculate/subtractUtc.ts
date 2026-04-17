@@ -15,9 +15,9 @@ import { isValidUtc } from "../validate";
  * @param units Partial<Record<DateTimeDurationUnit, number>> object specifying units to subtract
  * @returns UTC Instant string after subtraction, or "" on invalid input
  *
- * @example subtractUtc("2024-03-15T12:00:00Z", { day: 5 }) // "2024-03-10T12:00:00Z"
- * @example subtractUtc("2024-03-15T12:00:00Z", { month: 1, year: 1 }) // "2023-02-15T12:00:00Z"
- * @example subtractUtc("invalid", { day: 5 }) // ""
+ * @example subtractUtc("2024-03-15T12:00:00Z", { days: 5 }) // "2024-03-10T12:00:00Z"
+ * @example subtractUtc("2024-03-15T12:00:00Z", { months: 1, years: 1 }) // "2023-02-15T12:00:00Z"
+ * @example subtractUtc("invalid", { days: 5 }) // ""
  */
 export function subtractUtc(
   value: string,

@@ -15,9 +15,9 @@ import { isValidUtc } from "../validate/isValidUtc";
  * @param units Partial<Record<DateTimeDurationUnit, number>> object specifying units to add
  * @returns UTC Instant string after addition, or "" on invalid input
  *
- * @example addUtc("2024-03-10T12:00:00Z", { day: 5 }) // "2024-03-15T12:00:00Z"
- * @example addUtc("2024-03-10T12:00:00Z", { month: 1, year: 1 }) // "2025-04-10T12:00:00Z"
- * @example addUtc("invalid", { day: 5 }) // ""
+ * @example addUtc("2024-03-10T12:00:00Z", { days: 5 }) // "2024-03-15T12:00:00Z"
+ * @example addUtc("2024-03-10T12:00:00Z", { months: 1, years: 1 }) // "2025-04-10T12:00:00Z"
+ * @example addUtc("invalid", { days: 5 }) // ""
  */
 export function addUtc(
   value: string,

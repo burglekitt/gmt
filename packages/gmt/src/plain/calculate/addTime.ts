@@ -13,8 +13,8 @@ import { isValidTime, isValidTimeDurationUnit } from "../validate";
  * @param units Partial<Record<TimeDurationUnit, number>> object specifying units to add
  * @returns ISO PlainTime string after addition, or "" on invalid input
  *
- * @example addTime("12:00:00", { hour: 1 }) // "13:00:00"
- * @example addTime("invalid", { hour: 1 }) // ""
+ * @example addTime("12:00:00", { hours: 1 }) // "13:00:00"
+ * @example addTime("invalid", { hours: 1 }) // ""
  */
 export function addTime(
   value: string,

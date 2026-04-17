@@ -13,8 +13,8 @@ import { isValidDateTime, isValidDateTimeDurationUnit } from "../validate";
  * @param units Partial<Record<DateTimeDurationUnit, number>> object specifying units to add
  * @returns ISO PlainDateTime string after addition, or "" on invalid input
  *
- * @example addDateTime("2024-03-10T12:00:00", { day: 5 }) // "2024-03-15T12:00:00"
- * @example addDateTime("invalid", { day: 5 }) // ""
+ * @example addDateTime("2024-03-10T12:00:00", { days: 5 }) // "2024-03-15T12:00:00"
+ * @example addDateTime("invalid", { days: 5 }) // ""
  */
 export function addDateTime(
   value: string,

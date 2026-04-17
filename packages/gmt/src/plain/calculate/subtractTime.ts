@@ -13,8 +13,8 @@ import { isValidTime, isValidTimeDurationUnit } from "../validate";
  * @param units Partial<Record<TimeDurationUnit, number>> object specifying units to subtract
  * @returns ISO PlainTime string after subtraction, or "" on invalid input
  *
- * @example subtractTime("14:30:00", { hour: 1 }) // "13:30:00"
- * @example subtractTime("invalid", { hour: 1 }) // ""
+ * @example subtractTime("14:30:00", { hours: 1 }) // "13:30:00"
+ * @example subtractTime("invalid", { hours: 1 }) // ""
  */
 export function subtractTime(
   value: string,

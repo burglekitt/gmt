@@ -13,8 +13,8 @@ import { isValidDate, isValidDateDurationUnit } from "../validate";
  * @param units Partial<Record<DateDurationUnit, number>> object specifying units to add
  * @returns ISO PlainDate string after addition, or "" on invalid input
  *
- * @example addDate("2024-03-10", { day: 5 }) // "2024-03-15"
- * @example addDate("invalid", { day: 5 }) // ""
+ * @example addDate("2024-03-10", { days: 5 }) // "2024-03-15"
+ * @example addDate("invalid", { days: 5 }) // ""
  */
 export function addDate(
   value: string /* ISO 8601 date */,
