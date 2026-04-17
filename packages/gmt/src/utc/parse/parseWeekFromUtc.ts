@@ -24,19 +24,21 @@ export function parseWeekFromUtc(
 
   const weekStartsOn = optionsArg?.weekStartsOn ?? "monday";
 
+  let dateStr: string;
+
   try {
     const instant = Temporal.Instant.from(value);
     const dateTime = instant.toZonedDateTimeISO("UTC");
-    return getWeekNumber(
-      `${dateTime.year}-${dateTime.month.toString().padStart(2, "0")}-${dateTime.day.toString().padStart(2, "0")}`,
-      weekStartsOn,
-    );
+    dateStr = `${dateTime.year}-${dateTime.month.toString().padStart(2, "0")}-${dateTime.day.toString().padStart(2, "0")}`;
   } catch {
     try {
       const plainDateStr = value.replace("Z", "");
-      return getWeekNumber(plainDateStr, weekStartsOn);
+      const plainDate = Temporal.PlainDate.from(plainDateStr);
+      dateStr = plainDate.toString();
     } catch {
       return null;
     }
   }
+
+  return getWeekNumber(dateStr, weekStartsOn);
 }

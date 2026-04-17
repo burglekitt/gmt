@@ -44,7 +44,6 @@ describe("getDay", () => {
   );
 
   it("returns empty string on failure", () => {
-    // TODO what to do about this one
     vi.useRealTimers();
     mockTemporalNowZonedDateTimeISOThrow();
     const result = getDay();

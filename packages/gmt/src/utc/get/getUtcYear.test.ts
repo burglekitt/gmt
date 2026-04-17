@@ -2,7 +2,6 @@ import { mockTemporalNowInstantThrow } from "../../test/mocks";
 import { getUtcYear } from "./getUtcYear";
 
 describe("getUtcYear", () => {
-  // TODO compare with other implementations, see if this is more simple
   beforeEach(() => {
     vi.useFakeTimers();
     vi.setSystemTime("2024-02-29T00:00:00.000Z");

@@ -18,7 +18,6 @@ export function getZonedNow(
   ianaTimezone: string,
   optionsArg?: {
     smallestUnit?: Temporal.ZonedDateTimeToStringOptions["smallestUnit"];
-    // todo add comprehensive options support here and ALL methods
   },
 ): string {
   const options = {

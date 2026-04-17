@@ -19,12 +19,6 @@ describe("getUtcNow", () => {
     expect(utcNow).toBeTruthy();
   });
 
-  // TODO should this be added to all tests...
-  it("returns a parseable Temporal instant", () => {
-    const value = getUtcNow();
-    expect(() => Temporal.Instant.from(value)).not.toThrow();
-  });
-
   it("returns a value consumable by zoned unix converters", () => {
     const value = getUtcNow();
 

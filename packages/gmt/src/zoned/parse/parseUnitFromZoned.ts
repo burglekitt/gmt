@@ -15,8 +15,6 @@ export type ZonedParseUnit =
   | "nanosecond"
   | "timeZone";
 
-// TODO is duplicated
-
 function isValidZonedUnit(unit: string): unit is ZonedParseUnit {
   return [
     "year",

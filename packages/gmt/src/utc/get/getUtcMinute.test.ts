@@ -17,7 +17,7 @@ describe("getUtcMinute", () => {
 
   it("returns empty string on failure", () => {
     vi.useRealTimers();
-    mockTemporalNowInstantThrow(); // TODO tell AGENTS.md and CONTRIBUTING.md to use these mocks
+    mockTemporalNowInstantThrow();
     const result = getUtcMinute();
     expect(result).toBe("");
   });
