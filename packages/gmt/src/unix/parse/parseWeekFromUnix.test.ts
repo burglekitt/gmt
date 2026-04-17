@@ -30,6 +30,21 @@ describe("parseWeekFromUnix", () => {
   });
 
   it.each`
+    value            | epochUnit         | expected
+    ${-86400}        | ${"seconds"}      | ${1}
+    ${-31536000}     | ${"seconds"}      | ${1}
+    ${1709164800}    | ${"seconds"}      | ${9}
+    ${1704067200000} | ${"milliseconds"} | ${1}
+  `(
+    "returns $expected for $value with epochUnit $epochUnit",
+    ({ value, epochUnit, expected }) => {
+      expect(
+        parseWeekFromUnix(value as never, { epochUnit: epochUnit as never }),
+      ).toBe(expected);
+    },
+  );
+
+  it.each`
     value      | weekStartsOn | expected
     ${epochMs} | ${"monday"}  | ${9}
     ${epochMs} | ${"sunday"}  | ${9}
@@ -47,6 +62,8 @@ describe("parseWeekFromUnix", () => {
     ${NaN}
     ${Infinity}
     ${"invalid"}
+    ${1.5}
+    ${-1.5}
   `("returns null for invalid value $value", ({ value }) => {
     expect(parseWeekFromUnix(value as never)).toBeNull();
   });

@@ -31,15 +31,17 @@ describe("parseMillisecondFromUnix", () => {
   });
 
   it.each`
-    value            | options           | expected
+    value            | epochUnit         | expected
+    ${-86400}        | ${"seconds"}      | ${"000"}
+    ${-31536000}     | ${"seconds"}      | ${"000"}
     ${1709164800}    | ${"seconds"}      | ${"000"}
     ${1704067200000} | ${"milliseconds"} | ${"000"}
   `(
-    "returns $expected for $value with epochUnit $options",
-    ({ value, options, expected }) => {
+    "returns $expected for $value with epochUnit $epochUnit",
+    ({ value, epochUnit, expected }) => {
       expect(
         parseMillisecondFromUnix(value as never, {
-          epochUnit: options as never,
+          epochUnit: epochUnit as never,
         }),
       ).toBe(expected);
     },
@@ -50,6 +52,8 @@ describe("parseMillisecondFromUnix", () => {
     ${NaN}
     ${Infinity}
     ${"invalid"}
+    ${1.5}
+    ${-1.5}
   `("returns empty string for invalid value $value", ({ value }) => {
     expect(parseMillisecondFromUnix(value as never)).toBe("");
   });

@@ -1,8 +1,11 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { isValidAmount } from "../../internal";
 import { getSystemTimeZone } from "../../plain/get";
 import { convertUnixToZoned } from "../convert";
-import type { UnixUnit } from "../validate";
+import {
+  isValidUnixMilliseconds,
+  isValidUnixSeconds,
+  type UnixUnit,
+} from "../validate";
 
 /**
  * Return the hour (0-23) from a unix epoch value.
@@ -15,7 +18,7 @@ import type { UnixUnit } from "../validate";
  * @returns Hour (00-23) or "" on invalid input
  *
  * @example parseHourFromUnix(1700000000000) // "05"
- * @example parseHourFromUnix(-1) // ""
+ * @example parseHourFromUnix(-86400, { epochUnit: "seconds" }) // "00"
  */
 export function parseHourFromUnix(
   value: number | string,
@@ -25,7 +28,13 @@ export function parseHourFromUnix(
   },
 ): string {
   const numValue = typeof value === "string" ? Number(value) : value;
-  if (!isValidAmount(numValue)) return "";
+  const epochUnit = options?.epochUnit ?? "milliseconds";
+
+  if (epochUnit === "seconds") {
+    if (!isValidUnixSeconds(numValue)) return "";
+  } else {
+    if (!isValidUnixMilliseconds(numValue)) return "";
+  }
 
   const timeZone = options?.timeZone ?? getSystemTimeZone();
   if (!timeZone) return "";

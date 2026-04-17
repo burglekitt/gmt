@@ -20,7 +20,7 @@ import {
  *
  * @example convertUnixToPlainTime(1706659200000) // "00:00:00"
  * @example convertUnixToPlainTime(1706659200, { epochUnit: "seconds" }) // "00:00:00"
- * @example convertUnixToPlainTime(-1) // ""
+ * @example convertUnixToPlainTime(-1) // "23:59:59.999"
  */
 export function convertUnixToPlainTime(
   unix: number,

@@ -20,7 +20,7 @@ import {
  *
  * @example convertUnixToPlainDate(1709164800000) // "2024-02-29"
  * @example convertUnixToPlainDate(1709164800, { epochUnit: "seconds" }) // "2024-02-29"
- * @example convertUnixToPlainDate(-1) // ""
+ * @example convertUnixToPlainDate(-1) // "1969-12-31"
  */
 
 export function convertUnixToPlainDate(

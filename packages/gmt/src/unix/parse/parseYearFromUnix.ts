@@ -1,8 +1,11 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { isValidAmount } from "../../internal";
 import { getSystemTimeZone } from "../../plain/get";
 import { convertUnixToZoned } from "../convert";
-import type { UnixUnit } from "../validate";
+import {
+  isValidUnixMilliseconds,
+  isValidUnixSeconds,
+  type UnixUnit,
+} from "../validate";
 
 /**
  * Return the year from a unix epoch value.
@@ -16,7 +19,7 @@ import type { UnixUnit } from "../validate";
  *
  * @example parseYearFromUnix(1700000000000) // "2023"
  * @example parseYearFromUnix(1704067200000, { epochUnit: "milliseconds" }) // "2024"
- * @example parseYearFromUnix(-1) // ""
+ * @example parseYearFromUnix(-86400, { epochUnit: "seconds" }) // "1969"
  */
 export function parseYearFromUnix(
   value: number | string,
@@ -26,7 +29,13 @@ export function parseYearFromUnix(
   },
 ): string {
   const numValue = typeof value === "string" ? Number(value) : value;
-  if (!isValidAmount(numValue)) return "";
+  const epochUnit = options?.epochUnit ?? "milliseconds";
+
+  if (epochUnit === "seconds") {
+    if (!isValidUnixSeconds(numValue)) return "";
+  } else {
+    if (!isValidUnixMilliseconds(numValue)) return "";
+  }
 
   const timeZone = options?.timeZone ?? getSystemTimeZone();
   if (!timeZone) return "";

@@ -45,12 +45,22 @@ describe("parseUnitFromUnix", () => {
     }
   });
 
-  it("supports seconds epoch unit", () => {
-    const epochSec = 1709164800;
-    expect(parseUnitFromUnix(epochSec, "year", { epochUnit: "seconds" })).toBe(
-      "2024",
-    );
-  });
+  it.each`
+    value            | epochUnit         | expected
+    ${-86400}        | ${"seconds"}      | ${"1969"}
+    ${-31536000}     | ${"seconds"}      | ${"1969"}
+    ${1709164800}    | ${"seconds"}      | ${"2024"}
+    ${1704067200000} | ${"milliseconds"} | ${"2024"}
+  `(
+    "returns $expected for $value with epochUnit $epochUnit",
+    ({ value, epochUnit, expected }) => {
+      expect(
+        parseUnitFromUnix(value as never, "year", {
+          epochUnit: epochUnit as never,
+        }),
+      ).toBe(expected);
+    },
+  );
 
   it("supports optional timeZone", () => {
     expect(parseUnitFromUnix(epochMs, "year", { timeZone: "UTC" })).toBe(
@@ -62,6 +72,8 @@ describe("parseUnitFromUnix", () => {
     invalidValue
     ${NaN}
     ${Infinity}
+    ${1.5}
+    ${-1.5}
   `(
     "returns empty string for invalid epoch $invalidValue",
     ({ invalidValue }) => {

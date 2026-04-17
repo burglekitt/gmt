@@ -30,14 +30,18 @@ describe("parseDayOfWeekFromUnix", () => {
   });
 
   it.each`
-    value            | options           | expected
+    value            | epochUnit         | expected
+    ${-86400}        | ${"seconds"}      | ${3}
+    ${-31536000}     | ${"seconds"}      | ${3}
     ${1709164800}    | ${"seconds"}      | ${4}
     ${1704067200000} | ${"milliseconds"} | ${1}
   `(
-    "returns $expected for $value with epochUnit $options",
-    ({ value, options, expected }) => {
+    "returns $expected for $value with epochUnit $epochUnit",
+    ({ value, epochUnit, expected }) => {
       expect(
-        parseDayOfWeekFromUnix(value as never, { epochUnit: options as never }),
+        parseDayOfWeekFromUnix(value as never, {
+          epochUnit: epochUnit as never,
+        }),
       ).toBe(expected);
     },
   );
@@ -47,6 +51,8 @@ describe("parseDayOfWeekFromUnix", () => {
     ${NaN}
     ${Infinity}
     ${"invalid"}
+    ${1.5}
+    ${-1.5}
   `("returns null for invalid value $value", ({ value }) => {
     expect(parseDayOfWeekFromUnix(value as never)).toBe(null);
   });

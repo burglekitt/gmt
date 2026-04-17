@@ -58,12 +58,29 @@ describe("parseTimeFromUnix", () => {
   );
 
   it.each`
+    value            | epochUnit         | expected
+    ${-86400}        | ${"seconds"}      | ${"00:00:00"}
+    ${-31536000}     | ${"seconds"}      | ${"00:00:00"}
+    ${1710685800}    | ${"seconds"}      | ${"14:30:00"}
+    ${1710685800000} | ${"milliseconds"} | ${"14:30:00"}
+  `(
+    "returns $expected for $value with epochUnit $epochUnit",
+    ({ value, epochUnit, expected }) => {
+      expect(parseTimeFromUnix(value, { epochUnit: epochUnit as never })).toBe(
+        expected,
+      );
+    },
+  );
+
+  it.each`
     invalidValue
     ${null}
     ${undefined}
     ${NaN}
     ${Infinity}
     ${-Infinity}
+    ${1.5}
+    ${-1.5}
   `(
     "returns empty string for invalid value $invalidValue",
     ({ invalidValue }) => {

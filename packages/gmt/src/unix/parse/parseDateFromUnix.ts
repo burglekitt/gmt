@@ -1,7 +1,11 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { isValidAmount } from "../../internal";
 import { getSystemTimeZone } from "../../plain/get";
 import { convertUnixToZoned } from "../convert";
+import {
+  isValidUnixMilliseconds,
+  isValidUnixSeconds,
+  type UnixUnit,
+} from "../validate";
 
 /**
  * Extract the date portion from a unix epoch value.
@@ -16,20 +20,24 @@ import { convertUnixToZoned } from "../convert";
  *
  * @example parseDateFromUnix(1700000000000) // "2023-11-15"
  * @example parseDateFromUnix(1700000000, { epochUnit: "seconds" }) // "2023-11-15"
- * @example parseDateFromUnix(-1) // ""
+ * @example parseDateFromUnix(-86400, { epochUnit: "seconds" }) // "1969-12-31"
  */
 export function parseDateFromUnix(
   value: number,
   options?: {
-    epochUnit?: "seconds" | "milliseconds";
+    epochUnit?: UnixUnit;
     timeZone?: string;
   },
 ): string {
-  const { epochUnit = "milliseconds", timeZone = getSystemTimeZone() } =
-    options ?? {};
+  const epochUnit = options?.epochUnit ?? "milliseconds";
 
-  if (!isValidAmount(value)) return "";
+  if (epochUnit === "seconds") {
+    if (!isValidUnixSeconds(value)) return "";
+  } else {
+    if (!isValidUnixMilliseconds(value)) return "";
+  }
 
+  const timeZone = options?.timeZone ?? getSystemTimeZone();
   if (!timeZone) return "";
 
   const zoned = epochUnit

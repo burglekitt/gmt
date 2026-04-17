@@ -68,12 +68,29 @@ describe("parseDateFromUnix", () => {
   );
 
   it.each`
+    value            | epochUnit         | expected
+    ${-86400}        | ${"seconds"}      | ${"1969-12-31"}
+    ${-31536000}     | ${"seconds"}      | ${"1969-01-01"}
+    ${1710685800}    | ${"seconds"}      | ${"2024-03-17"}
+    ${1710685800000} | ${"milliseconds"} | ${"2024-03-17"}
+  `(
+    "returns $expected for $value with epochUnit $epochUnit",
+    ({ value, epochUnit, expected }) => {
+      expect(parseDateFromUnix(value, { epochUnit: epochUnit as never })).toBe(
+        expected,
+      );
+    },
+  );
+
+  it.each`
     invalidValue
     ${null}
     ${undefined}
     ${NaN}
     ${Infinity}
     ${-Infinity}
+    ${1.5}
+    ${-1.5}
   `(
     "returns empty string for invalid value $invalidValue",
     ({ invalidValue }) => {

@@ -34,14 +34,16 @@ describe("parseDayFromUnix", () => {
   });
 
   it.each`
-    value                            | options           | expected
+    value                            | epochUnit         | expected
+    ${-86400}                        | ${"seconds"}      | ${"31"}
+    ${-31536000}                     | ${"seconds"}      | ${"01"}
     ${battleTestLeapYearUnixSeconds} | ${"seconds"}      | ${"29"}
     ${1704067200000}                 | ${"milliseconds"} | ${"01"}
   `(
-    "returns $expected for $value with epochUnit $options",
-    ({ value, options, expected }) => {
+    "returns $expected for $value with epochUnit $epochUnit",
+    ({ value, epochUnit, expected }) => {
       expect(
-        parseDayFromUnix(value as never, { epochUnit: options as never }),
+        parseDayFromUnix(value as never, { epochUnit: epochUnit as never }),
       ).toBe(expected);
     },
   );
@@ -51,6 +53,8 @@ describe("parseDayFromUnix", () => {
     ${NaN}
     ${Infinity}
     ${"invalid"}
+    ${1.5}
+    ${-1.5}
   `("returns empty string for invalid value $value", ({ value }) => {
     expect(parseDayFromUnix(value as never)).toBe("");
   });

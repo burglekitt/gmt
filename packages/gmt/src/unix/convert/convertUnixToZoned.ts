@@ -20,7 +20,7 @@ import { isValidTimeZone } from "../../zoned/validate";
  *
  * @example convertUnixToZoned(1709164800000, "America/New_York") // "2024-02-29T00:00:00-05:00[America/New_York]"
  * @example convertUnixToZoned(1709164800, "UTC", "seconds") // "2024-02-29T00:00:00+00:00[UTC]"
- * @example convertUnixToZoned(-1, "UTC") // ""
+ * @example convertUnixToZoned(-1, "UTC") // "1969-12-31T23:59:59.999Z[UTC]"
  */
 export function convertUnixToZoned(
   value: number,

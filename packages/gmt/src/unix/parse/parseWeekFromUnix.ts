@@ -1,9 +1,12 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { isValidAmount } from "../../internal";
 import { getWeekNumber } from "../../plain/calculate/getWeekNumber";
 import { getSystemTimeZone } from "../../plain/get";
 import { convertUnixToZoned } from "../convert";
-import type { UnixUnit } from "../validate";
+import {
+  isValidUnixMilliseconds,
+  isValidUnixSeconds,
+  type UnixUnit,
+} from "../validate";
 
 /**
  * Return the week number from a unix epoch value.
@@ -17,7 +20,7 @@ import type { UnixUnit } from "../validate";
  *
  * @example parseWeekFromUnix(1704067200000) // 1
  * @example parseWeekFromUnix(1704067200000, { weekStartsOn: "sunday" }) // 1
- * @example parseWeekFromUnix(-1) // null
+ * @example parseWeekFromUnix(-86400, { epochUnit: "seconds" }) // 1
  */
 export function parseWeekFromUnix(
   value: number | string,
@@ -28,7 +31,13 @@ export function parseWeekFromUnix(
   },
 ): number | null {
   const numValue = typeof value === "string" ? Number(value) : value;
-  if (!isValidAmount(numValue)) return null;
+  const epochUnit = options?.epochUnit ?? "milliseconds";
+
+  if (epochUnit === "seconds") {
+    if (!isValidUnixSeconds(numValue)) return null;
+  } else {
+    if (!isValidUnixMilliseconds(numValue)) return null;
+  }
 
   const timeZone = options?.timeZone ?? getSystemTimeZone();
   if (!timeZone) return null;

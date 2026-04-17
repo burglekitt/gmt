@@ -31,14 +31,16 @@ describe("parseMonthFromUnix", () => {
   });
 
   it.each`
-    value            | options           | expected
+    value            | epochUnit         | expected
+    ${-86400}        | ${"seconds"}      | ${"12"}
+    ${-31536000}     | ${"seconds"}      | ${"01"}
     ${1709164800}    | ${"seconds"}      | ${"02"}
     ${1704067200000} | ${"milliseconds"} | ${"01"}
   `(
-    "returns $expected for $value with epochUnit $options",
-    ({ value, options, expected }) => {
+    "returns $expected for $value with epochUnit $epochUnit",
+    ({ value, epochUnit, expected }) => {
       expect(
-        parseMonthFromUnix(value as never, { epochUnit: options as never }),
+        parseMonthFromUnix(value as never, { epochUnit: epochUnit as never }),
       ).toBe(expected);
     },
   );
@@ -48,6 +50,8 @@ describe("parseMonthFromUnix", () => {
     ${NaN}
     ${Infinity}
     ${"invalid"}
+    ${1.5}
+    ${-1.5}
   `("returns empty string for invalid value $value", ({ value }) => {
     expect(parseMonthFromUnix(value as never)).toBe("");
   });

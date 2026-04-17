@@ -1,8 +1,11 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { isValidAmount } from "../../internal";
 import { getSystemTimeZone } from "../../plain/get";
 import { convertUnixToZoned } from "../convert";
-import type { UnixUnit } from "../validate";
+import {
+  isValidUnixMilliseconds,
+  isValidUnixSeconds,
+  type UnixUnit,
+} from "../validate";
 
 /**
  * Return the nanosecond (0-999) from a unix epoch value.
@@ -15,7 +18,7 @@ import type { UnixUnit } from "../validate";
  * @returns Nanosecond (000-999) or "" on invalid input
  *
  * @example parseNanosecondFromUnix(1700000000000) // "000000000"
- * @example parseNanosecondFromUnix(-1) // ""
+ * @example parseNanosecondFromUnix(-86400, { epochUnit: "seconds" }) // "000000000"
  */
 export function parseNanosecondFromUnix(
   value: number | string,
@@ -25,7 +28,13 @@ export function parseNanosecondFromUnix(
   },
 ): string {
   const numValue = typeof value === "string" ? Number(value) : value;
-  if (!isValidAmount(numValue)) return "";
+  const epochUnit = options?.epochUnit ?? "milliseconds";
+
+  if (epochUnit === "seconds") {
+    if (!isValidUnixSeconds(numValue)) return "";
+  } else {
+    if (!isValidUnixMilliseconds(numValue)) return "";
+  }
 
   const timeZone = options?.timeZone ?? getSystemTimeZone();
   if (!timeZone) return "";
@@ -38,7 +47,7 @@ export function parseNanosecondFromUnix(
 
   try {
     const zdt = Temporal.ZonedDateTime.from(zoned);
-    return (zdt.nanosecond ?? 0).toString().padStart(3, "0");
+    return (zdt.nanosecond ?? 0).toString().padStart(9, "0");
   } catch {
     return "";
   }

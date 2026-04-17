@@ -21,6 +21,8 @@ describe("convertUnixToPlainTime", () => {
     ${1709164800}    | ${"seconds"}      | ${"00:00:00"}
     ${1709164800000} | ${"milliseconds"} | ${"00:00:00"}
     ${1709218800000} | ${undefined}      | ${"15:00:00"}
+    ${-1}            | ${undefined}      | ${"23:59:59.999"}
+    ${-86400}        | ${"seconds"}      | ${"00:00:00"}
   `(
     "returns $expected for unix $unix with epochUnit $epochUnit",
     ({ unix, epochUnit, expected }) => {
@@ -50,9 +52,10 @@ describe("convertUnixToPlainTime", () => {
   it.each`
     unix
     ${"invalid"}
-    ${-1}
     ${null}
     ${undefined}
+    ${1.5}
+    ${-1.5}
   `("returns empty string for invalid unix $unix", ({ unix }) => {
     expect(convertUnixToPlainTime(unix as never)).toBe("");
   });

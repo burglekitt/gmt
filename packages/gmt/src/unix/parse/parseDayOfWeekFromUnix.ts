@@ -1,8 +1,11 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { isValidAmount } from "../../internal";
 import { getSystemTimeZone } from "../../plain/get";
 import { convertUnixToZoned } from "../convert";
-import type { UnixUnit } from "../validate";
+import {
+  isValidUnixMilliseconds,
+  isValidUnixSeconds,
+  type UnixUnit,
+} from "../validate";
 
 /**
  * Return the day of week (1-7) from a unix epoch value.
@@ -15,7 +18,7 @@ import type { UnixUnit } from "../validate";
  * @returns Day of week (1-7) or null on invalid input
  *
  * @example parseDayOfWeekFromUnix(1704067200000) // 1
- * @example parseDayOfWeekFromUnix(-1) // null
+ * @example parseDayOfWeekFromUnix(-86400, { epochUnit: "seconds" }) // 2
  */
 export function parseDayOfWeekFromUnix(
   value: number | string,
@@ -25,7 +28,13 @@ export function parseDayOfWeekFromUnix(
   },
 ): number | null {
   const numValue = typeof value === "string" ? Number(value) : value;
-  if (!isValidAmount(numValue)) return null;
+  const epochUnit = options?.epochUnit ?? "milliseconds";
+
+  if (epochUnit === "seconds") {
+    if (!isValidUnixSeconds(numValue)) return null;
+  } else {
+    if (!isValidUnixMilliseconds(numValue)) return null;
+  }
 
   const timeZone = options?.timeZone ?? getSystemTimeZone();
   if (!timeZone) return null;

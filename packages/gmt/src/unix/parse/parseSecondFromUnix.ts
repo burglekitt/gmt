@@ -1,8 +1,11 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { isValidAmount } from "../../internal";
 import { getSystemTimeZone } from "../../plain/get";
 import { convertUnixToZoned } from "../convert";
-import type { UnixUnit } from "../validate";
+import {
+  isValidUnixMilliseconds,
+  isValidUnixSeconds,
+  type UnixUnit,
+} from "../validate";
 
 /**
  * Return the second (0-59) from a unix epoch value.
@@ -15,7 +18,7 @@ import type { UnixUnit } from "../validate";
  * @returns Second (00-59) or "" on invalid input
  *
  * @example parseSecondFromUnix(1700000000000) // "26"
- * @example parseSecondFromUnix(-1) // ""
+ * @example parseSecondFromUnix(-86400, { epochUnit: "seconds" }) // "00"
  */
 export function parseSecondFromUnix(
   value: number | string,
@@ -25,7 +28,13 @@ export function parseSecondFromUnix(
   },
 ): string {
   const numValue = typeof value === "string" ? Number(value) : value;
-  if (!isValidAmount(numValue)) return "";
+  const epochUnit = options?.epochUnit ?? "milliseconds";
+
+  if (epochUnit === "seconds") {
+    if (!isValidUnixSeconds(numValue)) return "";
+  } else {
+    if (!isValidUnixMilliseconds(numValue)) return "";
+  }
 
   const timeZone = options?.timeZone ?? getSystemTimeZone();
   if (!timeZone) return "";

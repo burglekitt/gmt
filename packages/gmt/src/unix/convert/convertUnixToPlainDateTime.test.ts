@@ -19,6 +19,8 @@ describe("convertUnixToPlainDateTime", () => {
     unix             | epochUnit    | expected
     ${1709164800000} | ${undefined} | ${"2024-02-29T00:00:00"}
     ${1709164800}    | ${"seconds"} | ${"2024-02-29T00:00:00"}
+    ${-1}            | ${undefined} | ${"1969-12-31T23:59:59.999"}
+    ${-86400}        | ${"seconds"} | ${"1969-12-31T00:00:00"}
   `(
     "returns $expected for unix $unix with epochUnit $epochUnit",
     ({ unix, epochUnit, expected }) => {
@@ -51,9 +53,10 @@ describe("convertUnixToPlainDateTime", () => {
   it.each`
     unix
     ${"invalid"}
-    ${-1}
     ${null}
     ${undefined}
+    ${1.5}
+    ${-1.5}
   `("returns empty string for invalid unix $unix", ({ unix }) => {
     expect(convertUnixToPlainDateTime(unix as never)).toBe("");
   });

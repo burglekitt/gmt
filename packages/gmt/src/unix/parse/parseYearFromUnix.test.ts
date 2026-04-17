@@ -32,14 +32,16 @@ describe("parseYearFromUnix", () => {
   });
 
   it.each`
-    value            | options           | expected
+    value            | epochUnit         | expected
+    ${-86400}        | ${"seconds"}      | ${"1969"}
+    ${-31536000}     | ${"seconds"}      | ${"1969"}
     ${1709164800}    | ${"seconds"}      | ${"2024"}
     ${1704067200000} | ${"milliseconds"} | ${"2024"}
   `(
-    "returns $expected for $value with epochUnit $options",
-    ({ value, options, expected }) => {
+    "returns $expected for $value with epochUnit $epochUnit",
+    ({ value, epochUnit, expected }) => {
       expect(
-        parseYearFromUnix(value as never, { epochUnit: options as never }),
+        parseYearFromUnix(value as never, { epochUnit: epochUnit as never }),
       ).toBe(expected);
     },
   );
@@ -49,6 +51,8 @@ describe("parseYearFromUnix", () => {
     ${NaN}
     ${Infinity}
     ${"invalid"}
+    ${1.5}
+    ${-1.5}
   `("returns empty string for invalid value $value", ({ value }) => {
     expect(parseYearFromUnix(value as never)).toBe("");
   });

@@ -23,23 +23,25 @@ describe("parseNanosecondFromUnix", () => {
 
   it.each`
     value                     | expected
-    ${battleTestLeapYearUnix} | ${"000"}
-    ${1704067200000}          | ${"000"}
-    ${0}                      | ${"000"}
+    ${battleTestLeapYearUnix} | ${"000000000"}
+    ${1704067200000}          | ${"000000000"}
+    ${0}                      | ${"000000000"}
   `("returns $expected for $value", ({ value, expected }) => {
     expect(parseNanosecondFromUnix(value)).toBe(expected);
   });
 
   it.each`
-    value            | options           | expected
-    ${1709164800}    | ${"seconds"}      | ${"000"}
-    ${1704067200000} | ${"milliseconds"} | ${"000"}
+    value            | epochUnit         | expected
+    ${-86400}        | ${"seconds"}      | ${"000000000"}
+    ${-31536000}     | ${"seconds"}      | ${"000000000"}
+    ${1709164800}    | ${"seconds"}      | ${"000000000"}
+    ${1704067200000} | ${"milliseconds"} | ${"000000000"}
   `(
-    "returns $expected for $value with epochUnit $options",
-    ({ value, options, expected }) => {
+    "returns $expected for $value with epochUnit $epochUnit",
+    ({ value, epochUnit, expected }) => {
       expect(
         parseNanosecondFromUnix(value as never, {
-          epochUnit: options as never,
+          epochUnit: epochUnit as never,
         }),
       ).toBe(expected);
     },
@@ -50,6 +52,8 @@ describe("parseNanosecondFromUnix", () => {
     ${NaN}
     ${Infinity}
     ${"invalid"}
+    ${1.5}
+    ${-1.5}
   `("returns empty string for invalid value $value", ({ value }) => {
     expect(parseNanosecondFromUnix(value as never)).toBe("");
   });

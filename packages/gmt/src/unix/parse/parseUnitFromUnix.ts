@@ -1,9 +1,12 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { isValidAmount } from "../../internal";
 import { getWeekNumber } from "../../plain/calculate/getWeekNumber";
 import { getSystemTimeZone } from "../../plain/get";
 import { convertUnixToZoned } from "../convert";
-import type { UnixUnit } from "../validate";
+import {
+  isValidUnixMilliseconds,
+  isValidUnixSeconds,
+  type UnixUnit,
+} from "../validate";
 
 export type PlainNowUnit =
   | "year"
@@ -34,7 +37,7 @@ export type PlainNowUnit =
  * @example parseUnitFromUnix(1700000000, "hour", { epochUnit: "seconds" }) // "12"
  * @example parseUnitFromUnix(1704067200000, "week") // "1"
  * @example parseUnitFromUnix(1704067200000, "week", { weekStartsOn: "sunday" }) // "1"
- * @example parseUnitFromUnix(-1, "year") // ""
+ * @example parseUnitFromUnix(-86400, { epochUnit: "seconds" }, "year") // "1969"
  */
 export function parseUnitFromUnix(
   value: number | string,
@@ -46,7 +49,13 @@ export function parseUnitFromUnix(
   },
 ): string {
   const numValue = typeof value === "string" ? Number(value) : value;
-  if (!isValidAmount(numValue)) return "";
+  const epochUnit = options?.epochUnit ?? "milliseconds";
+
+  if (epochUnit === "seconds") {
+    if (!isValidUnixSeconds(numValue)) return "";
+  } else {
+    if (!isValidUnixMilliseconds(numValue)) return "";
+  }
 
   const timeZone = options?.timeZone ?? getSystemTimeZone();
   if (!timeZone) return "";
