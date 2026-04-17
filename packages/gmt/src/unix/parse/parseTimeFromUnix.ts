@@ -2,7 +2,7 @@ import { Temporal } from "@js-temporal/polyfill";
 import { isValidAmount } from "../../internal";
 import { getSystemTimeZone } from "../../plain/get";
 import { convertUnixToZoned } from "../convert";
-import { isValidUnixUnit, type UnixUnit } from "../validate/isValidUnixUnit";
+import type { UnixUnit } from "../validate/isValidUnixUnit";
 
 /**
  * Extract the time portion from a unix epoch value.
@@ -30,8 +30,6 @@ export function parseTimeFromUnix(
 
   const timeZone = options?.timeZone ?? getSystemTimeZone();
   if (!timeZone) return "";
-
-  if (!isValidUnixUnit(options?.epochUnit)) return "";
 
   const zoned = options?.epochUnit
     ? convertUnixToZoned(value, timeZone, options.epochUnit)
