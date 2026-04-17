@@ -19,7 +19,7 @@ import { isValidTimeZone } from "../../zoned/validate";
  * @example endOfUnix(1706659200000, "year") // 1735689600000
  * @example endOfUnix(1706659200000, "month") // 1708012800000
  * @example endOfUnix(1706659200, "day", { epochUnit: "seconds" }) // 1706736000
- * @example endOfUnix(-1, "year") // null
+ * @example endOfUnix(-86400000, "year") // -1 (end of 1969)
  */
 export function endOfUnix(
   value: number,
@@ -43,7 +43,7 @@ export function endOfUnix(
     return null;
   }
 
-  if (!Number.isFinite(value) || !Number.isInteger(value) || value < 0) {
+  if (!Number.isFinite(value) || !Number.isInteger(value)) {
     return null;
   }
 

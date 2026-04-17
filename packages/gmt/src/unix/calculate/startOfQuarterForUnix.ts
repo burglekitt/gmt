@@ -15,7 +15,7 @@ import { isValidTimeZone } from "../../zoned/validate";
  * @returns Unix epoch number representing the start of the quarter, or null on invalid input
  *
  * @example startOfQuarterForUnix(1706659200000) // 1704067200000
- * @example startOfQuarterForUnix(-1) // null
+ * @example startOfQuarterForUnix(-86400000) // -25598400001 (Q1 1969 starts Jan 1)
  */
 export function startOfQuarterForUnix(
   value: number,
@@ -31,7 +31,7 @@ export function startOfQuarterForUnix(
     return null;
   }
 
-  if (!Number.isFinite(value) || !Number.isInteger(value) || value < 0) {
+  if (!Number.isFinite(value) || !Number.isInteger(value)) {
     return null;
   }
 

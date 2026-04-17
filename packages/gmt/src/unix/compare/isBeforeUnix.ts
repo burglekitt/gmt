@@ -15,7 +15,9 @@ import type { UnixUnit } from "../validate/isValidUnixUnit";
  *
  * @example isBeforeUnix(1704067200, 1706659200) // true
  * @example isBeforeUnix(1706659200, 1706659200) // false
- * @example isBeforeUnix(-1, 0) // false
+ * @example isBeforeUnix(-1, 0) // true (1969-12-31T23:59:59.999Z is before 1970-01-01T00:00:00Z)
+ * @example isBeforeUnix('invalid', 1704067200000) // false
+ * @example isBeforeUnix(1704067200000, 'invalid') // false
  */
 export function isBeforeUnix(
   value1: number,

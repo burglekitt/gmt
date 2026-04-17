@@ -30,7 +30,6 @@ describe("addUnix", () => {
   it.each`
     value            | units                 | options
     ${"invalid"}     | ${{ days: 1 }}        | ${undefined}
-    ${-1}            | ${{ days: 1 }}        | ${undefined}
     ${1.5}           | ${{ days: 1 }}        | ${undefined}
     ${null}          | ${{ days: 1 }}        | ${undefined}
     ${1709164800000} | ${{ invalidUnit: 1 }} | ${undefined}

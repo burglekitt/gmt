@@ -17,7 +17,7 @@ import type { UnixUnit } from "../validate/isValidUnixUnit";
  * @example areUnixEqual(1706659200, 1704067200) // false
  * @example areUnixEqual(1706659200, 1706659200000, { epochUnit: "seconds" }) // true
  * @example areUnixEqual(1706659200, 1706659200000) // false
- * @example areUnixEqual(-1, 1706659200000) // false
+ * @example areUnixEqual(-86400000, 0) // false (1969-12-31 is not equal to 1970-01-01)
  */
 export function areUnixEqual(
   value1: number,

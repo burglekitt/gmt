@@ -15,7 +15,7 @@ import { isValidTimeZone } from "../../zoned/validate";
  * @returns Unix epoch number representing the end of the quarter, or null on invalid input
  *
  * @example endOfQuarterForUnix(1706659200000) // 1711977599999
- * @example endOfQuarterForUnix(-1) // null
+ * @example endOfQuarterForUnix(-86400000) // -1 (Q4 1969 ends Dec 31)
  */
 export function endOfQuarterForUnix(
   value: number,
@@ -31,7 +31,7 @@ export function endOfQuarterForUnix(
     return null;
   }
 
-  if (!Number.isFinite(value) || !Number.isInteger(value) || value < 0) {
+  if (!Number.isFinite(value) || !Number.isInteger(value)) {
     return null;
   }
 

@@ -29,7 +29,6 @@ describe("endOfQuarterForUnix", () => {
   it.each`
     invalidValue
     ${"invalid"}
-    ${-1}
     ${1.5}
     ${null}
     ${undefined}

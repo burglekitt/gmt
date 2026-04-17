@@ -19,7 +19,7 @@ import { isValidTimeZone } from "../../zoned/validate";
  *
  * @example addUnix(1706659200000, { days: 1 }) // 1706745600000
  * @example addUnix(1706659200, { days: 1 }, { epochUnit: "seconds" }) // 1706745600
- * @example addUnix(-1, { days: 1 }) // null
+ * @example addUnix(-86400000, { days: 1 }) // 0 (Dec 31 1969 + 1 day = Jan 1 1970)
  */
 export function addUnix(
   value: number,
@@ -41,7 +41,7 @@ export function addUnix(
     return null;
   }
 
-  if (!Number.isFinite(value) || !Number.isInteger(value) || value < 0) {
+  if (!Number.isFinite(value) || !Number.isInteger(value)) {
     return null;
   }
 

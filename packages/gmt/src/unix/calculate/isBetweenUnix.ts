@@ -40,13 +40,10 @@ export function isBetweenUnix(
   if (
     !Number.isFinite(value) ||
     !Number.isInteger(value) ||
-    value < 0 ||
     !Number.isFinite(start) ||
     !Number.isInteger(start) ||
-    start < 0 ||
     !Number.isFinite(end) ||
-    !Number.isInteger(end) ||
-    end < 0
+    !Number.isInteger(end)
   ) {
     return false;
   }

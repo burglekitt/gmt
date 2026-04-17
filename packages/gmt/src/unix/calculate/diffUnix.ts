@@ -20,7 +20,7 @@ import { isValidTimeZone } from "../../zoned/validate";
  *
  * @example diffUnix(1706745600000, 1706659200000, "day") // 1
  * @example diffUnix(1706745600, 1706659200, "day", { epochUnit: "seconds" }) // 1
- * @example diffUnix(-1, 0, "day") // null
+ * @example diffUnix(0, -86400000, "day") // 1 (Jan 1 1970 - Dec 31 1969 = 1 day)
  */
 export function diffUnix(
   value1: number,
@@ -48,10 +48,8 @@ export function diffUnix(
   if (
     !Number.isFinite(value1) ||
     !Number.isInteger(value1) ||
-    value1 < 0 ||
     !Number.isFinite(value2) ||
-    !Number.isInteger(value2) ||
-    value2 < 0
+    !Number.isInteger(value2)
   ) {
     return null;
   }
