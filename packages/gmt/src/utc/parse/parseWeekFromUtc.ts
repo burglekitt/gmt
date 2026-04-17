@@ -27,11 +27,14 @@ export function parseWeekFromUtc(
   try {
     const instant = Temporal.Instant.from(value);
     const dateTime = instant.toZonedDateTimeISO("UTC");
-    return getWeekNumber(dateTime.toPlainDate(), weekStartsOn);
+    return getWeekNumber(
+      `${dateTime.year}-${dateTime.month.toString().padStart(2, "0")}-${dateTime.day.toString().padStart(2, "0")}`,
+      weekStartsOn,
+    );
   } catch {
     try {
-      const plainDate = Temporal.PlainDate.from(value.replace("Z", ""));
-      return getWeekNumber(plainDate, weekStartsOn);
+      const plainDateStr = value.replace("Z", "");
+      return getWeekNumber(plainDateStr, weekStartsOn);
     } catch {
       return null;
     }

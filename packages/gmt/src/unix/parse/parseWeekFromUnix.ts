@@ -52,7 +52,10 @@ export function parseWeekFromUnix(
 
   try {
     const zdt = Temporal.ZonedDateTime.from(zoned);
-    return getWeekNumber(zdt.toPlainDate(), weekStartsOn);
+    return getWeekNumber(
+      `${zdt.year}-${zdt.month.toString().padStart(2, "0")}-${zdt.day.toString().padStart(2, "0")}`,
+      weekStartsOn,
+    );
   } catch {
     return null;
   }

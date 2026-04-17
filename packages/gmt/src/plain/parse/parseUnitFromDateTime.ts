@@ -43,11 +43,6 @@ export function parseUnitFromDateTime(
 
   try {
     const dateTime = Temporal.PlainDateTime.from(value);
-    const date = Temporal.PlainDate.from({
-      year: dateTime.year,
-      month: dateTime.month,
-      day: dateTime.day,
-    });
 
     switch (unit) {
       case "year":
@@ -57,7 +52,7 @@ export function parseUnitFromDateTime(
       case "day":
         return dateTime.day.toString().padStart(2, "0");
       case "week":
-        return getWeekNumber(date, weekStartsOn).toString();
+        return (getWeekNumber(value, weekStartsOn) ?? 0).toString();
       case "dayOfWeek":
         return dateTime.dayOfWeek.toString();
       case "hour":

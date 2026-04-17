@@ -44,7 +44,6 @@ export function parseUnitFromUtc(
   try {
     const instant = Temporal.Instant.from(value);
     const dateTime = instant.toZonedDateTimeISO("UTC");
-    const plainDate = dateTime.toPlainDate();
 
     switch (unit) {
       case "year":
@@ -52,7 +51,12 @@ export function parseUnitFromUtc(
       case "month":
         return dateTime.month.toString().padStart(2, "0");
       case "week":
-        return getWeekNumber(plainDate, weekStartsOn).toString();
+        return (
+          getWeekNumber(
+            `${dateTime.year}-${dateTime.month.toString().padStart(2, "0")}-${dateTime.day.toString().padStart(2, "0")}`,
+            weekStartsOn,
+          ) ?? 0
+        ).toString();
       case "day":
         return dateTime.day.toString().padStart(2, "0");
       case "dayOfWeek":

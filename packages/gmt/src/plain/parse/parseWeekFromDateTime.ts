@@ -1,4 +1,3 @@
-import { Temporal } from "@js-temporal/polyfill";
 import { getWeekNumber } from "../calculate/getWeekNumber";
 import { isValidDateTime } from "../validate";
 
@@ -27,13 +26,7 @@ export function parseWeekFromDateTime(
   const weekStartsOn = optionsArg?.weekStartsOn ?? "monday";
 
   try {
-    const dateTime = Temporal.PlainDateTime.from(value);
-    const date = Temporal.PlainDate.from({
-      year: dateTime.year,
-      month: dateTime.month,
-      day: dateTime.day,
-    });
-    return getWeekNumber(date, weekStartsOn);
+    return getWeekNumber(value, weekStartsOn);
   } catch {
     return null;
   }

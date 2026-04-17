@@ -44,7 +44,7 @@ export function parseUnitFromDate(
       case "day":
         return date.day.toString().padStart(2, "0");
       case "week":
-        return getWeekNumber(date, weekStartsOn).toString();
+        return (getWeekNumber(value, weekStartsOn) ?? 0).toString();
       case "dayOfWeek":
         return date.dayOfWeek.toString();
       default:

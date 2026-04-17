@@ -76,7 +76,12 @@ export function parseUnitFromUnix(
       case "month":
         return zdt.month.toString().padStart(2, "0");
       case "week": {
-        return getWeekNumber(zdt.toPlainDate(), weekStartsOn).toString();
+        return (
+          getWeekNumber(
+            `${zdt.year}-${zdt.month.toString().padStart(2, "0")}-${zdt.day.toString().padStart(2, "0")}`,
+            weekStartsOn,
+          ) ?? 0
+        ).toString();
       }
       case "day":
         return zdt.day.toString().padStart(2, "0");
