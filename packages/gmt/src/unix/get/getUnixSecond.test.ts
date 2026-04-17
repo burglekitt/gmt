@@ -16,8 +16,6 @@ describe("getUnixSecond", () => {
   });
 
   it("returns empty string on failure", () => {
-    // TODO CC is this even needed? the useRealTimers
-    vi.useRealTimers();
     mockTemporalNowInstantThrow();
     const result = getUnixSecond();
     expect(result).toBe("");
