@@ -17,7 +17,7 @@ Use this skill when a user wants to adopt `@burglekitt/gmt-oxlint`.
 
 2. Configure Oxlint
 - Add `@burglekitt/gmt-oxlint` to `.oxlintrc.json` `jsPlugins`.
-- Use `extends: ["gmt-oxlint/recommended"]` to enable all Date-ban rules, OR manually configure rules under `rules`.
+- Use `extends: ["@burglekitt/gmt-oxlint/recommended"]` to enable all Date-ban rules, OR manually configure rules under `rules`.
 - Keep unrelated existing rules unless the user requests consolidation.
 
 3. Verify enforcement
