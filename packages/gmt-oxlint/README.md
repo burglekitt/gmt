@@ -40,9 +40,12 @@ In your `.oxlintrc.json`:
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "jsPlugins": ["@burglekitt/gmt-oxlint"],
-  "extends": ["@burglekitt/gmt-oxlint/recommended"]
+  "extends": ["./node_modules/@burglekitt/gmt-oxlint/config/recommended.json"]
 }
 ```
+
+Oxlint currently resolves `extends` as file paths. Named shared config specifiers
+such as `@burglekitt/gmt-oxlint/recommended` are not currently supported.
 
 ### Manual configuration
 

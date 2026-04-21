@@ -17,7 +17,8 @@ Use this skill when a user wants to adopt `@burglekitt/gmt-oxlint`.
 
 2. Configure Oxlint
 - Add `@burglekitt/gmt-oxlint` to `.oxlintrc.json` `jsPlugins`.
-- Use `extends: ["@burglekitt/gmt-oxlint/recommended"]` to enable all Date-ban rules, OR manually configure rules under `rules`.
+- Use `extends: ["./node_modules/@burglekitt/gmt-oxlint/config/recommended.json"]` to enable all Date-ban rules, OR manually configure rules under `rules`.
+- Do not use named shared config specifiers (for example `@burglekitt/gmt-oxlint/recommended`) in `extends`; Oxlint currently resolves `extends` as file paths.
 - Keep unrelated existing rules unless the user requests consolidation.
 
 3. Verify enforcement
