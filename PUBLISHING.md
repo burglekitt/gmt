@@ -209,3 +209,112 @@ git push --follow-tags
 ---
 
 If you want, I can now either (a) remove the optional `publish.yml` workflow from the repo, or (b) leave it in place and mark it as optional in docs. Which would you prefer?
+
+
+MY ACTUAL STEPS
+
+BEFORE PR MERGED
+
+- Create a changeset:
+
+```bash
+pnpm run changeset:add
+```
+
+- Edit the generated changeset file as needed (example):
+
+```md
+---
+"@burglekitt/gmt-eslint": major
+"@burglekitt/gmt-oxlint": major
+"@burglekitt/gmt-biome": major
+"@burglekitt/gmt": major
+---
+
+Initial public release of the gmt suite.
+
+## @burglekitt/gmt
+
+Temporal-first date and time library. String-in, string-out API wrapping
+`@js-temporal/polyfill`. Covers plain and zoned arithmetic, comparison,
+formatting, parsing, mapping, conversion, and validation. No `Date` object
+used anywhere.
+
+## @burglekitt/gmt-eslint
+
+ESLint flat-config plugin that bans the `Date` API (`new Date`, `Date.now`,
+`Date.UTC`, `Date.parse`, and the global `Date` reference) and points
+consumers toward `@burglekitt/gmt` replacements.
+
+## @burglekitt/gmt-oxlint
+
+Oxlint JS plugin with the same `Date`-ban policy as `gmt-eslint`. Rules
+cover `new Date`, `Date.now`, `Date.UTC`, `Date.parse`,
+`date.getTimezoneOffset`, and bare `Date` global references.
+
+## @burglekitt/gmt-biome
+
+Biome GritQL plugin enforcing the same `Date`-ban rules for projects using
+Biome as their formatter/linter.
+```
+
+- Commit and push the changeset:
+
+```bash
+git add .changeset/
+git commit -m "add changeset: x.x.x release"
+git push
+```
+
+MERGE PR TO MAIN
+
+```bash
+git checkout main && git pull
+```
+
+Run changeset versioning and push
+
+```bash
+pnpm run changeset:version
+git add .
+git commit -m "Version Packages"
+git push
+```
+
+BUILD
+
+```bash
+pnpm exec nx run @burglekitt/gmt:build
+cd packages/gmt-oxlint && pnpm run build && cd ../..
+```
+
+DRY RUN
+
+```bash
+cd packages/gmt && npm pack --dry-run && cd ../..
+cd packages/gmt-biome && npm pack --dry-run && cd ../..
+cd packages/gmt-eslint && npm pack --dry-run && cd ../..
+cd packages/gmt-oxlint && npm pack --dry-run && cd ../..
+```
+
+NPM CHECKS
+
+```bash
+npm whoami
+# should show your npm username
+npm org ls burglekitt
+# confirm you have publish rights on the @burglekitt org
+```
+
+PUBLISH
+
+```bash
+pnpm run changeset:publish
+```
+
+TAGS AND PUSH
+
+```bash
+pnpm exec changeset tag
+git push --follow-tags
+```
