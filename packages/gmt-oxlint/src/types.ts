@@ -69,7 +69,12 @@ export type RuleModule = {
   create(context: RuleContext): RuleListener;
 };
 
-export type OxlintPluginRuleConfig = readonly ["error"];
+export type OxlintPluginRuleConfig =
+  | "error"
+  | "warn"
+  | "off"
+  | readonly [string]
+  | readonly [string, unknown];
 
 export interface OxlintPluginConfig {
   rules?: Record<string, OxlintPluginRuleConfig>;

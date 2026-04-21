@@ -46,7 +46,7 @@ In your `.oxlintrc.json`:
 
 ### Manual configuration
 
-Or explicitly configure each rule:
+Or explicitly configure each rule. You can use either a string or an array form:
 
 ```json
 {
@@ -59,6 +59,23 @@ Or explicitly configure each rule:
     "@burglekitt/gmt-oxlint/no-date-parse": "error",
     "@burglekitt/gmt-oxlint/no-date-utc": "error",
     "@burglekitt/gmt-oxlint/no-date-getTimezoneOffset": "error"
+  }
+}
+```
+
+Array form also supported:
+
+```json
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "jsPlugins": ["@burglekitt/gmt-oxlint"],
+  "rules": {
+    "@burglekitt/gmt-oxlint/no-date-global": ["error"],
+    "@burglekitt/gmt-oxlint/no-new-date": ["error"],
+    "@burglekitt/gmt-oxlint/no-date-now": ["error"],
+    "@burglekitt/gmt-oxlint/no-date-parse": ["error"],
+    "@burglekitt/gmt-oxlint/no-date-utc": ["error"],
+    "@burglekitt/gmt-oxlint/no-date-getTimezoneOffset": ["error"]
   }
 }
 ```

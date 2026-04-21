@@ -21,12 +21,12 @@ const plugin: OxlintPlugin = {
   configs: {
     recommended: {
       rules: {
-        "@burglekitt/gmt-oxlint/no-date-global": ["error"],
-        "@burglekitt/gmt-oxlint/no-new-date": ["error"],
-        "@burglekitt/gmt-oxlint/no-date-now": ["error"],
-        "@burglekitt/gmt-oxlint/no-date-parse": ["error"],
-        "@burglekitt/gmt-oxlint/no-date-utc": ["error"],
-        "@burglekitt/gmt-oxlint/no-date-getTimezoneOffset": ["error"],
+        "@burglekitt/gmt-oxlint/no-date-global": "error",
+        "@burglekitt/gmt-oxlint/no-new-date": "error",
+        "@burglekitt/gmt-oxlint/no-date-now": "error",
+        "@burglekitt/gmt-oxlint/no-date-parse": "error",
+        "@burglekitt/gmt-oxlint/no-date-utc": "error",
+        "@burglekitt/gmt-oxlint/no-date-getTimezoneOffset": "error",
       },
     },
   },
