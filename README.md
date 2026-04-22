@@ -207,29 +207,23 @@ Pre-alpha. Each package follows semantic versioning and is published independent
 
 Publishing is manual only. We use [Changesets](https://github.com/changesets/changesets) to manage per-package versioning. Nothing publishes automatically — releases are triggered by maintainers.
 
-Two supported publish paths:
+Publishing is 100% manual local only:
 
-- **Local publish (recommended):** run Changesets locally with your npm credentials (passkey). This gives maintainers direct control and creates git tags when publishing.
-- **GitHub Actions (optional):** run the manual `Publish Package` workflow at `.github/workflows/publish.yml` via Actions → Run workflow. The workflow reads `NPM_TOKEN` from secrets and is gated by the `release` environment.
+- **Local publish only:** run Changesets locally with your npm credentials (passkey). This gives maintainers direct control and creates git tags when publishing.
 
-Prerequisites for Actions-based publishing (optional):
-
-1. Create an npm access token with `Publish` permission for the `@burglekitt` org at https://www.npmjs.com/.
-2. Add it as a repository secret named `NPM_TOKEN` (or add it to the `release` environment) in GitHub (`Settings → Secrets` / `Settings → Environments`).
+There are no GitHub Actions publishing workflows in this repository.
 
 Basic Changesets workflow:
 
 - On your feature branch, run `pnpm run changeset:add` to record the change and desired bump.
 - Merge the PR. If no `.changeset/*` files were merged, create changesets before versioning — Changesets only acts on files in `.changeset/`.
 - On `main`, run `pnpm run changeset:version` to apply version bumps and update changelogs; commit and push those changes.
-- To publish locally, run `pnpm run changeset:publish` from the repo root — this will publish packages and create package-scoped git tags.
-- If you use the Actions workflow to publish, run the workflow, then run `pnpm exec changeset tag` locally and `git push --follow-tags` to synchronize tags (Actions publish does not create tags).
+- Run `pnpm run changeset:publish` from the repo root — this will publish packages and create package-scoped git tags.
 
 Notes:
 
 - Prefer using Changesets rather than manually bumping `package.json`; manual bumps can be used but they bypass the Changesets workflow.
 - Verify packages with `npm pack --dry-run` before publishing. For `@burglekitt/gmt`, run the dry-run after building.
-- The `Publish Package` workflow will build `@burglekitt/gmt` automatically when publishing that package.
 
 See [PUBLISHING.md](./PUBLISHING.md) for the full, step-by-step guide and examples.
 
