@@ -2,4 +2,4 @@
 "@burglekitt/gmt": patch
 ---
 
-Add missing barrel files for unix and utc comparatos exports
+Add missing barrel exports for unix and utc comparators, and add a new public export for `plain/validate/isLeapYear`
