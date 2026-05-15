@@ -1,4 +1,6 @@
-import { MustTestLocales } from "../../test";
+import { Intl as TIntl, Temporal } from "@js-temporal/polyfill";
+import { expectedForEnv, MustTestLocales } from "../../test";
+import { mockTemporalPlainDateFromThrow } from "../../test/mocks";
 import { formatDate } from "./formatDate";
 
 describe("formatDate", () => {
@@ -40,7 +42,11 @@ describe("formatDate", () => {
     "formats valid date $value for en-GB with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDate(value, MustTestLocales.enGB, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.enGB, options).format(
+            Temporal.PlainDate.from(value),
+          ),
+        ),
       );
     },
   );
@@ -61,7 +67,11 @@ describe("formatDate", () => {
     "formats valid date $value for de-DE with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDate(value, MustTestLocales.deDE, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.deDE, options).format(
+            Temporal.PlainDate.from(value),
+          ),
+        ),
       );
     },
   );
@@ -83,7 +93,11 @@ describe("formatDate", () => {
     "formats valid date $value for fr-FR with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDate(value, MustTestLocales.frFR, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.frFR, options).format(
+            Temporal.PlainDate.from(value),
+          ),
+        ),
       );
     },
   );
@@ -105,7 +119,11 @@ describe("formatDate", () => {
     "formats valid date $value for es-ES with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDate(value, MustTestLocales.esES, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.esES, options).format(
+            Temporal.PlainDate.from(value),
+          ),
+        ),
       );
     },
   );
@@ -127,7 +145,11 @@ describe("formatDate", () => {
     "formats valid date $value for it-IT with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDate(value, MustTestLocales.itIT, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.itIT, options).format(
+            Temporal.PlainDate.from(value),
+          ),
+        ),
       );
     },
   );
@@ -149,7 +171,11 @@ describe("formatDate", () => {
     "formats valid date $value for pt-PT with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDate(value, MustTestLocales.ptPT, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.ptPT, options).format(
+            Temporal.PlainDate.from(value),
+          ),
+        ),
       );
     },
   );
@@ -171,7 +197,11 @@ describe("formatDate", () => {
     "formats valid date $value for sv-SE with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDate(value, MustTestLocales.svSE, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.svSE, options).format(
+            Temporal.PlainDate.from(value),
+          ),
+        ),
       );
     },
   );
@@ -193,7 +223,11 @@ describe("formatDate", () => {
     "formats valid date $value for is-IS with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDate(value, MustTestLocales.isIS, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.isIS, options).format(
+            Temporal.PlainDate.from(value),
+          ),
+        ),
       );
     },
   );
@@ -215,7 +249,11 @@ describe("formatDate", () => {
     "formats valid date $value for zh-CN with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDate(value, MustTestLocales.zhCN, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.zhCN, options).format(
+            Temporal.PlainDate.from(value),
+          ),
+        ),
       );
     },
   );
@@ -237,7 +275,11 @@ describe("formatDate", () => {
     "formats valid date $value for zh-TW with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDate(value, MustTestLocales.zhTW, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.zhTW, options).format(
+            Temporal.PlainDate.from(value),
+          ),
+        ),
       );
     },
   );
@@ -259,7 +301,11 @@ describe("formatDate", () => {
     "formats valid date $value for ja-JP with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDate(value, MustTestLocales.jaJP, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.jaJP, options).format(
+            Temporal.PlainDate.from(value),
+          ),
+        ),
       );
     },
   );
@@ -281,7 +327,11 @@ describe("formatDate", () => {
     "formats valid date $value for ko-KR with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDate(value, MustTestLocales.koKR, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.koKR, options).format(
+            Temporal.PlainDate.from(value),
+          ),
+        ),
       );
     },
   );
@@ -303,7 +353,11 @@ describe("formatDate", () => {
     "formats valid date $value for ar-SA with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDate(value, MustTestLocales.arSA, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.arSA, options).format(
+            Temporal.PlainDate.from(value),
+          ),
+        ),
       );
     },
   );
@@ -325,7 +379,11 @@ describe("formatDate", () => {
     "formats valid date $value for he-IL with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDate(value, MustTestLocales.heIL, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.heIL, options).format(
+            Temporal.PlainDate.from(value),
+          ),
+        ),
       );
     },
   );
@@ -347,7 +405,11 @@ describe("formatDate", () => {
     "formats valid date $value for ru-RU with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDate(value, MustTestLocales.ruRU, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.ruRU, options).format(
+            Temporal.PlainDate.from(value),
+          ),
+        ),
       );
     },
   );
@@ -369,7 +431,11 @@ describe("formatDate", () => {
     "formats valid date $value for tr-TR with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDate(value, MustTestLocales.trTR, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.trTR, options).format(
+            Temporal.PlainDate.from(value),
+          ),
+        ),
       );
     },
   );
@@ -389,4 +455,10 @@ describe("formatDate", () => {
       expect(formatDate(invalidValue as never)).toBe("");
     },
   );
+
+  it("returns empty string on failure", () => {
+    mockTemporalPlainDateFromThrow();
+    const result = formatDate("2024-02-29");
+    expect(result).toBe("");
+  });
 });

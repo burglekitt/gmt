@@ -1,4 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
+import { normalizeDateTime } from "../../internal";
 import { isValidDateTime } from "../validate";
 
 // Intl.RelativeTimeFormatUnit includes "quarter" which Temporal doesn't support.
@@ -58,10 +59,12 @@ export function formatRelativeDateTime(
       );
     }
 
-    return new Intl.RelativeTimeFormat(locale, {
-      numeric: options.numeric ?? "auto",
-      style: options.style ?? "long",
-    }).format(amount, unit);
+    return normalizeDateTime(
+      new Intl.RelativeTimeFormat(locale, {
+        numeric: options.numeric ?? "auto",
+        style: options.style ?? "long",
+      }).format(amount, unit),
+    );
   } catch {
     return "";
   }

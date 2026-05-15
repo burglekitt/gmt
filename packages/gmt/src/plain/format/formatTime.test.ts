@@ -1,4 +1,6 @@
-import { MustTestLocales } from "../../test";
+import { Intl as TIntl, Temporal } from "@js-temporal/polyfill";
+import { expectedForEnv, MustTestLocales } from "../../test";
+import { mockTemporalPlainTimeFromThrow } from "../../test/mocks";
 import { formatTime } from "./formatTime";
 
 describe("formatTime", () => {
@@ -41,7 +43,11 @@ describe("formatTime", () => {
     "formats valid time $value for en-GB with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatTime(value, MustTestLocales.enGB, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.enGB, options).format(
+            Temporal.PlainTime.from(value),
+          ),
+        ),
       );
     },
   );
@@ -63,7 +69,11 @@ describe("formatTime", () => {
     "formats valid time $value for de-DE with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatTime(value, MustTestLocales.deDE, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.deDE, options).format(
+            Temporal.PlainTime.from(value),
+          ),
+        ),
       );
     },
   );
@@ -85,7 +95,11 @@ describe("formatTime", () => {
     "formats valid time $value for fr-FR with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatTime(value, MustTestLocales.frFR, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.frFR, options).format(
+            Temporal.PlainTime.from(value),
+          ),
+        ),
       );
     },
   );
@@ -107,7 +121,11 @@ describe("formatTime", () => {
     "formats valid time $value for es-ES with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatTime(value, MustTestLocales.esES, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.esES, options).format(
+            Temporal.PlainTime.from(value),
+          ),
+        ),
       );
     },
   );
@@ -129,7 +147,11 @@ describe("formatTime", () => {
     "formats valid time $value for it-IT with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatTime(value, MustTestLocales.itIT, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.itIT, options).format(
+            Temporal.PlainTime.from(value),
+          ),
+        ),
       );
     },
   );
@@ -145,13 +167,17 @@ describe("formatTime", () => {
     ${"14:30:45"} | ${{ hour: "numeric", minute: "numeric" }}                                   | ${"14:30"}
     ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit", second: "2-digit" }}                | ${"14:30:45"}
     ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit" }}                                   | ${"14:30"}
-    ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true }}  | ${"02:30:45 p.m."}
+    ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true }}  | ${"02:30:45 da tarde"}
     ${"14:30:45"} | ${{ hour: "numeric", minute: "numeric", second: "numeric", hour12: false }} | ${"14:30:45"}
   `(
     "formats valid time $value for pt-PT with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatTime(value, MustTestLocales.ptPT, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.ptPT, options).format(
+            Temporal.PlainTime.from(value),
+          ),
+        ),
       );
     },
   );
@@ -173,7 +199,11 @@ describe("formatTime", () => {
     "formats valid time $value for sv-SE with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatTime(value, MustTestLocales.svSE, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.svSE, options).format(
+            Temporal.PlainTime.from(value),
+          ),
+        ),
       );
     },
   );
@@ -195,7 +225,11 @@ describe("formatTime", () => {
     "formats valid time $value for is-IS with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatTime(value, MustTestLocales.isIS, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.isIS, options).format(
+            Temporal.PlainTime.from(value),
+          ),
+        ),
       );
     },
   );
@@ -217,7 +251,11 @@ describe("formatTime", () => {
     "formats valid time $value for zh-CN with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatTime(value, MustTestLocales.zhCN, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.zhCN, options).format(
+            Temporal.PlainTime.from(value),
+          ),
+        ),
       );
     },
   );
@@ -239,7 +277,11 @@ describe("formatTime", () => {
     "formats valid time $value for zh-TW with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatTime(value, MustTestLocales.zhTW, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.zhTW, options).format(
+            Temporal.PlainTime.from(value),
+          ),
+        ),
       );
     },
   );
@@ -261,7 +303,11 @@ describe("formatTime", () => {
     "formats valid time $value for ja-JP with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatTime(value, MustTestLocales.jaJP, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.jaJP, options).format(
+            Temporal.PlainTime.from(value),
+          ),
+        ),
       );
     },
   );
@@ -269,21 +315,25 @@ describe("formatTime", () => {
   // ko-KR
   it.each`
     value         | options                                                                     | expected
-    ${"14:30:45"} | ${{ timeStyle: "full" }}                                                    | ${"PM 2:30:45"}
-    ${"14:30:45"} | ${{ timeStyle: "long" }}                                                    | ${"PM 2:30:45"}
-    ${"14:30:45"} | ${{ timeStyle: "medium" }}                                                  | ${"PM 2:30:45"}
-    ${"14:30:45"} | ${{ timeStyle: "short" }}                                                   | ${"PM 2:30"}
-    ${"14:30:45"} | ${{ hour: "numeric", minute: "numeric", second: "numeric" }}                | ${"PM 2:30:45"}
-    ${"14:30:45"} | ${{ hour: "numeric", minute: "numeric" }}                                   | ${"PM 2:30"}
-    ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit", second: "2-digit" }}                | ${"PM 02:30:45"}
-    ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit" }}                                   | ${"PM 02:30"}
-    ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true }}  | ${"PM 02:30:45"}
+    ${"14:30:45"} | ${{ timeStyle: "full" }}                                                    | ${"오후 2:30:45"}
+    ${"14:30:45"} | ${{ timeStyle: "long" }}                                                    | ${"오후 2:30:45"}
+    ${"14:30:45"} | ${{ timeStyle: "medium" }}                                                  | ${"오후 2:30:45"}
+    ${"14:30:45"} | ${{ timeStyle: "short" }}                                                   | ${"오후 2:30"}
+    ${"14:30:45"} | ${{ hour: "numeric", minute: "numeric", second: "numeric" }}                | ${"오후 2:30:45"}
+    ${"14:30:45"} | ${{ hour: "numeric", minute: "numeric" }}                                   | ${"오후 2:30"}
+    ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit", second: "2-digit" }}                | ${"오후 02:30:45"}
+    ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit" }}                                   | ${"오후 02:30"}
+    ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true }}  | ${"오후 02:30:45"}
     ${"14:30:45"} | ${{ hour: "numeric", minute: "numeric", second: "numeric", hour12: false }} | ${"14시 30분 45초"}
   `(
     "formats valid time $value for ko-KR with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatTime(value, MustTestLocales.koKR, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.koKR, options).format(
+            Temporal.PlainTime.from(value),
+          ),
+        ),
       );
     },
   );
@@ -305,7 +355,11 @@ describe("formatTime", () => {
     "formats valid time $value for ar-SA with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatTime(value, MustTestLocales.arSA, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.arSA, options).format(
+            Temporal.PlainTime.from(value),
+          ),
+        ),
       );
     },
   );
@@ -327,7 +381,11 @@ describe("formatTime", () => {
     "formats valid time $value for he-IL with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatTime(value, MustTestLocales.heIL, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.heIL, options).format(
+            Temporal.PlainTime.from(value),
+          ),
+        ),
       );
     },
   );
@@ -349,7 +407,11 @@ describe("formatTime", () => {
     "formats valid time $value for ru-RU with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatTime(value, MustTestLocales.ruRU, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.ruRU, options).format(
+            Temporal.PlainTime.from(value),
+          ),
+        ),
       );
     },
   );
@@ -371,7 +433,11 @@ describe("formatTime", () => {
     "formats valid time $value for tr-TR with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatTime(value, MustTestLocales.trTR, options)).toEqual(
-        expected,
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(MustTestLocales.trTR, options).format(
+            Temporal.PlainTime.from(value),
+          ),
+        ),
       );
     },
   );
@@ -398,4 +464,10 @@ describe("formatTime", () => {
       expect(formatTime(invalidValue as never)).toBe("");
     },
   );
+
+  it("returns empty string on failure", () => {
+    mockTemporalPlainTimeFromThrow();
+    const result = formatTime("00:00:00");
+    expect(result).toBe("");
+  });
 });

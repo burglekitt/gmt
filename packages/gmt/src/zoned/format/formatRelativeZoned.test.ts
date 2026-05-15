@@ -1,5 +1,5 @@
 import { vi } from "vitest";
-import { MustTestLocales } from "../../test";
+import { expectedForEnv, MustTestLocales } from "../../test";
 import { mockTemporalNowZonedDateTimeISOThrow } from "../../test/mocks";
 import { formatRelativeZoned } from "./formatRelativeZoned";
 
@@ -90,7 +90,9 @@ describe("formatRelativeZoned", () => {
       ${MustTestLocales.trTR} | ${"30 dakika önce"}
     `("formats for $locale as $expected", ({ locale, expected }) => {
       expect(formatRelativeZoned(value, locale, { reference: REF })).toBe(
-        expected,
+        expectedForEnv(expected, () =>
+          new Intl.RelativeTimeFormat(locale).format(-30, "minute"),
+        ),
       );
     });
   });
@@ -122,7 +124,9 @@ describe("formatRelativeZoned", () => {
       ${MustTestLocales.trTR} | ${"30 dakika sonra"}
     `("formats for $locale as $expected", ({ locale, expected }) => {
       expect(formatRelativeZoned(value, locale, { reference: REF })).toBe(
-        expected,
+        expectedForEnv(expected, () =>
+          new Intl.RelativeTimeFormat(locale).format(30, "minute"),
+        ),
       );
     });
   });

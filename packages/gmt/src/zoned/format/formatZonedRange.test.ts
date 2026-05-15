@@ -1,5 +1,10 @@
+import { Intl as TIntl, Temporal } from "@js-temporal/polyfill";
 import { normalizeDateTime } from "../../internal";
-import { localeZonedRangeInputByLocale, MustTestLocales } from "../../test";
+import {
+  expectedForEnv,
+  localeZonedRangeInputByLocale,
+  MustTestLocales,
+} from "../../test";
 import { formatZonedRange } from "./formatZonedRange";
 
 describe("formatZonedRange", () => {
@@ -72,7 +77,15 @@ describe("formatZonedRange", () => {
     "formats valid zoned datetime range for en-GB",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.enGB, options)).toBe(
-        normalizeDateTime(expected),
+        expectedForEnv(normalizeDateTime(expected), () =>
+          new TIntl.DateTimeFormat(MustTestLocales.enGB, {
+            ...options,
+            timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
+          }).formatRange(
+            Temporal.ZonedDateTime.from(from),
+            Temporal.ZonedDateTime.from(to),
+          ),
+        ),
       );
     },
   );
@@ -87,7 +100,15 @@ describe("formatZonedRange", () => {
     "formats valid zoned datetime range for de-DE",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.deDE, options)).toBe(
-        normalizeDateTime(expected),
+        expectedForEnv(normalizeDateTime(expected), () =>
+          new TIntl.DateTimeFormat(MustTestLocales.deDE, {
+            ...options,
+            timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
+          }).formatRange(
+            Temporal.ZonedDateTime.from(from),
+            Temporal.ZonedDateTime.from(to),
+          ),
+        ),
       );
     },
   );
@@ -102,7 +123,15 @@ describe("formatZonedRange", () => {
     "formats valid zoned datetime range for fr-FR",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.frFR, options)).toBe(
-        normalizeDateTime(expected),
+        expectedForEnv(normalizeDateTime(expected), () =>
+          new TIntl.DateTimeFormat(MustTestLocales.frFR, {
+            ...options,
+            timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
+          }).formatRange(
+            Temporal.ZonedDateTime.from(from),
+            Temporal.ZonedDateTime.from(to),
+          ),
+        ),
       );
     },
   );
@@ -117,7 +146,15 @@ describe("formatZonedRange", () => {
     "formats valid zoned datetime range for es-ES",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.esES, options)).toBe(
-        normalizeDateTime(expected),
+        expectedForEnv(normalizeDateTime(expected), () =>
+          new TIntl.DateTimeFormat(MustTestLocales.esES, {
+            ...options,
+            timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
+          }).formatRange(
+            Temporal.ZonedDateTime.from(from),
+            Temporal.ZonedDateTime.from(to),
+          ),
+        ),
       );
     },
   );
@@ -132,7 +169,15 @@ describe("formatZonedRange", () => {
     "formats valid zoned datetime range for it-IT",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.itIT, options)).toBe(
-        normalizeDateTime(expected),
+        expectedForEnv(normalizeDateTime(expected), () =>
+          new TIntl.DateTimeFormat(MustTestLocales.itIT, {
+            ...options,
+            timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
+          }).formatRange(
+            Temporal.ZonedDateTime.from(from),
+            Temporal.ZonedDateTime.from(to),
+          ),
+        ),
       );
     },
   );
@@ -147,7 +192,15 @@ describe("formatZonedRange", () => {
     "formats valid zoned datetime range for pt-PT",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.ptPT, options)).toBe(
-        normalizeDateTime(expected),
+        expectedForEnv(normalizeDateTime(expected), () =>
+          new TIntl.DateTimeFormat(MustTestLocales.ptPT, {
+            ...options,
+            timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
+          }).formatRange(
+            Temporal.ZonedDateTime.from(from),
+            Temporal.ZonedDateTime.from(to),
+          ),
+        ),
       );
     },
   );
@@ -162,7 +215,15 @@ describe("formatZonedRange", () => {
     "formats valid zoned datetime range for sv-SE",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.svSE, options)).toBe(
-        normalizeDateTime(expected),
+        expectedForEnv(normalizeDateTime(expected), () =>
+          new TIntl.DateTimeFormat(MustTestLocales.svSE, {
+            ...options,
+            timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
+          }).formatRange(
+            Temporal.ZonedDateTime.from(from),
+            Temporal.ZonedDateTime.from(to),
+          ),
+        ),
       );
     },
   );
@@ -170,14 +231,22 @@ describe("formatZonedRange", () => {
   // is-IS
   it.each`
     from                                         | to                                         | options                                                                | expected
-    ${rangeByLocale[MustTestLocales.isIS].start} | ${rangeByLocale[MustTestLocales.isIS].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"3. febrúar 2024, 14:30:45 GMT+0 – 16:46:15 GMT+0"}
+    ${rangeByLocale[MustTestLocales.isIS].start} | ${rangeByLocale[MustTestLocales.isIS].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"3. febrúar 2024, 14:30:45 GMT – 16:46:15 GMT"}
     ${rangeByLocale[MustTestLocales.isIS].start} | ${rangeByLocale[MustTestLocales.isIS].end} | ${{ dateStyle: "short", timeStyle: "short" }}                          | ${"3.2.2024, 14:30–16:46"}
     ${rangeByLocale[MustTestLocales.isIS].start} | ${rangeByLocale[MustTestLocales.isIS].end} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "shortOffset" }} | ${"14:30–16:46"}
   `(
     "formats valid zoned datetime range for is-IS",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.isIS, options)).toBe(
-        normalizeDateTime(expected),
+        expectedForEnv(normalizeDateTime(expected), () =>
+          new TIntl.DateTimeFormat(MustTestLocales.isIS, {
+            ...options,
+            timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
+          }).formatRange(
+            Temporal.ZonedDateTime.from(from),
+            Temporal.ZonedDateTime.from(to),
+          ),
+        ),
       );
     },
   );
@@ -192,7 +261,15 @@ describe("formatZonedRange", () => {
     "formats valid zoned datetime range for zh-CN",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.zhCN, options)).toBe(
-        normalizeDateTime(expected),
+        expectedForEnv(normalizeDateTime(expected), () =>
+          new TIntl.DateTimeFormat(MustTestLocales.zhCN, {
+            ...options,
+            timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
+          }).formatRange(
+            Temporal.ZonedDateTime.from(from),
+            Temporal.ZonedDateTime.from(to),
+          ),
+        ),
       );
     },
   );
@@ -207,7 +284,15 @@ describe("formatZonedRange", () => {
     "formats valid zoned datetime range for zh-TW",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.zhTW, options)).toBe(
-        normalizeDateTime(expected),
+        expectedForEnv(normalizeDateTime(expected), () =>
+          new TIntl.DateTimeFormat(MustTestLocales.zhTW, {
+            ...options,
+            timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
+          }).formatRange(
+            Temporal.ZonedDateTime.from(from),
+            Temporal.ZonedDateTime.from(to),
+          ),
+        ),
       );
     },
   );
@@ -222,7 +307,15 @@ describe("formatZonedRange", () => {
     "formats valid zoned datetime range for ja-JP",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.jaJP, options)).toBe(
-        normalizeDateTime(expected),
+        expectedForEnv(normalizeDateTime(expected), () =>
+          new TIntl.DateTimeFormat(MustTestLocales.jaJP, {
+            ...options,
+            timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
+          }).formatRange(
+            Temporal.ZonedDateTime.from(from),
+            Temporal.ZonedDateTime.from(to),
+          ),
+        ),
       );
     },
   );
@@ -230,14 +323,22 @@ describe("formatZonedRange", () => {
   // ko-KR
   it.each`
     from                                         | to                                         | options                                                                | expected
-    ${rangeByLocale[MustTestLocales.koKR].start} | ${rangeByLocale[MustTestLocales.koKR].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"2024년 2월 3일 PM 2시 30분 45초 GMT+9 ~ PM 4시 46분 15초 GMT+9"}
-    ${rangeByLocale[MustTestLocales.koKR].start} | ${rangeByLocale[MustTestLocales.koKR].end} | ${{ dateStyle: "short", timeStyle: "short" }}                          | ${"24. 2. 3. PM 2:30~4:46"}
-    ${rangeByLocale[MustTestLocales.koKR].start} | ${rangeByLocale[MustTestLocales.koKR].end} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "shortOffset" }} | ${"PM 2:30~4:46"}
+    ${rangeByLocale[MustTestLocales.koKR].start} | ${rangeByLocale[MustTestLocales.koKR].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"2024년 2월 3일 오후 2시 30분 45초 GMT+9 ~ 오후 4시 46분 15초 GMT+9"}
+    ${rangeByLocale[MustTestLocales.koKR].start} | ${rangeByLocale[MustTestLocales.koKR].end} | ${{ dateStyle: "short", timeStyle: "short" }}                          | ${"24. 2. 3. 오후 2:30~4:46"}
+    ${rangeByLocale[MustTestLocales.koKR].start} | ${rangeByLocale[MustTestLocales.koKR].end} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "shortOffset" }} | ${"오후 2:30~4:46"}
   `(
     "formats valid zoned datetime range for ko-KR",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.koKR, options)).toBe(
-        normalizeDateTime(expected),
+        expectedForEnv(normalizeDateTime(expected), () =>
+          new TIntl.DateTimeFormat(MustTestLocales.koKR, {
+            ...options,
+            timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
+          }).formatRange(
+            Temporal.ZonedDateTime.from(from),
+            Temporal.ZonedDateTime.from(to),
+          ),
+        ),
       );
     },
   );
@@ -252,7 +353,15 @@ describe("formatZonedRange", () => {
     "formats valid zoned datetime range for ar-SA",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.arSA, options)).toBe(
-        normalizeDateTime(expected),
+        expectedForEnv(normalizeDateTime(expected), () =>
+          new TIntl.DateTimeFormat(MustTestLocales.arSA, {
+            ...options,
+            timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
+          }).formatRange(
+            Temporal.ZonedDateTime.from(from),
+            Temporal.ZonedDateTime.from(to),
+          ),
+        ),
       );
     },
   );
@@ -267,7 +376,15 @@ describe("formatZonedRange", () => {
     "formats valid zoned datetime range for he-IL",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.heIL, options)).toBe(
-        normalizeDateTime(expected),
+        expectedForEnv(normalizeDateTime(expected), () =>
+          new TIntl.DateTimeFormat(MustTestLocales.heIL, {
+            ...options,
+            timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
+          }).formatRange(
+            Temporal.ZonedDateTime.from(from),
+            Temporal.ZonedDateTime.from(to),
+          ),
+        ),
       );
     },
   );
@@ -282,7 +399,15 @@ describe("formatZonedRange", () => {
     "formats valid zoned datetime range for ru-RU",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.ruRU, options)).toBe(
-        normalizeDateTime(expected),
+        expectedForEnv(normalizeDateTime(expected), () =>
+          new TIntl.DateTimeFormat(MustTestLocales.ruRU, {
+            ...options,
+            timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
+          }).formatRange(
+            Temporal.ZonedDateTime.from(from),
+            Temporal.ZonedDateTime.from(to),
+          ),
+        ),
       );
     },
   );
@@ -297,7 +422,15 @@ describe("formatZonedRange", () => {
     "formats valid zoned datetime range for tr-TR",
     ({ from, to, options, expected }) => {
       expect(formatZonedRange(from, to, MustTestLocales.trTR, options)).toBe(
-        normalizeDateTime(expected),
+        expectedForEnv(normalizeDateTime(expected), () =>
+          new TIntl.DateTimeFormat(MustTestLocales.trTR, {
+            ...options,
+            timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
+          }).formatRange(
+            Temporal.ZonedDateTime.from(from),
+            Temporal.ZonedDateTime.from(to),
+          ),
+        ),
       );
     },
   );

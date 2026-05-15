@@ -1,4 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
+import { normalizeDateTime } from "../../internal";
 import { isValidTime } from "../validate";
 
 // PlainTime has no date component so only sub-day units are meaningful.
@@ -42,10 +43,12 @@ export function formatRelativeTime(
 
     const amount = Math.round(diff.total(unit));
 
-    return new Intl.RelativeTimeFormat(locale, {
-      numeric: options.numeric ?? "auto",
-      style: options.style ?? "long",
-    }).format(amount, unit);
+    return normalizeDateTime(
+      new Intl.RelativeTimeFormat(locale, {
+        numeric: options.numeric ?? "auto",
+        style: options.style ?? "long",
+      }).format(amount, unit),
+    );
   } catch {
     return "";
   }

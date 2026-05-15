@@ -1,0 +1,35 @@
+import { Intl as TemporalIntl, Temporal } from "@js-temporal/polyfill";
+
+// Detects whether the running Node has full ICU (all locales) or a stripped
+// ICU build. Locale-specific output from ICU-driven formatters
+// (Intl.DateTimeFormat, Intl.RelativeTimeFormat) varies significantly between
+// full and small/partial ICU runtimes; tests that assert exact locale strings
+// need to know which environment they're in.
+//
+// Probe strategy: assert all of the locale features our test goldens depend
+// on. A naive single-locale probe (e.g. just Spanish month names) is not
+// sufficient — some Node builds (notably vite-plus's Node 24) ship partial
+// ICU data: month names work for Spanish, but Korean day periods (오후/오전)
+// fall back to "PM"/"AM", and Portuguese day periods short-fall to "p.m."
+// instead of the full-ICU "da tarde". The probe checks all of:
+//   - Spanish month name ("enero")
+//   - Korean day period ("오후")
+//   - Portuguese long day period ("da tarde")
+// If any one falls back to a stripped form, treat the runtime as not-full.
+//
+// We feed Temporal.PlainDateTime into Intl rather than `new Date` because
+// this package is explicitly Date-free; @js-temporal/polyfill's `Intl`
+// extension accepts Temporal types directly.
+const PROBE_AFTERNOON = Temporal.PlainDateTime.from("2024-02-03T14:30:00");
+const PROBE_JANUARY = Temporal.PlainDate.from("1970-01-10");
+
+export const hasFullIcu =
+  new TemporalIntl.DateTimeFormat("es", { month: "long" }).format(
+    PROBE_JANUARY,
+  ) === "enero" &&
+  new TemporalIntl.DateTimeFormat("ko-KR", { hour: "numeric", hour12: true })
+    .format(PROBE_AFTERNOON)
+    .includes("오후") &&
+  new TemporalIntl.DateTimeFormat("pt-PT", { hour: "numeric", hour12: true })
+    .format(PROBE_AFTERNOON)
+    .includes("da tarde");

@@ -1,4 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
+import { normalizeDateTime } from "../../internal";
 import { isValidDate } from "../validate";
 
 // No "hour"/"minute"/"second" — PlainDate has no time component.
@@ -49,10 +50,12 @@ export function formatRelativeDate(
       amount = Math.round(diff.total({ unit, relativeTo: reference }));
     }
 
-    return new Intl.RelativeTimeFormat(locale, {
-      numeric: options.numeric ?? "auto",
-      style: options.style ?? "long",
-    }).format(amount, unit);
+    return normalizeDateTime(
+      new Intl.RelativeTimeFormat(locale, {
+        numeric: options.numeric ?? "auto",
+        style: options.style ?? "long",
+      }).format(amount, unit),
+    );
   } catch {
     return "";
   }

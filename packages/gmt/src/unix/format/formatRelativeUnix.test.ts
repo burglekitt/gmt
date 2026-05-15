@@ -1,6 +1,6 @@
 import { vi } from "vitest";
 import * as getSystemTimeZoneModule from "../../plain/get/getSystemTimeZone";
-import { MustTestLocales } from "../../test";
+import { expectedForEnv, MustTestLocales } from "../../test";
 import { mockTemporalNowInstantThrow } from "../../test/mocks";
 import { formatRelativeUnix } from "./formatRelativeUnix";
 
@@ -167,7 +167,9 @@ describe("formatRelativeUnix", () => {
       ${MustTestLocales.trTR} | ${"30 dakika önce"}
     `("formats for $locale as $expected", ({ locale, expected }) => {
       expect(formatRelativeUnix(value, locale, { reference: REF_MS })).toBe(
-        expected,
+        expectedForEnv(expected, () =>
+          new Intl.RelativeTimeFormat(locale).format(-30, "minute"),
+        ),
       );
     });
   });
@@ -199,7 +201,9 @@ describe("formatRelativeUnix", () => {
       ${MustTestLocales.trTR} | ${"30 dakika sonra"}
     `("formats for $locale as $expected", ({ locale, expected }) => {
       expect(formatRelativeUnix(value, locale, { reference: REF_MS })).toBe(
-        expected,
+        expectedForEnv(expected, () =>
+          new Intl.RelativeTimeFormat(locale).format(30, "minute"),
+        ),
       );
     });
   });

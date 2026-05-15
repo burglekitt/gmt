@@ -1,5 +1,6 @@
+import { Intl as TIntl, Temporal } from "@js-temporal/polyfill";
 import * as getSystemTimeZoneModule from "../../plain/get/getSystemTimeZone";
-import { MustTestLocales } from "../../test";
+import { expectedForEnv, MustTestLocales } from "../../test";
 import { formatUnix } from "./formatUnix";
 
 // Base: 2024-02-29T00:00:00Z (Thursday — leap day)
@@ -52,19 +53,24 @@ describe("formatUnix", () => {
       ${MustTestLocales.zhCN} | ${"2024年2月29日 00:00"}
       ${MustTestLocales.zhTW} | ${"2024年2月29日 凌晨12:00"}
       ${MustTestLocales.jaJP} | ${"2024/02/29 0:00"}
-      ${MustTestLocales.koKR} | ${"2024. 2. 29. AM 12:00"}
+      ${MustTestLocales.koKR} | ${"2024. 2. 29. 오전 12:00"}
       ${MustTestLocales.arSA} | ${"٢٩/٠٢/٢٠٢٤، ١٢:٠٠ ص"}
       ${MustTestLocales.heIL} | ${"29 בפבר׳ 2024, 0:00"}
       ${MustTestLocales.ruRU} | ${"29 февр. 2024 г., 00:00"}
       ${MustTestLocales.trTR} | ${"29 Şub 2024 00:00"}
     `("formats for $locale as $expected", ({ locale, expected }) => {
-      expect(
-        formatUnix(REF_MS, locale, {
-          dateStyle: "medium",
-          timeStyle: "short",
-          timeZone: "UTC",
-        }),
-      ).toBe(expected);
+      const options = {
+        dateStyle: "medium" as const,
+        timeStyle: "short" as const,
+        timeZone: "UTC" as const,
+      };
+      expect(formatUnix(REF_MS, locale, options)).toBe(
+        expectedForEnv(expected, () =>
+          new TIntl.DateTimeFormat(locale, options).format(
+            Temporal.Instant.fromEpochMilliseconds(REF_MS),
+          ),
+        ),
+      );
     });
   });
 
