@@ -1,4 +1,4 @@
-import { Intl as TIntl, Temporal } from "@js-temporal/polyfill";
+import { Temporal } from "@js-temporal/polyfill";
 import { normalizeDateTime } from "../../internal";
 import {
   expectedForEnv,
@@ -53,8 +53,9 @@ describe("formatZonedDateTime", () => {
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.enGB, options)).toBe(
         expectedForEnv(normalizeDateTime(expected), () =>
-          new TIntl.DateTimeFormat(MustTestLocales.enGB, options).format(
-            Temporal.ZonedDateTime.from(value),
+          Temporal.ZonedDateTime.from(value).toLocaleString(
+            MustTestLocales.enGB,
+            options,
           ),
         ),
       );
@@ -79,8 +80,9 @@ describe("formatZonedDateTime", () => {
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.deDE, options)).toBe(
         expectedForEnv(normalizeDateTime(expected), () =>
-          new TIntl.DateTimeFormat(MustTestLocales.deDE, options).format(
-            Temporal.ZonedDateTime.from(value),
+          Temporal.ZonedDateTime.from(value).toLocaleString(
+            MustTestLocales.deDE,
+            options,
           ),
         ),
       );
@@ -105,8 +107,9 @@ describe("formatZonedDateTime", () => {
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.frFR, options)).toBe(
         expectedForEnv(normalizeDateTime(expected), () =>
-          new TIntl.DateTimeFormat(MustTestLocales.frFR, options).format(
-            Temporal.ZonedDateTime.from(value),
+          Temporal.ZonedDateTime.from(value).toLocaleString(
+            MustTestLocales.frFR,
+            options,
           ),
         ),
       );
@@ -131,8 +134,9 @@ describe("formatZonedDateTime", () => {
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.esES, options)).toBe(
         expectedForEnv(normalizeDateTime(expected), () =>
-          new TIntl.DateTimeFormat(MustTestLocales.esES, options).format(
-            Temporal.ZonedDateTime.from(value),
+          Temporal.ZonedDateTime.from(value).toLocaleString(
+            MustTestLocales.esES,
+            options,
           ),
         ),
       );
@@ -157,8 +161,9 @@ describe("formatZonedDateTime", () => {
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.itIT, options)).toBe(
         expectedForEnv(normalizeDateTime(expected), () =>
-          new TIntl.DateTimeFormat(MustTestLocales.itIT, options).format(
-            Temporal.ZonedDateTime.from(value),
+          Temporal.ZonedDateTime.from(value).toLocaleString(
+            MustTestLocales.itIT,
+            options,
           ),
         ),
       );
@@ -183,8 +188,9 @@ describe("formatZonedDateTime", () => {
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.ptPT, options)).toBe(
         expectedForEnv(normalizeDateTime(expected), () =>
-          new TIntl.DateTimeFormat(MustTestLocales.ptPT, options).format(
-            Temporal.ZonedDateTime.from(value),
+          Temporal.ZonedDateTime.from(value).toLocaleString(
+            MustTestLocales.ptPT,
+            options,
           ),
         ),
       );
@@ -209,8 +215,9 @@ describe("formatZonedDateTime", () => {
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.svSE, options)).toBe(
         expectedForEnv(normalizeDateTime(expected), () =>
-          new TIntl.DateTimeFormat(MustTestLocales.svSE, options).format(
-            Temporal.ZonedDateTime.from(value),
+          Temporal.ZonedDateTime.from(value).toLocaleString(
+            MustTestLocales.svSE,
+            options,
           ),
         ),
       );
@@ -235,8 +242,9 @@ describe("formatZonedDateTime", () => {
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.isIS, options)).toBe(
         expectedForEnv(normalizeDateTime(expected), () =>
-          new TIntl.DateTimeFormat(MustTestLocales.isIS, options).format(
-            Temporal.ZonedDateTime.from(value),
+          Temporal.ZonedDateTime.from(value).toLocaleString(
+            MustTestLocales.isIS,
+            options,
           ),
         ),
       );
@@ -261,8 +269,9 @@ describe("formatZonedDateTime", () => {
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.zhCN, options)).toBe(
         expectedForEnv(normalizeDateTime(expected), () =>
-          new TIntl.DateTimeFormat(MustTestLocales.zhCN, options).format(
-            Temporal.ZonedDateTime.from(value),
+          Temporal.ZonedDateTime.from(value).toLocaleString(
+            MustTestLocales.zhCN,
+            options,
           ),
         ),
       );
@@ -287,8 +296,9 @@ describe("formatZonedDateTime", () => {
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.zhTW, options)).toBe(
         expectedForEnv(normalizeDateTime(expected), () =>
-          new TIntl.DateTimeFormat(MustTestLocales.zhTW, options).format(
-            Temporal.ZonedDateTime.from(value),
+          Temporal.ZonedDateTime.from(value).toLocaleString(
+            MustTestLocales.zhTW,
+            options,
           ),
         ),
       );
@@ -313,8 +323,9 @@ describe("formatZonedDateTime", () => {
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.jaJP, options)).toBe(
         expectedForEnv(normalizeDateTime(expected), () =>
-          new TIntl.DateTimeFormat(MustTestLocales.jaJP, options).format(
-            Temporal.ZonedDateTime.from(value),
+          Temporal.ZonedDateTime.from(value).toLocaleString(
+            MustTestLocales.jaJP,
+            options,
           ),
         ),
       );
@@ -339,8 +350,9 @@ describe("formatZonedDateTime", () => {
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.koKR, options)).toBe(
         expectedForEnv(normalizeDateTime(expected), () =>
-          new TIntl.DateTimeFormat(MustTestLocales.koKR, options).format(
-            Temporal.ZonedDateTime.from(value),
+          Temporal.ZonedDateTime.from(value).toLocaleString(
+            MustTestLocales.koKR,
+            options,
           ),
         ),
       );
@@ -365,8 +377,9 @@ describe("formatZonedDateTime", () => {
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.arSA, options)).toBe(
         expectedForEnv(normalizeDateTime(expected), () =>
-          new TIntl.DateTimeFormat(MustTestLocales.arSA, options).format(
-            Temporal.ZonedDateTime.from(value),
+          Temporal.ZonedDateTime.from(value).toLocaleString(
+            MustTestLocales.arSA,
+            options,
           ),
         ),
       );
@@ -391,8 +404,9 @@ describe("formatZonedDateTime", () => {
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.heIL, options)).toBe(
         expectedForEnv(normalizeDateTime(expected), () =>
-          new TIntl.DateTimeFormat(MustTestLocales.heIL, options).format(
-            Temporal.ZonedDateTime.from(value),
+          Temporal.ZonedDateTime.from(value).toLocaleString(
+            MustTestLocales.heIL,
+            options,
           ),
         ),
       );
@@ -417,8 +431,9 @@ describe("formatZonedDateTime", () => {
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.ruRU, options)).toBe(
         expectedForEnv(normalizeDateTime(expected), () =>
-          new TIntl.DateTimeFormat(MustTestLocales.ruRU, options).format(
-            Temporal.ZonedDateTime.from(value),
+          Temporal.ZonedDateTime.from(value).toLocaleString(
+            MustTestLocales.ruRU,
+            options,
           ),
         ),
       );
@@ -443,8 +458,9 @@ describe("formatZonedDateTime", () => {
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.trTR, options)).toBe(
         expectedForEnv(normalizeDateTime(expected), () =>
-          new TIntl.DateTimeFormat(MustTestLocales.trTR, options).format(
-            Temporal.ZonedDateTime.from(value),
+          Temporal.ZonedDateTime.from(value).toLocaleString(
+            MustTestLocales.trTR,
+            options,
           ),
         ),
       );

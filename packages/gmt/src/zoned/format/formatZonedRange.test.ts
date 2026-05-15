@@ -1,4 +1,4 @@
-import { Intl as TIntl, Temporal } from "@js-temporal/polyfill";
+import { Temporal, Intl as TIntl } from "@js-temporal/polyfill";
 import { normalizeDateTime } from "../../internal";
 import {
   expectedForEnv,
@@ -82,8 +82,8 @@ describe("formatZonedRange", () => {
             ...options,
             timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
           }).formatRange(
-            Temporal.ZonedDateTime.from(from),
-            Temporal.ZonedDateTime.from(to),
+            Temporal.ZonedDateTime.from(from).toInstant(),
+            Temporal.ZonedDateTime.from(to).toInstant(),
           ),
         ),
       );
@@ -105,8 +105,8 @@ describe("formatZonedRange", () => {
             ...options,
             timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
           }).formatRange(
-            Temporal.ZonedDateTime.from(from),
-            Temporal.ZonedDateTime.from(to),
+            Temporal.ZonedDateTime.from(from).toInstant(),
+            Temporal.ZonedDateTime.from(to).toInstant(),
           ),
         ),
       );
@@ -128,8 +128,8 @@ describe("formatZonedRange", () => {
             ...options,
             timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
           }).formatRange(
-            Temporal.ZonedDateTime.from(from),
-            Temporal.ZonedDateTime.from(to),
+            Temporal.ZonedDateTime.from(from).toInstant(),
+            Temporal.ZonedDateTime.from(to).toInstant(),
           ),
         ),
       );
@@ -151,8 +151,8 @@ describe("formatZonedRange", () => {
             ...options,
             timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
           }).formatRange(
-            Temporal.ZonedDateTime.from(from),
-            Temporal.ZonedDateTime.from(to),
+            Temporal.ZonedDateTime.from(from).toInstant(),
+            Temporal.ZonedDateTime.from(to).toInstant(),
           ),
         ),
       );
@@ -174,8 +174,8 @@ describe("formatZonedRange", () => {
             ...options,
             timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
           }).formatRange(
-            Temporal.ZonedDateTime.from(from),
-            Temporal.ZonedDateTime.from(to),
+            Temporal.ZonedDateTime.from(from).toInstant(),
+            Temporal.ZonedDateTime.from(to).toInstant(),
           ),
         ),
       );
@@ -197,8 +197,8 @@ describe("formatZonedRange", () => {
             ...options,
             timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
           }).formatRange(
-            Temporal.ZonedDateTime.from(from),
-            Temporal.ZonedDateTime.from(to),
+            Temporal.ZonedDateTime.from(from).toInstant(),
+            Temporal.ZonedDateTime.from(to).toInstant(),
           ),
         ),
       );
@@ -220,8 +220,8 @@ describe("formatZonedRange", () => {
             ...options,
             timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
           }).formatRange(
-            Temporal.ZonedDateTime.from(from),
-            Temporal.ZonedDateTime.from(to),
+            Temporal.ZonedDateTime.from(from).toInstant(),
+            Temporal.ZonedDateTime.from(to).toInstant(),
           ),
         ),
       );
@@ -243,8 +243,8 @@ describe("formatZonedRange", () => {
             ...options,
             timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
           }).formatRange(
-            Temporal.ZonedDateTime.from(from),
-            Temporal.ZonedDateTime.from(to),
+            Temporal.ZonedDateTime.from(from).toInstant(),
+            Temporal.ZonedDateTime.from(to).toInstant(),
           ),
         ),
       );
@@ -266,8 +266,8 @@ describe("formatZonedRange", () => {
             ...options,
             timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
           }).formatRange(
-            Temporal.ZonedDateTime.from(from),
-            Temporal.ZonedDateTime.from(to),
+            Temporal.ZonedDateTime.from(from).toInstant(),
+            Temporal.ZonedDateTime.from(to).toInstant(),
           ),
         ),
       );
@@ -289,8 +289,8 @@ describe("formatZonedRange", () => {
             ...options,
             timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
           }).formatRange(
-            Temporal.ZonedDateTime.from(from),
-            Temporal.ZonedDateTime.from(to),
+            Temporal.ZonedDateTime.from(from).toInstant(),
+            Temporal.ZonedDateTime.from(to).toInstant(),
           ),
         ),
       );
@@ -312,8 +312,8 @@ describe("formatZonedRange", () => {
             ...options,
             timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
           }).formatRange(
-            Temporal.ZonedDateTime.from(from),
-            Temporal.ZonedDateTime.from(to),
+            Temporal.ZonedDateTime.from(from).toInstant(),
+            Temporal.ZonedDateTime.from(to).toInstant(),
           ),
         ),
       );
@@ -335,8 +335,8 @@ describe("formatZonedRange", () => {
             ...options,
             timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
           }).formatRange(
-            Temporal.ZonedDateTime.from(from),
-            Temporal.ZonedDateTime.from(to),
+            Temporal.ZonedDateTime.from(from).toInstant(),
+            Temporal.ZonedDateTime.from(to).toInstant(),
           ),
         ),
       );
@@ -358,8 +358,8 @@ describe("formatZonedRange", () => {
             ...options,
             timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
           }).formatRange(
-            Temporal.ZonedDateTime.from(from),
-            Temporal.ZonedDateTime.from(to),
+            Temporal.ZonedDateTime.from(from).toInstant(),
+            Temporal.ZonedDateTime.from(to).toInstant(),
           ),
         ),
       );
@@ -381,8 +381,8 @@ describe("formatZonedRange", () => {
             ...options,
             timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
           }).formatRange(
-            Temporal.ZonedDateTime.from(from),
-            Temporal.ZonedDateTime.from(to),
+            Temporal.ZonedDateTime.from(from).toInstant(),
+            Temporal.ZonedDateTime.from(to).toInstant(),
           ),
         ),
       );
@@ -404,8 +404,8 @@ describe("formatZonedRange", () => {
             ...options,
             timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
           }).formatRange(
-            Temporal.ZonedDateTime.from(from),
-            Temporal.ZonedDateTime.from(to),
+            Temporal.ZonedDateTime.from(from).toInstant(),
+            Temporal.ZonedDateTime.from(to).toInstant(),
           ),
         ),
       );
@@ -427,8 +427,8 @@ describe("formatZonedRange", () => {
             ...options,
             timeZone: Temporal.ZonedDateTime.from(from).timeZoneId,
           }).formatRange(
-            Temporal.ZonedDateTime.from(from),
-            Temporal.ZonedDateTime.from(to),
+            Temporal.ZonedDateTime.from(from).toInstant(),
+            Temporal.ZonedDateTime.from(to).toInstant(),
           ),
         ),
       );

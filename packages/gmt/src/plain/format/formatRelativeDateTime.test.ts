@@ -1,5 +1,5 @@
 import { vi } from "vitest";
-import { matchExpectedForEnv, MustTestLocales } from "../../test";
+import { MustTestLocales, matchExpectedForEnv } from "../../test";
 import { mockTemporalNowPlainDateTimeISOThrow } from "../../test/mocks";
 import { formatRelativeDateTime } from "./formatRelativeDateTime";
 

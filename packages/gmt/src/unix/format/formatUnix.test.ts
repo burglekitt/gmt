@@ -1,4 +1,4 @@
-import { Intl as TIntl, Temporal } from "@js-temporal/polyfill";
+import { Temporal, Intl as TIntl } from "@js-temporal/polyfill";
 import * as getSystemTimeZoneModule from "../../plain/get/getSystemTimeZone";
 import { expectedForEnv, MustTestLocales } from "../../test";
 import { formatUnix } from "./formatUnix";

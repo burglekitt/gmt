@@ -1,4 +1,4 @@
-import { Intl as TIntl, Temporal } from "@js-temporal/polyfill";
+import { Temporal, Intl as TIntl } from "@js-temporal/polyfill";
 import { expectedForEnv, MustTestLocales } from "../../test";
 import { mockTemporalPlainDateFromThrow } from "../../test/mocks";
 import { formatDate } from "./formatDate";

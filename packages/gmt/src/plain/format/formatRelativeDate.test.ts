@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { vi } from "vitest";
-import { matchExpectedForEnv, MustTestLocales } from "../../test";
+import { MustTestLocales, matchExpectedForEnv } from "../../test";
 import { formatRelativeDate } from "./formatRelativeDate";
 
 const REF = "2024-03-15";

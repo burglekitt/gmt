@@ -1,4 +1,4 @@
-import { Intl as TemporalIntl, Temporal } from "@js-temporal/polyfill";
+import { Temporal, Intl as TemporalIntl } from "@js-temporal/polyfill";
 
 // Detects whether the running Node has full ICU (all locales) or a stripped
 // ICU build. Locale-specific output from ICU-driven formatters
@@ -16,10 +16,6 @@ import { Intl as TemporalIntl, Temporal } from "@js-temporal/polyfill";
 //   - Korean day period ("오후")
 //   - Portuguese long day period ("da tarde")
 // If any one falls back to a stripped form, treat the runtime as not-full.
-//
-// We feed Temporal.PlainDateTime into Intl rather than `new Date` because
-// this package is explicitly Date-free; @js-temporal/polyfill's `Intl`
-// extension accepts Temporal types directly.
 const PROBE_AFTERNOON = Temporal.PlainDateTime.from("2024-02-03T14:30:00");
 const PROBE_JANUARY = Temporal.PlainDate.from("1970-01-10");
 

@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { vi } from "vitest";
-import { matchExpectedForEnv, MustTestLocales } from "../../test";
+import { MustTestLocales, matchExpectedForEnv } from "../../test";
 import { mockTemporalPlainTimeFromThrow } from "../../test/mocks";
 import { formatRelativeTime } from "./formatRelativeTime";
 
