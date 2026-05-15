@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { vi } from "vitest";
-import { MustTestLocales, matchExpectedForEnv } from "../../test";
+import { hasFullIcu, MustTestLocales } from "../../test";
 import { formatRelativeDate } from "./formatRelativeDate";
 
 const REF = "2024-03-15";
@@ -102,8 +102,8 @@ describe("formatRelativeDate", () => {
   `(
     "formats $value for en-GB with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeDate(value, MustTestLocales.enGB, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeDate(value, MustTestLocales.enGB, options)).toBe(
+        expected,
       );
     },
   );
@@ -126,8 +126,8 @@ describe("formatRelativeDate", () => {
   `(
     "formats $value for de-DE with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeDate(value, MustTestLocales.deDE, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeDate(value, MustTestLocales.deDE, options)).toBe(
+        expected,
       );
     },
   );
@@ -150,8 +150,8 @@ describe("formatRelativeDate", () => {
   `(
     "formats $value for fr-FR with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeDate(value, MustTestLocales.frFR, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeDate(value, MustTestLocales.frFR, options)).toBe(
+        expected,
       );
     },
   );
@@ -174,8 +174,8 @@ describe("formatRelativeDate", () => {
   `(
     "formats $value for es-ES with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeDate(value, MustTestLocales.esES, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeDate(value, MustTestLocales.esES, options)).toBe(
+        expected,
       );
     },
   );
@@ -198,8 +198,8 @@ describe("formatRelativeDate", () => {
   `(
     "formats $value for it-IT with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeDate(value, MustTestLocales.itIT, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeDate(value, MustTestLocales.itIT, options)).toBe(
+        expected,
       );
     },
   );
@@ -222,8 +222,8 @@ describe("formatRelativeDate", () => {
   `(
     "formats $value for pt-PT with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeDate(value, MustTestLocales.ptPT, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeDate(value, MustTestLocales.ptPT, options)).toBe(
+        expected,
       );
     },
   );
@@ -240,14 +240,14 @@ describe("formatRelativeDate", () => {
     ${"2024-03-22"} | ${{ reference: REF }}                                                           | ${"nästa vecka"}
     ${"2024-01-15"} | ${{ reference: REF }}                                                           | ${"för 2 månader sedan"}
     ${"2024-05-15"} | ${{ reference: REF }}                                                           | ${"om 2 månader"}
-    ${"2023-03-15"} | ${{ reference: REF }}                                                           | ${"i fjol"}
+    ${"2023-03-15"} | ${{ reference: REF }}                                                           | ${hasFullIcu ? "i fjol" : "förra året"}
     ${"2025-03-15"} | ${{ reference: REF }}                                                           | ${"nästa år"}
     ${"2024-02-23"} | ${{ reference: REF, largestUnit: "week" as const, numeric: "always" as const }} | ${"för 3 veckor sedan"}
   `(
     "formats $value for sv-SE with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeDate(value, MustTestLocales.svSE, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeDate(value, MustTestLocales.svSE, options)).toBe(
+        expected,
       );
     },
   );
@@ -270,8 +270,8 @@ describe("formatRelativeDate", () => {
   `(
     "formats $value for is-IS with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeDate(value, MustTestLocales.isIS, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeDate(value, MustTestLocales.isIS, options)).toBe(
+        expected,
       );
     },
   );
@@ -294,8 +294,8 @@ describe("formatRelativeDate", () => {
   `(
     "formats $value for zh-CN with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeDate(value, MustTestLocales.zhCN, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeDate(value, MustTestLocales.zhCN, options)).toBe(
+        expected,
       );
     },
   );
@@ -318,8 +318,8 @@ describe("formatRelativeDate", () => {
   `(
     "formats $value for zh-TW with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeDate(value, MustTestLocales.zhTW, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeDate(value, MustTestLocales.zhTW, options)).toBe(
+        expected,
       );
     },
   );
@@ -342,8 +342,8 @@ describe("formatRelativeDate", () => {
   `(
     "formats $value for ja-JP with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeDate(value, MustTestLocales.jaJP, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeDate(value, MustTestLocales.jaJP, options)).toBe(
+        expected,
       );
     },
   );
@@ -366,8 +366,8 @@ describe("formatRelativeDate", () => {
   `(
     "formats $value for ko-KR with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeDate(value, MustTestLocales.koKR, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeDate(value, MustTestLocales.koKR, options)).toBe(
+        expected,
       );
     },
   );
@@ -390,8 +390,8 @@ describe("formatRelativeDate", () => {
   `(
     "formats $value for ar-SA with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeDate(value, MustTestLocales.arSA, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeDate(value, MustTestLocales.arSA, options)).toBe(
+        expected,
       );
     },
   );
@@ -406,16 +406,16 @@ describe("formatRelativeDate", () => {
     ${"2024-03-18"} | ${{ reference: REF, style: "narrow" as const }}                                 | ${"בעוד 3 ימים"}
     ${"2024-03-08"} | ${{ reference: REF }}                                                           | ${"השבוע שעבר"}
     ${"2024-03-22"} | ${{ reference: REF }}                                                           | ${"השבוע הבא"}
-    ${"2024-01-15"} | ${{ reference: REF }}                                                           | ${"לפני חודשיים"}
-    ${"2024-05-15"} | ${{ reference: REF }}                                                           | ${"בעוד חודשיים"}
+    ${"2024-01-15"} | ${{ reference: REF }}                                                           | ${hasFullIcu ? "לפני חודשיים" : "לפני חודשיים (2)"}
+    ${"2024-05-15"} | ${{ reference: REF }}                                                           | ${hasFullIcu ? "בעוד חודשיים" : "בעוד חודשיים (2)"}
     ${"2023-03-15"} | ${{ reference: REF }}                                                           | ${"השנה שעברה"}
     ${"2025-03-15"} | ${{ reference: REF }}                                                           | ${"השנה הבאה"}
     ${"2024-02-23"} | ${{ reference: REF, largestUnit: "week" as const, numeric: "always" as const }} | ${"לפני 3 שבועות"}
   `(
     "formats $value for he-IL with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeDate(value, MustTestLocales.heIL, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeDate(value, MustTestLocales.heIL, options)).toBe(
+        expected,
       );
     },
   );
@@ -438,8 +438,8 @@ describe("formatRelativeDate", () => {
   `(
     "formats $value for ru-RU with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeDate(value, MustTestLocales.ruRU, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeDate(value, MustTestLocales.ruRU, options)).toBe(
+        expected,
       );
     },
   );
@@ -462,8 +462,8 @@ describe("formatRelativeDate", () => {
   `(
     "formats $value for tr-TR with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeDate(value, MustTestLocales.trTR, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeDate(value, MustTestLocales.trTR, options)).toBe(
+        expected,
       );
     },
   );

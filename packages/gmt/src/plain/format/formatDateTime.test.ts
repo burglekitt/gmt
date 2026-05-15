@@ -1,5 +1,4 @@
-import { Temporal, Intl as TIntl } from "@js-temporal/polyfill";
-import { expectedForEnv, MustTestLocales } from "../../test";
+import { hasFullIcu, MustTestLocales } from "../../test";
 import { mockTemporalPlainDateTimeFromThrow } from "../../test/mocks";
 import { formatDateTime } from "./formatDateTime";
 
@@ -43,11 +42,7 @@ describe("formatDateTime", () => {
     "formats valid datetime $value for en-GB with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDateTime(value, MustTestLocales.enGB, options)).toEqual(
-        expectedForEnv(expected, () =>
-          new TIntl.DateTimeFormat(MustTestLocales.enGB, options).format(
-            Temporal.PlainDateTime.from(value),
-          ),
-        ),
+        expected,
       );
     },
   );
@@ -69,11 +64,7 @@ describe("formatDateTime", () => {
     "formats valid datetime $value for de-DE with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDateTime(value, MustTestLocales.deDE, options)).toEqual(
-        expectedForEnv(expected, () =>
-          new TIntl.DateTimeFormat(MustTestLocales.deDE, options).format(
-            Temporal.PlainDateTime.from(value),
-          ),
-        ),
+        expected,
       );
     },
   );
@@ -95,11 +86,7 @@ describe("formatDateTime", () => {
     "formats valid datetime $value for fr-FR with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDateTime(value, MustTestLocales.frFR, options)).toEqual(
-        expectedForEnv(expected, () =>
-          new TIntl.DateTimeFormat(MustTestLocales.frFR, options).format(
-            Temporal.PlainDateTime.from(value),
-          ),
-        ),
+        expected,
       );
     },
   );
@@ -108,10 +95,10 @@ describe("formatDateTime", () => {
   it.each`
     value                    | options                                                                                                                        | expected
     ${"2024-02-03T14:30:45"} | ${{ dateStyle: "full", timeStyle: "full" }}                                                                                    | ${"sábado, 3 de febrero de 2024, 14:30:45"}
-    ${"2024-02-03T14:30:45"} | ${{ dateStyle: "long", timeStyle: "long" }}                                                                                    | ${"3 de febrero de 2024, 14:30:45"}
+    ${"2024-02-03T14:30:45"} | ${{ dateStyle: "long", timeStyle: "long" }}                                                                                    | ${hasFullIcu ? "3 de febrero de 2024, 14:30:45" : "3 de febrero de 2024 a las 14:30:45"}
     ${"2024-02-03T14:30:45"} | ${{ dateStyle: "medium", timeStyle: "medium" }}                                                                                | ${"3 feb 2024, 14:30:45"}
     ${"2024-02-03T14:30:45"} | ${{ dateStyle: "short", timeStyle: "short" }}                                                                                  | ${"3/2/24, 14:30"}
-    ${"2024-02-03T14:30:45"} | ${{ year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric", second: "numeric" }}                   | ${"3 de febrero de 2024, 14:30:45"}
+    ${"2024-02-03T14:30:45"} | ${{ year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric", second: "numeric" }}                   | ${hasFullIcu ? "3 de febrero de 2024, 14:30:45" : "3 de febrero de 2024 a las 14:30:45"}
     ${"2024-02-03T14:30:45"} | ${{ year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" }}                                     | ${"3 feb 2024, 14:30"}
     ${"2024-02-03T14:30:45"} | ${{ year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit" }}                | ${"03/02/2024, 14:30:45"}
     ${"2024-02-03T14:30:45"} | ${{ year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" }}                                   | ${"03/02/2024, 14:30"}
@@ -121,11 +108,7 @@ describe("formatDateTime", () => {
     "formats valid datetime $value for es-ES with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDateTime(value, MustTestLocales.esES, options)).toEqual(
-        expectedForEnv(expected, () =>
-          new TIntl.DateTimeFormat(MustTestLocales.esES, options).format(
-            Temporal.PlainDateTime.from(value),
-          ),
-        ),
+        expected,
       );
     },
   );
@@ -147,11 +130,7 @@ describe("formatDateTime", () => {
     "formats valid datetime $value for it-IT with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDateTime(value, MustTestLocales.itIT, options)).toEqual(
-        expectedForEnv(expected, () =>
-          new TIntl.DateTimeFormat(MustTestLocales.itIT, options).format(
-            Temporal.PlainDateTime.from(value),
-          ),
-        ),
+        expected,
       );
     },
   );
@@ -167,17 +146,13 @@ describe("formatDateTime", () => {
     ${"2024-02-03T14:30:45"} | ${{ year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" }}                                     | ${"3/02/2024, 14:30"}
     ${"2024-02-03T14:30:45"} | ${{ year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit" }}                | ${"03/02/2024, 14:30:45"}
     ${"2024-02-03T14:30:45"} | ${{ year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" }}                                   | ${"03/02/2024, 14:30"}
-    ${"2024-02-03T14:30:45"} | ${{ year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true }}  | ${"03/02/2024, 02:30:45 da tarde"}
+    ${"2024-02-03T14:30:45"} | ${{ year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true }}  | ${hasFullIcu ? "03/02/2024, 02:30:45 da tarde" : "03/02/2024, 02:30:45 p.m."}
     ${"2024-02-03T14:30:45"} | ${{ year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric", second: "numeric", hour12: false }} | ${"03/02/2024, 14:30:45"}
   `(
     "formats valid datetime $value for pt-PT with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDateTime(value, MustTestLocales.ptPT, options)).toEqual(
-        expectedForEnv(expected, () =>
-          new TIntl.DateTimeFormat(MustTestLocales.ptPT, options).format(
-            Temporal.PlainDateTime.from(value),
-          ),
-        ),
+        expected,
       );
     },
   );
@@ -199,11 +174,7 @@ describe("formatDateTime", () => {
     "formats valid datetime $value for sv-SE with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDateTime(value, MustTestLocales.svSE, options)).toEqual(
-        expectedForEnv(expected, () =>
-          new TIntl.DateTimeFormat(MustTestLocales.svSE, options).format(
-            Temporal.PlainDateTime.from(value),
-          ),
-        ),
+        expected,
       );
     },
   );
@@ -225,11 +196,7 @@ describe("formatDateTime", () => {
     "formats valid datetime $value for is-IS with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDateTime(value, MustTestLocales.isIS, options)).toEqual(
-        expectedForEnv(expected, () =>
-          new TIntl.DateTimeFormat(MustTestLocales.isIS, options).format(
-            Temporal.PlainDateTime.from(value),
-          ),
-        ),
+        expected,
       );
     },
   );
@@ -251,11 +218,7 @@ describe("formatDateTime", () => {
     "formats valid datetime $value for zh-CN with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDateTime(value, MustTestLocales.zhCN, options)).toEqual(
-        expectedForEnv(expected, () =>
-          new TIntl.DateTimeFormat(MustTestLocales.zhCN, options).format(
-            Temporal.PlainDateTime.from(value),
-          ),
-        ),
+        expected,
       );
     },
   );
@@ -263,7 +226,7 @@ describe("formatDateTime", () => {
   // zh-TW
   it.each`
     value                    | options                                                                                                                        | expected
-    ${"2024-02-03T14:30:45"} | ${{ dateStyle: "full", timeStyle: "full" }}                                                                                    | ${"2024年2月3日 星期六 下午2:30:45"}
+    ${"2024-02-03T14:30:45"} | ${{ dateStyle: "full", timeStyle: "full" }}                                                                                    | ${hasFullIcu ? "2024年2月3日 星期六 下午2:30:45" : "2024年2月3日星期六 下午2:30:45"}
     ${"2024-02-03T14:30:45"} | ${{ dateStyle: "long", timeStyle: "long" }}                                                                                    | ${"2024年2月3日 下午2:30:45"}
     ${"2024-02-03T14:30:45"} | ${{ dateStyle: "medium", timeStyle: "medium" }}                                                                                | ${"2024年2月3日 下午2:30:45"}
     ${"2024-02-03T14:30:45"} | ${{ dateStyle: "short", timeStyle: "short" }}                                                                                  | ${"2024/2/3 下午2:30"}
@@ -277,11 +240,7 @@ describe("formatDateTime", () => {
     "formats valid datetime $value for zh-TW with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDateTime(value, MustTestLocales.zhTW, options)).toEqual(
-        expectedForEnv(expected, () =>
-          new TIntl.DateTimeFormat(MustTestLocales.zhTW, options).format(
-            Temporal.PlainDateTime.from(value),
-          ),
-        ),
+        expected,
       );
     },
   );
@@ -303,11 +262,7 @@ describe("formatDateTime", () => {
     "formats valid datetime $value for ja-JP with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDateTime(value, MustTestLocales.jaJP, options)).toEqual(
-        expectedForEnv(expected, () =>
-          new TIntl.DateTimeFormat(MustTestLocales.jaJP, options).format(
-            Temporal.PlainDateTime.from(value),
-          ),
-        ),
+        expected,
       );
     },
   );
@@ -315,25 +270,21 @@ describe("formatDateTime", () => {
   // ko-KR
   it.each`
     value                    | options                                                                                                                        | expected
-    ${"2024-02-03T14:30:45"} | ${{ dateStyle: "full", timeStyle: "full" }}                                                                                    | ${"2024년 2월 3일 토요일 오후 2:30:45"}
-    ${"2024-02-03T14:30:45"} | ${{ dateStyle: "long", timeStyle: "long" }}                                                                                    | ${"2024년 2월 3일 오후 2:30:45"}
-    ${"2024-02-03T14:30:45"} | ${{ dateStyle: "medium", timeStyle: "medium" }}                                                                                | ${"2024. 2. 3. 오후 2:30:45"}
-    ${"2024-02-03T14:30:45"} | ${{ dateStyle: "short", timeStyle: "short" }}                                                                                  | ${"24. 2. 3. 오후 2:30"}
-    ${"2024-02-03T14:30:45"} | ${{ year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric", second: "numeric" }}                   | ${"2024년 2월 3일 오후 2:30:45"}
-    ${"2024-02-03T14:30:45"} | ${{ year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" }}                                     | ${"2024년 2월 3일 오후 2:30"}
-    ${"2024-02-03T14:30:45"} | ${{ year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit" }}                | ${"2024. 02. 03. 오후 02:30:45"}
-    ${"2024-02-03T14:30:45"} | ${{ year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" }}                                   | ${"2024. 02. 03. 오후 02:30"}
-    ${"2024-02-03T14:30:45"} | ${{ year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true }}  | ${"2024. 02. 03. 오후 02:30:45"}
+    ${"2024-02-03T14:30:45"} | ${{ dateStyle: "full", timeStyle: "full" }}                                                                                    | ${hasFullIcu ? "2024년 2월 3일 토요일 오후 2:30:45" : "2024년 2월 3일 토요일 PM 2:30:45"}
+    ${"2024-02-03T14:30:45"} | ${{ dateStyle: "long", timeStyle: "long" }}                                                                                    | ${hasFullIcu ? "2024년 2월 3일 오후 2:30:45" : "2024년 2월 3일 PM 2:30:45"}
+    ${"2024-02-03T14:30:45"} | ${{ dateStyle: "medium", timeStyle: "medium" }}                                                                                | ${hasFullIcu ? "2024. 2. 3. 오후 2:30:45" : "2024. 2. 3. PM 2:30:45"}
+    ${"2024-02-03T14:30:45"} | ${{ dateStyle: "short", timeStyle: "short" }}                                                                                  | ${hasFullIcu ? "24. 2. 3. 오후 2:30" : "24. 2. 3. PM 2:30"}
+    ${"2024-02-03T14:30:45"} | ${{ year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric", second: "numeric" }}                   | ${hasFullIcu ? "2024년 2월 3일 오후 2:30:45" : "2024년 2월 3일 PM 2:30:45"}
+    ${"2024-02-03T14:30:45"} | ${{ year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" }}                                     | ${hasFullIcu ? "2024년 2월 3일 오후 2:30" : "2024년 2월 3일 PM 2:30"}
+    ${"2024-02-03T14:30:45"} | ${{ year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit" }}                | ${hasFullIcu ? "2024. 02. 03. 오후 02:30:45" : "2024. 02. 03. PM 02:30:45"}
+    ${"2024-02-03T14:30:45"} | ${{ year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" }}                                   | ${hasFullIcu ? "2024. 02. 03. 오후 02:30" : "2024. 02. 03. PM 02:30"}
+    ${"2024-02-03T14:30:45"} | ${{ year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true }}  | ${hasFullIcu ? "2024. 02. 03. 오후 02:30:45" : "2024. 02. 03. PM 02:30:45"}
     ${"2024-02-03T14:30:45"} | ${{ year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric", second: "numeric", hour12: false }} | ${"2024. 2. 3. 14시 30분 45초"}
   `(
     "formats valid datetime $value for ko-KR with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDateTime(value, MustTestLocales.koKR, options)).toEqual(
-        expectedForEnv(expected, () =>
-          new TIntl.DateTimeFormat(MustTestLocales.koKR, options).format(
-            Temporal.PlainDateTime.from(value),
-          ),
-        ),
+        expected,
       );
     },
   );
@@ -355,11 +306,7 @@ describe("formatDateTime", () => {
     "formats valid datetime $value for ar-SA with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDateTime(value, MustTestLocales.arSA, options)).toEqual(
-        expectedForEnv(expected, () =>
-          new TIntl.DateTimeFormat(MustTestLocales.arSA, options).format(
-            Temporal.PlainDateTime.from(value),
-          ),
-        ),
+        expected,
       );
     },
   );
@@ -381,11 +328,7 @@ describe("formatDateTime", () => {
     "formats valid datetime $value for he-IL with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDateTime(value, MustTestLocales.heIL, options)).toEqual(
-        expectedForEnv(expected, () =>
-          new TIntl.DateTimeFormat(MustTestLocales.heIL, options).format(
-            Temporal.PlainDateTime.from(value),
-          ),
-        ),
+        expected,
       );
     },
   );
@@ -407,11 +350,7 @@ describe("formatDateTime", () => {
     "formats valid datetime $value for ru-RU with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDateTime(value, MustTestLocales.ruRU, options)).toEqual(
-        expectedForEnv(expected, () =>
-          new TIntl.DateTimeFormat(MustTestLocales.ruRU, options).format(
-            Temporal.PlainDateTime.from(value),
-          ),
-        ),
+        expected,
       );
     },
   );
@@ -433,11 +372,7 @@ describe("formatDateTime", () => {
     "formats valid datetime $value for tr-TR with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatDateTime(value, MustTestLocales.trTR, options)).toEqual(
-        expectedForEnv(expected, () =>
-          new TIntl.DateTimeFormat(MustTestLocales.trTR, options).format(
-            Temporal.PlainDateTime.from(value),
-          ),
-        ),
+        expected,
       );
     },
   );

@@ -1,7 +1,6 @@
-import { Temporal } from "@js-temporal/polyfill";
 import { normalizeDateTime } from "../../internal";
 import {
-  expectedForEnv,
+  hasFullIcu,
   localeZonedDateTimeInputByLocale,
   MustTestLocales,
   sameInstantBattleCases,
@@ -52,12 +51,7 @@ describe("formatZonedDateTime", () => {
     "formats valid zoned datetime $value for en-GB with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.enGB, options)).toBe(
-        expectedForEnv(normalizeDateTime(expected), () =>
-          Temporal.ZonedDateTime.from(value).toLocaleString(
-            MustTestLocales.enGB,
-            options,
-          ),
-        ),
+        normalizeDateTime(expected),
       );
     },
   );
@@ -79,12 +73,7 @@ describe("formatZonedDateTime", () => {
     "formats valid zoned datetime $value for de-DE with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.deDE, options)).toBe(
-        expectedForEnv(normalizeDateTime(expected), () =>
-          Temporal.ZonedDateTime.from(value).toLocaleString(
-            MustTestLocales.deDE,
-            options,
-          ),
-        ),
+        normalizeDateTime(expected),
       );
     },
   );
@@ -106,12 +95,7 @@ describe("formatZonedDateTime", () => {
     "formats valid zoned datetime $value for fr-FR with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.frFR, options)).toBe(
-        expectedForEnv(normalizeDateTime(expected), () =>
-          Temporal.ZonedDateTime.from(value).toLocaleString(
-            MustTestLocales.frFR,
-            options,
-          ),
-        ),
+        normalizeDateTime(expected),
       );
     },
   );
@@ -120,10 +104,10 @@ describe("formatZonedDateTime", () => {
   it.each`
     value                                  | options                                                                                                                        | expected
     ${valueByLocale[MustTestLocales.esES]} | ${{ dateStyle: "full", timeStyle: "full" }}                                                                                    | ${"sábado, 3 de febrero de 2024, 14:30:45 (hora estándar de Europa central)"}
-    ${valueByLocale[MustTestLocales.esES]} | ${{ dateStyle: "long", timeStyle: "long" }}                                                                                    | ${"3 de febrero de 2024, 14:30:45 CET"}
+    ${valueByLocale[MustTestLocales.esES]} | ${{ dateStyle: "long", timeStyle: "long" }}                                                                                    | ${hasFullIcu ? "3 de febrero de 2024, 14:30:45 CET" : "3 de febrero de 2024 a las 14:30:45 CET"}
     ${valueByLocale[MustTestLocales.esES]} | ${{ dateStyle: "medium", timeStyle: "medium" }}                                                                                | ${"3 feb 2024, 14:30:45"}
     ${valueByLocale[MustTestLocales.esES]} | ${{ dateStyle: "short", timeStyle: "short" }}                                                                                  | ${"3/2/24, 14:30"}
-    ${valueByLocale[MustTestLocales.esES]} | ${{ year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric", second: "numeric" }}                   | ${"3 de febrero de 2024, 14:30:45"}
+    ${valueByLocale[MustTestLocales.esES]} | ${{ year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric", second: "numeric" }}                   | ${hasFullIcu ? "3 de febrero de 2024, 14:30:45" : "3 de febrero de 2024 a las 14:30:45"}
     ${valueByLocale[MustTestLocales.esES]} | ${{ year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" }}                                     | ${"3 feb 2024, 14:30"}
     ${valueByLocale[MustTestLocales.esES]} | ${{ year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit" }}                | ${"03/02/2024, 14:30:45"}
     ${valueByLocale[MustTestLocales.esES]} | ${{ year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" }}                                   | ${"03/02/2024, 14:30"}
@@ -133,12 +117,7 @@ describe("formatZonedDateTime", () => {
     "formats valid zoned datetime $value for es-ES with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.esES, options)).toBe(
-        expectedForEnv(normalizeDateTime(expected), () =>
-          Temporal.ZonedDateTime.from(value).toLocaleString(
-            MustTestLocales.esES,
-            options,
-          ),
-        ),
+        normalizeDateTime(expected),
       );
     },
   );
@@ -160,12 +139,7 @@ describe("formatZonedDateTime", () => {
     "formats valid zoned datetime $value for it-IT with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.itIT, options)).toBe(
-        expectedForEnv(normalizeDateTime(expected), () =>
-          Temporal.ZonedDateTime.from(value).toLocaleString(
-            MustTestLocales.itIT,
-            options,
-          ),
-        ),
+        normalizeDateTime(expected),
       );
     },
   );
@@ -181,18 +155,13 @@ describe("formatZonedDateTime", () => {
     ${valueByLocale[MustTestLocales.ptPT]} | ${{ year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" }}                                     | ${"3/02/2024, 14:30"}
     ${valueByLocale[MustTestLocales.ptPT]} | ${{ year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit" }}                | ${"03/02/2024, 14:30:45"}
     ${valueByLocale[MustTestLocales.ptPT]} | ${{ year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" }}                                   | ${"03/02/2024, 14:30"}
-    ${valueByLocale[MustTestLocales.ptPT]} | ${{ year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true }}  | ${"03/02/2024, 02:30:45 da tarde"}
+    ${valueByLocale[MustTestLocales.ptPT]} | ${{ year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true }}  | ${hasFullIcu ? "03/02/2024, 02:30:45 da tarde" : "03/02/2024, 02:30:45 p.m."}
     ${valueByLocale[MustTestLocales.ptPT]} | ${{ year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric", second: "numeric", hour12: false }} | ${"03/02/2024, 14:30:45"}
   `(
     "formats valid zoned datetime $value for pt-PT with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.ptPT, options)).toBe(
-        expectedForEnv(normalizeDateTime(expected), () =>
-          Temporal.ZonedDateTime.from(value).toLocaleString(
-            MustTestLocales.ptPT,
-            options,
-          ),
-        ),
+        normalizeDateTime(expected),
       );
     },
   );
@@ -214,12 +183,7 @@ describe("formatZonedDateTime", () => {
     "formats valid zoned datetime $value for sv-SE with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.svSE, options)).toBe(
-        expectedForEnv(normalizeDateTime(expected), () =>
-          Temporal.ZonedDateTime.from(value).toLocaleString(
-            MustTestLocales.svSE,
-            options,
-          ),
-        ),
+        normalizeDateTime(expected),
       );
     },
   );
@@ -228,7 +192,7 @@ describe("formatZonedDateTime", () => {
   it.each`
     value                                  | options                                                                                                                        | expected
     ${valueByLocale[MustTestLocales.isIS]} | ${{ dateStyle: "full", timeStyle: "full" }}                                                                                    | ${"laugardagur, 3. febrúar 2024 kl. 14:30:45 Greenwich-staðaltími"}
-    ${valueByLocale[MustTestLocales.isIS]} | ${{ dateStyle: "long", timeStyle: "long" }}                                                                                    | ${"3. febrúar 2024 kl. 14:30:45 GMT"}
+    ${valueByLocale[MustTestLocales.isIS]} | ${{ dateStyle: "long", timeStyle: "long" }}                                                                                    | ${hasFullIcu ? "3. febrúar 2024 kl. 14:30:45 GMT" : "3. febrúar 2024 kl. 14:30:45 GMT+0"}
     ${valueByLocale[MustTestLocales.isIS]} | ${{ dateStyle: "medium", timeStyle: "medium" }}                                                                                | ${"3. feb. 2024, 14:30:45"}
     ${valueByLocale[MustTestLocales.isIS]} | ${{ dateStyle: "short", timeStyle: "short" }}                                                                                  | ${"3.2.2024, 14:30"}
     ${valueByLocale[MustTestLocales.isIS]} | ${{ year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric", second: "numeric" }}                   | ${"3. febrúar 2024 kl. 14:30:45"}
@@ -241,12 +205,7 @@ describe("formatZonedDateTime", () => {
     "formats valid zoned datetime $value for is-IS with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.isIS, options)).toBe(
-        expectedForEnv(normalizeDateTime(expected), () =>
-          Temporal.ZonedDateTime.from(value).toLocaleString(
-            MustTestLocales.isIS,
-            options,
-          ),
-        ),
+        normalizeDateTime(expected),
       );
     },
   );
@@ -268,12 +227,7 @@ describe("formatZonedDateTime", () => {
     "formats valid zoned datetime $value for zh-CN with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.zhCN, options)).toBe(
-        expectedForEnv(normalizeDateTime(expected), () =>
-          Temporal.ZonedDateTime.from(value).toLocaleString(
-            MustTestLocales.zhCN,
-            options,
-          ),
-        ),
+        normalizeDateTime(expected),
       );
     },
   );
@@ -295,12 +249,7 @@ describe("formatZonedDateTime", () => {
     "formats valid zoned datetime $value for zh-TW with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.zhTW, options)).toBe(
-        expectedForEnv(normalizeDateTime(expected), () =>
-          Temporal.ZonedDateTime.from(value).toLocaleString(
-            MustTestLocales.zhTW,
-            options,
-          ),
-        ),
+        normalizeDateTime(expected),
       );
     },
   );
@@ -322,12 +271,7 @@ describe("formatZonedDateTime", () => {
     "formats valid zoned datetime $value for ja-JP with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.jaJP, options)).toBe(
-        expectedForEnv(normalizeDateTime(expected), () =>
-          Temporal.ZonedDateTime.from(value).toLocaleString(
-            MustTestLocales.jaJP,
-            options,
-          ),
-        ),
+        normalizeDateTime(expected),
       );
     },
   );
@@ -335,26 +279,21 @@ describe("formatZonedDateTime", () => {
   // ko-KR
   it.each`
     value                                  | options                                                                                                                        | expected
-    ${valueByLocale[MustTestLocales.koKR]} | ${{ dateStyle: "full", timeStyle: "full" }}                                                                                    | ${"2024년 2월 3일 토요일 오후 2시 30분 45초 대한민국 표준시"}
-    ${valueByLocale[MustTestLocales.koKR]} | ${{ dateStyle: "long", timeStyle: "long" }}                                                                                    | ${"2024년 2월 3일 오후 2시 30분 45초 GMT+9"}
-    ${valueByLocale[MustTestLocales.koKR]} | ${{ dateStyle: "medium", timeStyle: "medium" }}                                                                                | ${"2024. 2. 3. 오후 2:30:45"}
-    ${valueByLocale[MustTestLocales.koKR]} | ${{ dateStyle: "short", timeStyle: "short" }}                                                                                  | ${"24. 2. 3. 오후 2:30"}
-    ${valueByLocale[MustTestLocales.koKR]} | ${{ year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric", second: "numeric" }}                   | ${"2024년 2월 3일 오후 2:30:45"}
-    ${valueByLocale[MustTestLocales.koKR]} | ${{ year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" }}                                     | ${"2024년 2월 3일 오후 2:30"}
-    ${valueByLocale[MustTestLocales.koKR]} | ${{ year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit" }}                | ${"2024. 02. 03. 오후 02:30:45"}
-    ${valueByLocale[MustTestLocales.koKR]} | ${{ year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" }}                                   | ${"2024. 02. 03. 오후 02:30"}
-    ${valueByLocale[MustTestLocales.koKR]} | ${{ year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true }}  | ${"2024. 02. 03. 오후 02:30:45"}
+    ${valueByLocale[MustTestLocales.koKR]} | ${{ dateStyle: "full", timeStyle: "full" }}                                                                                    | ${hasFullIcu ? "2024년 2월 3일 토요일 오후 2시 30분 45초 대한민국 표준시" : "2024년 2월 3일 토요일 PM 2시 30분 45초 한국 표준시"}
+    ${valueByLocale[MustTestLocales.koKR]} | ${{ dateStyle: "long", timeStyle: "long" }}                                                                                    | ${hasFullIcu ? "2024년 2월 3일 오후 2시 30분 45초 GMT+9" : "2024년 2월 3일 PM 2시 30분 45초 GMT+9"}
+    ${valueByLocale[MustTestLocales.koKR]} | ${{ dateStyle: "medium", timeStyle: "medium" }}                                                                                | ${hasFullIcu ? "2024. 2. 3. 오후 2:30:45" : "2024. 2. 3. PM 2:30:45"}
+    ${valueByLocale[MustTestLocales.koKR]} | ${{ dateStyle: "short", timeStyle: "short" }}                                                                                  | ${hasFullIcu ? "24. 2. 3. 오후 2:30" : "24. 2. 3. PM 2:30"}
+    ${valueByLocale[MustTestLocales.koKR]} | ${{ year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric", second: "numeric" }}                   | ${hasFullIcu ? "2024년 2월 3일 오후 2:30:45" : "2024년 2월 3일 PM 2:30:45"}
+    ${valueByLocale[MustTestLocales.koKR]} | ${{ year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric" }}                                     | ${hasFullIcu ? "2024년 2월 3일 오후 2:30" : "2024년 2월 3일 PM 2:30"}
+    ${valueByLocale[MustTestLocales.koKR]} | ${{ year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit" }}                | ${hasFullIcu ? "2024. 02. 03. 오후 02:30:45" : "2024. 02. 03. PM 02:30:45"}
+    ${valueByLocale[MustTestLocales.koKR]} | ${{ year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" }}                                   | ${hasFullIcu ? "2024. 02. 03. 오후 02:30" : "2024. 02. 03. PM 02:30"}
+    ${valueByLocale[MustTestLocales.koKR]} | ${{ year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true }}  | ${hasFullIcu ? "2024. 02. 03. 오후 02:30:45" : "2024. 02. 03. PM 02:30:45"}
     ${valueByLocale[MustTestLocales.koKR]} | ${{ year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric", second: "numeric", hour12: false }} | ${"2024. 2. 3. 14시 30분 45초"}
   `(
     "formats valid zoned datetime $value for ko-KR with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.koKR, options)).toBe(
-        expectedForEnv(normalizeDateTime(expected), () =>
-          Temporal.ZonedDateTime.from(value).toLocaleString(
-            MustTestLocales.koKR,
-            options,
-          ),
-        ),
+        normalizeDateTime(expected),
       );
     },
   );
@@ -376,12 +315,7 @@ describe("formatZonedDateTime", () => {
     "formats valid zoned datetime $value for ar-SA with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.arSA, options)).toBe(
-        expectedForEnv(normalizeDateTime(expected), () =>
-          Temporal.ZonedDateTime.from(value).toLocaleString(
-            MustTestLocales.arSA,
-            options,
-          ),
-        ),
+        normalizeDateTime(expected),
       );
     },
   );
@@ -403,12 +337,7 @@ describe("formatZonedDateTime", () => {
     "formats valid zoned datetime $value for he-IL with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.heIL, options)).toBe(
-        expectedForEnv(normalizeDateTime(expected), () =>
-          Temporal.ZonedDateTime.from(value).toLocaleString(
-            MustTestLocales.heIL,
-            options,
-          ),
-        ),
+        normalizeDateTime(expected),
       );
     },
   );
@@ -430,12 +359,7 @@ describe("formatZonedDateTime", () => {
     "formats valid zoned datetime $value for ru-RU with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.ruRU, options)).toBe(
-        expectedForEnv(normalizeDateTime(expected), () =>
-          Temporal.ZonedDateTime.from(value).toLocaleString(
-            MustTestLocales.ruRU,
-            options,
-          ),
-        ),
+        normalizeDateTime(expected),
       );
     },
   );
@@ -443,7 +367,7 @@ describe("formatZonedDateTime", () => {
   // tr-TR
   it.each`
     value                                  | options                                                                                                                        | expected
-    ${valueByLocale[MustTestLocales.trTR]} | ${{ dateStyle: "full", timeStyle: "full" }}                                                                                    | ${"3 Şubat 2024 Cumartesi 14:30:45 GMT+03:00"}
+    ${valueByLocale[MustTestLocales.trTR]} | ${{ dateStyle: "full", timeStyle: "full" }}                                                                                    | ${hasFullIcu ? "3 Şubat 2024 Cumartesi 14:30:45 GMT+03:00" : "3 Şubat 2024 Cumartesi 14:30:45 Türkiye Standart Saati"}
     ${valueByLocale[MustTestLocales.trTR]} | ${{ dateStyle: "long", timeStyle: "long" }}                                                                                    | ${"3 Şubat 2024 14:30:45 GMT+3"}
     ${valueByLocale[MustTestLocales.trTR]} | ${{ dateStyle: "medium", timeStyle: "medium" }}                                                                                | ${"3 Şub 2024 14:30:45"}
     ${valueByLocale[MustTestLocales.trTR]} | ${{ dateStyle: "short", timeStyle: "short" }}                                                                                  | ${"3.02.2024 14:30"}
@@ -457,12 +381,7 @@ describe("formatZonedDateTime", () => {
     "formats valid zoned datetime $value for tr-TR with options $options to $expected",
     ({ value, options, expected }) => {
       expect(formatZonedDateTime(value, MustTestLocales.trTR, options)).toBe(
-        expectedForEnv(normalizeDateTime(expected), () =>
-          Temporal.ZonedDateTime.from(value).toLocaleString(
-            MustTestLocales.trTR,
-            options,
-          ),
-        ),
+        normalizeDateTime(expected),
       );
     },
   );

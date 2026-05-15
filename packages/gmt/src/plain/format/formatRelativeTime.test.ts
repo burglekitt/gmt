@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { vi } from "vitest";
-import { MustTestLocales, matchExpectedForEnv } from "../../test";
+import { hasFullIcu, MustTestLocales } from "../../test";
 import { mockTemporalPlainTimeFromThrow } from "../../test/mocks";
 import { formatRelativeTime } from "./formatRelativeTime";
 
@@ -97,8 +97,8 @@ describe("formatRelativeTime", () => {
   `(
     "formats $value for en-GB with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeTime(value, MustTestLocales.enGB, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeTime(value, MustTestLocales.enGB, options)).toBe(
+        expected,
       );
     },
   );
@@ -120,8 +120,8 @@ describe("formatRelativeTime", () => {
   `(
     "formats $value for de-DE with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeTime(value, MustTestLocales.deDE, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeTime(value, MustTestLocales.deDE, options)).toBe(
+        expected,
       );
     },
   );
@@ -143,8 +143,8 @@ describe("formatRelativeTime", () => {
   `(
     "formats $value for fr-FR with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeTime(value, MustTestLocales.frFR, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeTime(value, MustTestLocales.frFR, options)).toBe(
+        expected,
       );
     },
   );
@@ -166,8 +166,8 @@ describe("formatRelativeTime", () => {
   `(
     "formats $value for es-ES with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeTime(value, MustTestLocales.esES, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeTime(value, MustTestLocales.esES, options)).toBe(
+        expected,
       );
     },
   );
@@ -189,8 +189,8 @@ describe("formatRelativeTime", () => {
   `(
     "formats $value for it-IT with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeTime(value, MustTestLocales.itIT, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeTime(value, MustTestLocales.itIT, options)).toBe(
+        expected,
       );
     },
   );
@@ -212,8 +212,8 @@ describe("formatRelativeTime", () => {
   `(
     "formats $value for pt-PT with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeTime(value, MustTestLocales.ptPT, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeTime(value, MustTestLocales.ptPT, options)).toBe(
+        expected,
       );
     },
   );
@@ -235,8 +235,8 @@ describe("formatRelativeTime", () => {
   `(
     "formats $value for sv-SE with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeTime(value, MustTestLocales.svSE, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeTime(value, MustTestLocales.svSE, options)).toBe(
+        expected,
       );
     },
   );
@@ -258,8 +258,8 @@ describe("formatRelativeTime", () => {
   `(
     "formats $value for is-IS with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeTime(value, MustTestLocales.isIS, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeTime(value, MustTestLocales.isIS, options)).toBe(
+        expected,
       );
     },
   );
@@ -281,8 +281,8 @@ describe("formatRelativeTime", () => {
   `(
     "formats $value for zh-CN with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeTime(value, MustTestLocales.zhCN, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeTime(value, MustTestLocales.zhCN, options)).toBe(
+        expected,
       );
     },
   );
@@ -304,8 +304,8 @@ describe("formatRelativeTime", () => {
   `(
     "formats $value for zh-TW with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeTime(value, MustTestLocales.zhTW, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeTime(value, MustTestLocales.zhTW, options)).toBe(
+        expected,
       );
     },
   );
@@ -327,8 +327,8 @@ describe("formatRelativeTime", () => {
   `(
     "formats $value for ja-JP with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeTime(value, MustTestLocales.jaJP, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeTime(value, MustTestLocales.jaJP, options)).toBe(
+        expected,
       );
     },
   );
@@ -350,8 +350,8 @@ describe("formatRelativeTime", () => {
   `(
     "formats $value for ko-KR with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeTime(value, MustTestLocales.koKR, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeTime(value, MustTestLocales.koKR, options)).toBe(
+        expected,
       );
     },
   );
@@ -373,8 +373,8 @@ describe("formatRelativeTime", () => {
   `(
     "formats $value for ar-SA with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeTime(value, MustTestLocales.arSA, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeTime(value, MustTestLocales.arSA, options)).toBe(
+        expected,
       );
     },
   );
@@ -389,15 +389,15 @@ describe("formatRelativeTime", () => {
     ${"12:30:00"} | ${{ reference: REF, style: "narrow" as const }}                                   | ${"בעוד 30 דק׳"}
     ${"11:59:15"} | ${{ reference: REF }}                                                             | ${"לפני 45 שניות"}
     ${"12:00:45"} | ${{ reference: REF }}                                                             | ${"בעוד 45 שניות"}
-    ${"10:00:00"} | ${{ reference: REF }}                                                             | ${"לפני שעתיים"}
-    ${"14:00:00"} | ${{ reference: REF }}                                                             | ${"בעוד שעתיים"}
+    ${"10:00:00"} | ${{ reference: REF }}                                                             | ${hasFullIcu ? "לפני שעתיים" : "לפני שעתיים (2)"}
+    ${"14:00:00"} | ${{ reference: REF }}                                                             | ${hasFullIcu ? "בעוד שעתיים" : "בעוד שעתיים (2)"}
     ${"11:58:30"} | ${{ reference: REF, largestUnit: "second" as const, numeric: "always" as const }} | ${"לפני 90 שניות"}
     ${"10:00:00"} | ${{ reference: REF, largestUnit: "minute" as const, numeric: "always" as const }} | ${"לפני 120 דקות"}
   `(
     "formats $value for he-IL with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeTime(value, MustTestLocales.heIL, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeTime(value, MustTestLocales.heIL, options)).toBe(
+        expected,
       );
     },
   );
@@ -419,8 +419,8 @@ describe("formatRelativeTime", () => {
   `(
     "formats $value for ru-RU with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeTime(value, MustTestLocales.ruRU, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeTime(value, MustTestLocales.ruRU, options)).toBe(
+        expected,
       );
     },
   );
@@ -442,8 +442,8 @@ describe("formatRelativeTime", () => {
   `(
     "formats $value for tr-TR with $options as $expected",
     ({ value, options, expected }) => {
-      expect(formatRelativeTime(value, MustTestLocales.trTR, options)).toMatch(
-        matchExpectedForEnv(expected),
+      expect(formatRelativeTime(value, MustTestLocales.trTR, options)).toBe(
+        expected,
       );
     },
   );

@@ -1,5 +1,5 @@
 import { vi } from "vitest";
-import { MustTestLocales, matchExpectedForEnv } from "../../test";
+import { MustTestLocales } from "../../test";
 import { mockTemporalNowPlainDateTimeISOThrow } from "../../test/mocks";
 import { formatRelativeDateTime } from "./formatRelativeDateTime";
 
@@ -104,9 +104,9 @@ describe("formatRelativeDateTime", () => {
   `(
     "formats $value for en-GB with $options as $expected",
     ({ value, options, expected }) => {
-      expect(
-        formatRelativeDateTime(value, MustTestLocales.enGB, options),
-      ).toMatch(matchExpectedForEnv(expected));
+      expect(formatRelativeDateTime(value, MustTestLocales.enGB, options)).toBe(
+        expected,
+      );
     },
   );
 
@@ -127,9 +127,9 @@ describe("formatRelativeDateTime", () => {
   `(
     "formats $value for de-DE with $options as $expected",
     ({ value, options, expected }) => {
-      expect(
-        formatRelativeDateTime(value, MustTestLocales.deDE, options),
-      ).toMatch(matchExpectedForEnv(expected));
+      expect(formatRelativeDateTime(value, MustTestLocales.deDE, options)).toBe(
+        expected,
+      );
     },
   );
 
@@ -150,9 +150,9 @@ describe("formatRelativeDateTime", () => {
   `(
     "formats $value for fr-FR with $options as $expected",
     ({ value, options, expected }) => {
-      expect(
-        formatRelativeDateTime(value, MustTestLocales.frFR, options),
-      ).toMatch(matchExpectedForEnv(expected));
+      expect(formatRelativeDateTime(value, MustTestLocales.frFR, options)).toBe(
+        expected,
+      );
     },
   );
 
@@ -173,9 +173,9 @@ describe("formatRelativeDateTime", () => {
   `(
     "formats $value for es-ES with $options as $expected",
     ({ value, options, expected }) => {
-      expect(
-        formatRelativeDateTime(value, MustTestLocales.esES, options),
-      ).toMatch(matchExpectedForEnv(expected));
+      expect(formatRelativeDateTime(value, MustTestLocales.esES, options)).toBe(
+        expected,
+      );
     },
   );
 
@@ -196,9 +196,9 @@ describe("formatRelativeDateTime", () => {
   `(
     "formats $value for it-IT with $options as $expected",
     ({ value, options, expected }) => {
-      expect(
-        formatRelativeDateTime(value, MustTestLocales.itIT, options),
-      ).toMatch(matchExpectedForEnv(expected));
+      expect(formatRelativeDateTime(value, MustTestLocales.itIT, options)).toBe(
+        expected,
+      );
     },
   );
 
@@ -219,9 +219,9 @@ describe("formatRelativeDateTime", () => {
   `(
     "formats $value for pt-PT with $options as $expected",
     ({ value, options, expected }) => {
-      expect(
-        formatRelativeDateTime(value, MustTestLocales.ptPT, options),
-      ).toMatch(matchExpectedForEnv(expected));
+      expect(formatRelativeDateTime(value, MustTestLocales.ptPT, options)).toBe(
+        expected,
+      );
     },
   );
 
@@ -242,9 +242,9 @@ describe("formatRelativeDateTime", () => {
   `(
     "formats $value for sv-SE with $options as $expected",
     ({ value, options, expected }) => {
-      expect(
-        formatRelativeDateTime(value, MustTestLocales.svSE, options),
-      ).toMatch(matchExpectedForEnv(expected));
+      expect(formatRelativeDateTime(value, MustTestLocales.svSE, options)).toBe(
+        expected,
+      );
     },
   );
 
@@ -265,9 +265,9 @@ describe("formatRelativeDateTime", () => {
   `(
     "formats $value for is-IS with $options as $expected",
     ({ value, options, expected }) => {
-      expect(
-        formatRelativeDateTime(value, MustTestLocales.isIS, options),
-      ).toMatch(matchExpectedForEnv(expected));
+      expect(formatRelativeDateTime(value, MustTestLocales.isIS, options)).toBe(
+        expected,
+      );
     },
   );
 
@@ -288,9 +288,9 @@ describe("formatRelativeDateTime", () => {
   `(
     "formats $value for zh-CN with $options as $expected",
     ({ value, options, expected }) => {
-      expect(
-        formatRelativeDateTime(value, MustTestLocales.zhCN, options),
-      ).toMatch(matchExpectedForEnv(expected));
+      expect(formatRelativeDateTime(value, MustTestLocales.zhCN, options)).toBe(
+        expected,
+      );
     },
   );
 
@@ -311,9 +311,9 @@ describe("formatRelativeDateTime", () => {
   `(
     "formats $value for zh-TW with $options as $expected",
     ({ value, options, expected }) => {
-      expect(
-        formatRelativeDateTime(value, MustTestLocales.zhTW, options),
-      ).toMatch(matchExpectedForEnv(expected));
+      expect(formatRelativeDateTime(value, MustTestLocales.zhTW, options)).toBe(
+        expected,
+      );
     },
   );
 
@@ -334,9 +334,9 @@ describe("formatRelativeDateTime", () => {
   `(
     "formats $value for ja-JP with $options as $expected",
     ({ value, options, expected }) => {
-      expect(
-        formatRelativeDateTime(value, MustTestLocales.jaJP, options),
-      ).toMatch(matchExpectedForEnv(expected));
+      expect(formatRelativeDateTime(value, MustTestLocales.jaJP, options)).toBe(
+        expected,
+      );
     },
   );
 
@@ -357,9 +357,9 @@ describe("formatRelativeDateTime", () => {
   `(
     "formats $value for ko-KR with $options as $expected",
     ({ value, options, expected }) => {
-      expect(
-        formatRelativeDateTime(value, MustTestLocales.koKR, options),
-      ).toMatch(matchExpectedForEnv(expected));
+      expect(formatRelativeDateTime(value, MustTestLocales.koKR, options)).toBe(
+        expected,
+      );
     },
   );
 
@@ -380,9 +380,9 @@ describe("formatRelativeDateTime", () => {
   `(
     "formats $value for ar-SA with $options as $expected",
     ({ value, options, expected }) => {
-      expect(
-        formatRelativeDateTime(value, MustTestLocales.arSA, options),
-      ).toMatch(matchExpectedForEnv(expected));
+      expect(formatRelativeDateTime(value, MustTestLocales.arSA, options)).toBe(
+        expected,
+      );
     },
   );
 
@@ -403,9 +403,9 @@ describe("formatRelativeDateTime", () => {
   `(
     "formats $value for he-IL with $options as $expected",
     ({ value, options, expected }) => {
-      expect(
-        formatRelativeDateTime(value, MustTestLocales.heIL, options),
-      ).toMatch(matchExpectedForEnv(expected));
+      expect(formatRelativeDateTime(value, MustTestLocales.heIL, options)).toBe(
+        expected,
+      );
     },
   );
 
@@ -426,9 +426,9 @@ describe("formatRelativeDateTime", () => {
   `(
     "formats $value for ru-RU with $options as $expected",
     ({ value, options, expected }) => {
-      expect(
-        formatRelativeDateTime(value, MustTestLocales.ruRU, options),
-      ).toMatch(matchExpectedForEnv(expected));
+      expect(formatRelativeDateTime(value, MustTestLocales.ruRU, options)).toBe(
+        expected,
+      );
     },
   );
 
@@ -449,9 +449,9 @@ describe("formatRelativeDateTime", () => {
   `(
     "formats $value for tr-TR with $options as $expected",
     ({ value, options, expected }) => {
-      expect(
-        formatRelativeDateTime(value, MustTestLocales.trTR, options),
-      ).toMatch(matchExpectedForEnv(expected));
+      expect(formatRelativeDateTime(value, MustTestLocales.trTR, options)).toBe(
+        expected,
+      );
     },
   );
 
