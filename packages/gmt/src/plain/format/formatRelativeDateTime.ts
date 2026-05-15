@@ -1,44 +1,67 @@
 import { Temporal } from "@js-temporal/polyfill";
-import {
-  type FormatRelativeOptions,
-  formatRelativeTemporal,
-  mapLargestUnit,
-} from "../../internal/formatHelpers";
 import { isValidDateTime } from "../validate";
 
-interface Options extends FormatRelativeOptions {
-  /** Optional ISO PlainDateTime reference to compare against (e.g. "2024-05-02T13:00:00") */
+// Intl.RelativeTimeFormatUnit includes "quarter" which Temporal doesn't support.
+type RelativeUnit =
+  | "year"
+  | "month"
+  | "week"
+  | "day"
+  | "hour"
+  | "minute"
+  | "second";
+
+export interface FormatRelativeDateTimeOptions {
+  style?: "long" | "short" | "narrow";
+  numeric?: "always" | "auto";
+  largestUnit?: RelativeUnit;
   reference?: string;
 }
+
+const AUTO_UNITS: Array<{ unit: RelativeUnit; maxSeconds: number }> = [
+  { unit: "second", maxSeconds: 60 },
+  { unit: "minute", maxSeconds: 3_600 },
+  { unit: "hour", maxSeconds: 86_400 },
+  { unit: "day", maxSeconds: Infinity },
+];
 
 export function formatRelativeDateTime(
   value: string,
   locale?: string,
-  options?: Options,
+  options: FormatRelativeDateTimeOptions = {},
 ): string {
   if (!isValidDateTime(value)) return "";
+  if (options.reference !== undefined && !isValidDateTime(options.reference))
+    return "";
 
   try {
-    const { reference, ...opts } = options ?? {};
-
-    const mappedLargest = mapLargestUnit(
-      (opts as Record<string, unknown>).largestUnit as unknown as
-        | string
-        | undefined,
-    );
-    if (mappedLargest === null) return "";
-
-    const finalOpts: FormatRelativeOptions = {
-      ...(opts as FormatRelativeOptions),
-      ...(mappedLargest ? { largestUnit: mappedLargest } : {}),
-    };
-
     const target = Temporal.PlainDateTime.from(value);
-    const ref = reference
-      ? Temporal.PlainDateTime.from(reference)
+    const reference = options.reference
+      ? Temporal.PlainDateTime.from(options.reference)
       : Temporal.Now.plainDateTimeISO();
 
-    return formatRelativeTemporal(target, ref, locale, finalOpts);
+    const diff = target.since(reference);
+    const absSeconds = Math.abs(diff.total("second"));
+
+    const unit =
+      options.largestUnit ??
+      AUTO_UNITS.find((t) => absSeconds < t.maxSeconds)?.unit ??
+      "day";
+
+    let amount: number;
+    try {
+      amount = Math.round(diff.total(unit));
+    } catch {
+      // month/year are calendrical — relativeTo needs a PlainDate
+      amount = Math.round(
+        diff.total({ unit, relativeTo: reference.toPlainDate() }),
+      );
+    }
+
+    return new Intl.RelativeTimeFormat(locale, {
+      numeric: options.numeric ?? "auto",
+      style: options.style ?? "long",
+    }).format(amount, unit);
   } catch {
     return "";
   }

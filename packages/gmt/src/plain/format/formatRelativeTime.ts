@@ -1,60 +1,51 @@
 import { Temporal } from "@js-temporal/polyfill";
-import {
-  type FormatRelativeOptions,
-  formatRelativeTemporal,
-  mapLargestUnit,
-} from "../../internal/formatHelpers";
 import { isValidTime } from "../validate";
 
-interface Options extends FormatRelativeOptions {
-  /** Optional ISO PlainDateTime reference to compare against (e.g. "2024-05-02T13:00:00") */
+// PlainTime has no date component so only sub-day units are meaningful.
+type RelativeUnit = "hour" | "minute" | "second";
+
+export interface FormatRelativeTimeOptions {
+  style?: "long" | "short" | "narrow";
+  numeric?: "always" | "auto";
+  largestUnit?: RelativeUnit;
   reference?: string;
 }
 
-/**
- * Return a localized relative time string for a PlainTime input.
- *
- * - Combines the provided `value` (PlainTime) with either the provided
- *   `options.reference` date (ISO PlainDateTime) or the current local date
- *   to produce a `Temporal.PlainDateTime` target.
- * - Calls `formatRelativeTemporal` to produce the localized phrase.
- * - Returns "" on invalid input or error.
- */
+const AUTO_UNITS: Array<{ unit: RelativeUnit; maxSeconds: number }> = [
+  { unit: "second", maxSeconds: 60 },
+  { unit: "minute", maxSeconds: 3_600 },
+  { unit: "hour", maxSeconds: Infinity },
+];
+
 export function formatRelativeTime(
   value: string,
   locale?: string,
-  options?: Options,
+  options: FormatRelativeTimeOptions = {},
 ): string {
   if (!isValidTime(value)) return "";
+  if (options.reference !== undefined && !isValidTime(options.reference))
+    return "";
 
   try {
-    const { reference, ...opts } = options ?? {};
+    const target = Temporal.PlainTime.from(value);
+    const reference = options.reference
+      ? Temporal.PlainTime.from(options.reference)
+      : Temporal.Now.plainTimeISO();
 
-    const mappedLargest = mapLargestUnit(
-      (opts as Record<string, unknown>).largestUnit as unknown as
-        | string
-        | undefined,
-    );
-    if (mappedLargest === null) return "";
+    const diff = target.since(reference);
+    const absSeconds = Math.abs(diff.total("second"));
 
-    const finalOpts: FormatRelativeOptions = {
-      ...(opts as FormatRelativeOptions),
-      ...(mappedLargest ? { largestUnit: mappedLargest } : {}),
-    };
+    const unit =
+      options.largestUnit ??
+      AUTO_UNITS.find((t) => absSeconds < t.maxSeconds)?.unit ??
+      "hour";
 
-    // Build target PlainDateTime by combining a date with the provided time.
-    const dateComponent = reference
-      ? String(reference).includes("T")
-        ? String(reference).split("T")[0]
-        : String(reference)
-      : Temporal.Now.plainDateISO().toString();
+    const amount = Math.round(diff.total(unit));
 
-    const target = Temporal.PlainDateTime.from(`${dateComponent}T${value}`);
-    const ref = reference
-      ? Temporal.PlainDateTime.from(reference)
-      : Temporal.Now.plainDateTimeISO();
-
-    return formatRelativeTemporal(target, ref, locale, finalOpts);
+    return new Intl.RelativeTimeFormat(locale, {
+      numeric: options.numeric ?? "auto",
+      style: options.style ?? "long",
+    }).format(amount, unit);
   } catch {
     return "";
   }

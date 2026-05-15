@@ -1,96 +1,102 @@
 import { Temporal } from "@js-temporal/polyfill";
-import {
-  type FormatRelativeOptions,
-  formatRelativeTemporal,
-  mapLargestUnit,
-  parseEpochNumber,
-  resolveReferenceToZoned,
-} from "../../internal/formatHelpers";
 import { normalizeTimeZone } from "../../internal/normalizeTimeZone";
-import {
-  isValidUnixMilliseconds,
-  isValidUnixSeconds,
-  isValidUnixUnit,
-} from "../validate";
+import { isValidUtc } from "../../utc/validate";
 
-interface Options extends FormatRelativeOptions {
-  epochUnit?: "seconds" | "milliseconds";
-  timeZone?: string | "local";
+// Intl.RelativeTimeFormatUnit includes "quarter" which Temporal doesn't support.
+type RelativeUnit =
+  | "year"
+  | "month"
+  | "week"
+  | "day"
+  | "hour"
+  | "minute"
+  | "second";
+
+export interface FormatRelativeUnixOptions {
+  style?: "long" | "short" | "narrow";
+  numeric?: "always" | "auto";
+  largestUnit?: RelativeUnit;
+  epochUnit?: "milliseconds" | "seconds";
   reference?: string | number;
+  timeZone?: string;
 }
 
-/**
- * Return a localized relative time string for a Unix epoch input using Intl options.
- *
- * - Accepts `value` as a number or numeric string. Use `options.epochUnit` to indicate "seconds" or "milliseconds".
- * - `options.reference` may be a UTC ISO string or an epoch number (interpreted according to `options.epochUnit`, milliseconds by default).
- * - `timeZone: "local"` is resolved via the internal `getSystemTimeZone()` helper; invalid time zones fall back to "UTC".
- * - Returns `""` on invalid input.
- *
- * @param value Unix epoch as number or numeric string
- * @param locale optional BCP 47 locale identifier
- * @param options optional FormatRelativeOptions with additional `epochUnit`, `timeZone`, and `reference` properties
- * @returns localized relative time string or "" on invalid input
- *
- * @example formatRelativeUnix(1714531200000, "en-US", { reference: 1714617600000 }) // "yesterday" (numeric: "auto")
- * @example formatRelativeUnix(1714531200000, "en-US", { reference: 1714617600000, numeric: "always" }) // "1 day ago"
- * @example formatRelativeUnix(1714531200, "en-US", { epochUnit: "seconds", reference: 1714617600 }) // "yesterday"
- * @example formatRelativeUnix(1714531200, "en-US", { epochUnit: "seconds", reference: 1714617600, numeric: "always" }) // "1 day ago"
- * @example formatRelativeUnix(1714531200000, "en-US", { reference: "2024-05-01T13:00:00Z" }) // "hour"
- * @example formatRelativeUnix(1714531200000, "en-US", { timeZone: "Europe/Paris", reference: 1714617600000 }) // "yesterday"
- * @example formatRelativeUnix(1714531200000, "en-US", { timeZone: "local", reference: 1714617600000 }) // resolves local zone then formats
- * @example formatRelativeUnix("invalid") // ""
- */
+const AUTO_UNITS: Array<{ unit: RelativeUnit; maxSeconds: number }> = [
+  { unit: "second", maxSeconds: 60 },
+  { unit: "minute", maxSeconds: 3_600 },
+  { unit: "hour", maxSeconds: 86_400 },
+  { unit: "day", maxSeconds: Infinity },
+];
+
+function toInstant(
+  raw: string | number,
+  epochUnit: "milliseconds" | "seconds",
+): Temporal.Instant | null {
+  const n = typeof raw === "string" ? Number(raw) : raw;
+  if (!Number.isFinite(n)) return null;
+  try {
+    const ms = epochUnit === "seconds" ? n * 1000 : n;
+    return Temporal.Instant.fromEpochMilliseconds(ms);
+  } catch {
+    return null;
+  }
+}
+
 export function formatRelativeUnix(
   value: string | number,
   locale?: string,
-  options?: Options,
+  options: FormatRelativeUnixOptions = {},
 ): string {
-  const {
-    epochUnit = "milliseconds",
-    timeZone,
-    reference,
-    ...opts
-  } = options ?? {};
+  const epochUnit = options.epochUnit ?? "milliseconds";
 
-  if (!isValidUnixUnit(epochUnit)) return "";
+  const target = toInstant(value, epochUnit);
+  if (target === null) return "";
 
-  const epochNum = parseEpochNumber(value);
-  if (epochNum === null) return "";
+  let reference: Temporal.Instant;
+  if (options.reference === undefined) {
+    try {
+      reference = Temporal.Now.instant();
+    } catch {
+      return "";
+    }
+  } else if (typeof options.reference === "string") {
+    if (!isValidUtc(options.reference)) return "";
+    try {
+      reference = Temporal.Instant.from(options.reference);
+    } catch {
+      return "";
+    }
+  } else {
+    const ref = toInstant(options.reference, epochUnit);
+    if (ref === null) return "";
+    reference = ref;
+  }
 
-  if (
-    (epochUnit === "milliseconds" && !isValidUnixMilliseconds(epochNum)) ||
-    (epochUnit === "seconds" && !isValidUnixSeconds(epochNum))
-  )
-    return "";
-
-  const tz = normalizeTimeZone(timeZone as string | undefined);
+  const tz = normalizeTimeZone(options.timeZone);
 
   try {
-    const mappedLargest = mapLargestUnit(
-      (opts as Record<string, unknown>).largestUnit as unknown as
-        | string
-        | undefined,
-    );
-    if (mappedLargest === null) return "";
-    const finalOpts: FormatRelativeOptions = {
-      ...(opts as FormatRelativeOptions),
-      ...(mappedLargest ? { largestUnit: mappedLargest } : {}),
-    };
+    const diff = target.since(reference);
+    const absSeconds = Math.abs(diff.total("second"));
 
-    const instant = Temporal.Instant.fromEpochMilliseconds(
-      epochUnit === "seconds" ? epochNum * 1000 : epochNum,
-    );
-    const zoned = instant.toZonedDateTimeISO(tz);
+    const unit =
+      options.largestUnit ??
+      AUTO_UNITS.find((t) => absSeconds < t.maxSeconds)?.unit ??
+      "day";
 
-    const ref = resolveReferenceToZoned(reference, epochUnit, tz);
+    let amount: number;
+    try {
+      amount = Math.round(diff.total(unit));
+    } catch {
+      // month/year are calendrical and need a relativeTo anchor
+      amount = Math.round(
+        diff.total({ unit, relativeTo: reference.toZonedDateTimeISO(tz) }),
+      );
+    }
 
-    return formatRelativeTemporal(
-      zoned,
-      ref,
-      locale,
-      finalOpts as FormatRelativeOptions,
-    );
+    return new Intl.RelativeTimeFormat(locale, {
+      numeric: options.numeric ?? "auto",
+      style: options.style ?? "long",
+    }).format(amount, unit);
   } catch {
     return "";
   }

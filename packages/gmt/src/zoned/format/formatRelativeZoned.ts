@@ -1,82 +1,98 @@
 import { Temporal } from "@js-temporal/polyfill";
-import {
-  type FormatRelativeOptions,
-  formatRelativeTemporal,
-  mapLargestUnit,
-  resolveReferenceToZoned,
-} from "../../internal/formatHelpers";
-import { normalizeTimeZone } from "../../internal/normalizeTimeZone";
+import { isValidUtc } from "../../utc/validate";
 import { isValidZonedDateTime } from "../validate";
 
-interface Options extends FormatRelativeOptions {
-  /** Optional IANA time zone (e.g. "America/New_York", "local", "UTC") */
-  timeZone?: string;
-  /** Optional ISO ZonedDateTime or numeric epoch milliseconds reference */
+// Intl.RelativeTimeFormatUnit includes "quarter" which Temporal doesn't support.
+type RelativeUnit =
+  | "year"
+  | "month"
+  | "week"
+  | "day"
+  | "hour"
+  | "minute"
+  | "second";
+
+export interface FormatRelativeZonedOptions {
+  style?: "long" | "short" | "narrow";
+  numeric?: "always" | "auto";
+  largestUnit?: RelativeUnit;
+  // A ZonedDateTime ISO string, a UTC ISO string, or a unix epoch (ms).
+  // When omitted, "now" in the value's own timezone is used.
   reference?: string | number;
 }
 
-/**
- * Return a localized relative time string for a ZonedDateTime ISO input.
- *
- * - Accepts `options.largestUnit` in either Intl singular form (e.g. "day") or
- *   as a `DateTimeDurationUnit` (plural) such as "days". Plural units are mapped
- *   to the corresponding singular Intl unit; sub-second units (milliseconds,
- *   microseconds, nanoseconds) fall back to "second" for formatting.
- * - `timeZone` is applied to the input value via `toZonedDateTimeISO(tz)`;
- *   invalid time zones fall back to "UTC".
- * - `options.reference` may be a ZonedDateTime ISO string or a numeric epoch
- *   (milliseconds).
- * - Returns `""` on invalid input or invalid `largestUnit`.
- *
- * @param value ZonedDateTime ISO string
- * @param locale optional BCP 47 locale identifier
- * @param options optional FormatRelativeOptions with additional `timeZone`, `reference`, and `largestUnit` properties
- * @returns localized relative time string or "" on invalid input
- *
- * @example formatRelativeZoned("2024-05-01T12:00:00+00:00[UTC]", "en-US", { reference: "2024-05-01T13:00:00+00:00[UTC]" }) // "hour"
- * @example formatRelativeZoned("2024-05-01T12:00:00+00:00[UTC]", "en-US", { reference: "2024-05-01T13:00:00+00:00[UTC]", numeric: "always" }) // "1 hour ago"
- * @example formatRelativeZoned("2024-05-01T12:00:00+00:00[UTC]", "en-US", { reference: 1714598400000 }) // "day"
- * @example formatRelativeZoned("2024-05-01T12:00:00+00:00[UTC]", "en-US", { reference: 1714598400000, numeric: "always" }) // "1 day ago"
- * @example formatRelativeZoned("2024-05-01T12:00:00+00:00[UTC]", "en-US", { timeZone: "America/New_York", reference: "2024-05-01T13:00:00+00:00[UTC]" }) // "hour"
- * @example formatRelativeZoned("invalid") // ""
- */
+const AUTO_UNITS: Array<{ unit: RelativeUnit; maxSeconds: number }> = [
+  { unit: "second", maxSeconds: 60 },
+  { unit: "minute", maxSeconds: 3_600 },
+  { unit: "hour", maxSeconds: 86_400 },
+  { unit: "day", maxSeconds: Infinity },
+];
+
 export function formatRelativeZoned(
   value: string,
   locale?: string,
-  options?: Options,
+  options: FormatRelativeZonedOptions = {},
 ): string {
   if (!isValidZonedDateTime(value)) return "";
 
+  // String reference must be a valid ZonedDateTime or UTC ISO string.
+  if (
+    typeof options.reference === "string" &&
+    !isValidZonedDateTime(options.reference) &&
+    !isValidUtc(options.reference)
+  )
+    return "";
+
+  if (
+    typeof options.reference === "number" &&
+    !Number.isFinite(options.reference)
+  )
+    return "";
+
   try {
-    const { timeZone, reference, ...opts } = options ?? {};
+    const valueZDT = Temporal.ZonedDateTime.from(value);
+    const valueInstant = valueZDT.toInstant();
 
-    const mappedLargest = mapLargestUnit(
-      (opts as Record<string, unknown>).largestUnit as unknown as
-        | string
-        | undefined,
-    );
-    if (mappedLargest === null) return "";
+    let refZDT: Temporal.ZonedDateTime;
+    if (options.reference == null) {
+      // "now" in value's own zone — keeps the calendar context consistent.
+      refZDT = Temporal.Now.zonedDateTimeISO(valueZDT.timeZoneId);
+    } else if (typeof options.reference === "string") {
+      // UTC string → place into value's zone for a consistent calendar anchor.
+      // ZonedDateTime string → keep its own zone; Temporal handles cross-zone diffs.
+      refZDT = options.reference.endsWith("Z")
+        ? Temporal.Instant.from(options.reference).toZonedDateTimeISO(
+            valueZDT.timeZoneId,
+          )
+        : Temporal.ZonedDateTime.from(options.reference);
+    } else {
+      // Numeric epoch (ms) → place into value's zone.
+      refZDT = Temporal.Instant.fromEpochMilliseconds(
+        options.reference,
+      ).toZonedDateTimeISO(valueZDT.timeZoneId);
+    }
 
-    const finalOpts: FormatRelativeOptions = {
-      ...(opts as FormatRelativeOptions),
-      ...(mappedLargest ? { largestUnit: mappedLargest } : {}),
-    };
+    const diff = valueInstant.since(refZDT.toInstant());
+    const absSeconds = Math.abs(diff.total("second"));
 
-    const tz = normalizeTimeZone(timeZone as string | undefined);
+    const unit =
+      options.largestUnit ??
+      AUTO_UNITS.find((t) => absSeconds < t.maxSeconds)?.unit ??
+      "day";
 
-    const parsed = Temporal.ZonedDateTime.from(value);
-    const zoned = parsed.toInstant().toZonedDateTimeISO(tz);
+    let amount: number;
+    try {
+      amount = Math.round(diff.total(unit));
+    } catch {
+      // month/year are calendrical and need a relativeTo anchor
+      amount = Math.round(diff.total({ unit, relativeTo: refZDT }));
+    }
 
-    const ref = resolveReferenceToZoned(reference, "milliseconds", tz);
-
-    return formatRelativeTemporal(zoned, ref, locale, finalOpts);
-  } catch (e) {
-    // Log the error details for debugging tests (temporary).
-    // eslint-disable-next-line no-console
-    console.error("formatRelativeZoned error:", e, {
-      value,
-      type: typeof value,
-    });
+    return new Intl.RelativeTimeFormat(locale, {
+      numeric: options.numeric ?? "auto",
+      style: options.style ?? "long",
+    }).format(amount, unit);
+  } catch {
     return "";
   }
 }

@@ -1,187 +1,369 @@
-import { Temporal } from "@js-temporal/polyfill";
-import type { FormatRelativeOptions } from "../../internal/formatHelpers";
+import { vi } from "vitest";
 import * as getSystemTimeZoneModule from "../../plain/get/getSystemTimeZone";
 import { MustTestLocales } from "../../test";
+import { mockTemporalNowInstantThrow } from "../../test/mocks";
 import { formatRelativeUtc } from "./formatRelativeUtc";
 
+// All tests use a fixed reference so output is deterministic regardless of
+// when the suite runs.
+const REF = "2024-03-15T12:00:00Z";
+
 describe("formatRelativeUtc", () => {
-  const systemTime = "2024-02-29T00:00:00.000Z";
-  let timeZoneSpy: ReturnType<typeof vi.spyOn>;
-
-  beforeEach(() => {
-    vi.useFakeTimers();
-    vi.setSystemTime(systemTime);
-
-    timeZoneSpy = vi
-      .spyOn(getSystemTimeZoneModule, "getSystemTimeZone")
-      .mockReturnValue("UTC");
-  });
-
   afterEach(() => {
-    timeZoneSpy.mockRestore();
-    vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
-  describe("en-US specific cases", () => {
+  // ---------------------------------------------------------------------------
+  // Auto unit selection
+  // The function picks second/minute/hour/day based on the magnitude of the
+  // difference. These tests verify the threshold logic.
+  // ---------------------------------------------------------------------------
+  describe("auto unit selection", () => {
     it.each`
-      value                     | reference                 | opts                     | expected
-      ${"2024-05-01T00:00:00Z"} | ${"2024-05-02T00:00:00Z"} | ${undefined}             | ${"yesterday"}
-      ${"2024-05-01T00:00:00Z"} | ${"2024-05-02T00:00:00Z"} | ${{ numeric: "always" }} | ${"1 day ago"}
-      ${"2024-05-01T12:00:00Z"} | ${"2024-05-01T13:00:00Z"} | ${undefined}             | ${"hour"}
-      ${"2024-05-01T12:00:00Z"} | ${"2024-05-01T13:00:00Z"} | ${{ numeric: "always" }} | ${"1 hour ago"}
-      ${"2024-05-02T00:00:00Z"} | ${"2024-05-01T00:00:00Z"} | ${undefined}             | ${"tomorrow"}
-      ${"2024-05-02T00:00:00Z"} | ${"2024-05-01T00:00:00Z"} | ${{ numeric: "always" }} | ${"in 1 day"}
-      ${"2024-05-01T13:00:00Z"} | ${"2024-05-01T12:00:00Z"} | ${undefined}             | ${"hour"}
-      ${"2024-05-01T13:00:00Z"} | ${"2024-05-01T12:00:00Z"} | ${{ numeric: "always" }} | ${"in 1 hour"}
+      value                     | expected
+      ${"2024-03-15T11:59:30Z"} | ${"30 seconds ago"}
+      ${"2024-03-15T12:00:30Z"} | ${"in 30 seconds"}
+      ${"2024-03-15T11:30:00Z"} | ${"30 minutes ago"}
+      ${"2024-03-15T12:30:00Z"} | ${"in 30 minutes"}
+      ${"2024-03-15T09:00:00Z"} | ${"3 hours ago"}
+      ${"2024-03-15T15:00:00Z"} | ${"in 3 hours"}
+      ${"2024-03-12T12:00:00Z"} | ${"3 days ago"}
+      ${"2024-03-18T12:00:00Z"} | ${"in 3 days"}
+    `("formats $value relative to REF as $expected", ({ value, expected }) => {
+      expect(
+        formatRelativeUtc(value, MustTestLocales.enUS, { reference: REF }),
+      ).toBe(expected);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // ±1 and 0 permutations for each unit
+  // Covers the "yesterday"/"tomorrow"/"now" special cases that numeric:"auto"
+  // produces, and the singular vs plural boundary.
+  // ---------------------------------------------------------------------------
+  describe("±1 and 0 permutations", () => {
+    it.each`
+      value                     | expected
+      ${"2024-03-15T12:00:00Z"} | ${"now"}
+      ${"2024-03-15T12:00:01Z"} | ${"in 1 second"}
+      ${"2024-03-15T11:59:59Z"} | ${"1 second ago"}
+      ${"2024-03-15T12:01:00Z"} | ${"in 1 minute"}
+      ${"2024-03-15T11:59:00Z"} | ${"1 minute ago"}
+      ${"2024-03-15T13:00:00Z"} | ${"in 1 hour"}
+      ${"2024-03-15T11:00:00Z"} | ${"1 hour ago"}
+      ${"2024-03-16T12:00:00Z"} | ${"tomorrow"}
+      ${"2024-03-14T12:00:00Z"} | ${"yesterday"}
+    `("formats $value (en-US, auto) as $expected", ({ value, expected }) => {
+      expect(
+        formatRelativeUtc(value, MustTestLocales.enUS, { reference: REF }),
+      ).toBe(expected);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // Locale coverage — 30 minutes in the past, default options
+  // One canonical case across all MustTestLocales to verify locale forwarding.
+  // ---------------------------------------------------------------------------
+  describe("locale coverage — 30 minutes past", () => {
+    const value = "2024-03-15T11:30:00Z"; // 30m before REF
+
+    it.each`
+      locale                  | expected
+      ${MustTestLocales.enUS} | ${"30 minutes ago"}
+      ${MustTestLocales.enGB} | ${"30 minutes ago"}
+      ${MustTestLocales.deDE} | ${"vor 30 Minuten"}
+      ${MustTestLocales.frFR} | ${"il y a 30 minutes"}
+      ${MustTestLocales.esES} | ${"hace 30 minutos"}
+      ${MustTestLocales.itIT} | ${"30 minuti fa"}
+      ${MustTestLocales.ptPT} | ${"há 30 minutos"}
+      ${MustTestLocales.svSE} | ${"för 30 minuter sedan"}
+      ${MustTestLocales.isIS} | ${"fyrir 30 mínútum"}
+      ${MustTestLocales.zhCN} | ${"30分钟前"}
+      ${MustTestLocales.zhTW} | ${"30 分鐘前"}
+      ${MustTestLocales.jaJP} | ${"30 分前"}
+      ${MustTestLocales.koKR} | ${"30분 전"}
+      ${MustTestLocales.arSA} | ${"قبل ٣٠ دقيقة"}
+      ${MustTestLocales.heIL} | ${"לפני 30 דקות"}
+      ${MustTestLocales.ruRU} | ${"30 минут назад"}
+      ${MustTestLocales.trTR} | ${"30 dakika önce"}
+    `("formats for $locale as $expected", ({ locale, expected }) => {
+      expect(formatRelativeUtc(value, locale, { reference: REF })).toBe(
+        expected,
+      );
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // Locale coverage — 30 minutes in the future
+  // ---------------------------------------------------------------------------
+  describe("locale coverage — 30 minutes future", () => {
+    const value = "2024-03-15T12:30:00Z"; // 30m after REF
+
+    it.each`
+      locale                  | expected
+      ${MustTestLocales.enUS} | ${"in 30 minutes"}
+      ${MustTestLocales.enGB} | ${"in 30 minutes"}
+      ${MustTestLocales.deDE} | ${"in 30 Minuten"}
+      ${MustTestLocales.frFR} | ${"dans 30 minutes"}
+      ${MustTestLocales.esES} | ${"dentro de 30 minutos"}
+      ${MustTestLocales.itIT} | ${"tra 30 minuti"}
+      ${MustTestLocales.ptPT} | ${"dentro de 30 minutos"}
+      ${MustTestLocales.svSE} | ${"om 30 minuter"}
+      ${MustTestLocales.isIS} | ${"eftir 30 mínútur"}
+      ${MustTestLocales.zhCN} | ${"30分钟后"}
+      ${MustTestLocales.zhTW} | ${"30 分鐘後"}
+      ${MustTestLocales.jaJP} | ${"30 分後"}
+      ${MustTestLocales.koKR} | ${"30분 후"}
+      ${MustTestLocales.arSA} | ${"خلال ٣٠ دقيقة"}
+      ${MustTestLocales.heIL} | ${"בעוד 30 דקות"}
+      ${MustTestLocales.ruRU} | ${"через 30 минут"}
+      ${MustTestLocales.trTR} | ${"30 dakika sonra"}
+    `("formats for $locale as $expected", ({ locale, expected }) => {
+      expect(formatRelativeUtc(value, locale, { reference: REF })).toBe(
+        expected,
+      );
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // style option
+  // ---------------------------------------------------------------------------
+  describe("style option", () => {
+    const value = "2024-03-15T11:30:00Z"; // 30m before REF
+
+    it.each`
+      style       | expected
+      ${"long"}   | ${"30 minutes ago"}
+      ${"short"}  | ${"30 min. ago"}
+      ${"narrow"} | ${"30m ago"}
+    `("style:$style formats -30m as $expected", ({ style, expected }) => {
+      expect(
+        formatRelativeUtc(value, MustTestLocales.enUS, {
+          reference: REF,
+          style,
+        }),
+      ).toBe(expected);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // numeric option
+  // numeric:"auto" produces natural language ("yesterday", "now") while
+  // numeric:"always" always uses a number ("in 0 seconds", "in 1 day").
+  // ---------------------------------------------------------------------------
+  describe("numeric option", () => {
+    it.each`
+      value                     | numeric     | expected
+      ${"2024-03-15T12:00:00Z"} | ${"auto"}   | ${"now"}
+      ${"2024-03-15T12:00:00Z"} | ${"always"} | ${"in 0 seconds"}
+      ${"2024-03-16T12:00:00Z"} | ${"auto"}   | ${"tomorrow"}
+      ${"2024-03-16T12:00:00Z"} | ${"always"} | ${"in 1 day"}
+      ${"2024-03-14T12:00:00Z"} | ${"auto"}   | ${"yesterday"}
+      ${"2024-03-14T12:00:00Z"} | ${"always"} | ${"1 day ago"}
     `(
-      "formats en-US relative $value with options $opts to contain $expected",
-      ({ value, reference, opts, expected }) => {
-        const out = formatRelativeUtc(value, MustTestLocales.enUS, {
-          reference,
-          ...(opts || {}),
-        });
-        expect(out).toBeTruthy();
-        expect(out).toContain(expected);
+      "numeric:$numeric for $value → $expected",
+      ({ value, numeric, expected }) => {
+        expect(
+          formatRelativeUtc(value, MustTestLocales.enUS, {
+            reference: REF,
+            numeric,
+          }),
+        ).toBe(expected);
       },
     );
   });
 
-  describe("additional locales (sanity checks)", () => {
+  // ---------------------------------------------------------------------------
+  // explicit largestUnit
+  // Overrides auto-detection to force a specific unit.
+  // ---------------------------------------------------------------------------
+  describe("explicit largestUnit", () => {
     it.each`
-      locale     | value                     | reference
-      ${"en-GB"} | ${"2024-05-01T00:00:00Z"} | ${"2024-05-02T00:00:00Z"}
-      ${"de-DE"} | ${"2024-05-01T12:00:00Z"} | ${"2024-05-01T13:00:00Z"}
-      ${"fr-FR"} | ${"2024-06-10T09:00:00Z"} | ${"2024-06-11T09:00:00Z"}
+      value                     | largestUnit | expected
+      ${"2024-03-15T11:59:30Z"} | ${"minute"} | ${"0 minutes ago"}
+      ${"2024-03-15T09:00:00Z"} | ${"minute"} | ${"180 minutes ago"}
+      ${"2024-03-15T11:30:00Z"} | ${"hour"}   | ${"0 hours ago"}
+      ${"2024-03-15T09:00:00Z"} | ${"hour"}   | ${"3 hours ago"}
+      ${"2024-03-12T12:00:00Z"} | ${"day"}    | ${"3 days ago"}
+      ${"2024-03-18T12:00:00Z"} | ${"day"}    | ${"in 3 days"}
     `(
-      "returns non-empty relative string for $locale",
-      ({ locale, value, reference }) => {
-        const out = formatRelativeUtc(value, locale, { reference });
-        expect(out).toBeTruthy();
-        expect(out).not.toEqual("");
+      "largestUnit:$largestUnit for $value → $expected",
+      ({ value, largestUnit, expected }) => {
+        expect(
+          formatRelativeUtc(value, MustTestLocales.enUS, {
+            reference: REF,
+            largestUnit,
+            numeric: "always",
+          }),
+        ).toBe(expected);
       },
     );
-  });
 
-  it.each`
-    value                     | reference
-    ${"2024-05-01T00:00:00Z"} | ${"2024-05-02T00:00:00Z"}
-    ${"2024-06-10T12:00:00Z"} | ${"2024-06-11T12:00:00Z"}
-  `(
-    "returns a relative string for $value with reference $reference",
-    ({ value, reference }) => {
-      const out = formatRelativeUtc(value, MustTestLocales.enUS, { reference });
-      expect(out).toBeTruthy();
-      expect(out).not.toEqual("");
-    },
-  );
-
-  it("accepts numeric reference (milliseconds) and matches string reference", () => {
-    const value = "2024-05-01T00:00:00Z";
-    const referenceMs = Temporal.Instant.from(
-      "2024-05-02T00:00:00Z",
-    ).epochMilliseconds;
-
-    const outNumber = formatRelativeUtc(value, MustTestLocales.enUS, {
-      reference: referenceMs,
-    });
-    const outString = formatRelativeUtc(value, MustTestLocales.enUS, {
-      reference: "2024-05-02T00:00:00Z",
+    it("largestUnit:month uses calendrical calculation (2 months ago)", () => {
+      expect(
+        formatRelativeUtc("2024-01-15T12:00:00Z", MustTestLocales.enUS, {
+          reference: REF,
+          largestUnit: "month",
+        }),
+      ).toBe("2 months ago");
     });
 
-    expect(outNumber).toEqual(outString);
+    it("largestUnit:month uses calendrical calculation (in 2 months)", () => {
+      expect(
+        formatRelativeUtc("2024-05-15T12:00:00Z", MustTestLocales.enUS, {
+          reference: REF,
+          largestUnit: "month",
+        }),
+      ).toBe("in 2 months");
+    });
+
+    it("largestUnit:year (last year)", () => {
+      expect(
+        formatRelativeUtc("2023-03-15T12:00:00Z", MustTestLocales.enUS, {
+          reference: REF,
+          largestUnit: "year",
+        }),
+      ).toBe("last year");
+    });
+
+    it("largestUnit:year (next year)", () => {
+      expect(
+        formatRelativeUtc("2025-03-15T12:00:00Z", MustTestLocales.enUS, {
+          reference: REF,
+          largestUnit: "year",
+        }),
+      ).toBe("next year");
+    });
   });
 
-  describe("largestUnit plural -> singular mapping", () => {
-    const mapping: Record<string, string> = {
-      years: "year",
-      months: "month",
-      weeks: "week",
-      days: "day",
-      hours: "hour",
-      minutes: "minute",
-      seconds: "second",
-      milliseconds: "second",
-      microseconds: "second",
-      nanoseconds: "second",
-    };
+  // ---------------------------------------------------------------------------
+  // timezone handling
+  // timeZone only affects calendrical (month/year) diffs via the relativeTo
+  // anchor. For second/minute/hour/day the result is pure-seconds arithmetic
+  // and is identical regardless of zone.
+  // ---------------------------------------------------------------------------
+  describe("timezone handling", () => {
+    const value = "2024-03-15T11:30:00Z"; // 30 minutes before REF
 
     it.each`
-      unitPlural        | value                               | reference
-      ${"years"}        | ${"2023-05-01T00:00:00Z"}           | ${"2024-05-01T00:00:00Z"}
-      ${"months"}       | ${"2024-04-01T00:00:00Z"}           | ${"2024-05-01T00:00:00Z"}
-      ${"weeks"}        | ${"2024-04-24T00:00:00Z"}           | ${"2024-05-01T00:00:00Z"}
-      ${"days"}         | ${"2024-04-30T00:00:00Z"}           | ${"2024-05-01T00:00:00Z"}
-      ${"hours"}        | ${"2024-05-01T12:00:00Z"}           | ${"2024-05-01T13:00:00Z"}
-      ${"minutes"}      | ${"2024-05-01T12:00:00Z"}           | ${"2024-05-01T12:01:00Z"}
-      ${"seconds"}      | ${"2024-05-01T12:00:00Z"}           | ${"2024-05-01T12:00:01Z"}
-      ${"milliseconds"} | ${"2024-05-01T12:00:00.000Z"}       | ${"2024-05-01T12:00:00.001Z"}
-      ${"microseconds"} | ${"2024-05-01T12:00:00.000001Z"}    | ${"2024-05-01T12:00:00.000002Z"}
-      ${"nanoseconds"}  | ${"2024-05-01T12:00:00.000000001Z"} | ${"2024-05-01T12:00:00.000000002Z"}
+      timeZone              | expected
+      ${"UTC"}              | ${"30 minutes ago"}
+      ${"America/New_York"} | ${"30 minutes ago"}
+      ${"Europe/Paris"}     | ${"30 minutes ago"}
+      ${"Asia/Tokyo"}       | ${"30 minutes ago"}
     `(
-      "maps largestUnit %s to singular and produces same output",
-      ({ unitPlural, value, reference }) => {
-        const outPlural = formatRelativeUtc(value, MustTestLocales.enUS, {
-          reference,
-          largestUnit:
-            unitPlural as unknown as FormatRelativeOptions["largestUnit"],
-        });
-
-        const outSingular = formatRelativeUtc(value, MustTestLocales.enUS, {
-          reference,
-          largestUnit: mapping[
-            unitPlural as keyof typeof mapping
-          ] as unknown as FormatRelativeOptions["largestUnit"],
-        });
-
-        expect(outPlural).toBe(outSingular);
+      "timeZone $timeZone: 30 min diff produces $expected",
+      ({ timeZone, expected }) => {
+        expect(
+          formatRelativeUtc(value, MustTestLocales.enUS, {
+            reference: REF,
+            timeZone,
+          }),
+        ).toBe(expected);
       },
     );
+
+    it("falls back to UTC for an invalid timeZone (still returns relative string)", () => {
+      expect(
+        formatRelativeUtc(value, MustTestLocales.enUS, {
+          reference: REF,
+          timeZone: "Invalid/Zone",
+        }),
+      ).toBe("30 minutes ago");
+    });
+
+    it("uses getSystemTimeZone() when timeZone is 'local'", () => {
+      vi.spyOn(getSystemTimeZoneModule, "getSystemTimeZone").mockReturnValue(
+        "America/New_York",
+      );
+      expect(
+        formatRelativeUtc(value, MustTestLocales.enUS, {
+          reference: REF,
+          timeZone: "local",
+        }),
+      ).toBe("30 minutes ago");
+    });
+
+    it("largestUnit:month respects explicit timeZone for relativeTo anchor", () => {
+      // 2 calendar months before REF regardless of zone for this clean case
+      expect(
+        formatRelativeUtc("2024-01-15T12:00:00Z", MustTestLocales.enUS, {
+          reference: REF,
+          largestUnit: "month",
+          timeZone: "America/New_York",
+        }),
+      ).toBe("2 months ago");
+    });
   });
 
-  it("uses getSystemTimeZone() when timeZone is 'local'", () => {
-    const value = "2024-02-03T14:30:45Z";
-    const reference = "2024-02-03T15:30:45Z";
-    timeZoneSpy.mockReturnValue("Europe/Paris");
-
-    const outLocal = formatRelativeUtc(value, MustTestLocales.enUS, {
-      reference,
-      timeZone: "local",
+  // ---------------------------------------------------------------------------
+  // date-only UTC strings
+  // The utcDateTime regex requires a time component, so "2024-03-15Z" is
+  // rejected by isValidUtc and the function returns "".
+  // ---------------------------------------------------------------------------
+  describe("date-only UTC strings", () => {
+    it("returns '' for date-only value (no time component)", () => {
+      expect(
+        formatRelativeUtc("2024-03-15Z", MustTestLocales.enUS, {
+          reference: REF,
+        }),
+      ).toBe("");
     });
-    const outExplicit = formatRelativeUtc(value, MustTestLocales.enUS, {
-      reference,
-      timeZone: "Europe/Paris",
-    });
 
-    expect(outLocal).toEqual(outExplicit);
+    it("returns '' when reference is date-only", () => {
+      expect(
+        formatRelativeUtc(REF, MustTestLocales.enUS, {
+          reference: "2024-03-15Z",
+        }),
+      ).toBe("");
+    });
   });
 
-  it("falls back to UTC when an invalid timezone is provided", () => {
-    const value = "2024-05-01T00:00:00Z";
-    const reference = "2024-05-02T00:00:00Z";
-
-    const outInvalid = formatRelativeUtc(value, MustTestLocales.enUS, {
-      reference,
-      timeZone: "Invalid/Zone",
+  // ---------------------------------------------------------------------------
+  // Invalid inputs — must return ""
+  // ---------------------------------------------------------------------------
+  describe("invalid inputs", () => {
+    it.each`
+      value
+      ${""}
+      ${"not-a-date"}
+      ${"2024-13-01T00:00:00Z"}
+      ${"2024-02-30T00:00:00Z"}
+      ${"2024-12-31T23:59:60Z"}
+      ${null}
+      ${undefined}
+      ${42}
+      ${true}
+    `("returns '' for invalid value $value", ({ value }) => {
+      expect(formatRelativeUtc(value as never, MustTestLocales.enUS)).toBe("");
     });
-    const outUTC = formatRelativeUtc(value, MustTestLocales.enUS, {
-      reference,
+
+    it("returns '' when reference is provided but invalid", () => {
+      expect(
+        formatRelativeUtc("2024-03-15T12:00:00Z", MustTestLocales.enUS, {
+          reference: "not-a-date",
+        }),
+      ).toBe("");
     });
 
-    expect(outInvalid).toEqual(outUTC);
+    it("returns '' when reference is an empty string", () => {
+      expect(
+        formatRelativeUtc("2024-03-15T12:00:00Z", MustTestLocales.enUS, {
+          reference: "",
+        }),
+      ).toBe("");
+    });
   });
 
-  it.each`
-    invalidValue
-    ${"not-a-datetime"}
-    ${"2024-02-29"}
-    ${""}
-    ${null}
-    ${undefined}
-    ${true}
-  `(
-    "returns an empty string for invalid datetime $invalidValue",
-    ({ invalidValue }) => {
-      expect(formatRelativeUtc(invalidValue as never)).toBe("");
-    },
-  );
+  // ---------------------------------------------------------------------------
+  // Temporal failures — internal errors must not throw, must return ""
+  // ---------------------------------------------------------------------------
+  describe("Temporal failures", () => {
+    it("returns '' when Temporal.Now.instant throws (no reference provided)", () => {
+      mockTemporalNowInstantThrow();
+      expect(
+        formatRelativeUtc("2024-03-15T12:00:00Z", MustTestLocales.enUS),
+      ).toBe("");
+    });
+  });
 });

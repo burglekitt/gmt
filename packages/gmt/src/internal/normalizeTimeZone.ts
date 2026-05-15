@@ -1,5 +1,5 @@
-import { getSystemTimeZone } from "../plain";
-import { isValidTimeZone } from "../zoned";
+import { getSystemTimeZone } from "../plain/get/getSystemTimeZone";
+import { isValidTimeZone } from "../zoned/validate";
 
 export function normalizeTimeZone(tz?: string): string {
   if (tz === "local") return getSystemTimeZone();
