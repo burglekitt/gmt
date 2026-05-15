@@ -44,6 +44,7 @@ Date/time comparison:
 Locale-aware formatting:
 
 - `formatDate`, `formatDateTime`, `formatTime`
+- `formatRelativeDate`, `formatRelativeTime`, `formatRelativeDateTime`
 
 ### get
 

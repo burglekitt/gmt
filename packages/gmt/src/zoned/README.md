@@ -42,6 +42,7 @@ Timezone/format conversion:
 Locale-aware timezone formatting:
 
 - `formatZonedDateTime`, `formatZonedRange`
+- `formatRelativeZoned`
 
 ### get
 

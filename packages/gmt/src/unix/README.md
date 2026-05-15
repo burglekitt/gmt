@@ -31,6 +31,13 @@ Current Unix timestamps:
 - `getUnixHour`, `getUnixMinute`, `getUnixSecond`
 - `getUnixMillisecond`, `getUnixMicrosecond`, `getUnixNanosecond`
 
+### format
+
+Locale-aware Unix formatting:
+
+- `formatUnix`
+- `formatRelativeUnix`
+
 ### parse
 
 Parse Unix timestamps:

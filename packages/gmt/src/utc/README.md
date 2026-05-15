@@ -37,6 +37,13 @@ Current UTC time:
 - `getUtcHour`, `getUtcMinute`, `getUtcSecond`
 - `getUtcMillisecond`, `getUtcMicrosecond`, `getUtcNanosecond`
 
+### format
+
+Locale-aware UTC formatting:
+
+- `formatUtc`
+- `formatRelativeUtc`
+
 ### parse
 
 Parse UTC components:
