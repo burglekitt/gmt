@@ -64,9 +64,7 @@ import { Temporal, plain, zoned, regex } from "@burglekitt/gmt";
 You can also import subpaths directly:
 
 ```typescript
-import { addDate } from "@burglekitt/gmt/plain";
-import { getNow } from "@burglekitt/gmt/plain";
-import { formatRelativeZoned } from "@burglekitt/gmt/zoned/format";
+import { addDate, getNow, formatRelativeZoned } from "@burglekitt/gmt";
 ```
 
 ## Quick Start
@@ -74,8 +72,12 @@ import { formatRelativeZoned } from "@burglekitt/gmt/zoned/format";
 ### Plain arithmetic and comparisons
 
 ```typescript
-import { addDate, diffDateTime } from "@burglekitt/gmt/plain/calculate";
-import { areDatesEqual, isBeforeDateTime } from "@burglekitt/gmt/plain/compare";
+import {
+  addDate,
+  areDatesEqual,
+  diffDateTime,
+  isBeforeDateTime,
+} from "@burglekitt/gmt";
 
 addDate("2026-01-01", 90, "day");
 // "2026-03-32" is impossible, so Temporal normalizes correctly -> "2026-04-01"
@@ -93,8 +95,7 @@ isBeforeDateTime("2026-03-17T09:00:00", "2026-03-17T10:00:00");
 ### Zoned operations
 
 ```typescript
-import { addZoned } from "@burglekitt/gmt/zoned/calculate";
-import { formatZonedDateTime } from "@burglekitt/gmt/zoned/format";
+import { addZoned, formatZonedDateTime } from "@burglekitt/gmt";
 
 addZoned("2026-03-07T23:00:00-05:00[America/New_York]", 2, "hour");
 // "2026-03-08T01:00:00-05:00[America/New_York]"
@@ -153,11 +154,7 @@ formatRelativeUnix(1710685845000, "en-US", { epochUnit: "milliseconds" });
 ### Unix and UTC helpers
 
 ```typescript
-import {
-  getUnixNow,
-  getUtcNow,
-  convertUnixToPlainDate,
-} from "@burglekitt/gmt/unix/get";
+import { getUnixNow, getUtcNow, convertUnixToPlainDate } from "@burglekitt/gmt";
 
 getUnixNow("milliseconds");
 // 1710685845000
