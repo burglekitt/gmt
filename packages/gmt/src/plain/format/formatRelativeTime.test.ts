@@ -1,7 +1,9 @@
-import { Temporal } from "@js-temporal/polyfill";
 import { vi } from "vitest";
 import { hasFullIcu, MustTestLocales } from "../../test";
-import { mockTemporalPlainTimeFromThrow } from "../../test/mocks";
+import {
+  mockTemporalNowPlainTimeISOThrow,
+  mockTemporalPlainTimeFromThrow,
+} from "../../test/mocks";
 import { formatRelativeTime } from "./formatRelativeTime";
 
 const REF = "12:00:00";
@@ -581,9 +583,7 @@ describe("formatRelativeTime", () => {
   // ---------------------------------------------------------------------------
   describe("Temporal failures", () => {
     it("returns '' when Temporal.Now.plainTimeISO throws (no reference provided)", () => {
-      vi.spyOn(Temporal.Now, "plainTimeISO").mockImplementation(() => {
-        throw new Error("simulated failure");
-      });
+      mockTemporalNowPlainTimeISOThrow();
       expect(formatRelativeTime("11:30:00", MustTestLocales.enUS)).toBe("");
     });
 

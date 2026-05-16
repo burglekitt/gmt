@@ -1,5 +1,7 @@
 import { Temporal } from "@js-temporal/polyfill";
+import { normalizeDateTime } from "../../internal/normalizeDateTime";
 import { normalizeTimeZone } from "../../internal/normalizeTimeZone";
+import { toInstantFromUtc } from "../../internal/toInstantFromUtc";
 import { isValidUtc } from "../validate";
 
 // Intl.RelativeTimeFormatUnit includes "quarter" which Temporal doesn't support.
@@ -30,18 +32,6 @@ const AUTO_UNITS: Array<{
   { unit: "day", maxSeconds: Infinity },
 ];
 
-// date-only UTC strings ("2024-01-01Z") are valid but Temporal.Instant.from
-// won't accept them; treat them as midnight UTC.
-function toInstant(utcString: string): Temporal.Instant {
-  try {
-    return Temporal.Instant.from(utcString);
-  } catch {
-    return Temporal.PlainDate.from(utcString.replace(/Z$/i, ""))
-      .toZonedDateTime("UTC")
-      .toInstant();
-  }
-}
-
 export function formatRelativeUtc(
   value: string,
   locale?: string,
@@ -51,14 +41,23 @@ export function formatRelativeUtc(
   if (options.reference !== undefined && !isValidUtc(options.reference))
     return "";
 
+  const target = toInstantFromUtc(value);
+  if (target === null) return "";
+
+  let reference: Temporal.Instant;
+  if (options.reference) {
+    const ref = toInstantFromUtc(options.reference);
+    if (ref === null) return "";
+    reference = ref;
+  } else {
+    try {
+      reference = Temporal.Now.instant();
+    } catch {
+      return "";
+    }
+  }
+
   try {
-    const target = toInstant(value);
-    const reference = options.reference
-      ? toInstant(options.reference)
-      : Temporal.Now.instant();
-
-    const tz = normalizeTimeZone(options.timeZone);
-
     const diff = target.since(reference);
     const absSeconds = Math.abs(diff.total("second"));
 
@@ -71,16 +70,20 @@ export function formatRelativeUtc(
     try {
       amount = Math.round(diff.total(unit));
     } catch {
-      // month/year are calendrical and need a relativeTo anchor
+      // month/year are calendrical and need a relativeTo anchor.
+      // Defer timezone normalization until we know we need it.
+      const tz = normalizeTimeZone(options.timeZone);
       amount = Math.round(
         diff.total({ unit, relativeTo: reference.toZonedDateTimeISO(tz) }),
       );
     }
 
-    return new Intl.RelativeTimeFormat(locale, {
-      numeric: options.numeric ?? "auto",
-      style: options.style ?? "long",
-    }).format(amount, unit);
+    return normalizeDateTime(
+      new Intl.RelativeTimeFormat(locale, {
+        numeric: options.numeric ?? "auto",
+        style: options.style ?? "long",
+      }).format(amount, unit),
+    );
   } catch {
     return "";
   }

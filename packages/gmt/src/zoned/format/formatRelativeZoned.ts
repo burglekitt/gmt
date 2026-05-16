@@ -1,4 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
+import { normalizeDateTime } from "../../internal";
 import { isValidUtc } from "../../utc/validate";
 import { isValidZonedDateTime } from "../validate";
 
@@ -16,8 +17,18 @@ export interface FormatRelativeZonedOptions {
   style?: "long" | "short" | "narrow";
   numeric?: "always" | "auto";
   largestUnit?: RelativeUnit;
-  // A ZonedDateTime ISO string, a UTC ISO string, or a unix epoch (ms).
-  // When omitted, "now" in the value's own timezone is used.
+  /**
+   * Anchor point for the relative diff.
+   *
+   * - ZonedDateTime ISO string: kept in its own zone; Temporal handles
+   *   cross-zone diffs correctly. The label is therefore zone-aware — a value
+   *   and reference in different zones can produce a non-zero diff even when
+   *   they describe the same absolute instant.
+   * - UTC ISO string: placed into `value`'s timezone before diffing so the
+   *   calendar anchor matches the value's wall clock.
+   * - Numeric epoch (ms): same — placed into `value`'s timezone.
+   * - Omitted: "now" in `value`'s own timezone.
+   */
   reference?: string | number;
 }
 
@@ -60,7 +71,8 @@ export function formatRelativeZoned(
     } else if (typeof options.reference === "string") {
       // UTC string → place into value's zone for a consistent calendar anchor.
       // ZonedDateTime string → keep its own zone; Temporal handles cross-zone diffs.
-      refZDT = options.reference.endsWith("Z")
+      // isValidUtc covers both `Z` and `z` suffixes (the regex accepts [Zz]).
+      refZDT = isValidUtc(options.reference)
         ? Temporal.Instant.from(options.reference).toZonedDateTimeISO(
             valueZDT.timeZoneId,
           )
@@ -88,10 +100,12 @@ export function formatRelativeZoned(
       amount = Math.round(diff.total({ unit, relativeTo: refZDT }));
     }
 
-    return new Intl.RelativeTimeFormat(locale, {
-      numeric: options.numeric ?? "auto",
-      style: options.style ?? "long",
-    }).format(amount, unit);
+    return normalizeDateTime(
+      new Intl.RelativeTimeFormat(locale, {
+        numeric: options.numeric ?? "auto",
+        style: options.style ?? "long",
+      }).format(amount, unit),
+    );
   } catch {
     return "";
   }

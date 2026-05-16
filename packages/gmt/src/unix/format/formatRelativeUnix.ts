@@ -1,4 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
+import { normalizeDateTime } from "../../internal/normalizeDateTime";
 import { normalizeTimeZone } from "../../internal/normalizeTimeZone";
 import { isValidUtc } from "../../utc/validate";
 
@@ -32,7 +33,18 @@ function toInstant(
   raw: string | number,
   epochUnit: "milliseconds" | "seconds",
 ): Temporal.Instant | null {
-  const n = typeof raw === "string" ? Number(raw) : raw;
+  let n: number;
+  if (typeof raw === "number") {
+    n = raw;
+  } else if (typeof raw === "string") {
+    const trimmed = raw.trim();
+    // Mirror formatUnix.parseEpochMs: only accept integer-looking strings,
+    // so "" / "not-a-date" / "12.5" don't silently coerce to 0/12.
+    if (!/^-?\d+$/.test(trimmed)) return null;
+    n = Number(trimmed);
+  } else {
+    return null;
+  }
   if (!Number.isFinite(n)) return null;
   try {
     const ms = epochUnit === "seconds" ? n * 1000 : n;
@@ -60,10 +72,19 @@ export function formatRelativeUnix(
       return "";
     }
   } else if (typeof options.reference === "string") {
-    if (!isValidUtc(options.reference)) return "";
-    try {
-      reference = Temporal.Instant.from(options.reference);
-    } catch {
+    // String references can be a numeric unix epoch ("1709164800000") OR a
+    // UTC ISO string ("2024-02-29T00:00:00Z"). Try the numeric path first to
+    // match formatUnix's symmetry, then fall back to UTC.
+    const numericRef = toInstant(options.reference, epochUnit);
+    if (numericRef !== null) {
+      reference = numericRef;
+    } else if (isValidUtc(options.reference)) {
+      try {
+        reference = Temporal.Instant.from(options.reference);
+      } catch {
+        return "";
+      }
+    } else {
       return "";
     }
   } else {
@@ -71,8 +92,6 @@ export function formatRelativeUnix(
     if (ref === null) return "";
     reference = ref;
   }
-
-  const tz = normalizeTimeZone(options.timeZone);
 
   try {
     const diff = target.since(reference);
@@ -87,16 +106,20 @@ export function formatRelativeUnix(
     try {
       amount = Math.round(diff.total(unit));
     } catch {
-      // month/year are calendrical and need a relativeTo anchor
+      // month/year are calendrical and need a relativeTo anchor.
+      // Defer timezone normalization until we know we need it.
+      const tz = normalizeTimeZone(options.timeZone);
       amount = Math.round(
         diff.total({ unit, relativeTo: reference.toZonedDateTimeISO(tz) }),
       );
     }
 
-    return new Intl.RelativeTimeFormat(locale, {
-      numeric: options.numeric ?? "auto",
-      style: options.style ?? "long",
-    }).format(amount, unit);
+    return normalizeDateTime(
+      new Intl.RelativeTimeFormat(locale, {
+        numeric: options.numeric ?? "auto",
+        style: options.style ?? "long",
+      }).format(amount, unit),
+    );
   } catch {
     return "";
   }

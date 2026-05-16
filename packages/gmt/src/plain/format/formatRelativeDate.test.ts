@@ -1,6 +1,6 @@
-import { Temporal } from "@js-temporal/polyfill";
 import { vi } from "vitest";
 import { hasFullIcu, MustTestLocales } from "../../test";
+import { mockTemporalNowPlainDateISOThrow } from "../../test/mocks";
 import { formatRelativeDate } from "./formatRelativeDate";
 
 const REF = "2024-03-15";
@@ -624,9 +624,7 @@ describe("formatRelativeDate", () => {
   // ---------------------------------------------------------------------------
   describe("Temporal failures", () => {
     it("returns '' when Temporal.Now.plainDateISO throws (no reference provided)", () => {
-      vi.spyOn(Temporal.Now, "plainDateISO").mockImplementation(() => {
-        throw new Error("simulated failure");
-      });
+      mockTemporalNowPlainDateISOThrow();
       expect(formatRelativeDate("2024-03-12", MustTestLocales.enUS)).toBe("");
     });
   });

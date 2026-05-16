@@ -16,6 +16,14 @@ import { Temporal, Intl as TemporalIntl } from "@js-temporal/polyfill";
 //   - Korean day period ("오후")
 //   - Portuguese long day period ("da tarde")
 // If any one falls back to a stripped form, treat the runtime as not-full.
+//
+// CONTRIBUTOR NOTE: if you add a `hasFullIcu ? "fullValue" : "partialValue"`
+// ternary that depends on a locale feature NOT represented in this probe
+// (e.g. Turkish long timezone names, Hebrew dual-form pluralization), extend
+// the probe below to assert that feature too. Otherwise the probe could
+// return `true` on a partial-ICU runtime that happens to have data for the
+// existing probe features but not yours, and your test would fail silently
+// on that runtime.
 const PROBE_AFTERNOON = Temporal.PlainDateTime.from("2024-02-03T14:30:00");
 const PROBE_JANUARY = Temporal.PlainDate.from("1970-01-10");
 

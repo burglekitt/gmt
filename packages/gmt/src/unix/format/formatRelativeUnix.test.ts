@@ -120,9 +120,9 @@ describe("formatRelativeUnix", () => {
   });
 
   // ---------------------------------------------------------------------------
-  // String reference (UTC ISO)
+  // String reference (UTC ISO or numeric epoch string)
   // ---------------------------------------------------------------------------
-  describe("string reference (UTC ISO)", () => {
+  describe("string reference", () => {
     it("accepts a UTC ISO string as reference", () => {
       expect(
         formatRelativeUnix(REF_MS - 1_800_000, MustTestLocales.enUS, {
@@ -131,7 +131,24 @@ describe("formatRelativeUnix", () => {
       ).toBe("30 minutes ago");
     });
 
-    it("returns '' when string reference is not a valid UTC string", () => {
+    it("accepts a numeric ms string as reference (symmetric with value)", () => {
+      expect(
+        formatRelativeUnix(REF_MS - 1_800_000, MustTestLocales.enUS, {
+          reference: String(REF_MS),
+        }),
+      ).toBe("30 minutes ago");
+    });
+
+    it("accepts a numeric seconds string as reference with epochUnit: 'seconds'", () => {
+      expect(
+        formatRelativeUnix(REF_S - 1_800, MustTestLocales.enUS, {
+          reference: String(REF_S),
+          epochUnit: "seconds",
+        }),
+      ).toBe("30 minutes ago");
+    });
+
+    it("returns '' when string reference is neither numeric nor a valid UTC string", () => {
       expect(
         formatRelativeUnix(REF_MS, MustTestLocales.enUS, {
           reference: "not-a-date",

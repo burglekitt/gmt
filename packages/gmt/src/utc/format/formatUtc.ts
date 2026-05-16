@@ -1,6 +1,6 @@
-import { Temporal } from "@js-temporal/polyfill";
 import { normalizeDateTime } from "../../internal/normalizeDateTime";
 import { normalizeTimeZone } from "../../internal/normalizeTimeZone";
+import { toInstantFromUtc } from "../../internal/toInstantFromUtc";
 import { isValidUtc } from "../validate";
 
 export interface FormatUtcOptions extends Intl.DateTimeFormatOptions {
@@ -21,8 +21,10 @@ export function formatUtc(
     ...intlOptions
   } = options ?? {};
 
+  const instant = toInstantFromUtc(value);
+  if (instant === null) return "";
+
   try {
-    const instant = Temporal.Instant.from(value);
     const tz = normalizeTimeZone(timeZone);
     const zdt = instant.toZonedDateTimeISO(tz);
 

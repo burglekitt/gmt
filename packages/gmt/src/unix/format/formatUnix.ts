@@ -6,6 +6,10 @@ import { isValidUnixUnit } from "../validate";
 export interface FormatUnixOptions extends Intl.DateTimeFormatOptions {
   epochUnit?: "milliseconds" | "seconds";
   timeZone?: string;
+  // When true, format via ZonedDateTime so the localized timezone name is
+  // included for full/long styles. Defaults to false (matches the original
+  // behavior of formatting a wall-clock PlainDateTime).
+  includeTimeZoneName?: boolean;
 }
 
 function parseEpochMs(
@@ -34,6 +38,7 @@ export function formatUnix(
   const {
     epochUnit = "milliseconds",
     timeZone,
+    includeTimeZoneName = false,
     ...intlOptions
   } = options ?? {};
 
@@ -45,10 +50,11 @@ export function formatUnix(
   const tz = normalizeTimeZone(timeZone);
 
   try {
-    const out = Temporal.Instant.fromEpochMilliseconds(ms)
-      .toZonedDateTimeISO(tz)
-      .toPlainDateTime()
-      .toLocaleString(locale, intlOptions);
+    const zdt =
+      Temporal.Instant.fromEpochMilliseconds(ms).toZonedDateTimeISO(tz);
+    const out = includeTimeZoneName
+      ? zdt.toLocaleString(locale, intlOptions)
+      : zdt.toPlainDateTime().toLocaleString(locale, intlOptions);
     return normalizeDateTime(out);
   } catch {
     return "";

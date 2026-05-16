@@ -125,6 +125,32 @@ describe("formatUnix", () => {
   });
 
   // ---------------------------------------------------------------------------
+  // includeTimeZoneName — mirrors formatUtc.includeTimeZoneName
+  // ---------------------------------------------------------------------------
+  describe("includeTimeZoneName", () => {
+    it("omits the timezone name by default (PlainDateTime path)", () => {
+      expect(
+        formatUnix(REF_MS, MustTestLocales.enUS, {
+          dateStyle: "long",
+          timeStyle: "long",
+          timeZone: "UTC",
+        }),
+      ).toBe("February 29, 2024 at 12:00:00 AM");
+    });
+
+    it("includes the timezone name when includeTimeZoneName is true", () => {
+      expect(
+        formatUnix(REF_MS, MustTestLocales.enUS, {
+          dateStyle: "long",
+          timeStyle: "long",
+          timeZone: "UTC",
+          includeTimeZoneName: true,
+        }),
+      ).toContain("UTC");
+    });
+  });
+
+  // ---------------------------------------------------------------------------
   // epochUnit: "seconds"
   // ---------------------------------------------------------------------------
   describe("epochUnit: seconds", () => {
