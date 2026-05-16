@@ -13,6 +13,7 @@ Read these before working in the repo. Each is scoped — load only what you nee
 | [context/testing-standards.md](./context/testing-standards.md) | When writing or reviewing tests |
 | [context/jsdoc-standards.md](./context/jsdoc-standards.md) | When adding or updating public function JSDoc |
 | [context/code-review-checklist.md](./context/code-review-checklist.md) | When reviewing a PR |
+| [context/linting-packages.md](./context/linting-packages.md) | When working on gmt-eslint, gmt-oxlint, or gmt-biome |
 
 ## Core Rules (Quick Reference)
 
