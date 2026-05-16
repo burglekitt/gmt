@@ -50,15 +50,17 @@ Invalid input fallbacks are consistent across the library:
 
 ## Package Layout
 
-The package exports four top-level namespaces:
+The package exports six top-level namespaces:
 
 ```typescript
-import { Temporal, plain, zoned, regex } from "@burglekitt/gmt";
+import { Temporal, plain, zoned, unix, utc, regex } from "@burglekitt/gmt";
 ```
 
 - `Temporal`: re-exported from `@js-temporal/polyfill`
 - `plain`: timezone-free helpers
 - `zoned`: timezone-aware helpers
+- `unix`: Unix epoch (seconds or milliseconds) helpers
+- `utc`: UTC instant helpers
 - `regex`: low-level regex building blocks
 
 You can also import subpaths directly:

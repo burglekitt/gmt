@@ -2,29 +2,18 @@
 "@burglekitt/gmt": minor
 ---
 
-New relative time formatters and rounded-out format API surface.
+Adds relative time formatters across all value types, and fills in the missing base formatters for the unix and utc namespaces.
 
-**New formatters:**
+New relative formatters — all accept `locale`, `style` (`"long" | "short" | "narrow"`), `numeric` (`"auto" | "always"`), `largestUnit`, and an optional `reference` anchor; auto-select the largest sensible unit when `largestUnit` is omitted; return `""` for invalid input:
 
-- `formatRelativeDate` — relative dates against a `PlainDate` reference (e.g. "3 days ago", "next year").
-- `formatRelativeDateTime` — relative datetimes against a `PlainDateTime` reference (e.g. "in 2 hours", "yesterday").
-- `formatRelativeTime` — relative wall times against a `PlainTime` reference (e.g. "30 minutes ago").
-- `formatRelativeZoned` — relative zoned datetimes against a `ZonedDateTime` reference, DST-safe.
-- `formatRelativeUnix` — relative time from a Unix epoch (ms or seconds) against a reference epoch.
-- `formatRelativeUtc` — relative time from a UTC ISO string against a UTC reference.
+- `formatRelativeDate` — relative plain date (e.g. `"3 days ago"`, `"next year"`)
+- `formatRelativeTime` — relative plain time (e.g. `"30 minutes ago"`)
+- `formatRelativeDateTime` — relative plain datetime (e.g. `"in 2 hours"`)
+- `formatRelativeZoned` — relative zoned datetime, DST-safe; reference can be a `ZonedDateTime` string, UTC string, or Unix epoch (ms)
+- `formatRelativeUnix` — relative time from a Unix epoch (ms or seconds); reference can be a numeric epoch or UTC ISO string
+- `formatRelativeUtc` — relative time from a UTC ISO string
 
-All relative formatters:
-- Accept `numeric: "auto" | "always"` and `style: "long" | "short" | "narrow"` (passed through to `Intl.RelativeTimeFormat`).
-- Auto-select the largest sensible unit (second/minute/hour/day/week/month/year) unless `largestUnit` is provided.
-- Pass output through `normalizeDateTime` for consistent NBSP/minus-sign handling.
-- Return `""` for invalid input.
+New base formatters:
 
-**Filled-in base formatters:**
-
-- `formatUnix` — locale-aware formatting for Unix epochs (ms or seconds), with `timeZone` support including `"local"`.
-- `formatUtc` — locale-aware formatting for UTC ISO strings.
-
-**Test infrastructure:**
-
-- Adds `hasFullIcu` probe in `src/test/` so locale tests are robust to runtimes shipping partial ICU (e.g. some Node builds lack non-English day-period or timezone data).
-- Locale rows that diverge between full and partial ICU now carry inline ternaries with both expected strings visible, so the test tables continue to serve as documentation.
+- `formatUnix` — locale-aware formatting for Unix epochs (ms or seconds); accepts `timeZone` (including `"local"`) and `includeTimeZoneName`
+- `formatUtc` — locale-aware formatting for UTC ISO strings; accepts `timeZone` and `includeTimeZoneName`
