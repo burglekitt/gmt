@@ -125,8 +125,26 @@ npm publish --access public
 
 Option C — GitHub Actions publish (optional):
 
-- If you want to publish from the Actions UI instead of your machine, create an environment `release` in GitHub and add an environment secret named `NPM_TOKEN` containing an npm Automation token. The `publish.yml` workflow uses `environment: release` and will read `secrets.NPM_TOKEN` from that environment.
-- This is optional — local publishing works with your local npm auth/passkey and requires no repo secrets.
+If you publish from GitHub Actions, use an npm Automation token with the minimal required permission (publish). Store the token as a repository secret named `NPM_TOKEN` or (preferably) in a protected GitHub Environment called `release`. In Actions map the secret to the Node auth environment variable:
+
+```yaml
+env:
+  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+```
+
+Security checklist for Actions-based publishing:
+
+- Create an npm Automation token limited to publish scope; avoid broad or long-lived tokens.
+- Store the token in a protected environment or as a repo secret and restrict who can approve environment-protected workflow runs (use GitHub Environment approvals).
+- Never print or echo `NPM_TOKEN` (or `NODE_AUTH_TOKEN`) in workflow logs or steps; avoid exposing it in PRs or forked workflows.
+- Prefer local publishing where possible; if using Actions require explicit environment approvals and limit who can trigger the `release` environment.
+
+Relevant docs:
+
+- npm Automation tokens: https://docs.npmjs.com/creating-and-viewing-authentication-tokens
+- GitHub Environments & Secrets: https://docs.github.com/en/actions/deployment/targeting-specific-environments/using-environments-for-deployments
+
+This is optional — local publishing works with your local npm auth/passkey and requires no repo secrets.
 
 ---
 
@@ -139,6 +157,38 @@ Option C — GitHub Actions publish (optional):
 pnpm exec changeset tag
 git push --follow-tags
 ```
+
+---
+
+## GitHub Releases (manual, after publishing)
+
+`changeset:publish` creates git tags but does **not** create GitHub Releases. Create one per new tag so the repo's Releases page reflects what's on npm.
+
+For each new tag, run from repo root:
+
+```bash
+# 1. find the tag(s) just created
+git tag --sort=-creatordate | head
+
+# 2. pull the top changelog section (the just-added one) into a notes file,
+#    stripping the "## <version>" header so the body starts at "### ..."
+PKG=gmt                          # or gmt-biome | gmt-eslint | gmt-oxlint
+TAG='@burglekitt/gmt@1.3.0'      # the tag you're releasing
+awk '/^## /{f++} f==1' packages/$PKG/CHANGELOG.md | sed '1,2d' > /tmp/release-notes.md
+
+# 3. create the release
+gh release create "$TAG" \
+  --title "$TAG" \
+  --notes-file /tmp/release-notes.md \
+  --latest                       # or --latest=false for non-headline pkgs
+```
+
+Notes:
+
+- The tag name contains `@` and `/` — **always quote it** in shell commands. GitHub URL-encodes it (`%40`, `%2F`) in the release URL, which is normal.
+- Mark only one release per publish batch as `--latest` (typically the main `@burglekitt/gmt` package). Use `--latest=false` on the rest.
+- `gh` will create the tag if missing, but with the Changesets flow the tag already exists — `gh` just attaches the release to it.
+- Requires `gh auth login` once per machine.
 
 ---
 

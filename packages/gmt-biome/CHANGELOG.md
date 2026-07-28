@@ -1,5 +1,23 @@
 # @burglekitt/gmt-biome
 
+## 1.0.3
+
+### Patch Changes
+
+- 38f2e23: Fix .grit file export. This now works with explicit node_modules references in the plugins array in biome.json of consumers
+
+## 1.0.2
+
+### Patch Changes
+
+- 9348e7c: Add `.grit` extension exports for all plugins to support both extensionless and `.grit` subpath imports (for example, `plugins/no-new-date` and `plugins/no-new-date.grit`), and change the package entrypoint from `recommended.json` to `biome.json` by removing `recommended.json`.
+
+## 1.0.1
+
+### Patch Changes
+
+- f3af6b3: Replace top-level `biome.json` with a package `recommended.json` and export plugin subpaths. This avoids nested `biome.json` conflicts in the monorepo while keeping a consumer-facing entrypoint and direct plugin exports.
+
 ## 1.0.0
 
 ### Major Changes

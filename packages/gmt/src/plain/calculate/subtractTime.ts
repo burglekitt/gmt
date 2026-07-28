@@ -4,15 +4,17 @@ import type { TimeDurationUnit } from "../../types";
 import { isValidTime, isValidTimeDurationUnit } from "../validate";
 
 /**
- * Return a PlainTime ISO string with `amount` subtracted from `value`
- * using the specified `unit`.
+ * Return a PlainTime ISO string with `units` subtracted from `value`.
  *
- * - Validates `value`, `unit`, and `amount` before performing the operation.
- * - Returns an empty string for invalid inputs.
+ * - Validates `value`, `units`, and `amount` before performing the subtract.
+ * - Returns "" for invalid inputs.
  *
  * @param value ISO PlainTime string
- * @param units Partial record of TimeDurationUnits with numeric values to subtract
- * @returns ISO PlainTime string with amount subtracted, or "" on invalid input
+ * @param units Partial<Record<TimeDurationUnit, number>> object specifying units to subtract
+ * @returns ISO PlainTime string after subtraction, or "" on invalid input
+ *
+ * @example subtractTime("14:30:00", { hours: 1 }) // "13:30:00"
+ * @example subtractTime("invalid", { hours: 1 }) // ""
  */
 export function subtractTime(
   value: string,

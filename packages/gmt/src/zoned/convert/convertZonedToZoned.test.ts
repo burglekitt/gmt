@@ -1,5 +1,5 @@
-import { parseZonedTimezone } from "../parse";
-import { sameInstantBattleCases } from "../test/timezoneFixtures";
+import { sameInstantBattleCases } from "../../test";
+import { parseTimeZoneFromZoned } from "../parse";
 import { convertZonedToZoned } from "./convertZonedToZoned";
 
 describe("convertZonedToZoned", () => {
@@ -69,7 +69,7 @@ describe("convertZonedToZoned", () => {
     ${null}
     ${undefined}
   `(
-    "returns an empty string for invalid timezone $invalidTimeZone",
+    "returns an empty string for invalid timeZone $invalidTimeZone",
     ({ invalidTimeZone }) => {
       expect(
         convertZonedToZoned(
@@ -82,7 +82,9 @@ describe("convertZonedToZoned", () => {
 
   for (const { timeZone, value } of sameInstantBattleCases) {
     it(`converts a battle-test zoned datetime from ${timeZone} to UTC`, () => {
-      expect(parseZonedTimezone(convertZonedToZoned(value, "UTC"))).toBe("UTC");
+      expect(parseTimeZoneFromZoned(convertZonedToZoned(value, "UTC"))).toBe(
+        "UTC",
+      );
     });
   }
 });

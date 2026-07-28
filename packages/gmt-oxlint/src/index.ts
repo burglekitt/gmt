@@ -6,9 +6,23 @@ import { noDateUtcRule } from "./rules/no-date-utc";
 import { noNewDateRule } from "./rules/no-new-date";
 import type { OxlintPlugin } from "./types";
 
+export const recommendedRules = {
+  "@burglekitt/gmt-oxlint/no-date-global": "error",
+  "@burglekitt/gmt-oxlint/no-new-date": "error",
+  "@burglekitt/gmt-oxlint/no-date-now": "error",
+  "@burglekitt/gmt-oxlint/no-date-parse": "error",
+  "@burglekitt/gmt-oxlint/no-date-utc": "error",
+  "@burglekitt/gmt-oxlint/no-date-getTimezoneOffset": "error",
+} as const;
+
+export const recommendedConfig = {
+  jsPlugins: ["@burglekitt/gmt-oxlint"],
+  rules: recommendedRules,
+} as const;
+
 const plugin: OxlintPlugin = {
   meta: {
-    name: "gmt-oxlint",
+    name: "@burglekitt/gmt-oxlint",
   },
   rules: {
     "no-date-global": noDateGlobalRule,
@@ -17,6 +31,11 @@ const plugin: OxlintPlugin = {
     "no-date-parse": noDateParseRule,
     "no-date-utc": noDateUtcRule,
     "no-date-getTimezoneOffset": noDateGetTimezoneOffsetRule,
+  },
+  configs: {
+    recommended: {
+      rules: recommendedRules,
+    },
   },
 };
 

@@ -1,23 +1,36 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { isValidTimezone } from "../validate";
+import { isValidTimeZone } from "../validate";
 
 /**
- * Return the current zoned datetime for the specified IANA timezone.
+ * Return the current zoned datetime for the specified IANA timeZone.
  *
- * - Uses `Temporal.Now.zonedDateTimeISO(ianaTimezone)`.
- * - Returns empty string "" for invalid timezone or on failure.
+ * - Uses Temporal.Now.zonedDateTimeISO to get the current time.
+ * - Validation is performed on the timezone.
  *
- * @param ianaTimezone IANA timezone identifier
- * @returns zoned ISO 8601 datetime string or empty string when invalid
+ * @param ianaTimezone IANA timeZone identifier
+ * @param optionsArg optional: smallestUnit ("second" | "millisecond" | "microsecond" | "nanosecond")
+ * @returns zoned ISO 8601 datetime string or "" on invalid input
+ *
+ * @example getZonedNow("America/New_York") // "2024-02-29T09:30:45.123-05:00[America/New_York]"
+ * @example getZonedNow("Invalid/Zone") // ""
  */
-export function getZonedNow(ianaTimezone: string): string {
-  if (!isValidTimezone(ianaTimezone)) {
+export function getZonedNow(
+  ianaTimezone: string,
+  optionsArg?: {
+    smallestUnit?: Temporal.ZonedDateTimeToStringOptions["smallestUnit"];
+  },
+): string {
+  const options = {
+    smallestUnit: "millisecond",
+    ...optionsArg,
+  } as Partial<Temporal.ZonedDateTimeToStringOptions>;
+  if (!isValidTimeZone(ianaTimezone)) {
     return "";
   }
 
   try {
     const now = Temporal.Now.zonedDateTimeISO(ianaTimezone);
-    return now.toString();
+    return now.toString(options);
   } catch {
     return "";
   }

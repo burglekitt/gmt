@@ -15,15 +15,19 @@ Use this skill when a team wants automated enforcement of gmt-biome rules.
 1. Add lint/check command
 - Ensure CI runs a Biome check command on pull requests.
 
-2. Scope rollout
+2. Plugin selection
+- Use `"plugins": ["./node_modules/@burglekitt/gmt-biome/plugins/all.grit"]` as a common way to enforce all Date-ban rules at once. Reference individual files (for example, `./node_modules/@burglekitt/gmt-biome/plugins/<name>.grit`) only when you want a strict subset. Plugin entries must be filesystem paths to `.grit` files, and those paths may be relative or absolute depending on your repository layout.
+- **Never use `extends`** for these plugins — `extends` only accepts `biome.json` config files, not `.grit` files.
+
+3. Scope rollout
 - If the repository has many existing violations, propose incremental adoption:
   - start on changed files or selected paths,
   - then expand to full repository enforcement.
 
-3. Keep output actionable
+4. Keep output actionable
 - Configure CI so diagnostics are visible and easy to triage.
 
-4. Coordinate with other linters
+5. Coordinate with other linters
 - If ESLint/Oxlint are present, avoid redundant failures where possible.
 - Keep Date-ban policy consistent across tools.
 

@@ -1,124 +1,29 @@
-# GMT Temporal Library: Agent Rules
+# GMT Temporal Library — Agent Guide
 
-**Strict Guidelines for Working with Temporal Data**
+`@burglekitt/gmt` is a Temporal-first date/time library. String-in, string-out. No `Date` object anywhere.
 
----
+## Context Files
 
-## 📜 Core Principles
+Read these before working in the repo. Each is scoped — load only what you need for the task at hand.
 
-1. **String-Only Inputs/Outputs**
-   - **Rule**: All functions MUST accept/return **ISO 8601 strings** (e.g., `"2024-03-10"`, `"2024-03-10T12:00:00+01:00[Europe/Paris]"`).
-   - **Why**: Avoids `Date` object pitfalls (mutability, timezones, DST bugs).
-   - **Enforcement**: Zod schemas validate strings at runtime.
+| File | When to read it |
+|---|---|
+| [context/project-overview.md](./context/project-overview.md) | Always — covers what GMT is, why it exists, Temporal API references, and comparison library links |
+| [context/coding-standards.md](./context/coding-standards.md) | When writing or reviewing source code |
+| [context/testing-standards.md](./context/testing-standards.md) | When writing or reviewing tests |
+| [context/jsdoc-standards.md](./context/jsdoc-standards.md) | When adding or updating public function JSDoc |
+| [context/code-review-checklist.md](./context/code-review-checklist.md) | When reviewing a PR |
+| [context/linting-packages.md](./context/linting-packages.md) | When working on gmt-eslint, gmt-oxlint, or gmt-biome |
 
-2. **Temporal-Only**
-   - **Rule**: Use **only** `@js-temporal/polyfill` (never `Date`, `new Date()`, or `Date.now()`).
-   - **Why**: Temporal is immutable, timezone-aware, and precise.
-   - **Enforcement**: ESLint/Biome custom rules (block `Date` imports).
+## Core Rules (Quick Reference)
 
-3. **Strict Plain/Zoned Separation**
-   - **Rule**: Never mix `PlainDateTime` and `ZonedDateTime` in the same function/module.
-   - **Why**: Prevents ambiguity in timezone handling.
-   - **Enforcement**: Separate `plain/` and `zoned/` directories.
+These are the non-negotiables. Full detail is in the context files above.
 
-### 🧪 Test Rules
-
-1. **Use `it.each`` (Template Literals) for Iterative Tests**
-   - **Rule**: Always use backtick syntax (`it.each``) instead of array syntax (`it.each([])`).
-   - **Why**: Improves readability, type inference, and maintainability.
-   - **Example**:
-
-     ```ts
-     ✅ Correct:
-     it.each`
-       input       | expected
-       \${"2024"}   | \${2024}
-       \${"2025"}   | \${2025}
-     `("returns \$expected for \$input", ({ input, expected }) => { ... });
-
-     ❌ Avoid:
-     it.each([
-       ["2024", 2024],
-       ["2025", 2025]
-     ])("returns %s for %s", (input, expected) => { ... });
-     ```
-
-   - **Enforcement**: ESLint `vitest/prefer-it-each` rule (configured in `.eslintrc.json`).
-
-2. **Never Override Real Functions in Tests**
-    - **Rule**: Do not directly reassign or monkey-patch real functions (for example, `foo = ...`, `Temporal.Now.instant = ...`, `Intl.DateTimeFormat.prototype.resolvedOptions = ...`).
-    - **Use instead**:
-       - `vi.useFakeTimers()` + `vi.setSystemTime(...)` + `vi.useRealTimers()` for deterministic "now" behavior.
-       - `vi.spyOn(...).mockReturnValue(...)`, `mockReturnValueOnce(...)`, `mockImplementation(...)`, `mockResolvedValue(...)`, `mockRejectedValue(...)` for controlled behavior.
-    - **Why**: Keeps tests deterministic without mutating runtime globals in unsafe ways.
-
-3. **Locale Matrix Coverage Is Mandatory for Locale-Aware APIs**
-      - **Rule**: Any function that accepts a `locale` argument MUST test the full locale matrix:
-         - `en-US`, `en-GB`, `de-DE`, `fr-FR`, `es-ES`, `it-IT`, `pt-PT`, `sv-SE`, `is-IS`, `zh-CN`, `zh-TW`, `ja-JP`, `ko-KR`, `ar-SA`, `he-IL`, `ru-RU`, `tr-TR`
-      - **Implementation requirement**: Tests MUST reference named constants from the locale helper object (for example `MustTestLocales.enUS`) and list them explicitly in an `it.each`` table.
-      - **Do not**: Build locale tests by iterating generic arrays that hide locale names.
-      - **Why**: Explicit rows make locale intent and coverage visible, auditable, and easy to review for format regressions.
-
-
----
-
-## 🛠 Implementation Rules
-
-### ✅ **Allowed**
-
-| Pattern                     | Example                                  |
-|-----------------------------|------------------------------------------|
-| ISO strings                 | `"2024-03-10"`                            |
-| Temporal objects            | `Temporal.PlainDate.from("2024-03-10")`   |
-| Zod validation              | `PlainDateSchema.parse(input)`            |
-| Tree-shakable exports       | `export * "./plain"`       |
-
-### ❌ **Forbidden**
-
-| Pattern                     | Replacement                          |
-|-----------------------------|---------------------------------------|
-| `new Date()`                | `Temporal.Now.instant()`              |
-| `date.getTime()`            | `Temporal.Instant.from(date).epochSeconds` |
-| Manual string parsing       | `Temporal.PlainDate.from(string)`     |
-| Mutating methods            | Use Temporal’s immutable methods      |
-### 🚨 **Error Handling: Invalid Input Return Values**
-
-**Rule**: Return values depend on the function's return type:
-
-| Return Type | Invalid Input Behavior | Example |
-|-------------|----------------------|---------|
-| `string`    | Return empty string `""` | `addDate("invalid", 1, "day") → ""` |
-| `number`    | Return `null` | `diffDate("invalid", "2024-01-01", "day") → null` |
-| `boolean`   | Return `false` | `isValidDate("invalid") → false` |
-
-**Why**: Consistent, type-safe error handling without exceptions. Allows chaining and null-coalescing operators.
----
-
-## 🔍 Code Review Checklist
-
-**For every PR, verify:**
-
-1. **No `Date` objects** (search for `Date`, `new Date`, `.getTime()`).
-2. **All inputs/outputs are strings** (or Temporal objects).
-3. **Plain/zoned separation** (no cross-contamination).
-4. **Zod validation** for all public APIs.
-5. **100% test coverage** for edge cases (timezones, leap seconds).
-6. **Error handling is type-safe**: 
-   - Functions returning `string` return `""` on invalid input
-   - Functions returning `number` return `null` on invalid input
-   - Functions returning `boolean` return `false` on invalid input
-
----
-
-## 📋 Example: Valid vs. Invalid
-
-### ✅ **Valid**
-
-```ts
-import { Temporal } from "@js-temporal/polyfill";
-
-// Convert string → Temporal → string
-export const addDays = (dateStr: string, days: number): string => {
-  const date = Temporal.PlainDate.from(dateStr);
-  return date.add({ days }).toString();
-};
+1. **No `Date` object.** Use `@js-temporal/polyfill` exclusively.
+2. **String-in, string-out.** Public APIs accept ISO 8601 strings; return strings, numbers, booleans, or arrays.
+3. **Invalid input returns a sentinel, never throws.** `""` for strings, `null` for numbers, `false` for booleans, `[]` for arrays.
+4. **Wrap all Temporal calls in `try-catch`.** `.from()`, `.add()`, `.since()`, etc. throw `RangeError` on bad input.
+5. **Keep `plain/` and `zoned/` strictly separate.** Never mix `PlainDateTime` and `ZonedDateTime`.
+6. **Full locale matrix for any locale-aware function.** 17 locales, explicit rows, `hasFullIcu` ternaries where output differs.
+7. **Use pre-built mocks for error-path tests.** See `packages/gmt/src/test/mocks`.
+8. **JSDoc with `@example` on every public function.** Cover valid, invalid, and edge-case inputs.

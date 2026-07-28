@@ -6,14 +6,16 @@ import { getLargestTimeDurationUnit } from "./getLargestTimeDurationUnit";
 /**
  * Return the difference between two PlainTime values in the requested unit.
  *
- * - Returns `null` if inputs or unit are invalid.
- * - Uses Temporal.PlainTime.until with `largestUnit` and extracts the
- *   requested unit value from the resulting Duration.
+ * - Returns `null` for invalid inputs.
+ * - Uses Temporal.PlainTime.until with `largestUnit` and extracts the requested unit.
  *
  * @param time1 ISO PlainTime string for the start
  * @param time2 ISO PlainTime string for the end
- * @param units TimeDurationUnit | TimeDurationUnit[] to measure the difference (e.g. "hours", "minutes", "seconds")
+ * @param units TimeDurationUnit | TimeDurationUnit[] to measure the difference
  * @returns numeric difference in the requested unit, or null on invalid input
+ *
+ * @example diffTime("12:00:00", "14:30:00", "hour") // 2
+ * @example diffTime("invalid", "14:30:00", "hour") // null
  */
 export function diffTime(
   time1: string,

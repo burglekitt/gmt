@@ -1,6 +1,9 @@
 import { normalizeDateTime } from "../../internal";
-import { MustTestLocales } from "../../test/localeMatrix";
-import { localeZonedRangeInputByLocale } from "../test/localeZonedFixtures";
+import {
+  hasFullIcu,
+  localeZonedRangeInputByLocale,
+  MustTestLocales,
+} from "../../test";
 import { formatZonedRange } from "./formatZonedRange";
 
 describe("formatZonedRange", () => {
@@ -37,7 +40,7 @@ describe("formatZonedRange", () => {
     ${"2024-02-29T10:00:00-05:00[America/New_York]"} | ${"2024-02-29T12:00:00+01:00[Europe/Paris]"}
     ${"2024-02-29T10:00:00+00:00[UTC]"}              | ${"2024-02-29T12:00:00+09:00[Asia/Tokyo]"}
   `(
-    "returns empty string when range endpoints use different timezones: $from -> $to",
+    "returns empty string when range endpoints use different timeZones: $from -> $to",
     ({ from, to }) => {
       expect(
         formatZonedRange(from, to, "en-US", {
@@ -48,7 +51,7 @@ describe("formatZonedRange", () => {
     },
   );
 
-  it("forces formatting to use endpoint timezone even when options.timeZone is provided", () => {
+  it("forces formatting to use endpoint timeZone even when options.timeZone is provided", () => {
     const from = "2024-02-29T10:00:00-05:00[America/New_York]";
     const to = "2024-02-29T12:00:00-05:00[America/New_York]";
     const options = {
@@ -171,7 +174,7 @@ describe("formatZonedRange", () => {
   // is-IS
   it.each`
     from                                         | to                                         | options                                                                | expected
-    ${rangeByLocale[MustTestLocales.isIS].start} | ${rangeByLocale[MustTestLocales.isIS].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"3. febrúar 2024, 14:30:45 GMT+0 – 16:46:15 GMT+0"}
+    ${rangeByLocale[MustTestLocales.isIS].start} | ${rangeByLocale[MustTestLocales.isIS].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${hasFullIcu ? "3. febrúar 2024, 14:30:45 GMT – 16:46:15 GMT" : "3. febrúar 2024, 14:30:45 GMT+0 – 16:46:15 GMT+0"}
     ${rangeByLocale[MustTestLocales.isIS].start} | ${rangeByLocale[MustTestLocales.isIS].end} | ${{ dateStyle: "short", timeStyle: "short" }}                          | ${"3.2.2024, 14:30–16:46"}
     ${rangeByLocale[MustTestLocales.isIS].start} | ${rangeByLocale[MustTestLocales.isIS].end} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "shortOffset" }} | ${"14:30–16:46"}
   `(
@@ -231,9 +234,9 @@ describe("formatZonedRange", () => {
   // ko-KR
   it.each`
     from                                         | to                                         | options                                                                | expected
-    ${rangeByLocale[MustTestLocales.koKR].start} | ${rangeByLocale[MustTestLocales.koKR].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${"2024년 2월 3일 PM 2시 30분 45초 GMT+9 ~ PM 4시 46분 15초 GMT+9"}
-    ${rangeByLocale[MustTestLocales.koKR].start} | ${rangeByLocale[MustTestLocales.koKR].end} | ${{ dateStyle: "short", timeStyle: "short" }}                          | ${"24. 2. 3. PM 2:30~4:46"}
-    ${rangeByLocale[MustTestLocales.koKR].start} | ${rangeByLocale[MustTestLocales.koKR].end} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "shortOffset" }} | ${"PM 2:30~4:46"}
+    ${rangeByLocale[MustTestLocales.koKR].start} | ${rangeByLocale[MustTestLocales.koKR].end} | ${{ dateStyle: "long", timeStyle: "long" }}                            | ${hasFullIcu ? "2024년 2월 3일 오후 2시 30분 45초 GMT+9 ~ 오후 4시 46분 15초 GMT+9" : "2024년 2월 3일 PM 2시 30분 45초 GMT+9 ~ PM 4시 46분 15초 GMT+9"}
+    ${rangeByLocale[MustTestLocales.koKR].start} | ${rangeByLocale[MustTestLocales.koKR].end} | ${{ dateStyle: "short", timeStyle: "short" }}                          | ${hasFullIcu ? "24. 2. 3. 오후 2:30~4:46" : "24. 2. 3. PM 2:30~4:46"}
+    ${rangeByLocale[MustTestLocales.koKR].start} | ${rangeByLocale[MustTestLocales.koKR].end} | ${{ hour: "numeric", minute: "numeric", timeZoneName: "shortOffset" }} | ${hasFullIcu ? "오후 2:30~4:46" : "PM 2:30~4:46"}
   `(
     "formats valid zoned datetime range for ko-KR",
     ({ from, to, options, expected }) => {

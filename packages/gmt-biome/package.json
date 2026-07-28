@@ -1,6 +1,6 @@
 {
   "name": "@burglekitt/gmt-biome",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "private": false,
   "description": "Shared Biome configuration for gmt projects",
   "license": "MIT",
@@ -26,20 +26,24 @@
     "lint",
     "tanstack-intent"
   ],
-  "files": [
-    "biome.json",
-    "plugins",
-    "LICENSE",
-    "README.md",
-    "skills"
-  ],
   "scripts": {
     "pack": "npm pack --dry-run",
     "publish:dry-run": "npm publish --access public --dry-run",
     "publish:public": "npm publish --access public"
   },
+  "files": [
+    "plugins/",
+    "LICENSE",
+    "README.md",
+    "skills"
+  ],
   "exports": {
-    ".": "./biome.json"
+    "./plugins/all.grit": "./plugins/all.grit",
+    "./plugins/no-new-date.grit": "./plugins/no-new-date.grit",
+    "./plugins/no-date-now.grit": "./plugins/no-date-now.grit",
+    "./plugins/no-date-parse.grit": "./plugins/no-date-parse.grit",
+    "./plugins/no-date-utc.grit": "./plugins/no-date-utc.grit",
+    "./plugins/no-date-getTimezoneOffset.grit": "./plugins/no-date-getTimezoneOffset.grit"
   },
   "devDependencies": {
     "@tanstack/intent": "^0.0.29"

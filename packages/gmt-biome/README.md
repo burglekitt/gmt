@@ -30,36 +30,39 @@ bun add --save-dev @burglekitt/gmt-biome @biomejs/biome
 
 ## Usage
 
-### JSON (Recommended)
+Add the plugins to the `plugins` array in your `biome.json`. Biome resolves plugin paths as filesystem paths, so use the `./node_modules/` path with the `.grit` extension.
 
-In your `biome.json`:
+### All rules (recommended)
+
+Use the combined `all` plugin to enable every Date-ban rule in a single entry:
 
 ```json
 {
-  "$schema": "https://biomejs.dev/schemas/2.4.7/schema.json",
-  "extends": ["@burglekitt/gmt-biome"]
+  "$schema": "https://biomejs.dev/schemas/2.4.11/schema.json",
+  "plugins": ["./node_modules/@burglekitt/gmt-biome/plugins/all.grit"]
 }
 ```
 
-### JSON with Comments
+### Select specific rules
 
-In your `biome.jsonc`:
+Include only the plugins you need:
 
-```jsonc
+```json
 {
-  "$schema": "https://biomejs.dev/schemas/2.4.7/schema.json",
-  // Extend the gmt defaults
-  "extends": ["@burglekitt/gmt-biome"]
+  "$schema": "https://biomejs.dev/schemas/2.4.11/schema.json",
+  "plugins": [
+    "./node_modules/@burglekitt/gmt-biome/plugins/no-new-date.grit",
+    "./node_modules/@burglekitt/gmt-biome/plugins/no-date-now.grit",
+    "./node_modules/@burglekitt/gmt-biome/plugins/no-date-parse.grit",
+    "./node_modules/@burglekitt/gmt-biome/plugins/no-date-utc.grit",
+    "./node_modules/@burglekitt/gmt-biome/plugins/no-date-getTimezoneOffset.grit"
+  ]
 }
 ```
 
-### TOML
+> **Note:** The `.grit` extension is required. When installed from npm, the typical path uses the `./node_modules/` prefix (as shown above), but any relative or absolute filesystem path to the `.grit` file on disk will work — Biome does not resolve npm package specifiers in `plugins`.
 
-In your `biome.toml`:
-
-```toml
-extends = ["@burglekitt/gmt-biome"]
-```
+> **Why not `extends`?** Biome's `extends` is for sharing `biome.json` config options (formatter, linter rules, etc.). It cannot be used to distribute GritQL plugins — plugin paths in an extended config file are always resolved relative to the consuming project root, not the npm package directory. Use `plugins` instead.
 
 ## Banned patterns
 
