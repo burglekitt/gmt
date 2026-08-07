@@ -1,4 +1,9 @@
-import { expectOneOfIcu, MustTestLocales, oneOfIcu } from "../../test";
+import {
+  expectDateTimeEqual,
+  expectOneOfIcu,
+  MustTestLocales,
+  oneOfIcu,
+} from "../../test";
 import { mockTemporalPlainTimeFromThrow } from "../../test/mocks";
 import { formatTime } from "./formatTime";
 
@@ -228,7 +233,8 @@ describe("formatTime", () => {
   `(
     "formats valid time $value for zh-CN with options $options to $expected",
     ({ value, options, expected }) => {
-      expect(formatTime(value, MustTestLocales.zhCN, options)).toEqual(
+      expectDateTimeEqual(
+        formatTime(value, MustTestLocales.zhCN, options),
         expected,
       );
     },
@@ -250,7 +256,8 @@ describe("formatTime", () => {
   `(
     "formats valid time $value for zh-TW with options $options to $expected",
     ({ value, options, expected }) => {
-      expect(formatTime(value, MustTestLocales.zhTW, options)).toEqual(
+      expectDateTimeEqual(
+        formatTime(value, MustTestLocales.zhTW, options),
         expected,
       );
     },
@@ -272,7 +279,8 @@ describe("formatTime", () => {
   `(
     "formats valid time $value for ja-JP with options $options to $expected",
     ({ value, options, expected }) => {
-      expect(formatTime(value, MustTestLocales.jaJP, options)).toEqual(
+      expectDateTimeEqual(
+        formatTime(value, MustTestLocales.jaJP, options),
         expected,
       );
     },
@@ -294,7 +302,8 @@ describe("formatTime", () => {
   `(
     "formats valid time $value for ko-KR with options $options to $expected",
     ({ value, options, expected }) => {
-      expect(formatTime(value, MustTestLocales.koKR, options)).toEqual(
+      expectDateTimeEqual(
+        formatTime(value, MustTestLocales.koKR, options),
         expected,
       );
     },

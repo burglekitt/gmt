@@ -1,4 +1,4 @@
-import { MustTestLocales } from "../../test";
+import { expectDateTimeEqual, MustTestLocales } from "../../test";
 import * as getSystemTimeZoneModule from "../../zoned/get/getSystemTimeZone";
 import { formatUnix } from "./formatUnix";
 
@@ -63,7 +63,7 @@ describe("formatUnix", () => {
         timeStyle: "short" as const,
         timeZone: "UTC" as const,
       };
-      expect(formatUnix(REF_MS, locale, options)).toBe(expected);
+      expectDateTimeEqual(formatUnix(REF_MS, locale, options), expected);
     });
   });
 

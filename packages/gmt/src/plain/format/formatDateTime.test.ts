@@ -1,4 +1,10 @@
-import { expectOneOfIcu, MustTestLocales, oneOfIcu } from "../../test";
+import {
+  expectDateTimeEqual,
+  expectOneOfDateTimeIcu,
+  expectOneOfIcu,
+  MustTestLocales,
+  oneOfIcu,
+} from "../../test";
 import { mockTemporalPlainDateTimeFromThrow } from "../../test/mocks";
 import { formatDateTime } from "./formatDateTime";
 
@@ -247,7 +253,8 @@ describe("formatDateTime", () => {
   `(
     "formats valid datetime $value for zh-CN with options $options to $expected",
     ({ value, options, expected }) => {
-      expect(formatDateTime(value, MustTestLocales.zhCN, options)).toEqual(
+      expectDateTimeEqual(
+        formatDateTime(value, MustTestLocales.zhCN, options),
         expected,
       );
     },
@@ -268,7 +275,8 @@ describe("formatDateTime", () => {
   `(
     "formats valid datetime $value for zh-TW with options $options to $expected",
     ({ value, options, expected }) => {
-      expect(formatDateTime(value, MustTestLocales.zhTW, options)).toEqual(
+      expectDateTimeEqual(
+        formatDateTime(value, MustTestLocales.zhTW, options),
         expected,
       );
     },
@@ -277,7 +285,7 @@ describe("formatDateTime", () => {
   // zh-TW dateStyle:"full" — CLDR changed the weekday/time spacing
   // between ICU 77 (Node 20) and ICU 78 (Node 22/24).
   it("formats valid datetime 2024-02-03T14:30:45 for zh-TW with dateStyle/timeStyle full as one of the known ICU variants", () => {
-    expectOneOfIcu(
+    expectOneOfDateTimeIcu(
       formatDateTime("2024-02-03T14:30:45", MustTestLocales.zhTW, {
         dateStyle: "full",
         timeStyle: "full",
@@ -305,7 +313,8 @@ describe("formatDateTime", () => {
   `(
     "formats valid datetime $value for ja-JP with options $options to $expected",
     ({ value, options, expected }) => {
-      expect(formatDateTime(value, MustTestLocales.jaJP, options)).toEqual(
+      expectDateTimeEqual(
+        formatDateTime(value, MustTestLocales.jaJP, options),
         expected,
       );
     },
@@ -327,7 +336,8 @@ describe("formatDateTime", () => {
   `(
     "formats valid datetime $value for ko-KR with options $options to $expected",
     ({ value, options, expected }) => {
-      expect(formatDateTime(value, MustTestLocales.koKR, options)).toEqual(
+      expectDateTimeEqual(
+        formatDateTime(value, MustTestLocales.koKR, options),
         expected,
       );
     },

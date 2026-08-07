@@ -1,5 +1,6 @@
 import { normalizeDateTime } from "../../internal";
 import {
+  expectDateTimeEqual,
   expectOneOfIcu,
   localeZonedRangeInputByLocale,
   MustTestLocales,
@@ -227,7 +228,8 @@ describe("formatZonedRange", () => {
   `(
     "formats valid zoned datetime range for zh-TW",
     ({ from, to, options, expected }) => {
-      expect(formatZonedRange(from, to, MustTestLocales.zhTW, options)).toBe(
+      expectDateTimeEqual(
+        formatZonedRange(from, to, MustTestLocales.zhTW, options),
         normalizeDateTime(expected),
       );
     },
@@ -257,7 +259,8 @@ describe("formatZonedRange", () => {
   `(
     "formats valid zoned datetime range for ko-KR",
     ({ from, to, options, expected }) => {
-      expect(formatZonedRange(from, to, MustTestLocales.koKR, options)).toBe(
+      expectDateTimeEqual(
+        formatZonedRange(from, to, MustTestLocales.koKR, options),
         normalizeDateTime(expected),
       );
     },

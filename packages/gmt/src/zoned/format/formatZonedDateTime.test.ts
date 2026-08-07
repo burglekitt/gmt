@@ -1,5 +1,7 @@
 import { normalizeDateTime } from "../../internal";
 import {
+  expectDateTimeEqual,
+  expectOneOfDateTimeIcu,
   expectOneOfIcu,
   localeZonedDateTimeInputByLocale,
   MustTestLocales,
@@ -283,7 +285,8 @@ describe("formatZonedDateTime", () => {
   `(
     "formats valid zoned datetime $value for zh-CN with options $options to $expected",
     ({ value, options, expected }) => {
-      expect(formatZonedDateTime(value, MustTestLocales.zhCN, options)).toBe(
+      expectDateTimeEqual(
+        formatZonedDateTime(value, MustTestLocales.zhCN, options),
         normalizeDateTime(expected),
       );
     },
@@ -305,7 +308,8 @@ describe("formatZonedDateTime", () => {
   `(
     "formats valid zoned datetime $value for zh-TW with options $options to $expected",
     ({ value, options, expected }) => {
-      expect(formatZonedDateTime(value, MustTestLocales.zhTW, options)).toBe(
+      expectDateTimeEqual(
+        formatZonedDateTime(value, MustTestLocales.zhTW, options),
         normalizeDateTime(expected),
       );
     },
@@ -327,7 +331,8 @@ describe("formatZonedDateTime", () => {
   `(
     "formats valid zoned datetime $value for ja-JP with options $options to $expected",
     ({ value, options, expected }) => {
-      expect(formatZonedDateTime(value, MustTestLocales.jaJP, options)).toBe(
+      expectDateTimeEqual(
+        formatZonedDateTime(value, MustTestLocales.jaJP, options),
         normalizeDateTime(expected),
       );
     },
@@ -348,7 +353,8 @@ describe("formatZonedDateTime", () => {
   `(
     "formats valid zoned datetime $value for ko-KR with options $options to $expected",
     ({ value, options, expected }) => {
-      expect(formatZonedDateTime(value, MustTestLocales.koKR, options)).toBe(
+      expectDateTimeEqual(
+        formatZonedDateTime(value, MustTestLocales.koKR, options),
         normalizeDateTime(expected),
       );
     },
@@ -358,7 +364,7 @@ describe("formatZonedDateTime", () => {
   // South Korea Standard Time name from "대한민국 표준시" (ICU 77 / Node 20)
   // to "한국 표준시" (ICU 78 / Node 22/24).
   it("formats valid zoned datetime for ko-KR with dateStyle/timeStyle full as one of the known ICU variants", () => {
-    expectOneOfIcu(
+    expectOneOfDateTimeIcu(
       formatZonedDateTime(
         valueByLocale[MustTestLocales.koKR],
         MustTestLocales.koKR,
