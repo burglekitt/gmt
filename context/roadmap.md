@@ -27,6 +27,7 @@ This roadmap is intentionally a skeleton, not a spec. Before implementing any st
 4. **Expand the one-line story below into a full spec** before writing code: exact function signature(s), which Temporal API(s) it wraps, the sentinel return value, the locale matrix if locale-aware, and the specific edge cases the tests must cover (invalid input, DST boundaries, leap years/seconds, etc. as applicable).
 5. **One story = one PR = one changeset.** Do not bundle multiple stories into one PR even if they touch the same namespace, unless the story list explicitly groups them (e.g. C1-C3 are sequenced together but are still separate, reviewable commits).
 6. **Update `packages/gmt/README.md`** (via `/update-readme`) and add a changeset (via `/changelog`) as part of the same PR, not a follow-up.
+7. **Update the TanStack Intent agent skills** (via `/tanstack-intent`, or manually following `.agents/skills/tanstack-intent/SKILL.md`) as part of the same PR whenever the story adds/renames/removes an exported function, adds an option to an existing one, or introduces a new domain concept. Skills that fall behind the actual API surface actively mislead agents consuming `@burglekitt/gmt` — this is not optional cleanup. The skill's own step 0 also checks whether the `@tanstack/intent` **tool** itself (the devDependency, not just the skill content) has drifted behind npm — run it periodically even outside of a specific story, since tool drift and content drift are independent failure modes.
 
 ---
 
@@ -99,26 +100,28 @@ Workflow: copy the title + description below into a new GitHub issue for each st
 
 Issue number tracker (fill in as issues are created). `Order` is the sequence to actually work these in — it follows the "Suggested Sequencing" section above (C-group first as a correctness fix, then A1–A2, then D-group in parallel, then finishing A3–A5, then B-group, then E1 last) — **not** ascending issue number. `Publish` marks when to cut a release after that story lands: every story is additive-only (new functions, or new optional parameters defaulting to current behavior), so every bump is `minor`; publish once per Story Group rather than per-story.
 
-| Order | Story | GitHub Issue | Publish                                      |
-| ----- | ----- | ------------ | -------------------------------------------- |
-| 1     | C1    | Issue #38    | not yet                                      |
-| 2     | C2    | Issue #39    | not yet                                      |
-| 3     | C3    | Issue #40    | minor, Story Group C complete                |
-| 4     | A1    | Issue #27    | not yet                                      |
-| 5     | A2    | Issue #28    | not yet                                      |
-| 6     | D1    | Issue #41    | not yet                                      |
-| 7     | D2    | Issue #42    | not yet                                      |
-| 8     | D3    | Issue #43    | minor, Story Group D complete                |
-| 9     | A3    | Issue #29    | not yet                                      |
-| 10    | A4    | Issue #30    | not yet                                      |
-| 11    | A5    | Issue #31    | minor, Story Group A complete                |
-| 12    | B1    | Issue #32    | not yet                                      |
-| 13    | B2    | Issue #33    | not yet                                      |
-| 14    | B3    | Issue #34    | not yet                                      |
-| 15    | B4    | Issue #35    | not yet                                      |
-| 16    | B5    | Issue #36    | not yet                                      |
-| 17    | B6    | Issue #37    | minor, Story Group B complete                |
-| 18    | E1    | Issue #44    | unscheduled, no publish plan until picked up |
+**Changeset note:** each story's PR still adds its own `.changeset/*.md` file with a `minor` bump label (that's the correct per-change label, independent of when a release is cut). Changesets accumulate un-versioned in `.changeset/` across multiple merged PRs; only running `pnpm changeset:version` actually consumes them and cuts a release. Do **not** run `changeset:version` / publish until the `Publish` column for that row says so (i.e. wait for the last story in the Story Group, not the first).
+
+| Order | Story | GitHub Issue | Status      | Publish                                      |
+| ----- | ----- | ------------ | ----------- | -------------------------------------------- |
+| 1     | C1    | Issue #38    | Done        | not yet                                      |
+| 2     | C2    | Issue #39    | Not started | not yet                                      |
+| 3     | C3    | Issue #40    | Not started | minor, Story Group C complete                |
+| 4     | A1    | Issue #27    | Not started | not yet                                      |
+| 5     | A2    | Issue #28    | Not started | not yet                                      |
+| 6     | D1    | Issue #41    | Not started | not yet                                      |
+| 7     | D2    | Issue #42    | Not started | not yet                                      |
+| 8     | D3    | Issue #43    | Not started | minor, Story Group D complete                |
+| 9     | A3    | Issue #29    | Not started | not yet                                      |
+| 10    | A4    | Issue #30    | Not started | not yet                                      |
+| 11    | A5    | Issue #31    | Not started | minor, Story Group A complete                |
+| 12    | B1    | Issue #32    | Not started | not yet                                      |
+| 13    | B2    | Issue #33    | Not started | not yet                                      |
+| 14    | B3    | Issue #34    | Not started | not yet                                      |
+| 15    | B4    | Issue #35    | Not started | not yet                                      |
+| 16    | B5    | Issue #36    | Not started | not yet                                      |
+| 17    | B6    | Issue #37    | Not started | minor, Story Group B complete                |
+| 18    | E1    | Issue #44    | Not started | unscheduled, no publish plan until picked up |
 
 ### A1 — `parseDuration` / `isValidDuration`
 
