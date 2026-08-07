@@ -1,5 +1,5 @@
-import * as getSystemTimeZoneModule from "../../zoned/get/getSystemTimeZone";
 import { MustTestLocales } from "../../test";
+import * as getSystemTimeZoneModule from "../../zoned/get/getSystemTimeZone";
 import { formatUnix } from "./formatUnix";
 
 // Base: 2024-02-29T00:00:00Z (Thursday — leap day)

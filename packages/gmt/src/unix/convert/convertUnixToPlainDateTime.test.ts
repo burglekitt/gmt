@@ -1,5 +1,5 @@
-import * as getSystemTimeZoneModule from "../../zoned/get/getSystemTimeZone";
 import { TomorrowTimeZone, YesterdayTimeZone } from "../../test";
+import * as getSystemTimeZoneModule from "../../zoned/get/getSystemTimeZone";
 import { convertUnixToPlainDateTime } from "./convertUnixToPlainDateTime";
 
 describe("convertUnixToPlainDateTime", () => {
