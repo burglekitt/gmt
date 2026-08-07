@@ -3,7 +3,7 @@ import { chopMilliseconds, chopTime, chopUtc } from "../chop";
 import { isAfterDateTime } from "../compare";
 import { isValidDateTime } from "../validate";
 import { getNow } from "./getNow";
-import * as getSystemTimeZoneModule from "./getSystemTimeZone";
+import * as getSystemTimeZoneModule from "../../zoned/get/getSystemTimeZone";
 import { getToday } from "./getToday";
 
 describe("getNow", () => {

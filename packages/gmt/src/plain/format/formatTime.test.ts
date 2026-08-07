@@ -1,4 +1,4 @@
-import { hasFullIcu, MustTestLocales } from "../../test";
+import { expectOneOfIcu, MustTestLocales, oneOfIcu } from "../../test";
 import { mockTemporalPlainTimeFromThrow } from "../../test/mocks";
 import { formatTime } from "./formatTime";
 
@@ -146,7 +146,6 @@ describe("formatTime", () => {
     ${"14:30:45"} | ${{ hour: "numeric", minute: "numeric" }}                                   | ${"14:30"}
     ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit", second: "2-digit" }}                | ${"14:30:45"}
     ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit" }}                                   | ${"14:30"}
-    ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true }}  | ${hasFullIcu ? "02:30:45 da tarde" : "02:30:45 p.m."}
     ${"14:30:45"} | ${{ hour: "numeric", minute: "numeric", second: "numeric", hour12: false }} | ${"14:30:45"}
   `(
     "formats valid time $value for pt-PT with options $options to $expected",
@@ -156,6 +155,18 @@ describe("formatTime", () => {
       );
     },
   );
+
+  it("formats valid time 14:30:45 for pt-PT with 12-hour day period (CLDR wording varies by ICU version)", () => {
+    expectOneOfIcu(
+      formatTime("14:30:45", MustTestLocales.ptPT, {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true,
+      }),
+      oneOfIcu("02:30:45 da tarde", "02:30:45 p.m."),
+    );
+  });
 
   // sv-SE
   it.each`
@@ -270,15 +281,15 @@ describe("formatTime", () => {
   // ko-KR
   it.each`
     value         | options                                                                     | expected
-    ${"14:30:45"} | ${{ timeStyle: "full" }}                                                    | ${hasFullIcu ? "오후 2:30:45" : "PM 2:30:45"}
-    ${"14:30:45"} | ${{ timeStyle: "long" }}                                                    | ${hasFullIcu ? "오후 2:30:45" : "PM 2:30:45"}
-    ${"14:30:45"} | ${{ timeStyle: "medium" }}                                                  | ${hasFullIcu ? "오후 2:30:45" : "PM 2:30:45"}
-    ${"14:30:45"} | ${{ timeStyle: "short" }}                                                   | ${hasFullIcu ? "오후 2:30" : "PM 2:30"}
-    ${"14:30:45"} | ${{ hour: "numeric", minute: "numeric", second: "numeric" }}                | ${hasFullIcu ? "오후 2:30:45" : "PM 2:30:45"}
-    ${"14:30:45"} | ${{ hour: "numeric", minute: "numeric" }}                                   | ${hasFullIcu ? "오후 2:30" : "PM 2:30"}
-    ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit", second: "2-digit" }}                | ${hasFullIcu ? "오후 02:30:45" : "PM 02:30:45"}
-    ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit" }}                                   | ${hasFullIcu ? "오후 02:30" : "PM 02:30"}
-    ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true }}  | ${hasFullIcu ? "오후 02:30:45" : "PM 02:30:45"}
+    ${"14:30:45"} | ${{ timeStyle: "full" }}                                                    | ${"오후 2:30:45"}
+    ${"14:30:45"} | ${{ timeStyle: "long" }}                                                    | ${"오후 2:30:45"}
+    ${"14:30:45"} | ${{ timeStyle: "medium" }}                                                  | ${"오후 2:30:45"}
+    ${"14:30:45"} | ${{ timeStyle: "short" }}                                                   | ${"오후 2:30"}
+    ${"14:30:45"} | ${{ hour: "numeric", minute: "numeric", second: "numeric" }}                | ${"오후 2:30:45"}
+    ${"14:30:45"} | ${{ hour: "numeric", minute: "numeric" }}                                   | ${"오후 2:30"}
+    ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit", second: "2-digit" }}                | ${"오후 02:30:45"}
+    ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit" }}                                   | ${"오후 02:30"}
+    ${"14:30:45"} | ${{ hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true }}  | ${"오후 02:30:45"}
     ${"14:30:45"} | ${{ hour: "numeric", minute: "numeric", second: "numeric", hour12: false }} | ${"14시 30분 45초"}
   `(
     "formats valid time $value for ko-KR with options $options to $expected",

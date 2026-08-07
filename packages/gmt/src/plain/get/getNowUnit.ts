@@ -2,7 +2,7 @@ import { Temporal } from "@js-temporal/polyfill";
 import type { DateTimeUnit } from "../../types";
 import { parseWeekFromDate } from "../parse";
 import { isValidDateTimeUnit } from "../validate";
-import { getSystemTimeZone } from "./getSystemTimeZone";
+import { getSystemTimeZone } from "../../zoned/get/getSystemTimeZone";
 
 type NowUnit = DateTimeUnit | "dayOfWeek";
 

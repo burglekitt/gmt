@@ -1,5 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { getSystemTimeZone } from "../../plain/get";
+import { getSystemTimeZone } from "../../zoned/get";
 import { isValidUnixUnit } from "../../unix/validate/isValidUnixUnit";
 import { isValidTimeZone } from "../../zoned/validate";
 

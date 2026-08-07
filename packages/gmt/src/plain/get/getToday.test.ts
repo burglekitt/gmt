@@ -4,7 +4,7 @@ import { chopTime, chopUtc } from "../chop";
 import { areDatesEqual } from "../compare";
 import { isValidDate } from "../validate";
 import { getNow } from "./getNow";
-import * as getSystemTimeZoneModule from "./getSystemTimeZone";
+import * as getSystemTimeZoneModule from "../../zoned/get/getSystemTimeZone";
 import { getToday } from "./getToday";
 
 describe("getToday", () => {
