@@ -60,7 +60,7 @@ try {
     `pnpm exec intent validate packages/gmt/skills --set-version ${version}`,
     { cwd: root, stdio: "inherit" },
   );
-} catch (err) {
+} catch {
   console.error("[intent] validate failed — continuing anyway (non-fatal)");
 }
 
@@ -70,7 +70,7 @@ try {
     cwd: root,
     stdio: "inherit",
   });
-} catch (err) {
+} catch {
   console.error("[intent] stale failed — continuing anyway (non-fatal)");
 }
 
