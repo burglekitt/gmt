@@ -1,3 +1,4 @@
+export * from "./getLocaleZonedDayOfWeek";
 export * from "./getSystemTimeZone";
 export * from "./getTimeZones";
 export * from "./getZonedDay";
@@ -14,4 +15,3 @@ export * from "./getZonedSecond";
 export * from "./getZonedToday";
 export * from "./getZonedWeekOfYear";
 export * from "./getZonedYear";
-export * from "./getLocaleZonedDayOfWeek";
