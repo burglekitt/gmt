@@ -14,3 +14,4 @@ export * from "./getZonedSecond";
 export * from "./getZonedToday";
 export * from "./getZonedWeekOfYear";
 export * from "./getZonedYear";
+export * from "./getLocaleZonedDayOfWeek";
