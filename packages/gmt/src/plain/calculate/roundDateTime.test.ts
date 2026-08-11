@@ -1,5 +1,5 @@
-import { roundDateTime } from "./roundDateTime";
 import { mockTemporalPlainDateTimeFromThrow } from "../../test/mocks";
+import { roundDateTime } from "./roundDateTime";
 
 describe("roundDateTime", () => {
   // date units: year, month, week (manual rounding)

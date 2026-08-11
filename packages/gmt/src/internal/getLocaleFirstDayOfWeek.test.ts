@@ -1,5 +1,5 @@
-import { getLocaleFirstDayOfWeek } from "./getLocaleFirstDayOfWeek";
 import { MustTestLocales } from "../test";
+import { getLocaleFirstDayOfWeek } from "./getLocaleFirstDayOfWeek";
 
 describe("getLocaleFirstDayOfWeek", () => {
   it.each`

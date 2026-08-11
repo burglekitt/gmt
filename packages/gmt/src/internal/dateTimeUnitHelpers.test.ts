@@ -1,5 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { getStartOfDateTimeUnit, addDateTimeUnit } from "./dateTimeUnitHelpers";
+import { addDateTimeUnit, getStartOfDateTimeUnit } from "./dateTimeUnitHelpers";
 
 describe("getStartOfDateTimeUnit", () => {
   it.each`

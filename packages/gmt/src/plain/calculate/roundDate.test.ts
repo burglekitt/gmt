@@ -1,5 +1,5 @@
-import { roundDate } from "./roundDate";
 import { mockTemporalPlainDateFromThrow } from "../../test/mocks";
+import { roundDate } from "./roundDate";
 
 describe("roundDate", () => {
   // happy path: all supported date units with default rounding

@@ -1,5 +1,5 @@
-import { roundTime } from "./roundTime";
 import { mockTemporalPlainTimeFromThrow } from "../../test/mocks";
+import { roundTime } from "./roundTime";
 
 describe("roundTime", () => {
   // happy path: all supported time units with default rounding

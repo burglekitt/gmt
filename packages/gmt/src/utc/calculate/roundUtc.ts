@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
-import type { FractionalDigit } from "../../types";
 import { isValidDateTimeUnit } from "../../plain";
+import type { FractionalDigit } from "../../types";
 import { isValidUtc } from "../validate/isValidUtc";
 
 /**
