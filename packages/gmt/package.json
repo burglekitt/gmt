@@ -106,6 +106,8 @@
   },
   "devDependencies": {
     "@burglekitt/gmt-oxlint": "workspace:*",
-    "@tanstack/intent": "^0.3.6"
+    "@tanstack/intent": "^0.3.6",
+    "oxfmt": "^0.62.0",
+    "oxlint": "^1.0.0"
   }
 }
