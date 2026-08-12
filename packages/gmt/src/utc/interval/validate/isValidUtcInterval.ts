@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { utcDateTime } from "../../../regex/utc-date-time";
 import { isLeapSecond } from "../../../plain/validate/isLeapSecond";
+import { utcDateTime } from "../../../regex/utc-date-time";
 
 /**
  * Return true if `start` and `end` form a valid UTC interval — both parseable as
