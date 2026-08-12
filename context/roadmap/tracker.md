@@ -24,7 +24,7 @@ Issue number tracker (fill in as issues are created). `Order` is the sequence to
 | 14    | F3    | Issue #56    | Done        | v1.8.0                                       |
 | 15    | F4    | Issue #57    | Done        | v1.8.0                                       |
 | 16    | B1    | Issue #32    | Done        | not yet                                      |
-| 17    | B2    | Issue #33    | In Progress | not yet                                      |
+| 17    | B2    | Issue #33    | Done        | not yet                                      |
 | 18    | B3    | Issue #34    | Not started | not yet                                      |
 | 19    | B4    | Issue #35    | Not started | not yet                                      |
 | 20    | B5    | Issue #36    | Not started | not yet                                      |
