@@ -1,9 +1,9 @@
 import { Temporal } from "@js-temporal/polyfill";
+import { mockTemporalZonedDateTimeFromThrow } from "../../test/mocks";
 import {
   battleTestTimeZones,
   sameInstantBattleCases,
 } from "../../test/timeZoneMatrix";
-import { mockTemporalZonedDateTimeFromThrow } from "../../test/mocks";
 import { intervalContainsZoned } from "./intervalContainsZoned";
 
 describe("intervalContainsZoned", () => {

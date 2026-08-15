@@ -26,4 +26,3 @@ export * from "./splitIntervalByUnitDate";
 export * from "./splitIntervalByUnitDateTime";
 export * from "./splitIntervalByUnitTime";
 export * from "./validate";
-

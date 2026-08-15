@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { battleTestTimeZones } from "../../test/timeZoneMatrix";
 import { mockTemporalZonedDateTimeFromThrow } from "../../test/mocks";
+import { battleTestTimeZones } from "../../test/timeZoneMatrix";
 import { intervalEngulfsZoned } from "./intervalEngulfsZoned";
 
 describe("intervalEngulfsZoned", () => {

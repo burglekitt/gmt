@@ -8,4 +8,3 @@ export * from "./intervalUnionZoned";
 export * from "./intervalXorZoned";
 export * from "./splitIntervalByUnitZoned";
 export * from "./validate";
-

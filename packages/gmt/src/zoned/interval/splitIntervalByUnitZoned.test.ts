@@ -1,7 +1,7 @@
-import { splitIntervalByUnitZoned } from "./splitIntervalByUnitZoned";
-import { mockTemporalZonedDateTimeFromThrow } from "../../test/mocks";
 import { Temporal } from "@js-temporal/polyfill";
+import { mockTemporalZonedDateTimeFromThrow } from "../../test/mocks";
 import { battleTestTimeZones } from "../../test/timeZoneMatrix";
+import { splitIntervalByUnitZoned } from "./splitIntervalByUnitZoned";
 
 describe("splitIntervalByUnitZoned", () => {
   const expectedExactDivision = [

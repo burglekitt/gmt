@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { battleTestTimeZones } from "../../test/timeZoneMatrix";
 import { mockTemporalZonedDateTimeFromThrow } from "../../test/mocks";
+import { battleTestTimeZones } from "../../test/timeZoneMatrix";
 import { intervalAbutsZoned } from "./intervalAbutsZoned";
 
 describe("intervalAbutsZoned", () => {
@@ -125,7 +125,9 @@ describe("intervalAbutsZoned", () => {
   it("proves zone-invariance across battleTestTimeZones for adjacent intervals (abuts = true)", () => {
     const aStartInstant = Temporal.Instant.from("2024-01-01T09:00:00Z");
     const aEndInstant = Temporal.Instant.from("2024-06-30T12:00:00Z");
-    const bStartInstant = Temporal.Instant.from("2024-06-30T12:00:00.000000001Z");
+    const bStartInstant = Temporal.Instant.from(
+      "2024-06-30T12:00:00.000000001Z",
+    );
     const bEndInstant = Temporal.Instant.from("2024-12-31T17:00:00Z");
 
     for (const timeZone of battleTestTimeZones) {

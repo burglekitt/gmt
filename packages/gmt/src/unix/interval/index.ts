@@ -8,4 +8,3 @@ export * from "./intervalUnionUnix";
 export * from "./intervalXorUnix";
 export * from "./splitIntervalByUnitUnix";
 export * from "./validate";
-

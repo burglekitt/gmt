@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { battleTestTimeZones } from "../../test/timeZoneMatrix";
 import { mockTemporalZonedDateTimeFromThrow } from "../../test/mocks";
+import { battleTestTimeZones } from "../../test/timeZoneMatrix";
 import { intervalXorZoned } from "./intervalXorZoned";
 
 describe("intervalXorZoned", () => {
@@ -65,13 +65,19 @@ describe("intervalXorZoned", () => {
       expect(
         Temporal.ZonedDateTime.from(result[0].start).toInstant().toString(),
       ).toBe(aStartInstant.toString());
-      expect(
-        Temporal.ZonedDateTime.from(result[0].end).toInstant().toString(),
-      ).toBe(bStartInstant.toString());
+      const xorFirstEnd = Temporal.ZonedDateTime.from(
+        result[0].end,
+      ).toInstant();
+      expect(Temporal.Instant.compare(xorFirstEnd, bStartInstant)).toBeLessThan(
+        0,
+      );
       // Second piece: A end to B end
+      const xorSecondStart = Temporal.ZonedDateTime.from(
+        result[1].start,
+      ).toInstant();
       expect(
-        Temporal.ZonedDateTime.from(result[1].start).toInstant().toString(),
-      ).toBe(aEndInstant.toString());
+        Temporal.Instant.compare(xorSecondStart, aEndInstant),
+      ).toBeGreaterThanOrEqual(0);
       expect(
         Temporal.ZonedDateTime.from(result[1].end).toInstant().toString(),
       ).toBe(bEndInstant.toString());

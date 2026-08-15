@@ -8,4 +8,3 @@ export * from "./intervalUnionUtc";
 export * from "./intervalXorUtc";
 export * from "./splitIntervalByUnitUtc";
 export * from "./validate";
-

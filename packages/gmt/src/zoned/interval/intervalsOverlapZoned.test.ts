@@ -1,5 +1,3 @@
-import { Temporal } from "@js-temporal/polyfill";
-import { battleTestTimeZones } from "../../test/timeZoneMatrix";
 import { mockTemporalZonedDateTimeFromThrow } from "../../test/mocks";
 import { intervalsOverlapZoned } from "./intervalsOverlapZoned";
 

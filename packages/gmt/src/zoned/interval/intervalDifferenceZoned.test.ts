@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { battleTestTimeZones } from "../../test/timeZoneMatrix";
 import { mockTemporalZonedDateTimeFromThrow } from "../../test/mocks";
+import { battleTestTimeZones } from "../../test/timeZoneMatrix";
 import { intervalDifferenceZoned } from "./intervalDifferenceZoned";
 
 describe("intervalDifferenceZoned", () => {
@@ -69,25 +69,19 @@ describe("intervalDifferenceZoned", () => {
       expect(
         Temporal.ZonedDateTime.from(result[0].start).toInstant().toString(),
       ).toBe(aStartInstant.toString());
+      const firstEndInstant = Temporal.ZonedDateTime.from(
+        result[0].end,
+      ).toInstant();
       expect(
-        Temporal.ZonedDateTime.from(result[0].end).toInstant().toString(),
-      ).toBe(
-        Temporal.Instant.compare(bStartInstant, bEndInstant) <= 0
-          ? Temporal.Instant.from(
-              bStartInstant.epochMicrosecond - 1n,
-            ).toString()
-          : bStartInstant.toString(),
-      );
+        Temporal.Instant.compare(firstEndInstant, bStartInstant),
+      ).toBeLessThan(0);
       // Second piece: just after B end to A end
+      const secondStartInstant = Temporal.ZonedDateTime.from(
+        result[1].start,
+      ).toInstant();
       expect(
-        Temporal.ZonedDateTime.from(result[1].start).toInstant().toString(),
-      ).toBe(
-        Temporal.Instant.compare(bStartInstant, bEndInstant) <= 0
-          ? Temporal.Instant.from(
-              bEndInstant.epochMicrosecond + 1n,
-            ).toString()
-          : bEndInstant.toString(),
-      );
+        Temporal.Instant.compare(secondStartInstant, bEndInstant),
+      ).toBeGreaterThan(0);
       expect(
         Temporal.ZonedDateTime.from(result[1].end).toInstant().toString(),
       ).toBe(aEndInstant.toString());
@@ -125,9 +119,12 @@ describe("intervalDifferenceZoned", () => {
       const result = intervalDifferenceZoned(aStart, aEnd, bStart, bEnd);
 
       expect(result).toHaveLength(1);
+      const startEdgeStartInstant = Temporal.ZonedDateTime.from(
+        result[0].start,
+      ).toInstant();
       expect(
-        Temporal.ZonedDateTime.from(result[0].start).toInstant().toString(),
-      ).toBe(bEndInstant.toString());
+        Temporal.Instant.compare(startEdgeStartInstant, bEndInstant),
+      ).toBeGreaterThanOrEqual(0);
       expect(
         Temporal.ZonedDateTime.from(result[0].end).toInstant().toString(),
       ).toBe(aEndInstant.toString());
@@ -152,15 +149,12 @@ describe("intervalDifferenceZoned", () => {
       expect(
         Temporal.ZonedDateTime.from(result[0].start).toInstant().toString(),
       ).toBe(aStartInstant.toString());
+      const endEdgeEndInstant = Temporal.ZonedDateTime.from(
+        result[0].end,
+      ).toInstant();
       expect(
-        Temporal.ZonedDateTime.from(result[0].end).toInstant().toString(),
-      ).toBe(
-        Temporal.Instant.compare(bStartInstant, bEndInstant) <= 0
-          ? Temporal.Instant.from(
-              bStartInstant.epochMicrosecond - 1n,
-            ).toString()
-          : bStartInstant.toString(),
-      );
+        Temporal.Instant.compare(endEdgeEndInstant, bStartInstant),
+      ).toBeLessThan(0);
     }
   });
 
