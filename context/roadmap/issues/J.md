@@ -2,7 +2,7 @@
 
 Surfaced by a fresh audit (2026-08-20) run to answer whether the roadmap as planned actually reaches the stated goal: parity with, and beyond, Luxon, `@internationalized/date`, date-fns, and Moment.js. Method: GMT's actual `packages/gmt/src` tree enumerated by `find`/`grep` (not inferred from the roadmap's own claims), cross-referenced against current library documentation via context7, then every candidate gap re-verified against GMT source before being written up here — the same source-verification discipline Story Group I's notes credit with discarding false positives.
 
-**The audit's headline finding:** `overview.md`'s claim that completing Groups A–D, F–I, and E1–E5 makes GMT a credible "surpasses all four comparison libraries" release **does not hold**. Fifteen real capability gaps survive, several of them everyday APIs rather than long-tail exotica. The largest: **GMT has no field setters at all** — `grep -rn "export function set" packages/gmt/src` returns nothing, while Luxon has `.set()`, date-fns has the full `setYear`/`setMonth`/`setDate`/`setHours` family, `@internationalized/date` has `.set()` and `.cycle()`, and Moment has `.year(n)`.
+**The audit's headline finding:** `overview.md`'s claim that completing Groups A–D, F–I, and E1–E5 makes GMT a credible "surpasses all four comparison libraries" release **does not hold**. Fourteen real capability gaps survive in this group (a fifteenth, `cycle*` field wrap-around, was re-homed to Group E as E6 on 2026-08-20 — see Decision 6 and the Tier 2 note below), several of them everyday APIs rather than long-tail exotica. The largest: **GMT has no field setters at all, and its existing composition workaround is provably unsafe for multi-field updates** — see J1's Gap section for the correctness argument; `.set()`/`setYear`/`.cycle()`/`.year(n)`-style APIs across Luxon, date-fns, `@internationalized/date`, and Moment corroborate that this is a real, widely-felt gap, not the reason to add it on their own (Decision 6).
 
 Group J is sequenced **after Group I, before Group E**. Group E stays backlog on its own stated reasoning ("narrow demand"); Group J holds gaps users hit on day one.
 
@@ -40,6 +40,19 @@ Per `tracker.md`'s Changeset note, `changeset:version` sweeps up everything sitt
 
 Where a comparison library ships many near-identical functions, GMT ships one parameterized function per namespace: J5 is `areDatesEqualBy(a, b, unit)`, not date-fns's 12 `isSameX` functions; J7 is `nextWeekday(value, dayOfWeek)`/`previousWeekday(...)`, not date-fns's 16 `nextMonday`…`previousSunday` functions. This follows GMT's own precedent (`startOfDate(value, unit)`, `parseUnitFromDate(value, unit)`). Each such story's JSDoc **must** carry a mapping table from the comparison library's function names to the GMT call, so migrating users can find them by the name they already know.
 
+### Decision 6 — "a comparison library has it" is evidence, never the justification
+
+A 2026-08-20 re-review of this group found several stories' "Gap" sections leading with a competitor function count ("Luxon has X, date-fns has Y, Moment has Z") as the primary argument for adding something. That is backwards for a library whose own positioning (`context/project-overview.md`) is a **narrow, opinionated** surface, and whose stated goal (`overview.md`) is to *exceed* parity, not replicate every method a comparison library ships.
+
+**The binding test, going forward:** every story's "Gap" section must lead with a GMT-specific reason — one of:
+- **A correctness hole in GMT's own composability.** J1 is the worked example: the only existing workaround (`parse*FromDate` + `addDate({unit: delta})`) is not just clumsy, it is *provably unsafe* for multi-field updates — sequential `.add()` calls each resolve overflow independently, so setting month-then-day vs. day-then-month on the same target can silently diverge, where `.with({month, day})` resolves all fields in one atomic overflow pass. That is a real bug waiting to happen in GMT's own surface, not a feature-count gap.
+- **A capability that is categorically impossible to compose from what GMT already has**, not merely inconvenient. E6 (`cycle*`, formerly J2 — see below) is the worked example: `add()`'s defining behavior is to overflow into the next larger field, which is exactly what wrap-without-carry must not do. No delta composition can express it, at any degree of cleverness.
+- **An internal-consistency gap** — GMT already has the pairwise/zoned/plain sibling of this capability and is missing the other member of the same family (e.g. J9's list-form `mergeIntervals` generalizing B5's pairwise `intervalUnion*`; J14's plain range formatting alongside the existing zoned one).
+
+Comparison-library evidence stays in every story — it establishes that other consumers of this shape of library have wanted the capability, which is useful corroboration — but it moves to a secondary "prior art" role, after the GMT-specific reason, not in place of it. Decision 1 is this group's existing precedent for the inverse case: a competitor method (`toFormat`) was **excluded** despite every comparison library having it, because the shape itself was wrong for GMT (locale-hostile hardcoded field order). Decision 6 generalizes that same discipline to the inclusion side: presence in Luxon/date-fns/Moment/`@internationalized/date` is never sufficient on its own, in either direction.
+
+This decision prompted two concrete revisions on 2026-08-20: J1's "Gap" section was rewritten to lead with the correctness argument above (competitor bullet list demoted to prior art); and J2 (`cycle*`) was moved out of Group J into Group E as **E6** — not because the capability isn't real (Decision 6's impossibility test confirms it is), but because its own motivation is UI-segment-editing, which `overview.md`'s Group E paragraph already designates as that group's territory, not "gaps users hit on day one" (this group's own framing, above). J6 and J10 were also re-scoped the same day for a related reason: both proposed a per-variant function family (`isToday`/`isYesterday`/`isTomorrow`/…, `getZonedOffset`/`getZonedOffsetMinutes`/`getZonedOffsetNanoseconds`) that Decision 5 already forbids — see their entries below for the consolidated shape.
+
 ---
 
 ## Definition of done — binding for every Group J story
@@ -49,7 +62,7 @@ The existing `issues/*.md` files leave docs, skills, and test rigor implicit, de
 ### Documentation — same PR, never a follow-up
 
 - `packages/gmt/README.md` — API surface section (via `/update-readme`).
-- The owning namespace README — `packages/gmt/src/plain/README.md`, `zoned/README.md`, `unix/README.md`, `utc/README.md`, `duration/README.md`, or `regex/README.md`. Stories spanning several namespaces (J1, J2, J5, J6) update **each one they touch**.
+- The owning namespace README — `packages/gmt/src/plain/README.md`, `zoned/README.md`, `unix/README.md`, `utc/README.md`, `duration/README.md`, or `regex/README.md`. Stories spanning several namespaces (J1, J5, J6) update **each one they touch**.
 - `docs/dst-disambiguation.md` — required for **J1** and **J10**. J1 must extend that file's "Which function do I actually need?" section: a `set*` function taking both `disambiguation` and `offset` is exactly the confusion that section exists to resolve.
 - A `.changeset/*.md` entry with a `minor` label (via `/changelog`).
 
@@ -60,7 +73,7 @@ The existing `issues/*.md` files leave docs, skills, and test rigor implicit, de
 | Story | Skill(s) to update |
 | --- | --- |
 | J0b | `get-current`, `compare-dates` |
-| J1, J2 | `calculate-dates`, `zoned-date-ops` (for the `disambiguation`/`offset` pair) |
+| J1 | `calculate-dates`, `zoned-date-ops` (for the `disambiguation`/`offset` pair) |
 | J3, J4 | `get-current`, `parse-date-time` |
 | J5, J6, J7 | `compare-dates` |
 | J8 | `durations` |
@@ -82,9 +95,9 @@ Every function gets a `.test.ts` alongside it meeting `context/testing-standards
 
 - **`it.each` with backtick template-literal syntax.** Array syntax is forbidden.
 - **Exhaustive option tables, not a few `it()` blocks.** Every meaningfully different enum value, on an input where they actually diverge. The default *and* the explicit value matching the default, as separate rows — a bug that breaks only the explicit path is otherwise invisible. A case where the option has *no* effect, proving it isn't over-applying. Combinations with negative amounts, zero-length inputs, and invalid values routing to the sentinel.
-- **Every zoned/unix function uses `packages/gmt/src/test/timeZoneMatrix.ts`'s `battleTestTimeZones`** — the canonical 20-zone list including `Pacific/Apia` (+13:00) and `Pacific/Niue` (-11:00). No one-off zone lists; no UTC-and-New-York-only. Applies to J1, J2, J5, J6, J9, J10.
+- **Every zoned/unix function uses `packages/gmt/src/test/timeZoneMatrix.ts`'s `battleTestTimeZones`** — the canonical 20-zone list including `Pacific/Apia` (+13:00) and `Pacific/Niue` (-11:00). No one-off zone lists; no UTC-and-New-York-only. Applies to J1, J5, J6, J9, J10.
 - **Every locale-aware function runs the full 17-locale matrix** from `packages/gmt/src/test/localeMatrix.ts`, with `hasFullIcu` ternaries where ICU-dependent output differs. Applies to J3, J4, J10, J11, J12, J14, J15.
-- **DST edge cases** for J1, J2, J10: spring-forward gap and fall-back overlap, in both `America/Chicago` and `Europe/Berlin`.
+- **DST edge cases** for J1, J10: spring-forward gap and fall-back overlap, in both `America/Chicago` and `Europe/Berlin`.
 - **Clock-dependent functions (J6)** mock `Temporal.Now` via the existing mocks in `packages/gmt/src/test/mocks/`. No reliance on real wall-clock time.
 - **Invalid-input rows** proving the typed sentinel (`""` / `null` / `false` / `[]`) and proving the function never throws.
 
@@ -191,18 +204,20 @@ J1 Add setDate, setDateTime, setTime, setZoned, setUnix, setUtc
 **Description:**
 
 ````
-Part of the parity roadmap — see `context/roadmap/index.md`, Story Group J, item J1. Surfaced by the 2026-08-20 parity audit. **Foundational for Group J — sequence first.** J2 builds directly on it.
+Part of the parity roadmap — see `context/roadmap/index.md`, Story Group J, item J1. Surfaced by the 2026-08-20 parity audit. **Foundational for Group J — sequence first.** Group E's E6 (`cycle*`) builds directly on it too, across groups — see `issues/E.md`.
 
 ## Gap
-**GMT has no field setters at all.** `grep -rn "export function set\|export function with" packages/gmt/src` returns nothing (verified 2026-08-20). There is no way to say "same date, but with the year changed to 2025" — a caller must decompose to fields with `parse*` functions and rebuild the string by hand.
+**GMT has no field setters at all, and the only available workaround is provably unsafe for the multi-field case.** `grep -rn "export function set\|export function with" packages/gmt/src` returns nothing (verified 2026-08-20); `grep -rn "\.with("` shows GMT already uses `Temporal.*.with()` internally throughout `startOf*`/`endOf*`, but always with hardcoded reset values (`{month: 1, day: 1, ...}`) — never a caller-supplied field. There is no way to say "same date, but with the year changed to 2025" as a single call. A caller must compose it from existing primitives: `parse*FromDate` to read the current field, then `addDate({unit: target - current})` to shift it.
 
-All four comparison libraries have this, and it is one of their most-used APIs:
+That composition is not just clumsy, it is **unsafe** for anything beyond a single field. Each sequential `.add()` call resolves Temporal's `overflow` independently against its own intermediate value — so setting month-then-day vs. day-then-month on the same target date can silently diverge, because each step constrains against a different intermediate month's day-count. A single `.with({month, day})` call resolves all fields together in one atomic overflow pass and has no such order-dependence. For zoned values the gap is worse: `Temporal.ZonedDateTime.prototype.add()` has no `offset`/`disambiguation` control equivalent to `.with()`'s, so delta composition cannot reproduce the disambiguation-plus-offset handling `zoned/calculate/startOfZoned.ts` already depends on to avoid the C3 silent-no-op trap (see below). This is a real correctness gap in GMT's own composability — the kind Decision 6 requires a story to lead with — not merely a feature GMT happens to be missing.
+
+**Prior art** (secondary evidence, per Decision 6 — every comparison library has this and it is one of their most-used APIs):
 - Luxon: `dt.set({ year, month, day, hour })`
 - date-fns: `setYear`, `setMonth`, `setDate`, `setHours`, `setMinutes`, `setSeconds`, `setMilliseconds`, `setQuarter`, `setWeek`, `setDayOfYear`
 - `@internationalized/date`: `date.set({ day, month, year })`, with out-of-range values constrained
 - Moment: `.year(n)`, `.month(n)`, `.date(n)`, `.hour(n)`
 
-This is the single largest omission in the library.
+Given both the correctness argument and the prior-art count, this is the single largest omission in the library.
 
 ## Scope
 One parameterized setter per namespace (Decision 5), taking a partial field object and wrapping `Temporal.*.prototype.with()`:
@@ -346,37 +361,35 @@ Everything in Group J's shared Definition of Done, plus: every supported unit, e
 **Title:**
 
 ```
-J6 Add isToday, isYesterday, isTomorrow, isPast, isFuture, isThisWeek, isThisMonth, isThisYear
+J6 Add isRelativeDay, isThisUnit, isPast, isFuture
 ```
 
 **Description:**
 
 ````
-Part of the parity roadmap — see `context/roadmap/index.md`, Story Group J, item J6. Surfaced by the 2026-08-20 parity audit.
+Part of the parity roadmap — see `context/roadmap/index.md`, Story Group J, item J6. Surfaced by the 2026-08-20 parity audit. **Re-scoped 2026-08-20 (Decision 6)** — the original spec proposed eight near-duplicate functions (`isToday`/`isYesterday`/`isTomorrow`/`isThisWeek`/`isThisMonth`/`isThisYear` plus `isPast`/`isFuture`), which is exactly the per-variant-family shape Decision 5 already forbids when a comparison library does it (date-fns ships the same eight, plus three more for hour/minute/second). Consolidated below to four functions.
 
 ## Gap
-GMT has zero now-relative predicates. Verified 2026-08-20: `grep -ril "isToday\|isPast\|isFuture" packages/gmt/src` returns nothing. A caller must fetch `getToday()` and hand-compare.
-
-Comparison libraries: date-fns has `isToday`, `isYesterday`, `isTomorrow`, `isPast`, `isFuture`, `isThisWeek`, `isThisMonth`, `isThisYear`, `isThisHour`, `isThisMinute`, `isThisSecond`. Moment has the equivalents via `.isSame(moment(), unit)`. These are high-frequency in application code — "is this due today", "has this expired".
+GMT has zero now-relative predicates. Verified 2026-08-20: `grep -ril "isToday\|isPast\|isFuture" packages/gmt/src` returns nothing. A caller must fetch `getToday()` and hand-compare — and once J5's `areDatesEqualBy(a, b, unit)` exists, that hand-comparison is exactly what these predicates wrap, which is also why they should ship as parameterized functions rather than a name-per-offset family. These are high-frequency in application code — "is this due today", "has this expired" — which is the GMT-specific reason to add them, independent of how many comparably-named functions date-fns or Moment ship (Decision 6).
 
 ## Scope
-- `isToday(value)`, `isYesterday(value)`, `isTomorrow(value)`, `isPast(value)`, `isFuture(value)`, `isThisWeek(value, locale?)`, `isThisMonth(value)`, `isThisYear(value)` — plain
-- Zoned variants taking the zoned value (which carries its own timezone) — `isZonedToday` etc., following the naming of the existing `isZonedWeekend`/`isZonedBusinessDay`
+- `isRelativeDay(value, offsetDays): boolean` — subsumes `isToday`/`isYesterday`/`isTomorrow`: `offsetDays: 0` is "today", `-1` is "yesterday", `1` is "tomorrow", and any other integer offset works the same way (Decision 5's parameterization applied to the day axis). JSDoc mapping table: `isToday(value)` → `isRelativeDay(value, 0)`, `isYesterday(value)` → `isRelativeDay(value, -1)`, `isTomorrow(value)` → `isRelativeDay(value, 1)`.
+- `isThisUnit(value, unit, locale?): boolean` — subsumes `isThisWeek`/`isThisMonth`/`isThisYear`, `unit` drawn from the same `DateUnit` type J5 uses. `locale` only affects the `"week"` case, for the same reason J3's `getWeeksInMonth` needs it — which day the week starts on varies. JSDoc mapping table: `isThisWeek(value, locale?)` → `isThisUnit(value, "week", locale)`, `isThisMonth(value)` → `isThisUnit(value, "month")`, `isThisYear(value)` → `isThisUnit(value, "year")`.
+- `isPast(value): boolean` / `isFuture(value): boolean` — kept separate, not folded into either function above: these are genuinely distinct predicates (before/after *now*, not "the same unit as now"), not one more value on an enumerable axis.
+- Zoned variants taking the zoned value (which carries its own timezone) — `isZonedRelativeDay`, `isZonedThisUnit`, `isZonedPast`, `isZonedFuture` — following the naming of the existing `isZonedWeekend`/`isZonedBusinessDay`.
 
 `false` on invalid input per the boolean-return sentinel convention.
 
-Where J5 lands first, these should be built on `areDatesEqualBy` against `getToday()` rather than reimplementing the comparison — check whether J5 has merged and reuse it if so.
-
-`isThisWeek` needs a `locale` parameter for the same reason J3's `getWeeksInMonth` does: which day the week starts on varies. Reuse `internal/getLocaleFirstDayOfWeek.ts`.
+Where J5 lands first, `isRelativeDay` and `isThisUnit` should be built on `areDatesEqualBy` against `getToday()` (offset by `addDate(getToday(), { days: offsetDays })` for `isRelativeDay`) rather than reimplementing the comparison — check whether J5 has merged and reuse it if so.
 
 ## Common Mistakes entry (required)
-These depend on the **system clock and system timezone**. `isToday("2024-03-15")` compares against the host's current date, so the same call returns different answers in `Pacific/Apia` and `Pacific/Niue` at the same instant — a 24-hour spread. Callers needing determinism (server-side rendering, tests, scheduled jobs) should use the zoned variants with an explicit timezone, or compare against an explicit reference with J5's `areDatesEqualBy`. Name this trap directly; it is the classic source of "works on my machine" date bugs.
+These depend on the **system clock and system timezone**. `isRelativeDay("2024-03-15", 0)` compares against the host's current date, so the same call returns different answers in `Pacific/Apia` and `Pacific/Niue` at the same instant — a 24-hour spread. Callers needing determinism (server-side rendering, tests, scheduled jobs) should use the zoned variants with an explicit timezone, or compare against an explicit reference with J5's `areDatesEqualBy`. Name this trap directly; it is the classic source of "works on my machine" date bugs.
 
 ## Before starting
-See "Instructions for the agent picking up a story" in `context/roadmap/index.md`. Nearest analogs: `plain/compare/isWeekend.ts` (boolean sentinel, locale handling), `plain/get/getToday.ts` and `zoned/get/getZonedToday.ts` (the now-accessors these compare against). Note these are *predicates taking a value*, so per J0b's rule they belong in `compare/`, not `get/`.
+See "Instructions for the agent picking up a story" in `context/roadmap/index.md`. Nearest analogs: `plain/compare/isWeekend.ts` (boolean sentinel, locale handling), `plain/get/getToday.ts` and `zoned/get/getZonedToday.ts` (the now-accessors these compare against), J5's `areDatesEqualBy` for the parameterized-unit pattern this story reuses. Note these are *predicates taking a value*, so per J0b's rule they belong in `compare/`, not `get/`.
 
 ## Definition of done
-Everything in Group J's shared Definition of Done, plus: **`Temporal.Now` mocked via the existing `packages/gmt/src/test/mocks/` — no reliance on real wall-clock time**, since a test asserting "today" is a guaranteed future flake otherwise; boundary cases at midnight either side; `isPast`/`isFuture` on the current instant exactly; the full 17-locale matrix for `isThisWeek`, covering a date that falls in this week under one locale's week start and last week under another's; `battleTestTimeZones` for the zoned variants, including the `Pacific/Apia`/`Pacific/Niue` pair from the Common Mistakes entry; invalid input → `false`.
+Everything in Group J's shared Definition of Done, plus: **`Temporal.Now` mocked via the existing `packages/gmt/src/test/mocks/` — no reliance on real wall-clock time**, since a test asserting "today" is a guaranteed future flake otherwise; boundary cases at midnight either side; every `offsetDays` value date-fns's three named functions cover (0, -1, 1), plus at least one further-out offset proving the parameterization isn't hardcoded to those three; every `unit` value for `isThisUnit`; `isPast`/`isFuture` on the current instant exactly; the full 17-locale matrix for `isThisUnit(value, "week", locale)`, covering a date that falls in this week under one locale's week start and last week under another's; `battleTestTimeZones` for the zoned variants, including the `Pacific/Apia`/`Pacific/Niue` pair from the Common Mistakes entry; invalid input → `false`.
 ````
 
 ### J11 — Token-based parsing
@@ -441,51 +454,7 @@ Everything in Group J's shared Definition of Done, plus: every documented token,
 
 ## Tier 2
 
-### J2 — `cycle*` wrap-around field adjustment
-
-**GitHub Issue:** _not yet created_
-
-**Title:**
-
-```
-J2 Add cycleDate, cycleDateTime, cycleTime, cycleZoned
-```
-
-**Description:**
-
-````
-Part of the parity roadmap — see `context/roadmap/index.md`, Story Group J, item J2. Surfaced by the 2026-08-20 parity audit. **Depends on J1** — builds on the same `.with()` foundation.
-
-## Gap
-`@internationalized/date`'s `cycle(field, amount, options)` adjusts a single field and **wraps** at that field's limits: December + 1 month → January of the *same* year, not January of the next. GMT has no equivalent — `addDate(value, { months: 1 })` carries into the next year, which is correct arithmetic but wrong for the use case.
-
-The use case is datepicker segment editing: pressing Up on the month segment should cycle 12 → 1 without silently changing the year the user already set. This is why `@internationalized/date` has it and why react-aria's DateField depends on it.
-
-## Scope
-- `cycleDate(value, field, amount, options?): string`
-- `cycleDateTime(value, field, amount, options?): string`
-- `cycleTime(value, field, amount, options?): string`
-- `cycleZoned(value, field, amount, options?): string`
-
-`""` on invalid input. `options.round?: boolean` — round to the nearest increment before cycling, matching `@internationalized/date`'s `CycleOptions`. Zoned variant takes `disambiguation` and `offset` for the same reason J1 does; carry J1's `offset: 'ignore'` default and its reasoning.
-
-Verify at spec-expansion time whether hour cycling in a 12-hour context needs separate handling from 24-hour, as `@internationalized/date` handles this via a `hourCycle` concern.
-
-## Relationship to GMT's UI ambitions
-`overview.md` records that future `gmt-react`/`gmt-svelte`/`gmt-solid`/`gmt-octane` packages will need calendar-aware date math, the role `@internationalized/date` plays under react-aria. This function is squarely in that category — but like Group E's stories, it is a pure library addition with no UI dependency and does not imply starting a UI package.
-
-## Required inline comments
-On the wrap-around boundary arithmetic: what happens at each field's minimum and maximum, and how `round` interacts with the wrap. This is the part a reader cannot infer, and the part most likely to be "simplified" into a bug.
-
-## Common Mistakes entry (required)
-`cycle` is not `add`. Cycling December by +1 month stays in the same year; adding 1 month does not. Reaching for `cycleDate` when calendar arithmetic is wanted silently produces dates a year off.
-
-## Before starting
-See "Instructions for the agent picking up a story" in `context/roadmap/index.md`. Nearest analog: J1's setters (same `.with()` foundation, same option handling). Re-verify `@internationalized/date`'s `CycleOptions` semantics via context7.
-
-## Definition of done
-Everything in Group J's shared Definition of Done, plus: each cyclable field at both its minimum and maximum boundary, in both directions; amounts larger than the field's range (cycling month by +13); negative amounts; `round: true` vs. default on a non-aligned value; day-of-month cycling in a 31-, 30-, and 28/29-day month; `battleTestTimeZones` and DST cases for `cycleZoned`; invalid field name → `""`; invalid input → `""`.
-````
+> **`cycle*` wrap-around field adjustment moved to Group E as E6** (2026-08-20, Decision 6). The capability is real and categorically distinct from arithmetic — see `issues/E.md` for the full spec, unchanged in content. It moved groups, not out of scope: its own motivation (datepicker segment editing) is UI-primitive-ambition territory, which `overview.md`'s Group E paragraph already owns, not a "gap users hit on day one" the way the rest of this group is scoped. It still depends on J1's `.with()` foundation — see E6's own dependency note for the cross-group pointer.
 
 ### J8 — Duration introspection
 
@@ -590,17 +559,16 @@ J10 Add getZonedOffset, getTimeZoneOffset, formatTimeZoneName, isInDaylightSavin
 **Description:**
 
 ````
-Part of the parity roadmap — see `context/roadmap/index.md`, Story Group J, item J10. Surfaced by the 2026-08-20 parity audit. Sequence after H3 and I3.
+Part of the parity roadmap — see `context/roadmap/index.md`, Story Group J, item J10. Surfaced by the 2026-08-20 parity audit. Sequence after H3 and I3. **Re-scoped 2026-08-20 (Decision 6)** — the original spec proposed three near-duplicate offset-representation functions (`getZonedOffset`/`getZonedOffsetMinutes`/`getZonedOffsetNanoseconds`), the same per-unit-variant shape J8 already solved correctly with `getDurationUnit(value, unit)`. Consolidated below to one string getter plus one parameterized numeric getter.
 
 ## Gap
-GMT can construct and manipulate zoned values but cannot report their offset. Verified 2026-08-20: `grep -rn "offsetNanoseconds\|offsetName" packages/gmt/src` finds `offsetNanoseconds` used only *inside* `zoned/validate/hasDaylightSaving.ts` (H3), never exposed; `parseTimeZoneFromZoned` returns the IANA identifier only.
+GMT can construct and manipulate zoned values but cannot report their offset. Verified 2026-08-20: `grep -rn "offsetNanoseconds\|offsetName" packages/gmt/src` finds `offsetNanoseconds` used only *inside* `zoned/validate/hasDaylightSaving.ts` (H3), never exposed; `parseTimeZoneFromZoned` returns the IANA identifier only. This is a real internal-consistency gap — H3 already proves GMT computes this value, it just never surfaces it (Decision 6).
 
-Comparison libraries: Luxon `.offset`, `.offsetNameShort`, `.offsetNameLong`, `.isInDST`; `@date-fns/tz` `tzOffset`; Moment `.utcOffset()`, `.zoneAbbr()`.
+Comparison libraries (prior art, secondary per Decision 6): Luxon `.offset`, `.offsetNameShort`, `.offsetNameLong`, `.isInDST`; `@date-fns/tz` `tzOffset`; Moment `.utcOffset()`, `.zoneAbbr()`.
 
 ## Scope
-- `getZonedOffset(value): string` — `"-04:00"`; `""` on invalid
-- `getZonedOffsetMinutes(value): number | null`
-- `getZonedOffsetNanoseconds(value): number | null`
+- `getZonedOffset(value): string` — `"-04:00"`; `""` on invalid. Kept as its own function rather than folded into the numeric getter below, since its return type (a formatted string) differs in kind, not just in unit.
+- `getZonedOffsetAs(value, unit): number | null` — subsumes `getZonedOffsetMinutes`/`getZonedOffsetNanoseconds`; `unit: "minutes" | "nanoseconds"`, following J8's `getDurationUnit(value, unit)` precedent for reading one differently-scaled representation of the same underlying quantity through a single parameterized call.
 - `getTimeZoneOffset(timeZone, instant): string` — offset for a zone at a given instant, without needing a zoned value in hand
 - `formatTimeZoneName(timeZone, locale, options?): string` — localized zone name; `options.style` covering the `Intl.DateTimeFormat` `timeZoneName` values (`"short"`, `"long"`, `"shortOffset"`, `"longOffset"`, `"shortGeneric"`, `"longGeneric"`)
 - `isInDaylightSaving(value): boolean` — **whether a specific instant is in DST**
@@ -797,7 +765,7 @@ Concretely: setting an HTTP `Last-Modified` header, or parsing an email `Date:` 
 
 `""` on invalid input. Determine at spec-expansion time which namespaces each belongs in — HTTP and RFC 2822 are inherently absolute-time formats and likely belong under `zoned`/`utc` rather than `plain`.
 
-Verify whether `formatRfc3339` is genuinely distinct from GMT's existing ISO output before building it — RFC 3339 is a *profile* of ISO 8601 and Temporal's `toString()` may already satisfy it. If so, record it as a non-gap rather than adding a passthrough, following the discipline that discarded Group I's false positives.
+**Required go/no-go decision, recorded in this story before implementation starts:** verify whether `formatRfc3339` is genuinely distinct from GMT's existing ISO output — RFC 3339 is a *profile* of ISO 8601 and Temporal's `toString()` may already satisfy it. This is not an implementation nicety to check in passing; per Decision 6, "a comparison library has this" is not sufficient justification on its own, and a passthrough with a new name would be exactly the kind of gap Decision 6 exists to catch before it's built. If `toString()` already satisfies the RFC, record `formatRfc3339`/`parseRfc3339` as a non-gap here and drop them from scope, following the discipline that discarded Group I's false positives — do not ship a passthrough just because Luxon names one.
 
 ## Why this survives Decision 1
 These are **fixed, non-locale-adaptive grammars** — RFC 2822 mandates English weekday and month abbreviations regardless of locale, by specification. The i18n objection that excluded a token formatter does not apply: there is no locale-appropriate alternative ordering to lose, because the format is defined as a constant. Note this in the JSDoc so the two decisions do not read as contradictory.
@@ -873,7 +841,12 @@ Moment's `.calendar()` renders "Tomorrow at 2:30 PM", "Last Monday at 2:30 PM", 
 
 `""` on invalid input. Options should include a `reference` (defaulting to now), mirroring `FormatRelativeDateOptions`'s existing `reference` field.
 
-Implementation: `Intl.RelativeTimeFormat` with `numeric: "auto"` produces the day-name half ("tomorrow", "yesterday"); `Intl.DateTimeFormat` produces the time half; the two are joined per locale. **Verify how to join them without hardcoding "at"** — that word is English, and hardcoding it in a library whose A4 story explicitly rejected a formatting shortcut on i18n grounds would be inconsistent. Investigate whether `Intl.ListFormat` or a `dateTimeFormat` pattern can supply the connector, and if no clean `Intl` route exists, document the limitation explicitly rather than shipping a hidden English assumption — exactly as A4 did when native `Intl.DurationFormat` proved unavailable.
+Implementation: `Intl.RelativeTimeFormat` with `numeric: "auto"` produces the day-name half ("tomorrow", "yesterday"); `Intl.DateTimeFormat` produces the time half; the two need a connector joining them per locale.
+
+**Required go/no-go decision, recorded in this story before implementation starts, not deferred to spec-expansion time.** The connector-word problem is structurally the same i18n objection Decision 1 used to exclude token formatting: hardcoding "at" bakes in an English-specific construction the same way a `"MM/dd/yyyy"` token pattern bakes in US field order. Resolve one of two ways and record which:
+1. **A verified `Intl` route with no hardcoded English** — investigate whether `Intl.ListFormat` or a `dateTimeFormat` pattern can supply the connector across locales; confirm via context7/source before committing, not from memory.
+2. **An explicit documented-limitation decision**, per A4's precedent when native `Intl.DurationFormat` proved unavailable — ship with the connector word stated plainly as an English-only limitation in the JSDoc, and a test pinning the known-limited output so it can't silently regress or be mistaken for full i18n support.
+Do not ship a hidden English assumption under either path — that is the outcome this decision exists to prevent.
 
 Beyond ±1 week Moment falls back to an absolute date format; decide and document GMT's threshold.
 

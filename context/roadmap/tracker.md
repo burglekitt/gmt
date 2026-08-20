@@ -44,25 +44,25 @@ Issue number tracker (fill in as issues are created). `Order` is the sequence to
 | 32    | J0a   | _pending_    | Not started | not yet (docs-only, no changeset)            |
 | 33    | J0b   | _pending_    | Not started | not yet                                      |
 | 34    | J1    | _pending_    | Not started | not yet                                      |
-| 35    | J2    | _pending_    | Not started | not yet                                      |
-| 36    | J3    | _pending_    | Not started | not yet                                      |
-| 37    | J4    | _pending_    | Not started | not yet                                      |
-| 38    | J5    | _pending_    | Not started | not yet                                      |
-| 39    | J6    | _pending_    | Not started | not yet                                      |
-| 40    | J7    | _pending_    | Not started | not yet                                      |
-| 41    | J8    | _pending_    | Not started | not yet                                      |
-| 42    | J9    | _pending_    | Not started | not yet                                      |
-| 43    | J10   | _pending_    | Not started | not yet                                      |
-| 44    | J11   | _pending_    | Not started | not yet                                      |
-| 45    | J12   | _pending_    | Not started | not yet                                      |
-| 46    | J13   | _pending_    | Not started | not yet                                      |
-| 47    | J14   | _pending_    | Not started | not yet                                      |
-| 48    | J15   | _pending_    | Not started | minor, Story Group J complete                |
-| 49    | E1    | Issue #44    | Not started | unscheduled, no publish plan until picked up |
-| 50    | E2    | Issue #75    | Not started | unscheduled, no publish plan until picked up |
-| 51    | E3    | Issue #76    | Not started | unscheduled, no publish plan until picked up |
-| 52    | E4    | Issue #77    | Not started | unscheduled, no publish plan until picked up |
-| 53    | E5    | Issue #78    | Not started | unscheduled, no publish plan until picked up |
+| 35    | J3    | _pending_    | Not started | not yet                                      |
+| 36    | J4    | _pending_    | Not started | not yet                                      |
+| 37    | J5    | _pending_    | Not started | not yet                                      |
+| 38    | J6    | _pending_    | Not started | not yet                                      |
+| 39    | J7    | _pending_    | Not started | not yet                                      |
+| 40    | J8    | _pending_    | Not started | not yet                                      |
+| 41    | J9    | _pending_    | Not started | not yet                                      |
+| 42    | J10   | _pending_    | Not started | not yet                                      |
+| 43    | J11   | _pending_    | Not started | not yet                                      |
+| 44    | J12   | _pending_    | Not started | not yet                                      |
+| 45    | J13   | _pending_    | Not started | not yet                                      |
+| 46    | J14   | _pending_    | Not started | not yet                                      |
+| 47    | J15   | _pending_    | Not started | minor, Story Group J complete                |
+| 48    | E1    | Issue #44    | Not started | unscheduled, no publish plan until picked up |
+| 49    | E2    | Issue #75    | Not started | unscheduled, no publish plan until picked up |
+| 50    | E3    | Issue #76    | Not started | unscheduled, no publish plan until picked up |
+| 51    | E4    | Issue #77    | Not started | unscheduled, no publish plan until picked up |
+| 52    | E5    | Issue #78    | Not started | unscheduled, no publish plan until picked up |
+| 53    | E6    | _pending_    | Not started | unscheduled, no publish plan until picked up |
 
 ## Story Group J phases
 
@@ -73,10 +73,12 @@ Group J is split into two phases. Full specs for every row above live in [issues
 - **J0a** — `overview.md` declares the "surpasses all comparison libraries" release checkpoint twice, with contradictory group lists (one includes Group I, the other omits it). Documentation-only; no changeset.
 - **J0b** — `getLocaleDayOfWeek` and `getLocaleZonedDayOfWeek` sit in `plain/get/` and `zoned/get/`, which are otherwise exclusively current-moment accessors. Moves them to `calculate/` alongside their D2 siblings and records the resulting namespace rule in `coding-standards.md`. **Blocks J3 and J4** — those add four more value-taking accessors and have no unambiguous home until this lands. Note the release impact: root imports are unaffected, but `@burglekitt/gmt/plain/get` is a published subpath, so the changeset must name the change explicitly.
 
-**Phase 1 (Order 34–48) — the fifteen parity gaps.** Ordered above by dependency (J1 setters are foundational; J2 builds on J1; J13 shares J11's regex work). `issues/J.md` additionally groups them into three priority tiers if the group ever needs trimming:
+**Phase 1 (Order 34–47) — the fourteen parity gaps.** Ordered above by dependency (J1 setters are foundational; J13 shares J11's regex work). `issues/J.md` additionally groups them into three priority tiers if the group ever needs trimming:
 
 - **Tier 1** — J1, J3, J5, J6, J11. Highest real-world usage; J1 (no field setters anywhere in the library) is the single largest omission found.
-- **Tier 2** — J2, J8, J9, J10, J12.
+- **Tier 2** — J8, J9, J10, J12.
 - **Tier 3** — J4, J7, J13, J14, J15.
 
-**Decisions of record.** `issues/J.md` opens with five settled decisions that must not be re-opened — most importantly that a **token formatter is deliberately excluded, not missing** (it hard-codes field order and ships US ordering to every locale; J12's `formatToParts` is the i18n-correct replacement), while token *parsing* (J11) is in scope because no consumer-side workaround exists at any layer. A future parity audit needs to read that section before filing `toFormat` as a gap.
+A fifteenth story, `cycle*` field wrap-around, was moved out of this group entirely on 2026-08-20 (`issues/J.md` Decision 6) — it now runs as **E6** at Order 53, since its own motivation (datepicker segment editing) is Group E's UI-primitive-ambition territory, not a day-one gap. It still depends on J1 across groups.
+
+**Decisions of record.** `issues/J.md` opens with six settled decisions that must not be re-opened — most importantly that a **token formatter is deliberately excluded, not missing** (it hard-codes field order and ships US ordering to every locale; J12's `formatToParts` is the i18n-correct replacement), while token *parsing* (J11) is in scope because no consumer-side workaround exists at any layer; and that **a comparison library having a function is evidence, never the justification** (Decision 6) — every story's Gap section must lead with a GMT-specific correctness/impossibility/consistency reason, competitor prior art is secondary. A future parity audit needs to read that section before filing `toFormat` as a gap, or re-adding a story on headcount grounds alone.
