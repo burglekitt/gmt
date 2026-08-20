@@ -45,28 +45,24 @@ export function getLocaleEraNames(
     });
 
     // Year 1 BC (proleptic Gregorian) — Temporal represents 1 BC as year 0.
-    const bceInstant = Temporal.Instant.from(
-      Temporal.ZonedDateTime.from({
-        year: 0,
-        month: 1,
-        day: 1,
-        hour: 12,
-        timeZone: "UTC",
-        calendar: "gregory",
-      }),
-    );
+    const bceInstant = Temporal.ZonedDateTime.from({
+      year: 0,
+      month: 1,
+      day: 1,
+      hour: 12,
+      timeZone: "UTC",
+      calendar: "gregory",
+    }).toInstant();
 
     // Year 1 AD (proleptic Gregorian).
-    const ceInstant = Temporal.Instant.from(
-      Temporal.ZonedDateTime.from({
-        year: 1,
-        month: 1,
-        day: 1,
-        hour: 12,
-        timeZone: "UTC",
-        calendar: "gregory",
-      }),
-    );
+    const ceInstant = Temporal.ZonedDateTime.from({
+      year: 1,
+      month: 1,
+      day: 1,
+      hour: 12,
+      timeZone: "UTC",
+      calendar: "gregory",
+    }).toInstant();
 
     const bceParts = formatter.formatToParts(bceInstant.epochMilliseconds);
     const bceEra = bceParts.find((part) => part.type === "era")?.value ?? "";
