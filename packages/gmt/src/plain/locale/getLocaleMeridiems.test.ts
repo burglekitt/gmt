@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { MustTestLocales } from "../../test";
+import { MustTestLocales, expectDateTimeEqual } from "../../test";
 import { getLocaleMeridiems } from "./getLocaleMeridiems";
 
 describe("getLocaleMeridiems", () => {
@@ -25,7 +25,12 @@ describe("getLocaleMeridiems", () => {
   `(
     "returns [AM-label, PM-label] for $locale",
     ({ locale, am, pm }) => {
-      expect(getLocaleMeridiems(locale)).toEqual([am, pm]);
+      const [actualAm, actualPm] = getLocaleMeridiems(locale);
+      // CJK locales (ko-KR/ja-JP/zh-CN/zh-TW) render the day-period marker as
+      // either the native word or ASCII "AM"/"PM" depending on the CI runner's
+      // ICU data; canonicalize both sides so either rendering passes.
+      expectDateTimeEqual(actualAm, am);
+      expectDateTimeEqual(actualPm, pm);
     },
   );
 
@@ -33,7 +38,9 @@ describe("getLocaleMeridiems", () => {
     expect(getLocaleMeridiems(MustTestLocales.enUS)).toEqual(["AM", "PM"]);
     expect(getLocaleMeridiems(MustTestLocales.enGB)).toEqual(["am", "pm"]);
     expect(getLocaleMeridiems(MustTestLocales.svSE)).toEqual(["fm", "em"]);
-    expect(getLocaleMeridiems(MustTestLocales.zhCN)).toEqual(["上午", "下午"]);
+    const [zhAm, zhPm] = getLocaleMeridiems(MustTestLocales.zhCN);
+    expectDateTimeEqual(zhAm, "上午");
+    expectDateTimeEqual(zhPm, "下午");
   });
 
   it("returns an empty array for invalid locales", () => {
