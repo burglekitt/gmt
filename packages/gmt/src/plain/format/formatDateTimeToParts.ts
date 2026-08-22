@@ -39,9 +39,10 @@ export function formatDateTimeToParts(
     // an instant in UTC and hand that to Intl.DateTimeFormat, which does the
     // part-level locale work. UTC is arbitrary but stable: a plain date-time
     // has no zone, so any fixed zone reproduces the same clock fields.
-    const epochMilliseconds = Temporal.PlainDateTime.from(value)
-      .toZonedDateTime("UTC")
-      .epochMilliseconds;
+    const epochMilliseconds =
+      Temporal.PlainDateTime.from(value).toZonedDateTime(
+        "UTC",
+      ).epochMilliseconds;
     const formatter = new Intl.DateTimeFormat(locale, {
       ...options,
       timeZone: "UTC",

@@ -4,24 +4,24 @@ import { formatDateToParts } from "./formatDateToParts";
 describe("formatDateToParts", () => {
   describe("17-locale matrix — default options", () => {
     it.each`
-      locale                   | expected
-      ${MustTestLocales.enUS}  | ${[{ type: "month", value: "2" }, { type: "literal", value: "/" }, { type: "day", value: "3" }, { type: "literal", value: "/" }, { type: "year", value: "2024" }]}
-      ${MustTestLocales.enGB}  | ${[{ type: "day", value: "03" }, { type: "literal", value: "/" }, { type: "month", value: "02" }, { type: "literal", value: "/" }, { type: "year", value: "2024" }]}
-      ${MustTestLocales.deDE}  | ${[{ type: "day", value: "3" }, { type: "literal", value: "." }, { type: "month", value: "2" }, { type: "literal", value: "." }, { type: "year", value: "2024" }]}
-      ${MustTestLocales.frFR}  | ${[{ type: "day", value: "03" }, { type: "literal", value: "/" }, { type: "month", value: "02" }, { type: "literal", value: "/" }, { type: "year", value: "2024" }]}
-      ${MustTestLocales.esES}  | ${[{ type: "day", value: "3" }, { type: "literal", value: "/" }, { type: "month", value: "2" }, { type: "literal", value: "/" }, { type: "year", value: "2024" }]}
-      ${MustTestLocales.itIT}  | ${[{ type: "day", value: "03" }, { type: "literal", value: "/" }, { type: "month", value: "02" }, { type: "literal", value: "/" }, { type: "year", value: "2024" }]}
-      ${MustTestLocales.ptPT}  | ${[{ type: "day", value: "03" }, { type: "literal", value: "/" }, { type: "month", value: "02" }, { type: "literal", value: "/" }, { type: "year", value: "2024" }]}
-      ${MustTestLocales.svSE}  | ${[{ type: "year", value: "2024" }, { type: "literal", value: "-" }, { type: "month", value: "02" }, { type: "literal", value: "-" }, { type: "day", value: "03" }]}
-      ${MustTestLocales.isIS}  | ${[{ type: "day", value: "3" }, { type: "literal", value: "." }, { type: "month", value: "2" }, { type: "literal", value: "." }, { type: "year", value: "2024" }]}
-      ${MustTestLocales.zhCN}  | ${[{ type: "year", value: "2024" }, { type: "literal", value: "/" }, { type: "month", value: "2" }, { type: "literal", value: "/" }, { type: "day", value: "3" }]}
-      ${MustTestLocales.zhTW}  | ${[{ type: "year", value: "2024" }, { type: "literal", value: "/" }, { type: "month", value: "2" }, { type: "literal", value: "/" }, { type: "day", value: "3" }]}
-      ${MustTestLocales.jaJP}  | ${[{ type: "year", value: "2024" }, { type: "literal", value: "/" }, { type: "month", value: "2" }, { type: "literal", value: "/" }, { type: "day", value: "3" }]}
-      ${MustTestLocales.koKR}  | ${[{ type: "year", value: "2024" }, { type: "literal", value: ". " }, { type: "month", value: "2" }, { type: "literal", value: ". " }, { type: "day", value: "3" }, { type: "literal", value: "." }]}
-      ${MustTestLocales.arSA}  | ${[{ type: "day", value: "٣" }, { type: "literal", value: "‏/" }, { type: "month", value: "٢" }, { type: "literal", value: "‏/" }, { type: "year", value: "٢٠٢٤" }]}
-      ${MustTestLocales.heIL}  | ${[{ type: "day", value: "3" }, { type: "literal", value: "." }, { type: "month", value: "2" }, { type: "literal", value: "." }, { type: "year", value: "2024" }]}
-      ${MustTestLocales.ruRU}  | ${[{ type: "day", value: "03" }, { type: "literal", value: "." }, { type: "month", value: "02" }, { type: "literal", value: "." }, { type: "year", value: "2024" }]}
-      ${MustTestLocales.trTR}  | ${[{ type: "day", value: "03" }, { type: "literal", value: "." }, { type: "month", value: "02" }, { type: "literal", value: "." }, { type: "year", value: "2024" }]}
+      locale                  | expected
+      ${MustTestLocales.enUS} | ${[{ type: "month", value: "2" }, { type: "literal", value: "/" }, { type: "day", value: "3" }, { type: "literal", value: "/" }, { type: "year", value: "2024" }]}
+      ${MustTestLocales.enGB} | ${[{ type: "day", value: "03" }, { type: "literal", value: "/" }, { type: "month", value: "02" }, { type: "literal", value: "/" }, { type: "year", value: "2024" }]}
+      ${MustTestLocales.deDE} | ${[{ type: "day", value: "3" }, { type: "literal", value: "." }, { type: "month", value: "2" }, { type: "literal", value: "." }, { type: "year", value: "2024" }]}
+      ${MustTestLocales.frFR} | ${[{ type: "day", value: "03" }, { type: "literal", value: "/" }, { type: "month", value: "02" }, { type: "literal", value: "/" }, { type: "year", value: "2024" }]}
+      ${MustTestLocales.esES} | ${[{ type: "day", value: "3" }, { type: "literal", value: "/" }, { type: "month", value: "2" }, { type: "literal", value: "/" }, { type: "year", value: "2024" }]}
+      ${MustTestLocales.itIT} | ${[{ type: "day", value: "03" }, { type: "literal", value: "/" }, { type: "month", value: "02" }, { type: "literal", value: "/" }, { type: "year", value: "2024" }]}
+      ${MustTestLocales.ptPT} | ${[{ type: "day", value: "03" }, { type: "literal", value: "/" }, { type: "month", value: "02" }, { type: "literal", value: "/" }, { type: "year", value: "2024" }]}
+      ${MustTestLocales.svSE} | ${[{ type: "year", value: "2024" }, { type: "literal", value: "-" }, { type: "month", value: "02" }, { type: "literal", value: "-" }, { type: "day", value: "03" }]}
+      ${MustTestLocales.isIS} | ${[{ type: "day", value: "3" }, { type: "literal", value: "." }, { type: "month", value: "2" }, { type: "literal", value: "." }, { type: "year", value: "2024" }]}
+      ${MustTestLocales.zhCN} | ${[{ type: "year", value: "2024" }, { type: "literal", value: "/" }, { type: "month", value: "2" }, { type: "literal", value: "/" }, { type: "day", value: "3" }]}
+      ${MustTestLocales.zhTW} | ${[{ type: "year", value: "2024" }, { type: "literal", value: "/" }, { type: "month", value: "2" }, { type: "literal", value: "/" }, { type: "day", value: "3" }]}
+      ${MustTestLocales.jaJP} | ${[{ type: "year", value: "2024" }, { type: "literal", value: "/" }, { type: "month", value: "2" }, { type: "literal", value: "/" }, { type: "day", value: "3" }]}
+      ${MustTestLocales.koKR} | ${[{ type: "year", value: "2024" }, { type: "literal", value: ". " }, { type: "month", value: "2" }, { type: "literal", value: ". " }, { type: "day", value: "3" }, { type: "literal", value: "." }]}
+      ${MustTestLocales.arSA} | ${[{ type: "day", value: "٣" }, { type: "literal", value: "‏/" }, { type: "month", value: "٢" }, { type: "literal", value: "‏/" }, { type: "year", value: "٢٠٢٤" }]}
+      ${MustTestLocales.heIL} | ${[{ type: "day", value: "3" }, { type: "literal", value: "." }, { type: "month", value: "2" }, { type: "literal", value: "." }, { type: "year", value: "2024" }]}
+      ${MustTestLocales.ruRU} | ${[{ type: "day", value: "03" }, { type: "literal", value: "." }, { type: "month", value: "02" }, { type: "literal", value: "." }, { type: "year", value: "2024" }]}
+      ${MustTestLocales.trTR} | ${[{ type: "day", value: "03" }, { type: "literal", value: "." }, { type: "month", value: "02" }, { type: "literal", value: "." }, { type: "year", value: "2024" }]}
     `("returns exact parts for $locale", ({ locale, expected }) => {
       expect(formatDateToParts("2024-02-03", locale)).toEqual(expected);
     });
