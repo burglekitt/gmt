@@ -1,3 +1,4 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { vi } from "vitest";
 import { MustTestLocales, expectDateTimeEqual } from "../../test";
 import { mockTemporalNowPlainDateTimeISOThrow } from "../../test/mocks";
@@ -200,15 +201,12 @@ describe("formatCalendar", () => {
   // ---------------------------------------------------------------------------
   describe("reference option", () => {
     it("defaults to 'now' when reference is omitted", () => {
-      vi.useFakeTimers();
-      vi.setSystemTime(new Date("2024-03-15T09:00:00Z"));
-      try {
-        expect(
-          formatCalendar("2024-03-16T14:30:00", MustTestLocales.enUS),
-        ).toBe("tomorrow at 2:30 PM");
-      } finally {
-        vi.useRealTimers();
-      }
+      vi.spyOn(Temporal.Now, "plainDateTimeISO").mockReturnValue(
+        Temporal.PlainDateTime.from(REF),
+      );
+      expect(
+        formatCalendar("2024-03-16T14:30:00", MustTestLocales.enUS),
+      ).toBe("tomorrow at 2:30 PM");
     });
 
     it("returns '' when reference is provided but invalid", () => {
