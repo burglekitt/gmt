@@ -1,4 +1,4 @@
-import { MustTestLocales } from "../../test";
+import { expectDateTimeEqual, MustTestLocales } from "../../test";
 import { formatDateTimeToParts } from "./formatDateTimeToParts";
 
 const OPTIONS = { dateStyle: "medium", timeStyle: "short" } as const;
@@ -25,9 +25,16 @@ describe("formatDateTimeToParts", () => {
       ${MustTestLocales.ruRU} | ${[{ type: "day", value: "3" }, { type: "literal", value: " " }, { type: "month", value: "февр." }, { type: "literal", value: " " }, { type: "year", value: "2024" }, { type: "literal", value: " г., " }, { type: "hour", value: "14" }, { type: "literal", value: ":" }, { type: "minute", value: "30" }]}
       ${MustTestLocales.trTR} | ${[{ type: "day", value: "3" }, { type: "literal", value: " " }, { type: "month", value: "Şub" }, { type: "literal", value: " " }, { type: "year", value: "2024" }, { type: "literal", value: " " }, { type: "hour", value: "14" }, { type: "literal", value: ":" }, { type: "minute", value: "30" }]}
     `("returns exact parts for $locale", ({ locale, expected }) => {
-      expect(
-        formatDateTimeToParts("2024-02-03T14:30:00", locale, OPTIONS),
-      ).toEqual(expected);
+      const actual = formatDateTimeToParts(
+        "2024-02-03T14:30:00",
+        locale,
+        OPTIONS,
+      );
+      // Some CI runners' ICU/CLDR data renders CJK day-period markers as
+      // ASCII "AM"/"PM" instead of the native-script word (see
+      // test/icuVariants.ts) — compare through expectDateTimeEqual, which
+      // canonicalizes that variance, instead of a strict deep-equal.
+      expectDateTimeEqual(JSON.stringify(actual), JSON.stringify(expected));
     });
   });
 

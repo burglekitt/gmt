@@ -1,4 +1,8 @@
-import { localeZonedDateTimeInputByLocale, MustTestLocales } from "../../test";
+import {
+  expectDateTimeEqual,
+  localeZonedDateTimeInputByLocale,
+  MustTestLocales,
+} from "../../test";
 import { formatZonedToParts } from "./formatZonedToParts";
 
 const OPTIONS = { dateStyle: "medium", timeStyle: "short" } as const;
@@ -27,13 +31,16 @@ describe("formatZonedToParts", () => {
       ${MustTestLocales.ruRU} | ${[{ type: "day", value: "3" }, { type: "literal", value: " " }, { type: "month", value: "февр." }, { type: "literal", value: " " }, { type: "year", value: "2024" }, { type: "literal", value: " г., " }, { type: "hour", value: "14" }, { type: "literal", value: ":" }, { type: "minute", value: "30" }]}
       ${MustTestLocales.trTR} | ${[{ type: "day", value: "3" }, { type: "literal", value: " " }, { type: "month", value: "Şub" }, { type: "literal", value: " " }, { type: "year", value: "2024" }, { type: "literal", value: " " }, { type: "hour", value: "14" }, { type: "literal", value: ":" }, { type: "minute", value: "30" }]}
     `("returns exact parts for $locale", ({ locale, expected }) => {
-      expect(
-        formatZonedToParts(
-          valueByLocale[locale as keyof typeof valueByLocale],
-          locale,
-          OPTIONS,
-        ),
-      ).toEqual(expected);
+      const actual = formatZonedToParts(
+        valueByLocale[locale as keyof typeof valueByLocale],
+        locale,
+        OPTIONS,
+      );
+      // Some CI runners' ICU/CLDR data renders CJK day-period markers as
+      // ASCII "AM"/"PM" instead of the native-script word (see
+      // test/icuVariants.ts) — compare through expectDateTimeEqual, which
+      // canonicalizes that variance, instead of a strict deep-equal.
+      expectDateTimeEqual(JSON.stringify(actual), JSON.stringify(expected));
     });
   });
 
