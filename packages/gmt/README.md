@@ -107,7 +107,7 @@ GMT's roadmap tracks parity against the same four libraries story-by-story, with
 | Locale calendar metadata<br>(names, `hasDST`)                                      | ✅ Done                      | Luxon `Info`                                                             |
 | Overlap-day count, relative<br>rounding, DST transitions, hours-in-day             | ✅ Done                      | date-fns, `@internationalized/date`                                      |
 | Field setters, token-pattern<br>parsing, named machine formats,<br>calendar-style formatting        | ✅ Done | Luxon `.set()`,<br>`toRFC2822`/`toHTTP`/`toSQL`,<br>Moment `.calendar()` |
-| Non-Gregorian calendar systems<br>(Hebrew, Islamic, solar, Ethiopic)               | ⏳ Backlog                   | `@internationalized/date`'s<br>`toCalendar`                              |
+| Non-Gregorian calendar systems<br>(Hebrew done; Islamic, solar,<br>Ethiopic backlog) | 🟡 In progress | `@internationalized/date`'s<br>`toCalendar` |
 
 <sub>Status reflects [context/roadmap/tracker.md](https://github.com/burglekitt/gmt/tree/main/context/roadmap/tracker.md) as of this writing.</sub>
 
@@ -401,6 +401,27 @@ parseDateWithPattern("02/31/2024", "MM/dd/yyyy");
 ```
 
 Supported tokens include `yyyy`/`MM`/`dd`/`HH`/`mm`/`ss`/`SSS` for fixed-width fields, `M`/`d`/`H`/`h`/`m`/`s` for variable-width, `MMMM`/`MMM`/`EEEE`/`EEE`/`a`/`GGGG`/`GG` for locale-aware names, and `'single quotes'` for literal text. A `locale` parameter (default `"en-US"`) controls name-token matching. Invalid input, no-match, and malformed patterns all return `""`.
+
+### Calendar systems
+
+GMT's `CalendarSystem` type (`"gregorian" | "hebrew"`, extended by later stories) and `convertDateToCalendar` express a date in a non-Gregorian calendar system, built entirely on Temporal's native calendar support — no bundled leap-year tables or ported arithmetic.
+
+```typescript
+import { convertDateToCalendar } from "@burglekitt/gmt";
+
+convertDateToCalendar("2024-10-03", "hebrew");
+// "5785-01-01[u-ca=hebrew]" — Rosh Hashanah 5785
+
+convertDateToCalendar("5785-01-01[u-ca=hebrew]", "gregorian");
+// "2024-10-03" — round-trips back
+
+convertDateToCalendar("invalid", "hebrew");
+// ""
+```
+
+The output string shape is the key design decision here, and it deliberately **diverges from Temporal's own** `[u-ca=...]` convention. Temporal's `Temporal.PlainDate.prototype.toString()` always keeps the ISO/proleptic-Gregorian year-month-day digits and only tags the calendar (`"2024-10-03[u-ca=hebrew]"` — still literally October 3rd's Gregorian digits). That hides the calendar's own fields behind calendar-aware accessors, which GMT's string-only contract has no place for. GMT's annotated string instead carries the **calendar-native** year/month/day — Hebrew year 5785, not 2024 — so the calendar-system concept is visible directly in the string, not just in an object property. A plain, unannotated ISO string is always treated as (and always produced for) the `"gregorian"` calendar, so every existing GMT function keeps working unchanged.
+
+Hebrew years can run 12 or 13 months (7 leap years per 19-year Metonic cycle insert a 13th month, Adar I, before the regular Adar); `convertDateToCalendar` resolves this the same way Temporal does internally, via ordinal month numbers (`1`-`13`) rather than fixed month names, so no month-counting logic lives in GMT itself.
 
 ### Durations
 
