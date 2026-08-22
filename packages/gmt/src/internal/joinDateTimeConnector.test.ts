@@ -1,3 +1,4 @@
+import { expectDateTimeEqual } from "../test";
 import { joinDateTimeConnector } from "./joinDateTimeConnector";
 import { normalizeDateTime } from "./normalizeDateTime";
 
@@ -41,10 +42,16 @@ describe("joinDateTimeConnector", () => {
   });
 
   it("preserves day-period-before-hour ordering (ko-KR, zh-TW)", () => {
-    expect(join(EPOCH_MS, "UTC", "ko-KR", "내일", "short")).toBe(
+    // ko-KR's day period ("오후") is one of the CJK words that some ICU
+    // builds render as ASCII "PM" instead — see icuVariants.ts. This is a
+    // test-comparison concern only; the ordering (day period before hour)
+    // is what this case actually verifies.
+    expectDateTimeEqual(
+      join(EPOCH_MS, "UTC", "ko-KR", "내일", "short"),
       "내일 오후 2:30",
     );
-    expect(join(EPOCH_MS, "UTC", "zh-TW", "明天", "short")).toBe(
+    expectDateTimeEqual(
+      join(EPOCH_MS, "UTC", "zh-TW", "明天", "short"),
       "明天 下午2:30",
     );
   });

@@ -1,5 +1,5 @@
 import { vi } from "vitest";
-import { MustTestLocales } from "../../test";
+import { MustTestLocales, expectDateTimeEqual } from "../../test";
 import { mockTemporalNowPlainDateTimeISOThrow } from "../../test/mocks";
 import { formatCalendar } from "./formatCalendar";
 
@@ -97,9 +97,10 @@ describe("formatCalendar", () => {
       ${MustTestLocales.ruRU} | ${"завтра в 14:30"}
       ${MustTestLocales.trTR} | ${"yarın 14:30"}
     `("formats tomorrow for $locale as $expected", ({ locale, expected }) => {
-      expect(
+      expectDateTimeEqual(
         formatCalendar("2024-03-16T14:30:00", locale, { reference: REF }),
-      ).toBe(expected);
+        expected,
+      );
     });
 
     it.each`

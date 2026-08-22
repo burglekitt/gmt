@@ -1,5 +1,9 @@
 import { vi } from "vitest";
-import { MustTestLocales, battleTestTimeZones } from "../../test";
+import {
+  MustTestLocales,
+  battleTestTimeZones,
+  expectDateTimeEqual,
+} from "../../test";
 import { mockTemporalNowInstantThrow } from "../../test/mocks";
 import { formatCalendarUnix } from "./formatCalendarUnix";
 
@@ -130,12 +134,13 @@ describe("formatCalendarUnix", () => {
       ${MustTestLocales.ruRU} | ${"завтра в 14:30"}
       ${MustTestLocales.trTR} | ${"yarın 14:30"}
     `("formats tomorrow for $locale as $expected", ({ locale, expected }) => {
-      expect(
+      expectDateTimeEqual(
         formatCalendarUnix(VAL_MS, locale, {
           timeZone: "America/New_York",
           reference: REF_MS,
         }),
-      ).toBe(expected);
+        expected,
+      );
     });
   });
 

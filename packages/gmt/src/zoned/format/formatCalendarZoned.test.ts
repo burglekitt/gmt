@@ -1,5 +1,9 @@
 import { vi } from "vitest";
-import { MustTestLocales, battleTestTimeZones } from "../../test";
+import {
+  MustTestLocales,
+  battleTestTimeZones,
+  expectDateTimeEqual,
+} from "../../test";
 import { mockTemporalNowZonedDateTimeISOThrow } from "../../test/mocks";
 import { formatCalendarZoned } from "./formatCalendarZoned";
 
@@ -122,13 +126,14 @@ describe("formatCalendarZoned", () => {
       ${MustTestLocales.ruRU} | ${"завтра в 14:30"}
       ${MustTestLocales.trTR} | ${"yarın 14:30"}
     `("formats tomorrow for $locale as $expected", ({ locale, expected }) => {
-      expect(
+      expectDateTimeEqual(
         formatCalendarZoned(
           "2024-03-16T14:30:00-04:00[America/New_York]",
           locale,
           { reference: "2024-03-15T09:00:00-04:00[America/New_York]" },
         ),
-      ).toBe(expected);
+        expected,
+      );
     });
   });
 
