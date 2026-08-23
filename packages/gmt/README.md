@@ -114,18 +114,18 @@ GMT's roadmap (see [context/roadmap](https://github.com/burglekitt/gmt/tree/main
 
 GMT's roadmap tracks parity against the same four libraries story-by-story, with each gap sourced against the specific competitor function it closes — see [context/roadmap](https://github.com/burglekitt/gmt/tree/main/context/roadmap) for the full, source-verified audit trail. This is a live snapshot, not a finished-parity claim: ✅ shipped, 🟡 in progress, ⏳ backlog and not yet scheduled.
 
-| Capability                                                                         | Status                       | Also has it                                                              |
-| ---------------------------------------------------------------------------------- | ---------------------------- | ------------------------------------------------------------------------ |
-| Duration type<br>(ISO 8601 parse/format/arithmetic)                                | ✅ Done                      | Luxon `Duration`                                                         |
-| Interval/range math<br>(contains, overlap, union,<br>intersection, split, set ops) | ✅ Done                      | Luxon `Interval`,<br>date-fns `areIntervalsOverlapping`                  |
-| DST disambiguation control<br>on construction _and_ arithmetic                     | ✅ Done — **differentiator** | None of the others expose<br>this on arithmetic                          |
-| Locale-aware calendar helpers<br>(weekend, week start/end, day-of-week)            | ✅ Done                      | `@internationalized/date`                                                |
-| Business-day arithmetic,<br>clamp/closest, time rounding                           | ✅ Done                      | `temporal-kit`                                                           |
-| Interval rounding-out<br>(boundary count, from-duration)                           | ✅ Done                      | Luxon                                                                    |
-| Locale calendar metadata<br>(names, `hasDST`)                                      | ✅ Done                      | Luxon `Info`                                                             |
-| Overlap-day count, relative<br>rounding, DST transitions, hours-in-day             | ✅ Done                      | date-fns, `@internationalized/date`                                      |
-| Field setters, token-pattern<br>parsing, named machine formats,<br>calendar-style formatting        | ✅ Done | Luxon `.set()`,<br>`toRFC2822`/`toHTTP`/`toSQL`,<br>Moment `.calendar()` |
-| Non-Gregorian calendar systems<br>(Hebrew done; Islamic, solar,<br>Ethiopic backlog) | 🟡 In progress | `@internationalized/date`'s<br>`toCalendar` |
+| Capability                                                                                   | Status                       | Also has it                                                              |
+| -------------------------------------------------------------------------------------------- | ---------------------------- | ------------------------------------------------------------------------ |
+| Duration type<br>(ISO 8601 parse/format/arithmetic)                                          | ✅ Done                      | Luxon `Duration`                                                         |
+| Interval/range math<br>(contains, overlap, union,<br>intersection, split, set ops)           | ✅ Done                      | Luxon `Interval`,<br>date-fns `areIntervalsOverlapping`                  |
+| DST disambiguation control<br>on construction _and_ arithmetic                               | ✅ Done — **differentiator** | None of the others expose<br>this on arithmetic                          |
+| Locale-aware calendar helpers<br>(weekend, week start/end, day-of-week)                      | ✅ Done                      | `@internationalized/date`                                                |
+| Business-day arithmetic,<br>clamp/closest, time rounding                                     | ✅ Done                      | `temporal-kit`                                                           |
+| Interval rounding-out<br>(boundary count, from-duration)                                     | ✅ Done                      | Luxon                                                                    |
+| Locale calendar metadata<br>(names, `hasDST`)                                                | ✅ Done                      | Luxon `Info`                                                             |
+| Overlap-day count, relative<br>rounding, DST transitions, hours-in-day                       | ✅ Done                      | date-fns, `@internationalized/date`                                      |
+| Field setters, token-pattern<br>parsing, named machine formats,<br>calendar-style formatting | ✅ Done                      | Luxon `.set()`,<br>`toRFC2822`/`toHTTP`/`toSQL`,<br>Moment `.calendar()` |
+| Non-Gregorian calendar systems<br>(Hebrew done; Islamic, solar,<br>Ethiopic backlog)         | 🟡 In progress               | `@internationalized/date`'s<br>`toCalendar`                              |
 
 <sub>Status reflects [context/roadmap/tracker.md](https://github.com/burglekitt/gmt/tree/main/context/roadmap/tracker.md) as of this writing.</sub>
 
@@ -1350,10 +1350,14 @@ formatRelativeUtc(value, "en-US", { roundingMethod: "floor" });
 // `.calendar()` — for user-facing schedules, not elapsed-time displays.
 // Within ±6 days of "now" (or an explicit `reference`) it stays relative;
 // beyond that it falls back to an absolute date + time, no relative wording.
-formatCalendar("2026-03-16T14:30:00", "en-US", { reference: "2026-03-15T09:00:00" });
+formatCalendar("2026-03-16T14:30:00", "en-US", {
+  reference: "2026-03-15T09:00:00",
+});
 // "tomorrow at 2:30 PM"
 
-formatCalendar("2026-03-08T14:30:00", "en-US", { reference: "2026-03-15T09:00:00" });
+formatCalendar("2026-03-08T14:30:00", "en-US", {
+  reference: "2026-03-15T09:00:00",
+});
 // "March 8, 2026 at 2:30 PM" — 7 days out, beyond the threshold
 
 formatCalendarZoned("2026-03-16T14:30:00-04:00[America/New_York]", "de-DE", {
