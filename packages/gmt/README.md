@@ -422,7 +422,7 @@ Supported tokens include `yyyy`/`MM`/`dd`/`HH`/`mm`/`ss`/`SSS` for fixed-width f
 
 ### Calendar systems
 
-GMT's `CalendarSystem` type (`"gregorian" | "hebrew"`, extended by later stories) and `convertDateToCalendar` express a date in a non-Gregorian calendar system, built entirely on Temporal's native calendar support — no bundled leap-year tables or ported arithmetic.
+GMT's `CalendarSystem` type (`"gregorian" | "hebrew" | "islamic-civil" | "islamic-tabular" | "islamic-umalqura"`, extended by later stories) and `convertDateToCalendar` express a date in a non-Gregorian calendar system, built entirely on Temporal's native calendar support — no bundled leap-year tables or ported arithmetic.
 
 ```typescript
 import { convertDateToCalendar } from "@burglekitt/gmt";
@@ -433,6 +433,9 @@ convertDateToCalendar("2024-10-03", "hebrew");
 convertDateToCalendar("5785-01-01[u-ca=hebrew]", "gregorian");
 // "2024-10-03" — round-trips back
 
+convertDateToCalendar("2024-10-03", "islamic-umalqura");
+// "1446-03-30[u-ca=islamic-umalqura]" — Saudi Umm al-Qura calendar
+
 convertDateToCalendar("invalid", "hebrew");
 // ""
 ```
@@ -440,6 +443,12 @@ convertDateToCalendar("invalid", "hebrew");
 The output string shape is the key design decision here, and it deliberately **diverges from Temporal's own** `[u-ca=...]` convention. Temporal's `Temporal.PlainDate.prototype.toString()` always keeps the ISO/proleptic-Gregorian year-month-day digits and only tags the calendar (`"2024-10-03[u-ca=hebrew]"` — still literally October 3rd's Gregorian digits). That hides the calendar's own fields behind calendar-aware accessors, which GMT's string-only contract has no place for. GMT's annotated string instead carries the **calendar-native** year/month/day — Hebrew year 5785, not 2024 — so the calendar-system concept is visible directly in the string, not just in an object property. A plain, unannotated ISO string is always treated as (and always produced for) the `"gregorian"` calendar, so every existing GMT function keeps working unchanged.
 
 Hebrew years can run 12 or 13 months (7 leap years per 19-year Metonic cycle insert a 13th month, Adar I, before the regular Adar); `convertDateToCalendar` resolves this the same way Temporal does internally, via ordinal month numbers (`1`-`13`) rather than fixed month names, so no month-counting logic lives in GMT itself.
+
+Three Islamic (Hijri) calendar variants are supported, and they are **not interchangeable** — each resolves the same Gregorian date to different calendar-native digits:
+
+- `"islamic-civil"` — a fixed 30-year leap-year cycle, Friday epoch (`1 AH = 622-07-19`).
+- `"islamic-tabular"` — the same style of fixed arithmetic cycle, but a Thursday epoch one day earlier (`1 AH = 622-07-18`); maps to Temporal's `"islamic-tbla"` calendar id internally, though GMT's own string annotation always reads `[u-ca=islamic-tabular]`.
+- `"islamic-umalqura"` — the Saudi civil calendar, based on Umm al-Qura University's own published tables rather than a fixed arithmetic rule. This is **not** approximated by the tabular variant's math — `convertDateToCalendar("2020-02-24", "islamic-umalqura")` returns `"1441-06-30[u-ca=islamic-umalqura]"` while the same input under `"islamic-tabular"` returns `"1441-07-01[u-ca=islamic-tabular]"`, a genuine one-day divergence, not a rounding difference.
 
 ### Durations
 
