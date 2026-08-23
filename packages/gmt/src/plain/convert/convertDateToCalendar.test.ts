@@ -3,17 +3,17 @@ import { convertDateToCalendar } from "./convertDateToCalendar";
 
 describe("convertDateToCalendar", () => {
   it.each`
-    value                        | calendar        | expected
-    ${"2024-02-29"}              | ${"hebrew"}      | ${"5784-06-20[u-ca=hebrew]"}
-    ${"2023-02-28"}              | ${"hebrew"}      | ${"5783-06-07[u-ca=hebrew]"}
-    ${"2024-01-01"}              | ${"hebrew"}      | ${"5784-04-20[u-ca=hebrew]"}
-    ${"2024-12-31"}              | ${"hebrew"}      | ${"5785-03-30[u-ca=hebrew]"}
-    ${"2024-03-01"}              | ${"hebrew"}      | ${"5784-06-21[u-ca=hebrew]"}
-    ${"2024-03-31"}              | ${"hebrew"}      | ${"5784-07-21[u-ca=hebrew]"}
-    ${"2024-01-01"}              | ${"gregorian"}   | ${"2024-01-01"}
-    ${"5785-01-01[u-ca=hebrew]"} | ${"gregorian"}   | ${"2024-10-03"}
-    ${"5784-06-01[u-ca=hebrew]"} | ${"gregorian"}   | ${"2024-02-10"}
-    ${"5784-06-01[u-ca=hebrew]"} | ${"hebrew"}      | ${"5784-06-01[u-ca=hebrew]"}
+    value                        | calendar       | expected
+    ${"2024-02-29"}              | ${"hebrew"}    | ${"5784-06-20[u-ca=hebrew]"}
+    ${"2023-02-28"}              | ${"hebrew"}    | ${"5783-06-07[u-ca=hebrew]"}
+    ${"2024-01-01"}              | ${"hebrew"}    | ${"5784-04-20[u-ca=hebrew]"}
+    ${"2024-12-31"}              | ${"hebrew"}    | ${"5785-03-30[u-ca=hebrew]"}
+    ${"2024-03-01"}              | ${"hebrew"}    | ${"5784-06-21[u-ca=hebrew]"}
+    ${"2024-03-31"}              | ${"hebrew"}    | ${"5784-07-21[u-ca=hebrew]"}
+    ${"2024-01-01"}              | ${"gregorian"} | ${"2024-01-01"}
+    ${"5785-01-01[u-ca=hebrew]"} | ${"gregorian"} | ${"2024-10-03"}
+    ${"5784-06-01[u-ca=hebrew]"} | ${"gregorian"} | ${"2024-02-10"}
+    ${"5784-06-01[u-ca=hebrew]"} | ${"hebrew"}    | ${"5784-06-01[u-ca=hebrew]"}
   `(
     "converts $value to $calendar as $expected",
     ({
@@ -124,12 +124,12 @@ describe("convertDateToCalendar", () => {
   });
 
   it.each`
-    value            | calendar
-    ${"invalid"}     | ${"hebrew"}
-    ${"2024-02-30"}  | ${"hebrew"}
-    ${""}            | ${"hebrew"}
-    ${null}          | ${"hebrew"}
-    ${123}           | ${"hebrew"}
+    value           | calendar
+    ${"invalid"}    | ${"hebrew"}
+    ${"2024-02-30"} | ${"hebrew"}
+    ${""}           | ${"hebrew"}
+    ${null}         | ${"hebrew"}
+    ${123}          | ${"hebrew"}
   `(
     "returns empty string for invalid input: $value",
     ({ value, calendar }: { value: unknown; calendar: "hebrew" }) => {
@@ -139,10 +139,7 @@ describe("convertDateToCalendar", () => {
 
   it("returns empty string for an unsupported calendar system", () => {
     expect(
-      convertDateToCalendar(
-        "2024-10-03",
-        "martian" as unknown as "hebrew",
-      ),
+      convertDateToCalendar("2024-10-03", "martian" as unknown as "hebrew"),
     ).toBe("");
   });
 

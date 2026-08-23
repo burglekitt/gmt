@@ -2,12 +2,18 @@ import { isCalendarSystem, temporalCalendarIds } from "./calendarSystemIds";
 
 describe("temporalCalendarIds", () => {
   it.each`
-    calendar        | temporalId
-    ${"gregorian"}   | ${"iso8601"}
-    ${"hebrew"}      | ${"hebrew"}
+    calendar       | temporalId
+    ${"gregorian"} | ${"iso8601"}
+    ${"hebrew"}    | ${"hebrew"}
   `(
     "maps $calendar to Temporal calendar id $temporalId",
-    ({ calendar, temporalId }: { calendar: "gregorian" | "hebrew"; temporalId: string }) => {
+    ({
+      calendar,
+      temporalId,
+    }: {
+      calendar: "gregorian" | "hebrew";
+      temporalId: string;
+    }) => {
       expect(temporalCalendarIds[calendar]).toBe(temporalId);
     },
   );
@@ -25,9 +31,12 @@ describe("isCalendarSystem", () => {
     value
     ${"gregorian"}
     ${"hebrew"}
-  `("returns true for supported calendar: $value", ({ value }: { value: string }) => {
-    expect(isCalendarSystem(value)).toBe(true);
-  });
+  `(
+    "returns true for supported calendar: $value",
+    ({ value }: { value: string }) => {
+      expect(isCalendarSystem(value)).toBe(true);
+    },
+  );
 
   it.each`
     value
