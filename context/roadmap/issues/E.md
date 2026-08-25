@@ -158,6 +158,84 @@ See "Instructions for the agent picking up a story" in `context/roadmap/index.md
 Per-function audit findings documented (even the "no change needed, verified why" cases — don't skip documenting negatives), tests for calendar-boundary-crossing cases (leap month, era transition) on whichever functions needed fixes, README update, changeset, lint/test pass.
 ```
 
+## E5 outcome — decisions of record and per-function audit (landed)
+
+E5 shipped as one PR (issue #78, no version bump — Group E's release is cut after E6). This section is the permanent record the story's "even the no-change-needed cases" definition of done requires. Settled decisions must not be re-opened; a future audit should read this section before re-filing anything here as a gap.
+
+### Decisions of record
+
+**D1 — Calendar-string input contract: Option 4.** GMT's native-digit calendar-annotated shape (`"5785-01-01[u-ca=hebrew]"`, as `convertDateToCalendar` produces) is the only accepted calendar-tagged input, and it is accepted **only** by `plain/` `PlainDate` functions. Temporal's own ISO-digit `[u-ca=...]` shape (`"2024-10-03[u-ca=hebrew]"`) is not a GMT input contract — the two shapes are not distinguishable by inspection and treating both as valid would make one string mean two different dates depending on which function received it (verified: `convertDateToCalendar("2024-10-03[u-ca=hebrew]", "gregorian")` returned `"-001736-06-02"` pre-E5, while `zoned/`/`duration/` read the identical string as `2024-10-03`). `zoned/`, `utc/`, `unix/` reject all `[u-ca=...]` annotations outright. `duration/`'s `relativeTo` accepts the GMT shape only (via the new `internal/resolveDurationRelativeTo.ts`).
+
+**D2 — `zoned/`'s accidental calendar-awareness: removed.** `isValidZonedDateTime` was not regex-gated before E5, so `Temporal.ZonedDateTime.from` silently accepted a `[u-ca=...]` annotation and every zoned function did genuinely calendar-aware — but undocumented, untested — arithmetic (verified: `addZoned` on a Hebrew-annotated value returned a date one day different from the ISO answer). This is now rejected outright via the new `internal/hasCalendarAnnotation.ts` guard, applied at `isValidZonedDateTime`, `isValidZonedInterval`, and the 9 `zoned/interval/*` functions that rolled their own `isLeapSecond`-based gate rather than delegating to either validator. This knowingly removes working, correct behavior; the justification is contract coherence with D1. **Filed as a follow-up story candidate, E7** — see below — so the capability is deferred, not lost.
+
+**D10 — Story size: one PR.** Shipped as a single change under issue #78, per `overview.md`'s "one story = one PR." The internal execution order (duration fix → zoned removal → plain gate-opening) is preserved in the diff for reviewability but is not a PR boundary.
+
+**Release: no version bump with this story.** A `.changeset/*.md` entry is included (per `tracker.md`'s rule that the per-PR label is independent of release timing) but `changeset:version` was not run. Group E's release is cut after E6.
+
+**D4 — Mixed-calendar interval endpoints, split by return type.** Boolean/number-returning ordering functions (`intervalContains*`, `intervalsOverlap*`, `intervalAbuts*`, `intervalEngulfs*`, `isValidDateInterval`, `intervalOverlappingDaysDate`) **accept** mixed calendars — ordering and day-counting are calendar-independent (`Temporal.PlainDate.compare` ignores calendar; verified). Value-returning functions (`intervalUnionDate`, `intervalIntersectionDate`, `intervalDifferenceDate`, `intervalXorDate`, `intervalXorAllDate`, `mergeIntervalsDate`, `intervalDivideEquallyDate`, `intervalSplitAtDate`) **reject** a mismatch (return the type's sentinel) — there is no principled way to pick an output calendar for a *value* the caller reads back as a date. Implemented via `internal/calendarValueOfDate.ts`'s `calendarOfAllDateValues`.
+
+**D5 — Calendar-unit measurement: shared calendar, or Gregorian fallback.** `diffDate`, `diffDateAsDuration`, `intervalCountDate`, `intervalLengthDate`, `splitIntervalByUnitDate` measure/step in the endpoints' shared calendar when both carry the same tag (a Hebrew leap year crosses 13 month boundaries and 1 year boundary, not 12/2 — verified), and fall back to Gregorian when the tags mismatch or either endpoint is bare ISO. Implemented via `internal/calendarDatePairPolicy.ts`'s `parseCalendarDatePairForArithmetic`. Distinct from D4's reject policy: ordering/duration math stays well-defined across a mismatch, unlike a value-returning function's output calendar.
+
+**D6 — `splitIntervalByUnit` months on calendar boundaries: yes, already did.** `splitIntervalByUnitDate` steps via `current.add({ [unit]: amount })`, which was already calendar-aware for free once the value carries a calendar (verified: a Hebrew leap year splits into 13 month-slices, not 12). Only the input gate and output formatting needed to change.
+
+**D7 — Calendar tag survives arithmetic: re-derived, never copied.** Every calendar-aware output goes through `internal/formatDateInCalendar.ts`, which re-reads the actual result's fields on each call (this was already how `formatCalendarDate`/`formatEthiopicFamilyDate` worked from E1/E4 — E5 didn't need to change it, only route every new call site through it). Necessary because arithmetic can cross a leap-month or era boundary mid-operation: Japanese Heisei 31-04-30 `+ 1 day` re-derives to Reiwa 1-05-01, not a copied Heisei tag on a date that no longer exists in that era.
+
+**D8 — `overflow` semantics: unchanged, documented asymmetry.** `overflow: "reject"` does not throw uniformly across calendars — verified it throws for `ethioaa 7515-12-30 + 1 month` (`Day 30 does not exist in resulting calendar month`) but does **not** throw for Hebrew `Adar I 15, 5784 + 1 year` (Temporal silently remaps `M05L`/Adar I to `M06`/Adar in the non-leap target year instead of rejecting). Both are Temporal's own behavior; E5 documents the asymmetry in JSDoc rather than papering over it.
+
+**D9 — Business-day functions reject calendar tags.** `addBusinessDays`/`subtractBusinessDays`/`addZonedBusinessDays`/`subtractZonedBusinessDays` reject annotations (the zoned pair via D2's gate; the plain pair was never in scope to open, since `dayOfWeek` is ISO-fixed identically in every supported calendar — verified — so a calendar tag would change nothing about the answer while implying it might).
+
+### Unanticipated findings (discovered during implementation, not in the original architect plan)
+
+1. **Pre-existing bug in `internal/calendarDateString.ts`'s `parseCalendarDateValue` (E1-era code), fixed as part of E5.** The non-annotated fallback branch called `Temporal.PlainDate.from(value)` directly with no shape pre-check. `Temporal.PlainDate.from` silently *truncates* a full datetime/zoned string to its date portion rather than rejecting it (`Temporal.PlainDate.from("2024-03-10T14:30:00")` succeeds, discarding the time) — so `isValidCalendarDate("2024-03-10T14:30:00")` and `convertDateToCalendar("2024-03-10T14:30:00", "hebrew")` both silently accepted datetime input before this fix. Fixed by requiring the strict `plainDate` regex shape before the fallback's `Temporal.PlainDate.from` call. This predates E5 but had to be fixed as part of it, since `parseCalendarDateValue` is E5's own shared parsing gate.
+2. **`Temporal.PlainDate.prototype.until` throws across two different calendars even though `.compare` does not.** `hebrewDate.until(isoDate, {...})` throws `RangeError: cannot compute difference between dates of hebrew and iso8601 calendars`. This bit `intervalOverlappingDaysDate` specifically (a D4-"accept mixed calendars" function that determines its span via `.compare` then previously called `.until` on the result) — fixed by normalizing both operands to `iso8601` immediately before the `.until` call. Every other function that needed cross-calendar arithmetic used `parseCalendarDatePairForArithmetic`/`calendarOfAllDateValues`, which already avoid this by construction.
+3. **The `.equals()` calendar-sensitivity trap resolved itself once D1 and D4 were enforced — no dedicated `.equals()`→`.compare()` patch was needed.** The original architect plan flagged 13 at-risk `.equals()` call sites (coincident-point dedup in `intervalXorAll*`/`intervalSplitAt*`/`intervalDivideEqually*`/`intervalCount*`). Verified: `.equals()` is calendar-sensitive *across* calendars but correct *within* one (same-calendar `PlainDate`s compare equal correctly, including after round-trip arithmetic). Since D1 confines calendar-awareness to `plain/` `PlainDate`, and D4 rejects mismatched-calendar inputs to every function that later calls `.equals()`, the cross-calendar scenario that made `.equals()` unsafe is structurally unreachable by the time it runs. No source change was needed at these sites beyond the D4 gate already added for other reasons.
+
+### Follow-up story candidate — E7 (not filed as a GitHub issue; proposal only)
+
+**Extend `zoned/` with a GMT-shape calendar-annotated zoned string.** D2 removed `zoned/`'s accidental calendar-awareness rather than blessing it, on contract-coherence grounds — but the underlying capability (calendar-aware zoned arithmetic) was real and verified-correct before removal. A deliberate version would need: a GMT-native calendar-annotated `ZonedDateTime` string grammar (not just re-accepting Temporal's own shape, per D1's reasoning), decisions for how `disambiguation`/`offset` interact with a calendar-tagged value, and the same D4/D5/D7 policy questions E5 answered for `plain/`, re-derived for the zoned case. Scope this as its own E-group story if picked up — do not fold it into E6.
+
+### Per-function audit table
+
+Legend: **(a)** no change needed (verified, not assumed) · **(b)** calendar-unit arithmetic, gate opened · **(b→a)** was accidentally calendar-aware, now rejects (D2) · **(a, pre-existing gate)** already correctly rejected before E5, unaffected by it.
+
+**`duration/`**
+
+| Function | File | Verdict | Note |
+|---|---|---|---|
+| `isValidDuration`, `parseDuration` | `duration/validate`, `duration/parse` | (a) | Duration strings carry no calendar. |
+| `absDuration`, `negateDuration`, `getDurationSign`, `getDurationUnit` | `duration/calculate` | (a) | Sign/field reads; no `relativeTo`. |
+| `addDuration`, `subtractDuration` | `duration/calculate` | (a) | Already return `""` for any calendar-unit operand (no `relativeTo` support in Temporal's own `.add`/`.subtract`); no calendar tag can reach them. |
+| `formatDuration` | `duration/format` | (a) | Calendar-independent, verified. |
+| `durationAs`, `compareDurations`, `normalizeDuration` | `duration/calculate`, `duration/compare`, `duration/normalize` | **(b)** | `relativeTo` now resolved via `internal/resolveDurationRelativeTo.ts` — live bug fixed (previously silently misread GMT's own calendar-annotated string as ISO digits). |
+
+**`plain/calculate`**
+
+| Function | Verdict | Note |
+|---|---|---|
+| `addDate`, `subtractDate` | **(b)** | Gate opened via `isValidCalendarDate`/`parseCalendarDateValue`/`formatDateInCalendar`. |
+| `diffDate`, `diffDateAsDuration` | **(b)** | Via `parseCalendarDatePairForArithmetic` (D5). |
+| `addDateTime`, `subtractDateTime`, `diffDateTime`, `diffDateTimeAsDuration` | (a) | No calendar-annotated `PlainDateTime` grammar exists (D1/D3 scope boundary) — a calendar-annotated `PlainDate` string is simply not a valid `PlainDateTime` string. |
+| `addTime`, `subtractTime`, `diffTime` | (a) | `PlainTime` has no calendar. |
+| `addBusinessDays`, `subtractBusinessDays` | (a) | D9 — `dayOfWeek` is ISO-fixed in every calendar. |
+| `addUnix`, `subtractUnix`, `diffUnix`, `diffUnixAsDuration` | (a) | Numeric epoch input, structurally immune. |
+| `addUtc`, `subtractUtc`, `diffUtc`, `diffUtcAsDuration` | (a, pre-existing gate) | `utc/` was already regex-gated to a strict `<date>T<time>Z` shape before E5. |
+| `addZoned`, `subtractZoned`, `diffZoned`, `diffZonedAsDuration`, `addZonedBusinessDays`, `subtractZonedBusinessDays` | **(b→a)** | D2 — now reject via `isValidZonedDateTime`. |
+
+**`plain/interval` (18 `*Date` functions + `isValidDateInterval`)**
+
+| Function | Class | Verdict | Note |
+|---|---|---|---|
+| `intervalAbutsDate`, `intervalContainsDate`, `intervalsOverlapDate`, `intervalEngulfsDate`, `isValidDateInterval` | 1 (ordering) | **(b)** | Gate opened; mixed calendars accepted (D4). |
+| `intervalOverlappingDaysDate` | 1 (day count) | **(b)** | Gate opened; mixed calendars accepted; normalizes to iso8601 before `.until()` (unanticipated finding #2). |
+| `intervalUnionDate`, `intervalIntersectionDate`, `intervalDifferenceDate`, `intervalXorDate`, `intervalXorAllDate`, `mergeIntervalsDate`, `intervalDivideEquallyDate`, `intervalSplitAtDate` | 2 (value-returning set ops) | **(b)** | Gate opened; mismatched calendars rejected (D4); output tag re-derived (D7). |
+| `intervalCountDate`, `intervalLengthDate`, `splitIntervalByUnitDate`, `intervalFromDurationDate` | 3 (calendar-unit arithmetic) | **(b)** | Shared-calendar-or-Gregorian-fallback (D5, except `intervalFromDurationDate` which has only one calendar-tagged input and needs no pair policy). |
+
+**`*DateTime`/`*Time` interval variants (all namespaces)** — (a): no calendar-annotated `PlainDateTime` grammar exists; `PlainTime` has no calendar (precedent: `intervalOverlappingDays*` already had no `Time` sibling for this reason pre-E5).
+
+**`unix/interval/*`, `utc/interval/*`** — (a): numeric epoch (unix) or pre-existing strict regex gate (utc), both unaffected by E5, verified.
+
+**`zoned/interval/*` (17 functions)** — **(b→a)**: all now reject `[u-ca=...]` via `hasCalendarAnnotation`, applied at `isValidZonedDateTime`/`isValidZonedInterval` (covers `intervalFromDurationZoned`, `intervalCountZoned`, `splitIntervalByUnitZoned`, `mergeIntervalsZoned`, `intervalDivideEquallyZoned`, `intervalLengthZoned`, `intervalXorAllZoned`, `intervalSplitAtZoned`) or directly in their own `isLeapSecond`-adjacent guard (`intervalAbutsZoned`, `intervalContainsZoned`, `intervalDifferenceZoned`, `intervalEngulfsZoned`, `intervalIntersectionZoned`, `intervalOverlappingDaysZoned`, `intervalUnionZoned`, `intervalXorZoned`, `intervalsOverlapZoned`).
+
 ### E6 — `cycle*` wrap-around field adjustment
 
 **GitHub Issue:** Issue #125
