@@ -111,6 +111,27 @@ Two traps:
   it yields zero inferred script targets and makes `project.json` the single source of truth.
   Scripts stay in `package.json` so `pnpm --filter @gmt/docs build` still works standalone.
 
+### 5b. `rm -rf .nx/cache` produces a **false green** — use `nx reset`
+
+Nx keeps cached artifacts in `.nx/cache` and their metadata in `.nx/workspace-data`.
+Deleting only the former leaves entries pointing at artifacts that no longer exist, and Nx
+then reports:
+
+```console
+$ pnpm exec nx run docs:generate
+ NX   Successfully ran target generate for project docs
+Nx read the output from the cache instead of running the command for 1 out of 1 tasks.
+```
+
+…while `apps/docs/src/generated/` does not exist. The task never ran and nothing was
+restored, but the exit code is 0. Observed directly while verifying `DOX-A1`.
+
+**Always use `pnpm exec nx reset` to test a cold build**, never `rm -rf .nx/cache`. CI is
+not affected — a fresh checkout has neither directory, so `ci.yml`'s existing
+`rm -rf .nx/cache` step is harmless there — but any local "does this work from clean?"
+check is worthless without `nx reset`. This matters most for `DOX-A3a`, whose Definition of
+Done requires `docs:test` to pass on a clean checkout with no prior build.
+
 ### 6. `.oxfmtrc.json` is an allow-list the issue does not mention
 
 Its `overrides` blocks cover `packages/**`, `docs/**`, `context/**`, `scripts/**`. Without a

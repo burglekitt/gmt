@@ -47,7 +47,13 @@ Node v20, below Astro 7's `>=22.12.0` floor).
 
 - **`pnpm nx run-many -t lint test typecheck build` is green across the monorepo.** Check
   the task list, not just the exit code — a target that does not exist cannot fail, and
-  `apps/docs` silently having no `lint` task would show as green.
+  `apps/docs` silently having no `lint` task would show as green. `nx show projects
+  --with-target <t>` is the quick way to confirm `docs` is actually in each target's set.
+- **To test anything "from clean", use `pnpm exec nx reset` — never `rm -rf .nx/cache`.**
+  Nx stores artifacts in `.nx/cache` and their metadata in `.nx/workspace-data`; deleting
+  only the first leaves Nx reporting "read the output from the cache… Successfully ran"
+  for tasks that never ran and restored nothing. **Exit code 0 with the outputs absent.**
+  Verify the artifacts exist on disk afterwards rather than trusting the exit code.
 - **`packages/gmt` is unperturbed.** `git diff --stat packages/gmt` is empty. If it is not,
   the story needed a changeset — check `.changeset/` and flag it if absent.
 - **No `octane` or `@octanejs/*` dependency** appears anywhere in `apps/docs`.
