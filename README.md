@@ -13,7 +13,7 @@
 
 Home of [@northguild/gmt](./packages/gmt) — **Give Me Temporal!**
 
-A monorepo for Burglekitt community libraries, built with Nx and powered by pnpm, focused on making JavaScript date handling reliable and predictable.
+A monorepo for NorthGuild community libraries, built with Nx and powered by pnpm, focused on making JavaScript date handling reliable and predictable.
 
 ## Agent prompt
 
