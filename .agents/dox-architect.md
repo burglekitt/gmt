@@ -40,7 +40,7 @@ applies here. Dox is a private, unpublished Astro app that _consumes_ the librar
 
 What you actually need to hold:
 
-**The generate-don't-maintain principle.** `apps/docs/scripts/build-reference.ts`
+**The generate-don't-maintain principle.** `apps/dox/scripts/build-reference.ts`
 (`DOX-A3a`) walks `packages/gmt/src` once with the TypeScript compiler API and emits four
 artifacts from that single extraction: the MDX pages, `gmt-corpus.json`, a route manifest,
 and the `{ call, result, note }` widget seeds. One source of truth, four consumers, so they
@@ -81,7 +81,6 @@ a UI nobody can read for ten minutes.
    `prebuild` hook that never fires, a lint config that is never loaded, and a peer
    dependency that is not satisfied transitively. Read the actual files. Run the actual
    commands. Query the actual registry. Concretely:
-
    - Read the config files the story touches rather than trusting its snapshot of them.
    - `npm view <pkg> version peerDependencies engines --json` for every pinned version.
    - Re-derive counts with `grep`/`glob` rather than quoting overview.md §1.
@@ -114,15 +113,15 @@ only what the current story needs. **Authoring the pack is your job**, done as p
 planning the first story in that tier — never speculatively in advance, because a pack
 written months before its tier is reached will be stale before it is read.
 
-| Pack                  | Stories        | Status                     |
-| --------------------- | -------------- | -------------------------- |
-| `tier0-infra.md`      | A1, A2         | Written                    |
-| `tier0-generator.md`  | A3a, A3b       | Author when A3a is planned |
-| `tier1-content.md`    | A4a–A4d        | Author when A4a is planned |
-| `tier2-widgets.md`    | B1a/b, B2a–d   | Author when B1a is planned |
-| `tier3-design.md`     | A5, D1, D2     | Author when A5 is planned  |
-| `tier4-globe.md`      | E1a/b          | Author when E1a is planned |
-| `tier6-ai.md`         | C1–C3a/b       | Author when C1 is planned  |
+| Pack                 | Stories      | Status                     |
+| -------------------- | ------------ | -------------------------- |
+| `tier0-infra.md`     | A1, A2       | Written                    |
+| `tier0-generator.md` | A3a, A3b     | Author when A3a is planned |
+| `tier1-content.md`   | A4a–A4d      | Author when A4a is planned |
+| `tier2-widgets.md`   | B1a/b, B2a–d | Author when B1a is planned |
+| `tier3-design.md`    | A5, D1, D2   | Author when A5 is planned  |
+| `tier4-globe.md`     | E1a/b        | Author when E1a is planned |
+| `tier6-ai.md`        | C1–C3a/b     | Author when C1 is planned  |
 
 A pack contains: the verified facts for that tier, the exact file paths involved, the
 constraints that bind it, the named edge cases, and the open decisions the story must
@@ -139,10 +138,10 @@ in `dox-builder.md`.
 - **An issue closes when its last sub-story lands, not its first.** #132 (`A3a` + `A3b`),
   #133 (`A4a` + `A4b`–`d`), and #135 (`B1a` + `B1b`) each span more than one tier. Do not
   close #132 when `DOX-A3a` ships.
-- **No changesets.** `apps/docs` is private and unpublished. The single exception: a story
+- **No changesets.** `apps/dox` is private and unpublished. The single exception: a story
   that also modifies `packages/gmt` follows the normal repo convention and does need one.
-- **`apps/docs` must not perturb `packages/gmt`.** `pnpm nx run-many -t lint test typecheck
-  build` stays green including the 20-cell GMT timezone matrix.
+- **`apps/dox` must not perturb `packages/gmt`.** `pnpm nx run-many -t lint test typecheck
+build` stays green including the 20-cell GMT timezone matrix.
 - **No Octane.** No dependency on `octane` or any `@octanejs/*` package, in any tier. It is
   a moving pre-1.0 target with no benefit for a documentation site, and nothing in any tier
   depends on it.

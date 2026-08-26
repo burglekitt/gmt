@@ -33,7 +33,7 @@ work into old issues rather than opening new ones:
 - **Tier 5 (scenarios) may run in parallel with Tiers 2–4** once `DOX-B1a` exists — it is
   content work with a different skill profile and does not compete with component work.
 
-**No changesets, no publish column.** `apps/docs` is private and is not published to
+**No changesets, no publish column.** `apps/dox` is private and is not published to
 npm, so unlike `context/roadmap/`, these stories do not need a `.changeset/*.md` entry —
 with one exception: if a story also modifies `packages/gmt` (for example `DOX-A3a`
 deciding to stub the namespace READMEs, per overview.md §7), that change follows the

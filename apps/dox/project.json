@@ -1,8 +1,8 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "name": "docs",
+  "name": "dox",
   "projectType": "application",
-  "sourceRoot": "apps/docs/src",
+  "sourceRoot": "apps/dox/src",
   "tags": [],
   "targets": {
     "generate": {

@@ -24,7 +24,7 @@ jobs:
       any_changed: ${{ steps.detect.outputs.any_changed }}
       gmt_changed: ${{ steps.detect.outputs.gmt_changed }}
       non_gmt_changed: ${{ steps.detect.outputs.non_gmt_changed }}
-      docs_changed: ${{ steps.detect.outputs.docs_changed }}
+      dox_changed: ${{ steps.detect.outputs.dox_changed }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -44,10 +44,10 @@ jobs:
           # apps/** is deliberately classified as non-GMT: docs changes run the
           # build-lint matrix and the `tests` job, never the GMT TZ matrix.
           # Surfaced as its own output so DOX-A2's deploy workflow can gate on it.
-          if echo "$CHANGED" | grep -q '^apps/docs/'; then
-            echo "docs_changed=true" >> $GITHUB_OUTPUT
+          if echo "$CHANGED" | grep -q '^apps/dox/'; then
+            echo "dox_changed=true" >> $GITHUB_OUTPUT
           else
-            echo "docs_changed=false" >> $GITHUB_OUTPUT
+            echo "dox_changed=false" >> $GITHUB_OUTPUT
           fi
           NON_GMT=$(echo "$CHANGED" | grep -v '^packages/gmt/' | grep -v '^packages/gmt-oxlint/' || true)
           if [ -z "$NON_GMT" ]; then

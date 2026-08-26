@@ -48,9 +48,9 @@ __pycache__/
 .venv/
 *.egg-info/
 
-# Astro docs site (apps/docs)
-# NOTE: apps/docs/dist is already covered by the unanchored `dist/` rule above.
-apps/docs/.astro/
-apps/docs/dist/
-apps/docs/src/generated/
-apps/docs/src/content/docs/reference/
+# Astro docs site (apps/dox)
+# NOTE: apps/dox/dist is already covered by the unanchored `dist/` rule above.
+apps/dox/.astro/
+apps/dox/dist/
+apps/dox/src/generated/
+apps/dox/src/content/docs/reference/

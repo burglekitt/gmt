@@ -27,6 +27,31 @@ Current release: **v{gmtVersion}**
 aimed at the cases application code actually hits: arithmetic, comparison, parsing,
 formatting, unix conversions, timezone conversion, and validation.
 
+## Agent prompt
+
+Paste this into your coding agent before it touches a date or time:
+
+```
+You are working with the @northguild/gmt library — a Temporal-first date/time library
+for JavaScript. Install @northguild/gmt (and, if the user wants lint enforcement,
+whichever of @northguild/gmt-eslint, @northguild/gmt-oxlint, or @northguild/gmt-biome
+matches their toolchain).
+
+Every one of these packages ships its own skill files. After installing, read them
+before writing any code:
+
+- node_modules/@northguild/gmt/skills/ — API surface, naming conventions, and Temporal
+  patterns, one skill per task (parsing, formatting, comparing, converting, durations,
+  zoned operations, and more). Also read node_modules/@northguild/gmt/skills/_artifacts/.
+- node_modules/@northguild/gmt-eslint/skills/, node_modules/@northguild/gmt-oxlint/skills/,
+  or node_modules/@northguild/gmt-biome/skills/ — whichever linter was installed, covering
+  first-time setup, migrating existing code, and CI enforcement.
+
+Ask what difficulties the user is having with JavaScript dates — this helps match them
+to the right GMT namespace (plain, zoned, unix, utc, regex). Then generate code using
+GMT's string-in/string-out API, never `new Date()`.
+```
+
 <CardGrid stagger>
   <Card title="100% Temporal, Temporal-first" icon="star">
     Built directly on the TC39 `Temporal` standard — not a homegrown date/time type system.

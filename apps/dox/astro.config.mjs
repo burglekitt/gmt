@@ -21,7 +21,7 @@ export default defineConfig({
         },
       ],
       editLink: {
-        baseUrl: "https://github.com/northguild/gmt/edit/main/apps/docs/",
+        baseUrl: "https://github.com/northguild/gmt/edit/main/apps/dox/",
       },
       sidebar: [
         {

@@ -3,10 +3,10 @@
  * Generate the docs-site version map.
  *
  * Reads every packages/<pkg>/package.json and emits a typed module at
- * apps/docs/src/generated/versions.ts, so that no version number is ever
+ * apps/dox/src/generated/versions.ts, so that no version number is ever
  * hardcoded in site content and the site cannot ship a stale version badge.
  *
- * Run as: node apps/docs/scripts/generate-version-map.mjs
+ * Run as: node apps/dox/scripts/generate-version-map.mjs
  *
  * Wired to the `generate` Nx target, which `build`, `dev`, and `typecheck` all
  * depend on. Deliberately NOT wired via an npm `prebuild`/`predev` lifecycle
@@ -56,7 +56,7 @@ const body = entries
   .join("\n");
 
 const source = `// GENERATED FILE — do not edit by hand.
-// Produced by apps/docs/scripts/generate-version-map.mjs (\`nx run docs:generate\`).
+// Produced by apps/dox/scripts/generate-version-map.mjs (\`nx run dox:generate\`).
 export const packageVersions = {
 ${body}
 } as const;

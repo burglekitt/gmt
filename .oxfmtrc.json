@@ -57,7 +57,7 @@
         "**/coverage/**",
         "**/*.tsbuildinfo",
         "**/out/**",
-        "apps/docs/src/generated/**"
+        "apps/dox/src/generated/**"
       ]
     }
   ]

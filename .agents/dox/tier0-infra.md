@@ -53,7 +53,7 @@ Consequences:
 
 - Adding `apps/**` to `files.include` does **nothing**. Land the edit because the story asks
   for it and it documents intent, but do not report it as the mechanism that lints the app.
-- **The real mechanism is an explicit `lint` target in `apps/docs/project.json`** running
+- **The real mechanism is an explicit `lint` target in `apps/dox/project.json`** running
   `oxlint` with explicit paths. Without it, `nx run-many -t lint` resolves to exactly one
   task (`@northguild/gmt:lint`, the only project with a `lint` script) and stays green while
   ignoring the entire new app.
@@ -76,7 +76,7 @@ It is an **optional** peer. Starlight 0.41.9 depends on `@astrojs/markdown-satte
 directly, and `astro@7.2.7` ships `@astrojs/markdown-satteri@0.3.8` — the remark package is
 the older path, kept as an optional peer for compatibility.
 
-**Do not add `@astrojs/markdown-remark` to `apps/docs`.** Confirmed empirically: a full
+**Do not add `@astrojs/markdown-remark` to `apps/dox`.** Confirmed empirically: a full
 `pnpm install` with only `astro` and `@astrojs/starlight` declared produces **no peer
 warning** for it. Declaring it would pull a package the site does not use.
 
@@ -123,7 +123,7 @@ $ pnpm exec nx run docs:generate
 Nx read the output from the cache instead of running the command for 1 out of 1 tasks.
 ```
 
-…while `apps/docs/src/generated/` does not exist. The task never ran and nothing was
+…while `apps/dox/src/generated/` does not exist. The task never ran and nothing was
 restored, but the exit code is 0. Observed directly while verifying `DOX-A1`.
 
 **Always use `pnpm exec nx reset` to test a cold build**, never `rm -rf .nx/cache`. CI is
@@ -143,7 +143,7 @@ Traced through all four jobs for an `apps/**`-only PR:
 
 - `determine-affected` → `gmt_changed=false`, `non_gmt_changed=true`, `any_changed=true`.
 - `build-lint` → **this is where docs work is actually validated.** `nx affected -t lint
-  typecheck build` picks up `docs`, and `dependsOn: ["^build"]` pulls in
+typecheck build` picks up `docs`, and `dependsOn: ["^build"]` pulls in
   `@northguild/gmt:build` as a task dependency. The job's `rm -rf .nx/cache` step means the
   cold-cache build-order check is exercised on every run — which is what `DOX-A2` wants
   verified.
@@ -199,13 +199,13 @@ Do **not** set `"types"`. Leaving it unset lets `.astro/types.d.ts` supply `astr
 
 ### Version map script
 
-`apps/docs/scripts/generate-version-map.mjs`, following `scripts/sync-intent-version.mjs`'s
+`apps/dox/scripts/generate-version-map.mjs`, following `scripts/sync-intent-version.mjs`'s
 shape. Emits a **typed module** (`src/generated/versions.ts` exporting `packageVersions` and
 `gmtVersion`), not JSON, so consumers get autocomplete and type errors. Write idempotently —
 skip the write when content is unchanged, so `astro dev` does not HMR-thrash and Nx does not
 see a spurious output change.
 
-Lives in `apps/docs/scripts/`, not root `scripts/`: Nx's `default` named input is
+Lives in `apps/dox/scripts/`, not root `scripts/`: Nx's `default` named input is
 `{projectRoot}/**/*`, so a root-level script would not invalidate the docs cache when
 edited, and it belongs next to `DOX-A3a`'s future `build-reference.ts`.
 
@@ -272,7 +272,7 @@ surprising thing about the library.
    `esbuild` and `nx`. Astro's esbuild is already allowed and pagefind ships prebuilt
    platform binaries, so this should be clean — but if `allowBuilds` needs new entries, the
    lockfile must be regenerated **in the same commit** or `--frozen-lockfile` fails in CI.
-3. **Nx sync generator.** Once `apps/docs/tsconfig.json` exists, `@nx/js:typescript-sync`
+3. **Nx sync generator.** Once `apps/dox/tsconfig.json` exists, `@nx/js:typescript-sync`
    may flag the workspace permanently out of sync on the story's own local DoD command (CI
    skips sync entirely). If it does, `nx.json`'s
    `sync.disabledTaskSyncGenerators: ["@nx/js:typescript-sync"]` is the fix — but **verify

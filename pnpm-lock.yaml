@@ -48,7 +48,7 @@ importers:
         specifier: ^4.1.0
         version: 4.1.4(@types/node@22.19.17)(vite@8.2.2(@types/node@22.19.17)(esbuild@0.28.2)(yaml@2.9.0))
 
-  apps/docs:
+  apps/dox:
     dependencies:
       '@astrojs/starlight':
         specifier: 0.41.9
