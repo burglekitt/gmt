@@ -1,17 +1,5 @@
 # @northguild/gmt-biome
 
-> ## ⚠️ Deprecation Notice
->
-> This package has moved. **`gmt-biome` is now published as
-> [`@northguild/gmt-biome`](https://www.npmjs.com/package/@northguild/gmt-biome)**
-> under the [northguild](https://github.com/northguild) GitHub organization.
->
-> - **New repository:** <https://github.com/northguild/gmt>
-> - **New package:** `@northguild/gmt-biome`
->
-> `@northguild/gmt-biome` is deprecated and will receive no further updates.
-> Please migrate to `@northguild/gmt-biome`.
-
 Shared [Biome](https://biomejs.dev/) configuration for `@northguild/gmt` projects. Enforces the Temporal-only policy by banning all `Date` APIs via Grit plugins.
 
 ## Installation

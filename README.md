@@ -1,16 +1,5 @@
 # GMT: Give Me Temporal
 
-> ## ⚠️ Deprecation Notice
->
-> This package and repository have moved. **`gmt` is now maintained under the
-> [northguild](https://github.com/northguild) organization.**
->
-> - **New repository:** <https://github.com/northguild/gmt>
->
-> This `northguild/gmt` repository and its published package are deprecated and
-> will receive no further updates. Please update any bookmarks, forks, and CI
-> references to point at **`northguild/gmt`**.
-
 Home of [@northguild/gmt](./packages/gmt) — **Give Me Temporal!**
 
 A monorepo for NorthGuild community libraries, built with Nx and powered by pnpm, focused on making JavaScript date handling reliable and predictable.
