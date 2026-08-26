@@ -383,7 +383,7 @@ skills:
     packages:
       - '@burglekitt/gmt'
       - '@burglekitt/gmt-eslint'
-      - '@burglekitt/gmt-biome'
+      - '@northguild/gmt-biome'
       - '@northguild/gmt-oxlint'
     tasks:
       - Choose ESLint config

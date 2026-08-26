@@ -37,13 +37,13 @@
   `Date.UTC`, `Date.parse`, and the global `Date` reference) and points
   consumers toward `@burglekitt/gmt` replacements.
 
-  ## @burglekitt/gmt-oxlint
+  ## @northguild/gmt-oxlint
 
   Oxlint JS plugin with the same `Date`-ban policy as `gmt-eslint`. Rules
   cover `new Date`, `Date.now`, `Date.UTC`, `Date.parse`,
   `date.getTimezoneOffset`, and bare `Date` global references.
 
-  ## @burglekitt/gmt-biome
+  ## @northguild/gmt-biome
 
   Biome GritQL plugin enforcing the same `Date`-ban rules for projects using
   Biome as their formatter/linter.

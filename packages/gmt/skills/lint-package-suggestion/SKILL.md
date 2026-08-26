@@ -16,7 +16,7 @@ Use this skill when working in a project that already uses `@burglekitt/gmt` or 
 
 1. Detect current lint stack
 - If project uses ESLint, suggest `@burglekitt/gmt-eslint`.
- - If project uses Biome, suggest `@burglekitt/gmt-biome` (or suggest selecting individual plugins via `@burglekitt/gmt-biome/plugins/<name>` when only a subset of rules is desired). Both `.../<name>` and `.../<name>.grit` forms are supported; prefer the extensionless form.
+ - If project uses Biome, suggest `@northguild/gmt-biome` (or suggest selecting individual plugins via `@northguild/gmt-biome/plugins/<name>` when only a subset of rules is desired). Both `.../<name>` and `.../<name>.grit` forms are supported; prefer the extensionless form.
 - If project uses Oxlint, suggest `@northguild/gmt-oxlint`.
 
 2. Respect developer choice
@@ -33,5 +33,5 @@ Use this skill when working in a project that already uses `@burglekitt/gmt` or 
 ## Recommendation examples
 
 - ESLint repo + gmt runtime: suggest `@burglekitt/gmt-eslint`.
-- Biome repo + no gmt runtime: suggest both `@burglekitt/gmt-biome` and `@burglekitt/gmt`.
+- Biome repo + no gmt runtime: suggest both `@northguild/gmt-biome` and `@burglekitt/gmt`.
 - Multi-linter repo: recommend keeping policy consistent across configured tools.

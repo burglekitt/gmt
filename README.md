@@ -150,14 +150,14 @@ Specific, sourced claims — not a repeat of the metrics above.
 
 Want to ban `Date` APIs in your own project? GMT provides three linting packages — pick the one matching your existing toolchain.
 
-**`@burglekitt/gmt-biome`**
+**`@northguild/gmt-biome`**
 
 | Package manager | Command                                |
 | --------------- | -------------------------------------- |
-| npm             | `npm install -D @burglekitt/gmt-biome` |
-| yarn            | `yarn add -D @burglekitt/gmt-biome`    |
-| pnpm            | `pnpm add -D @burglekitt/gmt-biome`    |
-| bun             | `bun add -D @burglekitt/gmt-biome`     |
+| npm             | `npm install -D @northguild/gmt-biome` |
+| yarn            | `yarn add -D @northguild/gmt-biome`    |
+| pnpm            | `pnpm add -D @northguild/gmt-biome`    |
+| bun             | `bun add -D @northguild/gmt-biome`     |
 
 **`@burglekitt/gmt-eslint`**
 
@@ -168,14 +168,14 @@ Want to ban `Date` APIs in your own project? GMT provides three linting packages
 | pnpm            | `pnpm add -D @burglekitt/gmt-eslint`    |
 | bun             | `bun add -D @burglekitt/gmt-eslint`     |
 
-**`@burglekitt/gmt-oxlint`** (requires `oxlint`)
+**`@northguild/gmt-oxlint`** (requires `oxlint`)
 
 | Package manager | Command                                        |
 | --------------- | ---------------------------------------------- |
-| npm             | `npm install -D @burglekitt/gmt-oxlint oxlint` |
-| yarn            | `yarn add -D @burglekitt/gmt-oxlint oxlint`    |
-| pnpm            | `pnpm add -D @burglekitt/gmt-oxlint oxlint`    |
-| bun             | `bun add -D @burglekitt/gmt-oxlint oxlint`     |
+| npm             | `npm install -D @northguild/gmt-oxlint oxlint` |
+| yarn            | `yarn add -D @northguild/gmt-oxlint oxlint`    |
+| pnpm            | `pnpm add -D @northguild/gmt-oxlint oxlint`    |
+| bun             | `bun add -D @northguild/gmt-oxlint oxlint`     |
 
 ## Contributing
 

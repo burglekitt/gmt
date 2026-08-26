@@ -1,10 +1,10 @@
-# @burglekitt/gmt-biome
+# @northguild/gmt-biome
 
 ## 1.0.6
 
 ### Patch Changes
 
-- 131087a: Add deprecation notice: this package is moving to `@northguild/gmt-biome` under the [northguild](https://github.com/northguild) GitHub organization. `@burglekitt/gmt-biome` will receive no further updates after this release.
+- 131087a: Add deprecation notice: this package is moving to `@northguild/gmt-biome` under the [northguild](https://github.com/northguild) GitHub organization. `@northguild/gmt-biome` will receive no further updates after this release.
 
 ## 1.0.5
 
@@ -55,13 +55,13 @@
   `Date.UTC`, `Date.parse`, and the global `Date` reference) and points
   consumers toward `@burglekitt/gmt` replacements.
 
-  ## @burglekitt/gmt-oxlint
+  ## @northguild/gmt-oxlint
 
   Oxlint JS plugin with the same `Date`-ban policy as `gmt-eslint`. Rules
   cover `new Date`, `Date.now`, `Date.UTC`, `Date.parse`,
   `date.getTimezoneOffset`, and bare `Date` global references.
 
-  ## @burglekitt/gmt-biome
+  ## @northguild/gmt-biome
 
   Biome GritQL plugin enforcing the same `Date`-ban rules for projects using
   Biome as their formatter/linter.

@@ -8,9 +8,9 @@ Packages (each independently versioned):
 | Package dir           | npm name                 |
 | --------------------- | ------------------------ |
 | `packages/gmt`        | `@burglekitt/gmt`        |
-| `packages/gmt-biome`  | `@burglekitt/gmt-biome`  |
+| `packages/gmt-biome`  | `@northguild/gmt-biome`  |
 | `packages/gmt-eslint` | `@burglekitt/gmt-eslint` |
-| `packages/gmt-oxlint` | `@burglekitt/gmt-oxlint` |
+| `packages/gmt-oxlint` | `@northguild/gmt-oxlint` |
 
 ---
 
@@ -92,7 +92,7 @@ commit, so this holds as long as you haven't done anything else in between):
 
 ```bash
 for TAG in $(git tag --points-at HEAD); do
-  PKG=${TAG#@burglekitt/}   # "@burglekitt/gmt-oxlint@1.1.2" -> "gmt-oxlint@1.1.2"
+  PKG=${TAG#@burglekitt/}   # "@northguild/gmt-oxlint@1.1.2" -> "gmt-oxlint@1.1.2"
   PKG=${PKG%@*}             # "gmt-oxlint@1.1.2" -> "gmt-oxlint"
 
   NOTES="/tmp/release-notes-$PKG.md"
