@@ -16,11 +16,11 @@ description: >
   for shared calendar dates between two intervals. Covers plain, zoned, unix,
   utc. Returns false/null/[] on invalid input — never throws.
 sources:
-  - 'burglekitt/gmt:packages/gmt/src/plain/interval/index.ts'
-  - 'burglekitt/gmt:packages/gmt/src/zoned/interval/index.ts'
-  - 'burglekitt/gmt:packages/gmt/src/unix/interval/index.ts'
-  - 'burglekitt/gmt:packages/gmt/src/utc/interval/index.ts'
-  - 'burglekitt/gmt:packages/gmt/src/duration/validate/isValidDuration.ts'
+  - 'northguild/gmt:packages/gmt/src/plain/interval/index.ts'
+  - 'northguild/gmt:packages/gmt/src/zoned/interval/index.ts'
+  - 'northguild/gmt:packages/gmt/src/unix/interval/index.ts'
+  - 'northguild/gmt:packages/gmt/src/utc/interval/index.ts'
+  - 'northguild/gmt:packages/gmt/src/duration/validate/isValidDuration.ts'
 metadata:
   type: core
   library: '@northguild/gmt'

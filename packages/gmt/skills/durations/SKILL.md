@@ -15,18 +15,18 @@ description: >
   formatDuration to render a duration as a human-readable, locale-aware string
   (e.g. "1 day, 2 hours, and 30 minutes").
 sources:
-  - 'burglekitt/gmt:packages/gmt/src/duration/index.ts'
-  - 'burglekitt/gmt:packages/gmt/src/duration/calculate/getDurationUnit.ts'
-  - 'burglekitt/gmt:packages/gmt/src/duration/calculate/durationAs.ts'
-  - 'burglekitt/gmt:packages/gmt/src/duration/calculate/negateDuration.ts'
-  - 'burglekitt/gmt:packages/gmt/src/duration/calculate/absDuration.ts'
-  - 'burglekitt/gmt:packages/gmt/src/duration/calculate/getDurationSign.ts'
-  - 'burglekitt/gmt:packages/gmt/src/duration/compare/compareDurations.ts'
-  - 'burglekitt/gmt:packages/gmt/src/plain/calculate/diffDateAsDuration.ts'
-  - 'burglekitt/gmt:packages/gmt/src/plain/calculate/diffDateTimeAsDuration.ts'
-  - 'burglekitt/gmt:packages/gmt/src/zoned/calculate/diffZonedAsDuration.ts'
-  - 'burglekitt/gmt:packages/gmt/src/unix/calculate/diffUnixAsDuration.ts'
-  - 'burglekitt/gmt:packages/gmt/src/utc/calculate/diffUtcAsDuration.ts'
+  - 'northguild/gmt:packages/gmt/src/duration/index.ts'
+  - 'northguild/gmt:packages/gmt/src/duration/calculate/getDurationUnit.ts'
+  - 'northguild/gmt:packages/gmt/src/duration/calculate/durationAs.ts'
+  - 'northguild/gmt:packages/gmt/src/duration/calculate/negateDuration.ts'
+  - 'northguild/gmt:packages/gmt/src/duration/calculate/absDuration.ts'
+  - 'northguild/gmt:packages/gmt/src/duration/calculate/getDurationSign.ts'
+  - 'northguild/gmt:packages/gmt/src/duration/compare/compareDurations.ts'
+  - 'northguild/gmt:packages/gmt/src/plain/calculate/diffDateAsDuration.ts'
+  - 'northguild/gmt:packages/gmt/src/plain/calculate/diffDateTimeAsDuration.ts'
+  - 'northguild/gmt:packages/gmt/src/zoned/calculate/diffZonedAsDuration.ts'
+  - 'northguild/gmt:packages/gmt/src/unix/calculate/diffUnixAsDuration.ts'
+  - 'northguild/gmt:packages/gmt/src/utc/calculate/diffUtcAsDuration.ts'
 metadata:
   type: core
   library: '@northguild/gmt'

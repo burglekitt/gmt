@@ -9,11 +9,11 @@ description: >
   japanese, buddhist, taiwan, persian, indian, ethiopic, ethiopic-amete-alem,
   coptic).
 sources:
-  - 'burglekitt/gmt:packages/gmt/src/plain/convert/index.ts'
-  - 'burglekitt/gmt:packages/gmt/src/zoned/convert/index.ts'
-  - 'burglekitt/gmt:packages/gmt/src/unix/convert/index.ts'
-  - 'burglekitt/gmt:packages/gmt/src/utc/convert/index.ts'
-  - 'burglekitt/gmt:packages/gmt/src/types/calendar-system.ts'
+  - 'northguild/gmt:packages/gmt/src/plain/convert/index.ts'
+  - 'northguild/gmt:packages/gmt/src/zoned/convert/index.ts'
+  - 'northguild/gmt:packages/gmt/src/unix/convert/index.ts'
+  - 'northguild/gmt:packages/gmt/src/utc/convert/index.ts'
+  - 'northguild/gmt:packages/gmt/src/types/calendar-system.ts'
 metadata:
   type: core
   library: '@northguild/gmt'

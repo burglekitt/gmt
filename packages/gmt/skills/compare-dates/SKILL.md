@@ -15,14 +15,14 @@ description: >
   next/previous occurrence of an ISO day of week ("next Friday"). Returns
   false/null/"" on invalid input.
 sources:
-  - 'burglekitt/gmt:packages/gmt/src/plain/compare/index.ts'
-  - 'burglekitt/gmt:packages/gmt/src/zoned/compare/index.ts'
-  - 'burglekitt/gmt:packages/gmt/src/unix/compare/index.ts'
-  - 'burglekitt/gmt:packages/gmt/src/utc/compare/index.ts'
-  - 'burglekitt/gmt:packages/gmt/src/plain/calculate/getLocaleDayOfWeek.ts'
-  - 'burglekitt/gmt:packages/gmt/src/zoned/calculate/getLocaleZonedDayOfWeek.ts'
-  - 'burglekitt/gmt:packages/gmt/src/plain/calculate/nextWeekday.ts'
-  - 'burglekitt/gmt:packages/gmt/src/plain/calculate/previousWeekday.ts'
+  - 'northguild/gmt:packages/gmt/src/plain/compare/index.ts'
+  - 'northguild/gmt:packages/gmt/src/zoned/compare/index.ts'
+  - 'northguild/gmt:packages/gmt/src/unix/compare/index.ts'
+  - 'northguild/gmt:packages/gmt/src/utc/compare/index.ts'
+  - 'northguild/gmt:packages/gmt/src/plain/calculate/getLocaleDayOfWeek.ts'
+  - 'northguild/gmt:packages/gmt/src/zoned/calculate/getLocaleZonedDayOfWeek.ts'
+  - 'northguild/gmt:packages/gmt/src/plain/calculate/nextWeekday.ts'
+  - 'northguild/gmt:packages/gmt/src/plain/calculate/previousWeekday.ts'
 metadata:
   type: core
   library: '@northguild/gmt'

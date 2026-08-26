@@ -14,15 +14,15 @@ description: >
   single field instead of carrying into the next (month +1 from December stays
   in the same year, unlike addMonths).
 sources:
-  - 'burglekitt/gmt:packages/gmt/src/plain/calculate/index.ts'
-  - 'burglekitt/gmt:packages/gmt/src/plain/calculate/clampDate.ts'
-  - 'burglekitt/gmt:packages/gmt/src/plain/calculate/closestDateTo.ts'
-  - 'burglekitt/gmt:packages/gmt/src/plain/calculate/setDate.ts'
-  - 'burglekitt/gmt:packages/gmt/src/plain/calculate/setDateTime.ts'
-  - 'burglekitt/gmt:packages/gmt/src/plain/calculate/setTime.ts'
-  - 'burglekitt/gmt:packages/gmt/src/plain/calculate/cycleDate.ts'
-  - 'burglekitt/gmt:packages/gmt/src/plain/calculate/cycleDateTime.ts'
-  - 'burglekitt/gmt:packages/gmt/src/plain/calculate/cycleTime.ts'
+  - 'northguild/gmt:packages/gmt/src/plain/calculate/index.ts'
+  - 'northguild/gmt:packages/gmt/src/plain/calculate/clampDate.ts'
+  - 'northguild/gmt:packages/gmt/src/plain/calculate/closestDateTo.ts'
+  - 'northguild/gmt:packages/gmt/src/plain/calculate/setDate.ts'
+  - 'northguild/gmt:packages/gmt/src/plain/calculate/setDateTime.ts'
+  - 'northguild/gmt:packages/gmt/src/plain/calculate/setTime.ts'
+  - 'northguild/gmt:packages/gmt/src/plain/calculate/cycleDate.ts'
+  - 'northguild/gmt:packages/gmt/src/plain/calculate/cycleDateTime.ts'
+  - 'northguild/gmt:packages/gmt/src/plain/calculate/cycleTime.ts'
 metadata:
   type: core
   library: '@northguild/gmt'

@@ -8,12 +8,12 @@ description: >
   strings. All accept a reference anchor and Intl.RelativeTimeFormat options
   (numeric, style).
 sources:
-  - 'burglekitt/gmt:packages/gmt/src/plain/format/formatRelativeDate.ts'
-  - 'burglekitt/gmt:packages/gmt/src/plain/format/formatRelativeTime.ts'
-  - 'burglekitt/gmt:packages/gmt/src/plain/format/formatRelativeDateTime.ts'
-  - 'burglekitt/gmt:packages/gmt/src/zoned/format/formatRelativeZoned.ts'
-  - 'burglekitt/gmt:packages/gmt/src/unix/format/formatRelativeUnix.ts'
-  - 'burglekitt/gmt:packages/gmt/src/utc/format/formatRelativeUtc.ts'
+  - 'northguild/gmt:packages/gmt/src/plain/format/formatRelativeDate.ts'
+  - 'northguild/gmt:packages/gmt/src/plain/format/formatRelativeTime.ts'
+  - 'northguild/gmt:packages/gmt/src/plain/format/formatRelativeDateTime.ts'
+  - 'northguild/gmt:packages/gmt/src/zoned/format/formatRelativeZoned.ts'
+  - 'northguild/gmt:packages/gmt/src/unix/format/formatRelativeUnix.ts'
+  - 'northguild/gmt:packages/gmt/src/utc/format/formatRelativeUtc.ts'
 metadata:
   type: core
   library: '@northguild/gmt'

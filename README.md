@@ -7,7 +7,7 @@
 >
 > - **New repository:** <https://github.com/northguild/gmt>
 >
-> This `burglekitt/gmt` repository and its published package are deprecated and
+> This `northguild/gmt` repository and its published package are deprecated and
 > will receive no further updates. Please update any bookmarks, forks, and CI
 > references to point at **`northguild/gmt`**.
 

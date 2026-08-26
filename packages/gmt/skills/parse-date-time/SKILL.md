@@ -8,11 +8,11 @@ description: >
   RFC 3339) into GMT's own ISO strings — these return "" on invalid input, not
   null.
 sources:
-  - 'burglekitt/gmt:packages/gmt/src/plain/parse/index.ts'
-  - 'burglekitt/gmt:packages/gmt/src/zoned/parse/parseRfc2822.ts'
-  - 'burglekitt/gmt:packages/gmt/src/utc/parse/parseHttp.ts'
-  - 'burglekitt/gmt:packages/gmt/src/plain/parse/parseSql.ts'
-  - 'burglekitt/gmt:packages/gmt/src/zoned/parse/parseRfc3339.ts'
+  - 'northguild/gmt:packages/gmt/src/plain/parse/index.ts'
+  - 'northguild/gmt:packages/gmt/src/zoned/parse/parseRfc2822.ts'
+  - 'northguild/gmt:packages/gmt/src/utc/parse/parseHttp.ts'
+  - 'northguild/gmt:packages/gmt/src/plain/parse/parseSql.ts'
+  - 'northguild/gmt:packages/gmt/src/zoned/parse/parseRfc3339.ts'
 metadata:
   type: core
   library: '@northguild/gmt'

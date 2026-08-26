@@ -140,7 +140,7 @@ pnpm run lint
 │   └── gmt-eslint/             # @northguild/gmt-eslint — Shared ESLint flat config
 │       └── eslint/
 │           └── index.mjs       # Flat config banning Date APIs
-├── burglekitt/                  # Nx workspace configuration (internal, do not publish)
+├── northguild/                  # Nx workspace configuration (internal, do not publish)
 ├── biome.json                   # Root Biome config — references gmt-biome plugins directly
 ├── eslint.config.mjs            # Root ESLint config — imports gmt-eslint
 ├── tsconfig.base.json           # Shared TypeScript base config

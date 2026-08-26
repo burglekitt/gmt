@@ -5,12 +5,12 @@ description: >
   getToday(), getSystemTimeZone(), or getTimeZones() for current temporal
   values. String output for logging; use Temporal for manipulation.
 sources:
-  - 'burglekitt/gmt:packages/gmt/src/plain/get/getNow.ts'
-  - 'burglekitt/gmt:packages/gmt/src/plain/get/getToday.ts'
-  - 'burglekitt/gmt:packages/gmt/src/zoned/get/getSystemTimeZone.ts'
-  - 'burglekitt/gmt:packages/gmt/src/zoned/get/getTimeZones.ts'
-  - 'burglekitt/gmt:packages/gmt/src/utc/get/index.ts'
-  - 'burglekitt/gmt:packages/gmt/src/unix/get/index.ts'
+  - 'northguild/gmt:packages/gmt/src/plain/get/getNow.ts'
+  - 'northguild/gmt:packages/gmt/src/plain/get/getToday.ts'
+  - 'northguild/gmt:packages/gmt/src/zoned/get/getSystemTimeZone.ts'
+  - 'northguild/gmt:packages/gmt/src/zoned/get/getTimeZones.ts'
+  - 'northguild/gmt:packages/gmt/src/utc/get/index.ts'
+  - 'northguild/gmt:packages/gmt/src/unix/get/index.ts'
 metadata:
   type: core
   library: '@northguild/gmt'
