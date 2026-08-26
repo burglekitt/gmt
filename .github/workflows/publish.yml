@@ -22,7 +22,7 @@ permissions:
 
 jobs:
   publish:
-    name: Publish @burglekitt/${{ inputs.package }}
+    name: Publish @northguild/${{ inputs.package }}
     runs-on: ubuntu-latest
     environment: release
     steps:
@@ -51,7 +51,7 @@ jobs:
         if: inputs.package == 'gmt-oxlint'
         run: cd packages/gmt-oxlint && npm run build
 
-      - name: Publish @burglekitt/${{ inputs.package }}
+      - name: Publish @northguild/${{ inputs.package }}
         run: npm publish --access public --tag ${{ inputs.tag }}
         working-directory: packages/${{ inputs.package }}
         env:

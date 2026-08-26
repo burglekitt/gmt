@@ -51,7 +51,7 @@ far less than changing `"reject"` to `"earlier"` and watching the output change.
   package root. The exports map already exposes one level of deep import per namespace;
   root imports pull the entire surface plus `@js-temporal/polyfill` onto every page.
 - Import from the built `dist`, not source. `packages/gmt` sets
-  `customConditions: ["@burglekitt/source"]`, but matching it means configuring Vite's
+  `customConditions: ["@northguild/source"]`, but matching it means configuring Vite's
   `resolve.conditions`; letting Nx build the package first (A1's `dependsOn: ["^build"]`)
   is fewer moving parts.
 - Handle option-object parameters, not just positional strings — a playground that only

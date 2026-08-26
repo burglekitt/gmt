@@ -9,7 +9,7 @@ This guide covers local development, quality checks, and publishing for workspac
 
 - Node.js 24.x (see `.nvmrc`)
 - pnpm (use Corepack or Volta)
-- npm account with publish access to the `@burglekitt` org (for publishing)
+- npm account with publish access to the `@northguild` org (for publishing)
 - [uv](https://docs.astral.sh/uv/) (only needed to run Python-backed agent skill scripts under `.agents/skills/`)
 
 ## Local Setup
@@ -363,7 +363,7 @@ Two supported publish paths:
 
 Prerequisites for Actions-based publishing (optional):
 
-1. Create an npm access token with `Publish` permission for the `@burglekitt` org at https://www.npmjs.com/.
+1. Create an npm access token with `Publish` permission for the `@northguild` org at https://www.npmjs.com/.
 2. Add it as a repository secret named `NPM_TOKEN` (or add it to the `release` environment) in GitHub (`Settings → Secrets` / `Settings → Environments`).
 
 Basic Changesets workflow:

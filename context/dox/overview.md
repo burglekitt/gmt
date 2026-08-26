@@ -151,7 +151,7 @@ shipped behavior.
 ### Reviewed prior art — the Worktree CLI docs site
 
 `example-sibling-repo-docs.md` in this directory documents how a sibling
-`@burglekitt/worktree` repo built its docs site and AI chat. It is a working system, and
+`@northguild/worktree` repo built its docs site and AI chat. It is a working system, and
 it was reviewed in full on 2026-08-21. It is **an example, not a target** — its own
 warning notes it lacks a real textarea, multiline chat, and copyable code blocks, and it
 does not meet this project's design or functional needs.
@@ -392,10 +392,10 @@ Two more constraints:
 
 - **`apps/docs` must not extend `tsconfig.base.json`.** The base sets
   `composite: true`, `emitDeclarationOnly: true`, `module: nodenext`, and
-  `customConditions: ["@burglekitt/source"]` — all wrong for an Astro app. Extend
+  `customConditions: ["@northguild/source"]` — all wrong for an Astro app. Extend
   `astro/tsconfigs/strict` instead.
 - **Import `@northguild/gmt` from its built `dist`, not from source.** The
-  `@burglekitt/source` custom condition exists, but matching it would require
+  `@northguild/source` custom condition exists, but matching it would require
   configuring Vite's `resolve.conditions`; letting Nx build the package first is fewer
   moving parts. Deep-import per function (`@northguild/gmt/plain/...`, already exposed
   by the exports map) so islands tree-shake.

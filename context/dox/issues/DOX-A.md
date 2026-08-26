@@ -73,7 +73,7 @@ file does not exist and never did.
 
 **Gate — resolve here, not later:** `apps/docs` must NOT extend `tsconfig.base.json`.
 The base config sets `composite: true`, `emitDeclarationOnly: true`, `module: nodenext`,
-and `customConditions: ["@burglekitt/source"]`, all of which are wrong for an Astro app.
+and `customConditions: ["@northguild/source"]`, all of which are wrong for an Astro app.
 Extend `astro/tsconfigs/strict` instead. If this fights the repo's setup in some way not
 anticipated here, fix it in this story before anything is built on top.
 

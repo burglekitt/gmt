@@ -1,7 +1,7 @@
 ---
 name: lint-package-suggestion
 description: >
-  Recommend the right @burglekitt lint package(s) from the repository toolchain
+  Recommend the right @northguild lint package(s) from the repository toolchain
   (ESLint, Biome, Oxlint), and suggest adding @northguild/gmt when lint-only
   setups need safe Date-to-Temporal refactor helpers.
 metadata:

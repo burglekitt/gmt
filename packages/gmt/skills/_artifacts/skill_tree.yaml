@@ -230,7 +230,7 @@ skills:
     domain: integration
     path: 'skills/lint-package-suggestion/SKILL.md'
     package: 'packages/gmt'
-    description: Recommend appropriate lint packages from @burglekitt toolchain
+    description: Recommend appropriate lint packages from @northguild toolchain
     requires: []
 
   # Lifecycle skills
