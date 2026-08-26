@@ -9,7 +9,7 @@ Packages (each independently versioned):
 | --------------------- | ------------------------ |
 | `packages/gmt`        | `@burglekitt/gmt`        |
 | `packages/gmt-biome`  | `@northguild/gmt-biome`  |
-| `packages/gmt-eslint` | `@burglekitt/gmt-eslint` |
+| `packages/gmt-eslint` | `@northguild/gmt-eslint` |
 | `packages/gmt-oxlint` | `@northguild/gmt-oxlint` |
 
 ---

@@ -107,7 +107,7 @@ Avoid `while` loops in new code. Prefer `for` loops or array methods (`map`, `fi
 
 The `Date` API ban is enforced at the AST level by three optional linting packages:
 
-- `@burglekitt/gmt-eslint` — ESLint flat config
+- `@northguild/gmt-eslint` — ESLint flat config
 - `@northguild/gmt-biome` — Biome + GritQL plugins
 - `@northguild/gmt-oxlint` — Oxlint JS plugin
 

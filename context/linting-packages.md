@@ -6,7 +6,7 @@ GMT publishes three opt-in linting packages that enforce the `Date` API ban at t
 
 | Package                  | Linter     | Mechanism                                          | npm                                                                |
 | ------------------------ | ---------- | -------------------------------------------------- | ------------------------------------------------------------------ |
-| `@burglekitt/gmt-eslint` | ESLint ≥ 9 | Flat config using built-in `no-restricted-*` rules | `npm i -D @burglekitt/gmt-eslint eslint @typescript-eslint/parser` |
+| `@northguild/gmt-eslint` | ESLint ≥ 9 | Flat config using built-in `no-restricted-*` rules | `npm i -D @northguild/gmt-eslint eslint @typescript-eslint/parser` |
 | `@northguild/gmt-oxlint` | Oxlint ≥ 1 | JS plugin with custom rule modules (alpha)         | `npm i -D @northguild/gmt-oxlint oxlint`                           |
 | `@northguild/gmt-biome`  | Biome ≥ 2  | GritQL `.grit` plugins in the `plugins` array      | `npm i -D @northguild/gmt-biome @biomejs/biome`                    |
 
@@ -23,7 +23,7 @@ GMT publishes three opt-in linting packages that enforce the `Date` API ban at t
 
 ---
 
-## `@burglekitt/gmt-eslint`
+## `@northguild/gmt-eslint`
 
 **Source:** `packages/gmt-eslint/eslint/index.mjs`
 
@@ -39,7 +39,7 @@ A single default-exported flat config array. Uses only ESLint's built-in rules �
 
 ```js
 // eslint.config.mjs
-import gmtEslintConfig from "@burglekitt/gmt-eslint";
+import gmtEslintConfig from "@northguild/gmt-eslint";
 export default [...gmtEslintConfig];
 ```
 

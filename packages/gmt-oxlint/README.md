@@ -14,7 +14,7 @@
 
 Shared [Oxlint](https://oxc.rs/docs/guide/usage/linter) JS plugin for `@burglekitt/gmt` projects.
 
-It enforces the same Date bans used by `@burglekitt/gmt-eslint` and `@northguild/gmt-biome`.
+It enforces the same Date bans used by `@northguild/gmt-eslint` and `@northguild/gmt-biome`.
 
 ## Installation
 

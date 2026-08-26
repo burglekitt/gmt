@@ -1,10 +1,10 @@
-# @burglekitt/gmt-eslint
+# @northguild/gmt-eslint
 
 ## 1.0.3
 
 ### Patch Changes
 
-- 131087a: Add deprecation notice: this package is moving to `@northguild/gmt-eslint` under the [northguild](https://github.com/northguild) GitHub organization. `@burglekitt/gmt-eslint` will receive no further updates after this release.
+- 131087a: Add deprecation notice: this package is moving to `@northguild/gmt-eslint` under the [northguild](https://github.com/northguild) GitHub organization. `@northguild/gmt-eslint` will receive no further updates after this release.
 
 ## 1.0.2
 
@@ -31,7 +31,7 @@
   formatting, parsing, mapping, conversion, and validation. No `Date` object
   used anywhere.
 
-  ## @burglekitt/gmt-eslint
+  ## @northguild/gmt-eslint
 
   ESLint flat-config plugin that bans the `Date` API (`new Date`, `Date.now`,
   `Date.UTC`, `Date.parse`, and the global `Date` reference) and points

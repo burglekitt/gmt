@@ -1,7 +1,7 @@
 ---
 name: first-time-setup
 description: >
-  Install and wire @burglekitt/gmt-eslint into eslint.config.* (flat config),
+  Install and wire @northguild/gmt-eslint into eslint.config.* (flat config),
   verify Date-ban rules are active, and keep existing project lint behavior
   intact with minimal config churn.
 metadata:
@@ -10,16 +10,16 @@ metadata:
 
 # First-Time Setup
 
-Use this skill when a user wants to adopt `@burglekitt/gmt-eslint`.
+Use this skill when a user wants to adopt `@northguild/gmt-eslint`.
 
 ## Setup flow
 
 1. Install dependencies
-- Install `@burglekitt/gmt-eslint`, `eslint`, and required parser dependencies.
+- Install `@northguild/gmt-eslint`, `eslint`, and required parser dependencies.
 
 2. Configure ESLint
 - Prefer flat config (`eslint.config.mjs`) with:
-  - import from `@burglekitt/gmt-eslint`
+  - import from `@northguild/gmt-eslint`
   - export merged config array
 - Keep project-specific rules unless explicitly asked to replace.
 

@@ -1,4 +1,4 @@
-# @burglekitt/gmt-eslint
+# @northguild/gmt-eslint
 
 > ## ⚠️ Deprecation Notice
 >
@@ -9,7 +9,7 @@
 > - **New repository:** <https://github.com/northguild/gmt>
 > - **New package:** `@northguild/gmt-eslint`
 >
-> `@burglekitt/gmt-eslint` is deprecated and will receive no further updates.
+> `@northguild/gmt-eslint` is deprecated and will receive no further updates.
 > Please migrate to `@northguild/gmt-eslint`.
 
 Shared [ESLint](https://eslint.org/) flat configuration for `@burglekitt/gmt` projects. Enforces the Temporal-only policy by banning all `Date` APIs via ESLint rules.
@@ -19,25 +19,25 @@ Shared [ESLint](https://eslint.org/) flat configuration for `@burglekitt/gmt` pr
 ### npm
 
 ```sh
-npm install --save-dev @burglekitt/gmt-eslint eslint @typescript-eslint/parser
+npm install --save-dev @northguild/gmt-eslint eslint @typescript-eslint/parser
 ```
 
 ### yarn
 
 ```sh
-yarn add --dev @burglekitt/gmt-eslint eslint @typescript-eslint/parser
+yarn add --dev @northguild/gmt-eslint eslint @typescript-eslint/parser
 ```
 
 ### pnpm
 
 ```sh
-pnpm add --save-dev @burglekitt/gmt-eslint eslint @typescript-eslint/parser
+pnpm add --save-dev @northguild/gmt-eslint eslint @typescript-eslint/parser
 ```
 
 ### bun
 
 ```sh
-bun add --save-dev @burglekitt/gmt-eslint eslint @typescript-eslint/parser
+bun add --save-dev @northguild/gmt-eslint eslint @typescript-eslint/parser
 ```
 
 ## Usage
@@ -46,7 +46,7 @@ bun add --save-dev @burglekitt/gmt-eslint eslint @typescript-eslint/parser
 
 ```js
 // eslint.config.mjs
-import gmtEslintConfig from "@burglekitt/gmt-eslint";
+import gmtEslintConfig from "@northguild/gmt-eslint";
 
 export default [...gmtEslintConfig];
 ```
@@ -55,7 +55,7 @@ export default [...gmtEslintConfig];
 
 ```js
 // .eslintrc.js
-const gmtEslintConfig = require("@burglekitt/gmt-eslint");
+const gmtEslintConfig = require("@northguild/gmt-eslint");
 
 module.exports = [...gmtEslintConfig];
 ```
@@ -64,7 +64,7 @@ module.exports = [...gmtEslintConfig];
 
 ```js
 // .eslintrc.cjs
-const gmtEslintConfig = require("@burglekitt/gmt-eslint");
+const gmtEslintConfig = require("@northguild/gmt-eslint");
 
 module.exports = [...gmtEslintConfig];
 ```
@@ -74,7 +74,7 @@ module.exports = [...gmtEslintConfig];
 ```json
 // .eslintrc.json
 {
-  "extends": ["@burglekitt/gmt-eslint"]
+  "extends": ["@northguild/gmt-eslint"]
 }
 ```
 
@@ -82,14 +82,14 @@ module.exports = [...gmtEslintConfig];
 
 ## Banned patterns
 
-| Pattern | Rule | Suggestion |
-|---|---|---|
-| `Date` (global reference) | `no-restricted-globals` | Use `getUtcNow()`, `getNow()`, `getUnixNow()`, or `getZonedNow(timezone)` |
-| `new Date(...)` | `no-restricted-syntax` | Use `getUtcNow()`, `getNow()`, or `getZonedNow(timezone)` |
-| `Date.now()` | `no-restricted-properties` | Use `getUnixNow('milliseconds' \| 'seconds')` or `getNow()` |
-| `Date.UTC(...)` | `no-restricted-properties` | Use `convertUtcDateTimeToUnix('YYYY-MM-DDTHH:mm:ss', 'milliseconds' \| 'seconds')` |
-| `Date.parse(...)` | `no-restricted-properties` | Use `convertZonedToUnix(value)` |
-| `$date.getTimezoneOffset()` | `no-restricted-syntax` | Use `getZonedNow(timezone)`, other gmt zoned helpers such as `convertZonedToUnix(value)`, or `Temporal.ZonedDateTime` |
+| Pattern                     | Rule                       | Suggestion                                                                                                            |
+| --------------------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `Date` (global reference)   | `no-restricted-globals`    | Use `getUtcNow()`, `getNow()`, `getUnixNow()`, or `getZonedNow(timezone)`                                             |
+| `new Date(...)`             | `no-restricted-syntax`     | Use `getUtcNow()`, `getNow()`, or `getZonedNow(timezone)`                                                             |
+| `Date.now()`                | `no-restricted-properties` | Use `getUnixNow('milliseconds' \| 'seconds')` or `getNow()`                                                           |
+| `Date.UTC(...)`             | `no-restricted-properties` | Use `convertUtcDateTimeToUnix('YYYY-MM-DDTHH:mm:ss', 'milliseconds' \| 'seconds')`                                    |
+| `Date.parse(...)`           | `no-restricted-properties` | Use `convertZonedToUnix(value)`                                                                                       |
+| `$date.getTimezoneOffset()` | `no-restricted-syntax`     | Use `getZonedNow(timezone)`, other gmt zoned helpers such as `convertZonedToUnix(value)`, or `Temporal.ZonedDateTime` |
 
 ## Why Temporal?
 

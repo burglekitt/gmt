@@ -1,7 +1,7 @@
 ---
 name: migration-refactor
 description: >
-  Resolve @burglekitt/gmt-eslint Date-rule violations with careful, behavior-
+  Resolve @northguild/gmt-eslint Date-rule violations with careful, behavior-
   preserving refactors to existing gmt helpers first, then guide the custom
   Temporal method + issue workflow when no helper exists.
 metadata:

@@ -159,14 +159,14 @@ Want to ban `Date` APIs in your own project? GMT provides three linting packages
 | pnpm            | `pnpm add -D @northguild/gmt-biome`    |
 | bun             | `bun add -D @northguild/gmt-biome`     |
 
-**`@burglekitt/gmt-eslint`**
+**`@northguild/gmt-eslint`**
 
 | Package manager | Command                                 |
 | --------------- | --------------------------------------- |
-| npm             | `npm install -D @burglekitt/gmt-eslint` |
-| yarn            | `yarn add -D @burglekitt/gmt-eslint`    |
-| pnpm            | `pnpm add -D @burglekitt/gmt-eslint`    |
-| bun             | `bun add -D @burglekitt/gmt-eslint`     |
+| npm             | `npm install -D @northguild/gmt-eslint` |
+| yarn            | `yarn add -D @northguild/gmt-eslint`    |
+| pnpm            | `pnpm add -D @northguild/gmt-eslint`    |
+| bun             | `bun add -D @northguild/gmt-eslint`     |
 
 **`@northguild/gmt-oxlint`** (requires `oxlint`)
 

@@ -49,7 +49,7 @@
   formatting, parsing, mapping, conversion, and validation. No `Date` object
   used anywhere.
 
-  ## @burglekitt/gmt-eslint
+  ## @northguild/gmt-eslint
 
   ESLint flat-config plugin that bans the `Date` API (`new Date`, `Date.now`,
   `Date.UTC`, `Date.parse`, and the global `Date` reference) and points

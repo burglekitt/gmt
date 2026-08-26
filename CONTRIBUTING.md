@@ -137,7 +137,7 @@ pnpm run lint
 │   ├── gmt-biome/              # @northguild/gmt-biome — Shared Biome config
 │   │   ├── biome.json          # Consumer-facing config (uses ./plugins/ paths)
 │   │   └── plugins/            # Grit plugins banning Date APIs
-│   └── gmt-eslint/             # @burglekitt/gmt-eslint — Shared ESLint flat config
+│   └── gmt-eslint/             # @northguild/gmt-eslint — Shared ESLint flat config
 │       └── eslint/
 │           └── index.mjs       # Flat config banning Date APIs
 ├── burglekitt/                  # Nx workspace configuration (internal, do not publish)

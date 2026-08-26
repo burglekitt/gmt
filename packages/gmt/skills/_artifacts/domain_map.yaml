@@ -382,7 +382,7 @@ skills:
     type: composition
     packages:
       - '@burglekitt/gmt'
-      - '@burglekitt/gmt-eslint'
+      - '@northguild/gmt-eslint'
       - '@northguild/gmt-biome'
       - '@northguild/gmt-oxlint'
     tasks:
