@@ -12,7 +12,7 @@
 > `@northguild/gmt-oxlint` is deprecated and will receive no further updates.
 > Please migrate to `@northguild/gmt-oxlint`.
 
-Shared [Oxlint](https://oxc.rs/docs/guide/usage/linter) JS plugin for `@burglekitt/gmt` projects.
+Shared [Oxlint](https://oxc.rs/docs/guide/usage/linter) JS plugin for `@northguild/gmt` projects.
 
 It enforces the same Date bans used by `@northguild/gmt-eslint` and `@northguild/gmt-biome`.
 

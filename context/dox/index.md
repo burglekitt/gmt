@@ -1,4 +1,4 @@
-# Dox: the documentation site for `@burglekitt/gmt`
+# Dox: the documentation site for `@northguild/gmt`
 
 This file has been split into a progressive-disclosure directory. Read what you need:
 

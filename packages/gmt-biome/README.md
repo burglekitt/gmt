@@ -12,7 +12,7 @@
 > `@northguild/gmt-biome` is deprecated and will receive no further updates.
 > Please migrate to `@northguild/gmt-biome`.
 
-Shared [Biome](https://biomejs.dev/) configuration for `@burglekitt/gmt` projects. Enforces the Temporal-only policy by banning all `Date` APIs via Grit plugins.
+Shared [Biome](https://biomejs.dev/) configuration for `@northguild/gmt` projects. Enforces the Temporal-only policy by banning all `Date` APIs via Grit plugins.
 
 ## Installation
 

@@ -43,9 +43,9 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: Build @burglekitt/gmt
+      - name: Build @northguild/gmt
         if: inputs.package == 'gmt'
-        run: pnpm -w exec nx run @burglekitt/gmt:build
+        run: pnpm -w exec nx run @northguild/gmt:build
 
       - name: Build @northguild/gmt-oxlint
         if: inputs.package == 'gmt-oxlint'

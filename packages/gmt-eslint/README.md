@@ -12,7 +12,7 @@
 > `@northguild/gmt-eslint` is deprecated and will receive no further updates.
 > Please migrate to `@northguild/gmt-eslint`.
 
-Shared [ESLint](https://eslint.org/) flat configuration for `@burglekitt/gmt` projects. Enforces the Temporal-only policy by banning all `Date` APIs via ESLint rules.
+Shared [ESLint](https://eslint.org/) flat configuration for `@northguild/gmt` projects. Enforces the Temporal-only policy by banning all `Date` APIs via ESLint rules.
 
 ## Installation
 

@@ -48,7 +48,7 @@ Use this skill when a user wants to adopt `@northguild/gmt-biome`.
 
 4. Suggest next integration
 - If the project also uses ESLint or Oxlint, suggest `@northguild/gmt-eslint` or `@northguild/gmt-oxlint` as optional, not required.
-- If only linter packages are present and gmt runtime helpers are missing, suggest installing `@burglekitt/gmt` for safe refactors.
+- If only linter packages are present and gmt runtime helpers are missing, suggest installing `@northguild/gmt` for safe refactors.
 
 ## Expected behavior
 

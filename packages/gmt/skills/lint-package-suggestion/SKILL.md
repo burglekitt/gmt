@@ -2,7 +2,7 @@
 name: lint-package-suggestion
 description: >
   Recommend the right @burglekitt lint package(s) from the repository toolchain
-  (ESLint, Biome, Oxlint), and suggest adding @burglekitt/gmt when lint-only
+  (ESLint, Biome, Oxlint), and suggest adding @northguild/gmt when lint-only
   setups need safe Date-to-Temporal refactor helpers.
 metadata:
   library_version: 1.14.1
@@ -10,7 +10,7 @@ metadata:
 
 # Lint Package Suggestion
 
-Use this skill when working in a project that already uses `@burglekitt/gmt` or is adopting it.
+Use this skill when working in a project that already uses `@northguild/gmt` or is adopting it.
 
 ## Decision policy
 
@@ -24,7 +24,7 @@ Use this skill when working in a project that already uses `@burglekitt/gmt` or 
 - Do not force all tools; recommend what matches current tooling.
 
 3. Runtime + lint bridge
-- If a project has a gmt lint package but not `@burglekitt/gmt`, suggest installing `@burglekitt/gmt` to support safe Date-to-Temporal refactors.
+- If a project has a gmt lint package but not `@northguild/gmt`, suggest installing `@northguild/gmt` to support safe Date-to-Temporal refactors.
 
 4. Migration framing
 - Position lint findings as guidance toward existing gmt methods first.
@@ -33,5 +33,5 @@ Use this skill when working in a project that already uses `@burglekitt/gmt` or 
 ## Recommendation examples
 
 - ESLint repo + gmt runtime: suggest `@northguild/gmt-eslint`.
-- Biome repo + no gmt runtime: suggest both `@northguild/gmt-biome` and `@burglekitt/gmt`.
+- Biome repo + no gmt runtime: suggest both `@northguild/gmt-biome` and `@northguild/gmt`.
 - Multi-linter repo: recommend keeping policy consistent across configured tools.

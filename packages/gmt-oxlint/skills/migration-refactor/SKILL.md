@@ -15,7 +15,7 @@ Use this skill when Oxlint reports Date API violations and the user asks for fix
 ## Refactor policy
 
 1. Prefer existing gmt helpers
-- Replace Date APIs with available `@burglekitt/gmt` methods first.
+- Replace Date APIs with available `@northguild/gmt` methods first.
 
 2. Preserve behavior
 - Keep output format, timezone intent, and edge-case semantics stable.

@@ -7,7 +7,7 @@ Packages (each independently versioned):
 
 | Package dir           | npm name                 |
 | --------------------- | ------------------------ |
-| `packages/gmt`        | `@burglekitt/gmt`        |
+| `packages/gmt`        | `@northguild/gmt`        |
 | `packages/gmt-biome`  | `@northguild/gmt-biome`  |
 | `packages/gmt-eslint` | `@northguild/gmt-eslint` |
 | `packages/gmt-oxlint` | `@northguild/gmt-oxlint` |
@@ -59,7 +59,7 @@ git push
 
 # 3. Build packages that need a build before publish
 #    (gmt-oxlint builds itself automatically via its `prepack` script)
-pnpm exec nx run @burglekitt/gmt:build
+pnpm exec nx run @northguild/gmt:build
 
 # 4. Sanity-check package contents before they go out
 for PKG in gmt gmt-biome gmt-eslint gmt-oxlint; do
@@ -108,7 +108,7 @@ done
 Notes:
 
 - The tag is quoted (`"$TAG"`) since it contains `@` and `/`, which GitHub URL-encodes in the release URL; that's expected.
-- Only `@burglekitt/gmt` gets `--latest`; every other package gets `--latest=false` automatically.
+- Only `@northguild/gmt` gets `--latest`; every other package gets `--latest=false` automatically.
 - If `HEAD` has moved since publishing (e.g. you made another commit first), fall back to `git tag --sort=-creatordate | head -n <count>` to find the right tags manually.
 
 ---

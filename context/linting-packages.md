@@ -137,7 +137,7 @@ A set of GritQL `.grit` files. No build step — the `.grit` source files are th
 `new Date($args)` where {
   register_diagnostic(
     span=`new Date`,
-    message="Avoid new Date(). Use @burglekitt/gmt getUtcNow(), getNow(), or getZonedNow(timezone) instead.",
+    message="Avoid new Date(). Use @northguild/gmt getUtcNow(), getNow(), or getZonedNow(timezone) instead.",
     severity="error"
   )
 }

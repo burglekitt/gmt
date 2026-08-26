@@ -36,7 +36,7 @@ Use this skill when a user wants to adopt `@northguild/gmt-oxlint`.
 - Keep the default package-name namespace unless a shorter alias is explicitly requested.
 
 5. Suggest companion packages
-- If `@burglekitt/gmt` is missing, suggest installing it for safe Date-to-Temporal refactors.
+- If `@northguild/gmt` is missing, suggest installing it for safe Date-to-Temporal refactors.
 - If ESLint or Biome are already used, optionally suggest matching gmt lint packages for policy consistency.
 
 ## Guardrails

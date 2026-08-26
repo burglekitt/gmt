@@ -46,7 +46,7 @@ sources:
   - 'burglekitt/gmt:packages/gmt/src/zoned/calculate/cycleZoned.ts'
 metadata:
   type: core
-  library: '@burglekitt/gmt'
+  library: '@northguild/gmt'
   library_version: '1.14.1'
 ---
 
@@ -66,7 +66,7 @@ import {
   clampZoned, closestZonedTo, mapZonedHoursInDay, getHoursInZonedDay,
   setZoned, getZonedOffset, getZonedOffsetAs, getTimeZoneOffset,
   formatTimeZoneName, isInDaylightSaving
-} from "@burglekitt/gmt/zoned";
+} from "@northguild/gmt/zoned";
 ```
 
 ## Core Patterns
@@ -171,7 +171,7 @@ setZoned(
 ### Cycle (wrap) a single field instead of setting it directly (E6)
 
 ```ts
-import { cycleZoned } from "@burglekitt/gmt";
+import { cycleZoned } from "@northguild/gmt";
 
 cycleZoned("2024-12-15T09:30:00-06:00[America/Chicago]", "month", 1);
 // "2024-01-15T09:30:00-06:00[America/Chicago]" — wraps, stays in the same year

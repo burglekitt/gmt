@@ -95,7 +95,7 @@ pnpm run lint
 ```
 .
 ├── packages/
-│   ├── gmt/                    # @burglekitt/gmt — Give Me Temporal!
+│   ├── gmt/                    # @northguild/gmt — Give Me Temporal!
 │   │   ├── src/
 │   │   │   ├── duration/       # ISO 8601 duration parsing and validation
 │   │   │   │   ├── parse/      # parseDuration
@@ -377,8 +377,8 @@ Basic Changesets workflow:
 Notes:
 
 - Prefer using Changesets rather than manually bumping `package.json`; manual bumps can be used but they bypass the Changesets workflow.
-- Verify packages with `npm pack --dry-run` before publishing. For `@burglekitt/gmt`, run the dry-run after building.
-- The `Publish Package` workflow will build `@burglekitt/gmt` automatically when publishing that package.
+- Verify packages with `npm pack --dry-run` before publishing. For `@northguild/gmt`, run the dry-run after building.
+- The `Publish Package` workflow will build `@northguild/gmt` automatically when publishing that package.
 
 See [PUBLISHING.md](./PUBLISHING.md) for the full, step-by-step guide and examples.
 
@@ -391,12 +391,12 @@ CI strategy:
 ## Agent prompt
 
 ```
-You are working with the @burglekitt/gmt library — a Temporal-first date/time library for JavaScript. Before writing any date-related code, read the skill files in packages/gmt/skills/ and packages/gmt/skills/_artifacts/ to understand the full API surface, naming conventions, and Temporal patterns this project uses. For maintenance procedures (stale skill detection, version bumps, artifact updates), see .agents/skills/tanstack-intent/SKILL.md.
+You are working with the @northguild/gmt library — a Temporal-first date/time library for JavaScript. Before writing any date-related code, read the skill files in packages/gmt/skills/ and packages/gmt/skills/_artifacts/ to understand the full API surface, naming conventions, and Temporal patterns this project uses. For maintenance procedures (stale skill detection, version bumps, artifact updates), see .agents/skills/tanstack-intent/SKILL.md.
 ```
 
 ## Agent Skills
 
-`packages/gmt/skills/` contains [TanStack Intent](https://github.com/tanstack/intent) skill files that teach coding agents how to use `@burglekitt/gmt`'s API. They are published as part of the npm package (see `files` in `packages/gmt/package.json`) and go stale silently — nothing fails CI if a skill still references a renamed or removed function, so this is a manual discipline, not an automated gate.
+`packages/gmt/skills/` contains [TanStack Intent](https://github.com/tanstack/intent) skill files that teach coding agents how to use `@northguild/gmt`'s API. They are published as part of the npm package (see `files` in `packages/gmt/package.json`) and go stale silently — nothing fails CI if a skill still references a renamed or removed function, so this is a manual discipline, not an automated gate.
 
 Two independent things can go stale, and both matter:
 

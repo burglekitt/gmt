@@ -13,7 +13,7 @@ Keep the [TanStack Intent](https://github.com/tanstack/intent) agent skills unde
 - The package version in `packages/gmt/package.json` changes (or a changeset bumps it)
 - A whole domain of functionality is introduced (which may need a brand-new skill)
 
-The goal: agents that consume `@burglekitt/gmt`'s skills get an accurate, current picture of the API surface and how to use it.
+The goal: agents that consume `@northguild/gmt`'s skills get an accurate, current picture of the API surface and how to use it.
 
 ## Inputs
 
@@ -94,7 +94,7 @@ description: >
   <1–3 sentences. Concrete enough that an agent can route to this skill from
   a user request. Name the functions, options, and concept keywords.>
 type: core   # or: sub-skill | framework | lifecycle | composition | security
-library: '@burglekitt/gmt'
+library: '@northguild/gmt'
 library_version: '<next-version>'
 sources:
   - 'burglekitt/gmt:packages/gmt/src/<path-to-source-file>.ts'

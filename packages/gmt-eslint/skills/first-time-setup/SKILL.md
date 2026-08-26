@@ -28,7 +28,7 @@ Use this skill when a user wants to adopt `@northguild/gmt-eslint`.
 - Ensure rule IDs map to gmt-eslint restrictions.
 
 4. Suggest companion packages
-- If gmt runtime is missing, suggest `@burglekitt/gmt` for safe refactors.
+- If gmt runtime is missing, suggest `@northguild/gmt` for safe refactors.
 - If Biome/Oxlint are in use, optionally suggest matching gmt-* lint packages for policy consistency.
 
 ## Guardrails

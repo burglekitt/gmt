@@ -24,7 +24,7 @@
 
 - fa5a465: Initial public release of the gmt suite.
 
-  ## @burglekitt/gmt
+  ## @northguild/gmt
 
   Temporal-first date and time library. String-in, string-out API wrapping
   `@js-temporal/polyfill`. Covers plain and zoned arithmetic, comparison,
@@ -35,7 +35,7 @@
 
   ESLint flat-config plugin that bans the `Date` API (`new Date`, `Date.now`,
   `Date.UTC`, `Date.parse`, and the global `Date` reference) and points
-  consumers toward `@burglekitt/gmt` replacements.
+  consumers toward `@northguild/gmt` replacements.
 
   ## @northguild/gmt-oxlint
 

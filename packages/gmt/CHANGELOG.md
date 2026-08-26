@@ -1,10 +1,10 @@
-# @burglekitt/gmt
+# @northguild/gmt
 
 ## 1.14.1
 
 ### Patch Changes
 
-- 131087a: Add deprecation notice: this package is moving to `@northguild/gmt` under the [northguild](https://github.com/northguild) GitHub organization. `@burglekitt/gmt` will receive no further updates after this release.
+- 131087a: Add deprecation notice: this package is moving to `@northguild/gmt` under the [northguild](https://github.com/northguild) GitHub organization. `@northguild/gmt` will receive no further updates after this release.
 
 ## 1.14.0
 
@@ -225,7 +225,7 @@
 
   `get/` namespaces are now current-moment accessors only (no argument, or timezone only, reporting a value for _now_); any function taking a date value belongs in `calculate/`. Function names, signatures, and behavior are unchanged.
 
-  **Technically breaking for deep-subpath consumers.** Root imports (`from "@burglekitt/gmt"`) are unaffected. But anyone importing from `@burglekitt/gmt/plain/get` or `@burglekitt/gmt/zoned/get` loses these symbols — switch those imports to `@burglekitt/gmt/plain/calculate` and `@burglekitt/gmt/zoned/calculate` respectively.
+  **Technically breaking for deep-subpath consumers.** Root imports (`from "@northguild/gmt"`) are unaffected. But anyone importing from `@northguild/gmt/plain/get` or `@northguild/gmt/zoned/get` loses these symbols — switch those imports to `@northguild/gmt/plain/calculate` and `@northguild/gmt/zoned/calculate` respectively.
 
 ## 1.12.0
 
@@ -433,7 +433,7 @@ end: number } | null` for Unix).
 
 - 313f052: Adds `getTimeZones` to the `zoned` namespace, returning the full list of IANA timezone identifiers supported by the runtime (via `Intl.supportedValuesOf("timeZone")`, `[]` on unsupported runtimes).
 
-  `getSystemTimeZone` moves from the `plain` namespace to `zoned` alongside it. It remains available from the package root (`@burglekitt/gmt`) and from `@burglekitt/gmt/zoned`, but is no longer exported from `@burglekitt/gmt/plain` — update imports accordingly if you were importing it from the `plain` subpath.
+  `getSystemTimeZone` moves from the `plain` namespace to `zoned` alongside it. It remains available from the package root (`@northguild/gmt`) and from `@northguild/gmt/zoned`, but is no longer exported from `@northguild/gmt/plain` — update imports accordingly if you were importing it from the `plain` subpath.
 
 ## 1.3.0
 
@@ -477,7 +477,7 @@ end: number } | null` for Unix).
 
 - fa5a465: Initial public release of the gmt suite.
 
-  ## @burglekitt/gmt
+  ## @northguild/gmt
 
   Temporal-first date and time library. String-in, string-out API wrapping
   `@js-temporal/polyfill`. Covers plain and zoned arithmetic, comparison,
@@ -488,7 +488,7 @@ end: number } | null` for Unix).
 
   ESLint flat-config plugin that bans the `Date` API (`new Date`, `Date.now`,
   `Date.UTC`, `Date.parse`, and the global `Date` reference) and points
-  consumers toward `@burglekitt/gmt` replacements.
+  consumers toward `@northguild/gmt` replacements.
 
   ## @northguild/gmt-oxlint
 

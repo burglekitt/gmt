@@ -1,6 +1,6 @@
 # Story Group A — Ship the site
 
-Five stories. After A5, `@burglekitt/gmt` has a real, deployed, searchable, linkable
+Five stories. After A5, `@northguild/gmt` has a real, deployed, searchable, linkable
 documentation site. Nothing in Groups B–E is required for that to be true, and any of
 them can be dropped or reordered without losing the docs.
 
@@ -31,13 +31,13 @@ DOX-A1 Create apps/docs (Astro + Starlight) and wire pnpm/nx/oxlint
 Part of the Dox epic — see `context/dox/index.md`, Story Group A, item A1.
 
 ## Gap
-`apps/` does not exist in this monorepo and is not a workspace glob. `@burglekitt/gmt`
+`apps/` does not exist in this monorepo and is not a workspace glob. `@northguild/gmt`
 has ~424 public functions and no documentation site — the only discovery path is
 `packages/gmt/README.md`, whose "API Surface" section just links to GitHub tree URLs.
 
 ## Scope
 - Create `apps/docs` as `@gmt/docs` (private, `"type": "module"`), depending on
-  `@burglekitt/gmt` via `workspace:*`.
+  `@northguild/gmt` via `workspace:*`.
 - Install `astro@7.2.4` and `@astrojs/starlight@0.41.7` (Starlight peers on
   `astro ^7.0.2` — verified compatible).
 - `src/content.config.ts` defining the `docs` collection with Starlight's
@@ -54,7 +54,7 @@ has ~424 public functions and no documentation site — the only discovery path 
   4. `apps/docs/project.json` — **required.** Nx's `@nx/js/typescript` plugin infers
      `build`/`typecheck` from the presence of `tsconfig.build.json`, which an Astro app
      will not have, so Nx will infer nothing. Declare `build`, `dev`, and `typecheck`
-     explicitly with `dependsOn: ["^build"]` so `@burglekitt/gmt` builds first.
+     explicitly with `dependsOn: ["^build"]` so `@northguild/gmt` builds first.
 - Add root scripts `docs:dev` and `docs:build`.
 - **Never hardcode a version number in the site.** Generate a version map from
   `packages/*/package.json` in a `prebuild`/`predev` step, so the docs cannot ship a
@@ -125,7 +125,7 @@ until the very end. Two stories' worth of cost buys the fastest feedback loop av
 - Match `ci.yml`'s existing conventions rather than introducing an unrelated pattern:
   `pnpm/action-setup@v4` pinned to `10.32.1`, `actions/setup-node@v4` with
   `cache: pnpm`, `pnpm install --frozen-lockfile`, Nx for the build.
-- Build order matters: `@burglekitt/gmt` must be built before `apps/docs`. A1's
+- Build order matters: `@northguild/gmt` must be built before `apps/docs`. A1's
   `project.json` `dependsOn: ["^build"]` should handle this — verify it actually does
   in CI, where the Nx cache is cold.
 - Set Astro's `site` and `base` config correctly for the Pages URL. Getting `base`

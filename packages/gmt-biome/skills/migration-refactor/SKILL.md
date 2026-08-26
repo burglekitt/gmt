@@ -15,7 +15,7 @@ Use this skill when Biome flags Date usage and the user asks for code fixes.
 ## Refactor policy
 
 1. Prefer existing gmt APIs
-- Replace Date patterns with existing `@burglekitt/gmt` methods first.
+- Replace Date patterns with existing `@northguild/gmt` methods first.
 
 2. Keep refactors delicate
 - Preserve runtime behavior, timezone intent, and output format.
