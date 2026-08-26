@@ -104,6 +104,28 @@ an explicit branch — do not leave it accidental.
 - `pnpm nx run-many -t lint typecheck build` is green across the monorepo.
 ```
 
+**Corrections found while implementing (2026-08-26).** Five claims above did not survive
+contact with the repo. Full detail and evidence in `.agents/dox/tier0-infra.md`; that pack
+is authoritative where it disagrees with this issue.
+
+| Claim above                                           | Reality                                                                                                                                                                                           |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| "`nvm use` first"                                     | The toolchain is **`fnm`**, and `fnm use` alone is a **silent no-op** in a non-interactive shell — it prints success and changes nothing. Use `eval "$(fnm env)" && fnm use && …`                 |
+| Starlight peers on `@astrojs/markdown-remark ^7.2.0`  | That peer is **optional** (`peerDependenciesMeta.optional: true`). Astro 7 ships `@astrojs/markdown-satteri` instead. **Do not declare it**                                                       |
+| Version map in a `prebuild`/`predev` step             | pnpm 10 defaults `enable-pre-post-scripts` to false and there is no `.npmrc`, so those hooks **never fire**. Chained with `&&` and wired to an Nx `generate` target instead                       |
+| `oxlint.config.js` — add `apps/**` to `files.include` | That config is **never loaded** (`.js` is not in oxlint's discovery list), so the edit is inert. Landed anyway to document intent; the real mechanism is an explicit `docs:lint` target           |
+| —                                                     | **New:** `@astrojs/mdx@7.0.8` imports `satteri` without declaring it, and two satteri versions in the tree stop pnpm hoisting it. Fixed with a `packageExtensions` entry in `pnpm-workspace.yaml` |
+
+Also landed beyond the scope above, because the story could not be verified without them:
+an `apps/**` override in `.oxfmtrc.json` (its `overrides` are an allow-list, so `pnpm
+format` skipped the app), and a `docs_changed` output plus an `apps`-aware artifact
+collector in `ci.yml`.
+
+**Decision recorded:** the generated version map is **gitignored, not stubbed** —
+deliberately breaking symmetry with `DOX-A3a`'s committed-stub pattern. A stub would render
+a *wrong* version badge, which is the exact failure this story exists to prevent, and
+`DOX-A1` ships no tests that would need it to resolve on a clean checkout.
+
 ---
 
 ### DOX-A2 — Deploy

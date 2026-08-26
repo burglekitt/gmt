@@ -1,0 +1,50 @@
+---
+title: "@northguild/gmt"
+description: Give Me Temporal. A Temporal-first date and time library with a strict string-in, string-out contract and no Date object anywhere.
+template: splash
+hero:
+  tagline: ISO 8601 strings in. Strings, numbers, booleans, or arrays out. No <code>Date</code>, anywhere.
+  actions:
+    - text: Install
+      link: /install/
+      icon: right-arrow
+    - text: Core Rules
+      link: /core-rules/
+      variant: minimal
+    - text: View on GitHub
+      link: https://github.com/northguild/gmt
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid } from "@astrojs/starlight/components";
+
+import { gmtVersion } from "~/generated/versions";
+
+Current release: **v{gmtVersion}**
+
+`@northguild/gmt` wraps `@js-temporal/polyfill` behind a smaller, more opinionated API
+aimed at the cases application code actually hits: arithmetic, comparison, parsing,
+formatting, unix conversions, timezone conversion, and validation.
+
+<CardGrid stagger>
+  <Card title="100% Temporal, Temporal-first" icon="star">
+    Built directly on the TC39 `Temporal` standard — not a homegrown date/time type system.
+    No `Date` object anywhere, enforced by three dedicated lint packages.
+  </Card>
+
+  <Card title="A full replacement for all four" icon="approve-check">
+    Luxon, date-fns, Moment.js, and `@internationalized/date` don't have parity with each
+    other. GMT covers the combined capabilities of all four, plus what none of them do alone.
+  </Card>
+
+  <Card title="~15× more CI test executions" icon="rocket">
+    312,220 executions — 15,611 tests × 17 locales × 10 timezones × 2 Node versions —
+    against the four competitors' combined 20,190.
+  </Card>
+
+  <Card title="Explicit DST disambiguation" icon="setting">
+    Control over DST disambiguation on both construction *and* arithmetic — a control none
+    of the other four expose.
+  </Card>
+</CardGrid>

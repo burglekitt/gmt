@@ -19,14 +19,16 @@ of work. Everything tier-specific lives in the reference pack the architect name
 
 **This machine runs `fnm`, not `nvm`.** The shell is frequently on Node v20, and
 `astro@7.2.7` requires `>=22.12.0`. Shell state does not persist between tool calls, so a
-`fnm use` in one call is gone by the next.
+version switch in one call is gone by the next.
 
-**Prefix every shell command that touches Node with `fnm use &&` in the same compound
-command:**
+**`fnm use` alone does not work in a non-interactive shell.** It prints
+"Using Node v24.19.0" and exits 0 while leaving `node` on v20 — a silent no-op that looks
+like a success. You must `eval` fnm's env first. **Prefix every shell command that touches
+Node with this exact incantation, in the same compound command:**
 
 ```bash
-fnm use && pnpm install
-fnm use && pnpm nx run docs:build
+eval "$(fnm env)" && fnm use && pnpm install
+eval "$(fnm env)" && fnm use && pnpm nx run docs:build
 ```
 
 A bare `pnpm install` in a later call silently reverts to v20 and then fails at the first
@@ -70,7 +72,7 @@ These bind every story. The reference pack does not restate them.
    that as the signal-lost state (`⟨ NO SIGNAL — invalid input ⟩`, amber, bracketed), never
    as a blank field — a blank box teaches nothing. **And distinguish it from a legitimately
    empty result:** `intervalIntersectionZoned` returning `[]` for two intervals that
-   genuinely do not overlap is a *correct answer*. Rendering that as NO SIGNAL teaches the
+   genuinely do not overlap is a _correct answer_. Rendering that as NO SIGNAL teaches the
    wrong lesson outright.
 
 8. **Tokens only.** No color literal in any component style. Amber (`#F5A524`) is reserved
@@ -87,9 +89,9 @@ These bind every story. The reference pack does not restate them.
 
 11. **No Octane.** No `octane` or `@octanejs/*` dependency, in any tier.
 
-12. **Pin Astro, Starlight, and `@astrojs/markdown-remark`.** All three move quickly and
-    Starlight peers on an exact-ish Astro major. Keep the generator emitting plain MDX so
-    only the site shell is coupled to the framework.
+12. **Pin Astro and Starlight to exact versions.** Both move quickly and Starlight peers on
+    an exact-ish Astro major. Keep the generator emitting plain MDX so only the site shell
+    is coupled to the framework.
 
 ## Process
 

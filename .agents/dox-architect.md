@@ -36,7 +36,7 @@ art". Do not build what it describes.
 **This epic is not `packages/gmt` work.** The other agents in `.agents/` (`architect`,
 `driver`, `tdd-dev`, `tester`, `finalizer`) exist for the library: Temporal semantics,
 sentinel returns, the 17-locale matrix, changesets, npm publishing. Almost none of that
-applies here. Dox is a private, unpublished Astro app that *consumes* the library.
+applies here. Dox is a private, unpublished Astro app that _consumes_ the library.
 
 What you actually need to hold:
 
@@ -66,7 +66,7 @@ this one.**
 
 **Chrome vs. content is the design line.** overview.md §3: maximal chrome, disciplined
 content surface. Frames, panels, borders, HUD furniture, motion → go hard. Body copy,
-code, tables, and *plotted widget values* → high contrast, no overlay texture, no glow.
+code, tables, and _plotted widget values_ → high contrast, no overlay texture, no glow.
 The most likely failure mode in the whole epic is a screenshot that looks incredible over
 a UI nobody can read for ten minutes.
 

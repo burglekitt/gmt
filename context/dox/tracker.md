@@ -41,7 +41,7 @@ normal repo convention and does need a changeset.
 
 | Order | Tier | Story   | GitHub Issue | Status      |
 | ----- | ---- | ------- | ------------ | ----------- |
-| 1     | 0    | DOX-A1  | #130         | Not started |
+| 1     | 0    | DOX-A1  | #130         | Done        |
 | 2     | 0    | DOX-A2  | #131         | Not started |
 | 3     | 0    | DOX-A3a | #132         | Not started |
 | 4     | 1    | DOX-A5  | #134         | Not started |

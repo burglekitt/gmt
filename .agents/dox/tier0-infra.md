@@ -17,10 +17,21 @@ checked by running the command, not read out of `context/dox/`. Where this pack 
 `24`. `astro@7.2.7` declares `engines.node: ">=22.12.0"`.
 
 The issue says "`nvm use` first". **It is `fnm`.** And because shell state does not persist
-between tool calls, `fnm use` must be part of every compound command:
+between tool calls, the switch must be part of every compound command.
+
+**`fnm use` on its own is a silent no-op in a non-interactive shell** — verified:
+
+```console
+$ fnm use && node -v
+Using Node v24.19.0     ← claims success
+v20.19.6                ← still on 20
+```
+
+It exits 0 while changing nothing, which is the worst possible failure shape. The env must
+be eval'd first:
 
 ```bash
-fnm use && pnpm install
+eval "$(fnm env)" && fnm use && pnpm install   # → v24.19.0, and pnpm exec node agrees
 ```
 
 CI is unaffected — `actions/setup-node@v4` with `node-version: 22` resolves to the latest
@@ -28,7 +39,7 @@ CI is unaffected — `actions/setup-node@v4` with `node-version: 22` resolves to
 
 ### 2. `oxlint.config.js` is never loaded — the `files.include` edit is a no-op
 
-```
+```console
 $ pnpm exec oxlint --print-config
 { "plugins": ["unicorn", "typescript", "oxc"], ... }
 ```
@@ -50,15 +61,24 @@ Consequences:
   either. It is out of scope for `DOX-A1`. File it separately; do not try to fix the root
   config inside this story.
 
-### 3. Starlight's `@astrojs/markdown-remark` peer is not satisfied transitively
+### 3. The `@astrojs/markdown-remark` peer is **optional** — do not declare it
 
-`astro@7.2.7`'s dependencies include `@astrojs/markdown-satteri@0.3.8` — **not**
-`@astrojs/markdown-remark`. `@astrojs/starlight@0.41.9` peers on
-`@astrojs/markdown-remark ^7.2.0`; latest 7.x is `7.2.4`.
+`context/dox/` says Starlight "peers on `astro ^7.0.2` _and_
+`@astrojs/markdown-remark ^7.2.0` — the second peer is easy to miss" and instructs you to
+verify both. Verified, and the instruction is wrong:
 
-pnpm 10 auto-installs missing peers, which papers over this and produces a phantom
-dependency that is easy to break later. **Declare `"@astrojs/markdown-remark": "^7.2.4"`
-as an explicit dependency of `apps/docs`.**
+```console
+$ npm view @astrojs/starlight@0.41.9 peerDependenciesMeta --json
+{ "@astrojs/markdown-remark": { "optional": true } }
+```
+
+It is an **optional** peer. Starlight 0.41.9 depends on `@astrojs/markdown-satteri ^0.3.5`
+directly, and `astro@7.2.7` ships `@astrojs/markdown-satteri@0.3.8` — the remark package is
+the older path, kept as an optional peer for compatibility.
+
+**Do not add `@astrojs/markdown-remark` to `apps/docs`.** Confirmed empirically: a full
+`pnpm install` with only `astro` and `@astrojs/starlight` declared produces **no peer
+warning** for it. Declaring it would pull a package the site does not use.
 
 ### 4. `prebuild` / `predev` never fire
 
@@ -134,7 +154,7 @@ to `astro build`).
 - `typecheck` **must** carry an explicit `dependsOn` to override `nx.json`'s
   `targetDefaults.typecheck.dependsOn: ["^typecheck"]`. Left as the default, it waits on
   gmt's `tsc --noEmit` across 504 source files while still not producing the `dist/` the
-  docs actually need — slow *and* wrong.
+  docs actually need — slow _and_ wrong.
 - Cache inputs must include `{workspaceRoot}/packages/*/package.json`. The version map's
   real input lives outside `{projectRoot}`, and `namedInputs.default` is
   `{projectRoot}/**/*` + `sharedGlobals` — so without it, a version bump leaves `docs:build`
@@ -170,7 +190,7 @@ edited, and it belongs next to `DOX-A3a`'s future `build-reference.ts`.
 
 **Gitignored, not committed** — deliberately breaking symmetry with `DOX-A3a`'s stub
 pattern. A3a commits stubs so tests can import generated modules on a clean checkout; A1 has
-no tests, and a stub version map would render a *wrong* version badge, which is the precise
+no tests, and a stub version map would render a _wrong_ version badge, which is the precise
 failure the story exists to prevent. Flag the asymmetry in the PR so A3a does not assume it.
 
 ### Starlight 0.41 API shapes
@@ -189,11 +209,11 @@ failure the story exists to prevent. Flag the asymmetry in the PR so A3a does no
 Port from `packages/gmt/README.md`; do not re-derive. Its figures (312,220 test executions,
 15,611 tests, 17 locales) are audited.
 
-| Page             | Source                                                       |
-| ---------------- | ------------------------------------------------------------ |
+| Page             | Source                                                        |
+| ---------------- | ------------------------------------------------------------- |
 | `index.mdx`      | Hero from README:3–11; four cards from "Why GMT" README:13–23 |
-| `install.mdx`    | README:25–33, plus Package Layout README:151–179             |
-| `core-rules.mdx` | README:44–58, plus Design Philosophy README:37–42            |
+| `install.mdx`    | README:25–33, plus Package Layout README:151–179              |
+| `core-rules.mdx` | README:44–58, plus Design Philosophy README:37–42             |
 
 Populate every page's `description` frontmatter — `DOX-A3b` generates its `llms.txt` nav
 index from titles and descriptions.
@@ -213,7 +233,7 @@ surprising thing about the library.
 - **GitHub Pages was never enabled on this repo** (`gh api repos/northguild/gmt/pages` →
   404 as of 2026-08-26), so there is nothing to migrate away from.
 - **A Cloudflare account is a hard dependency for shipping the MVP at all**, not just for
-  the eventual chat. Confirm account access and that a token can be provisioned *before*
+  the eventual chat. Confirm account access and that a token can be provisioned _before_
   starting.
 - Verify `dependsOn: ["^build"]` actually orders the build correctly in CI, where the Nx
   cache is cold.
@@ -226,7 +246,7 @@ surprising thing about the library.
 
 1. **Node.** `fnm use &&` on every command. Failure surfaces at the first `astro` call, not
    at install, so the error points at the wrong thing.
-2. **Lockfile + build-script approval.** CI runs `pnpm approve-builds --all` *before*
+2. **Lockfile + build-script approval.** CI runs `pnpm approve-builds --all` _before_
    `pnpm install --frozen-lockfile`, and `pnpm-workspace.yaml`'s `allowBuilds` lists only
    `esbuild` and `nx`. Astro's esbuild is already allowed and pagefind ships prebuilt
    platform binaries, so this should be clean — but if `allowBuilds` needs new entries, the

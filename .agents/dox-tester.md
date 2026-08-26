@@ -88,7 +88,7 @@ it can be tested at all.
 **Tiers 1–5 — the reading and interaction surface.**
 
 - **Keyboard-only pass with the mouse unplugged.** Starlight ships a good accessible
-  baseline and Tier 3 is exactly what puts it at risk, so run this before *and* after
+  baseline and Tier 3 is exactly what puts it at risk, so run this before _and_ after
   `DOX-D1`. **Repeat it for every Tier 2, 4, and 5 widget** — a drag-based timeline, a
   globe, and a time scrubber are each a new surface the baseline pass does not cover for
   free.
@@ -108,7 +108,7 @@ it can be tested at all.
 with no corpus answer must be refused, not improvised.** Separately, stub a response
 containing a plausible-but-nonexistent route and confirm it **renders as plain text**
 rather than a broken link — the route manifest makes this a structural property, not a
-hope. And a stubbed streamed tool call with a malformed *terminal* JSON object must not
+hope. And a stubbed streamed tool call with a malformed _terminal_ JSON object must not
 crash the client.
 
 ## Iteration cap
