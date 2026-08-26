@@ -105,7 +105,7 @@
     "@js-temporal/polyfill": "^0.5.1"
   },
   "devDependencies": {
-    "@burglekitt/gmt-oxlint": "workspace:*",
+    "@northguild/gmt-oxlint": "workspace:*",
     "@tanstack/intent": "^0.3.6",
     "oxfmt": "^0.62.0",
     "oxlint": "^1.0.0"

@@ -384,7 +384,7 @@ skills:
       - '@burglekitt/gmt'
       - '@burglekitt/gmt-eslint'
       - '@burglekitt/gmt-biome'
-      - '@burglekitt/gmt-oxlint'
+      - '@northguild/gmt-oxlint'
     tasks:
       - Choose ESLint config
       - Choose Biome config
