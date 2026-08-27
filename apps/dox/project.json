@@ -79,6 +79,16 @@
         "command": "oxlint astro.config.mjs scripts src",
         "forwardAllArgs": false
       }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "inputs": ["default"],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "vitest run --passWithNoTests",
+        "forwardAllArgs": false
+      }
     }
   }
 }

@@ -29,6 +29,7 @@ export default defineConfig({
           label: "Start here",
           items: [{ slug: "install" }, { slug: "core-rules" }],
         },
+        { autogenerate: { directory: "reference" } },
       ],
     }),
   ],
