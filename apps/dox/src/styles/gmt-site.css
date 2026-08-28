@@ -336,6 +336,50 @@ dialog {
     inset 0 1px 0 color(from var(--gmt-ice) srgb r g b / 0.06);
 }
 
+/* ---- Unified icon buttons ---- */
+/* GitHub link, theme toggle, copy button */
+.social-icons a,
+.theme-toggle,
+.expressive-code .copy button {
+  color: var(--gmt-cyan-bright);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--gmt-radius-sm);
+  padding: 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    color var(--gmt-duration-fast) var(--gmt-easing),
+    border-color var(--gmt-duration-fast) var(--gmt-easing),
+    background var(--gmt-duration-fast) var(--gmt-easing);
+}
+
+.social-icons a:hover,
+.theme-toggle:hover,
+.expressive-code .copy button:hover {
+  color: var(--gmt-cyan);
+  background: color(from var(--gmt-teal) srgb r g b / 0.12);
+  border-color: color(from var(--gmt-cyan) srgb r g b / 0.18);
+  box-shadow: 0 0 8px color(from var(--gmt-cyan) srgb r g b / 0.15);
+}
+
+@supports (backdrop-filter: blur(1px)) {
+  .social-icons a:hover,
+  .theme-toggle:hover,
+  .expressive-code .copy button:hover {
+    backdrop-filter: blur(var(--gmt-blur)) saturate(var(--gmt-saturate));
+    -webkit-backdrop-filter: blur(var(--gmt-blur)) saturate(var(--gmt-saturate));
+  }
+}
+
+/* Expressive-code tooltip — ice background */
+.expressive-code {
+  --ec-frm-tooltipSuccessBg: var(--gmt-cyan);
+  --ec-frm-tooltipSuccessFg: var(--gmt-void);
+}
+
 /* ---- Keyboard focus ---- */
 :focus-visible {
   outline: 2px solid var(--gmt-cyan);
