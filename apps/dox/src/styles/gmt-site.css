@@ -548,6 +548,11 @@ a[rel="next"] .link-title {
   color: var(--gmt-ice);
 }
 
+/* TOC hover — light mode uses dark text instead of white */
+[data-theme="light"] nav[aria-labelledby="starlight__on-this-page"] a:hover {
+  color: var(--gmt-ice);
+}
+
 /* Landing page general text */
 [data-theme="light"] main a:not(.sidebar-pane a):not(#starlight__sidebar a),
 [data-theme="light"] .hero a,
