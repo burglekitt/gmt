@@ -1,6 +1,7 @@
 // @ts-check
 import starlight from "@astrojs/starlight";
 import { defineConfig } from "astro/config";
+import { referenceSidebar } from "./src/generated/reference/sidebar.ts";
 
 // DOX-A2 deploys to Cloudflare Workers' default *.workers.dev subdomain (no
 // custom domain yet). `site` must be set or @astrojs/sitemap (a Starlight
@@ -49,24 +50,63 @@ export default defineConfig({
             crossorigin: "anonymous",
           },
         },
+        // DOX-A3b: discoverability — let LLMs find the llms.txt surface
+        {
+          tag: "link",
+          attrs: {
+            rel: "alternate",
+            type: "text/plain",
+            href: "/llms.txt",
+          },
+        },
+        {
+          tag: "script",
+          content: `(() => {
+            const el = document.documentElement;
+            el.classList.add('is-scrolling');
+            let t;
+            const end = () => {
+              clearTimeout(t);
+              t = setTimeout(() => el.classList.remove('is-scrolling'), 500);
+            };
+            window.addEventListener('scroll', end, { passive: true });
+          })();`,
+        },
+        {
+          tag: "script",
+          content: `(() => {
+            const mq = window.matchMedia('(min-width: 50rem)');
+            const syncSidebar = () => {
+              const sidebar = document.querySelector('.sidebar-pane');
+              const html = document.documentElement;
+              if (sidebar && html.hasAttribute('data-has-sidebar') && mq.matches) {
+                html.style.setProperty('--sl-content-inline-start', Math.ceil(sidebar.getBoundingClientRect().width) + 'px');
+              } else {
+                html.style.removeProperty('--sl-content-inline-start');
+              }
+            };
+            if (document.readyState === 'loading') {
+              document.addEventListener('DOMContentLoaded', syncSidebar);
+            } else {
+              syncSidebar();
+            }
+            mq.addEventListener('change', syncSidebar);
+            window.addEventListener('resize', syncSidebar);
+          })();`,
+        },
       ],
       sidebar: [
         {
           label: "Start here",
           items: [{ slug: "install" }, { slug: "core-rules" }],
         },
-        // `collapsed` so only the current namespace/module branch is expanded
-        // on load — the reference tree is ~600 entries and rebuilding the whole
-        // expanded DOM on every navigation is a measurable chunk of the jank.
-        {
-          label: "Reference",
-          items: [{ autogenerate: { directory: "reference", collapsed: true } }],
-        },
+        { label: "Reference", items: referenceSidebar },
       ],
       components: {
-        SocialIcons: './src/components/SocialIcons.astro',
-        ThemeProvider: './src/components/ThemeProvider.astro',
-        ThemeSelect: './src/components/ThemeSelect.astro',
+        SocialIcons: "./src/components/SocialIcons.astro",
+        ThemeProvider: "./src/components/ThemeProvider.astro",
+        ThemeSelect: "./src/components/ThemeSelect.astro",
+        PageTitle: "./src/components/PageTitle.astro",
       },
       customCss: [
         "./src/styles/mg-theme.css",

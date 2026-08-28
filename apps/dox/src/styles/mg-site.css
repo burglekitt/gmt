@@ -28,6 +28,7 @@ h6 {
 h1 {
   font-weight: 700;
   letter-spacing: var(--mg-tracking-wide);
+  font-size: 32px;
 }
 
 /* ---- Starlight layout shell ---- */
@@ -39,6 +40,14 @@ h1 {
 #starlight__sidebar {
   background-color: var(--mg-void-2);
   border-color: var(--mg-border);
+}
+
+@media (min-width: 50rem) {
+  .sidebar-pane {
+    width: fit-content;
+    min-width: var(--sl-sidebar-width);
+    max-width: 35vw;
+  }
 }
 
 .sidebar-pane a {
@@ -220,8 +229,8 @@ header {
 
 /* ---- Scrollbar ---- */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 20px;
+  height: 20px;
 }
 
 ::-webkit-scrollbar-track {
@@ -230,11 +239,12 @@ header {
 
 ::-webkit-scrollbar-thumb {
   background: var(--mg-void-3);
-  border: 2px solid var(--mg-void);
-  border-radius: 5px;
+  border: 4px solid var(--mg-void);
+  border-radius: 0.5px;
 }
 
-::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover,
+html.is-scrolling ::-webkit-scrollbar-thumb {
   background: var(--mg-cyan-dim);
 }
 
@@ -371,6 +381,11 @@ header {
 [data-theme="light"] .sidebar-pane a[aria-current="page"],
 [data-theme="light"] #starlight__sidebar a[aria-current="page"] {
   color: var(--mg-cyan) !important;
+}
+
+a[rel="prev"] .link-title,
+a[rel="next"] .link-title {
+  font-size: 20px;
 }
 
 /* Inner-page navigation and content rendered by Starlight components. */

@@ -14,10 +14,17 @@
  * Generated MDX + src/generated/* are gitignored and produced by a prebuild step.
  */
 
-import { existsSync, mkdirSync, readdirSync, statSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  rmSync,
+  statSync,
+  writeFileSync,
+} from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import * as ts from "typescript";
+import ts from "typescript";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const appRoot = resolve(__dirname, "..");
@@ -28,8 +35,7 @@ const outGen = resolve(appRoot, "src", "generated", "reference");
 
 const SKIP_DIRS = ["test", "internal"];
 const SKIP_EXTS = [".test.ts", ".spec.ts"];
-const GH_BASE =
-  "https://github.com/northguild/gmt/blob/main/packages/gmt/src";
+const GH_BASE = "https://github.com/northguild/gmt/blob/main/packages/gmt/src";
 
 // ---------------------------------------------------------------------------
 // Walk
@@ -223,7 +229,8 @@ function parseExample(text: string): Example | undefined {
 function isRegexInit(expr: ts.Expression, depth = 0): boolean {
   if (depth > 3) return false;
   if (ts.isRegularExpressionLiteral(expr)) return true;
-  if (ts.isNewExpression(expr) && expr.expression.getText() === "RegExp") return true;
+  if (ts.isNewExpression(expr) && expr.expression.getText() === "RegExp")
+    return true;
   if (ts.isIdentifier(expr)) {
     const sf = expr.getSourceFile();
     let resolved: ts.Declaration | undefined;
@@ -264,7 +271,8 @@ function resolveRegexInit(expr: ts.Expression, depth = 0): ts.Expression {
       }
     }
   });
-  if (resolved?.initializer) return resolveRegexInit(resolved.initializer, depth + 1);
+  if (resolved?.initializer)
+    return resolveRegexInit(resolved.initializer, depth + 1);
   return expr;
 }
 
@@ -275,7 +283,12 @@ function leadingLineComment(node: ts.Node): string | undefined {
   // scan upward from the line above the node
   const lines: string[] = [];
   for (let l = lineStart - 1; l >= 0; l--) {
-    const lineText = sf.getFullText().slice(sf.getPositionOfLineAndCharacter(l, 0), sf.getPositionOfLineAndCharacter(l + 1, 0));
+    const lineText = sf
+      .getFullText()
+      .slice(
+        sf.getPositionOfLineAndCharacter(l, 0),
+        sf.getPositionOfLineAndCharacter(l + 1, 0),
+      );
     const trimmed = lineText.trim();
     if (trimmed.startsWith("//")) {
       lines.unshift(trimmed.replace(/^\/\/\s*/, ""));
@@ -303,7 +316,9 @@ function extractOptions(
   let removeParam: string | null = null;
   for (const sp of sig.getParameters()) {
     if (!sp.name.toLowerCase().includes("options")) continue;
-    const paramNode = sp.valueDeclaration as ts.ParameterDeclaration | undefined;
+    const paramNode = sp.valueDeclaration as
+      | ts.ParameterDeclaration
+      | undefined;
     if (!paramNode) continue;
     const t = checker.getTypeOfSymbolAtLocation(sp, node);
     const props = t.getProperties();
@@ -344,8 +359,16 @@ function generateRegexExamples(pattern: string, name: string): Example[] {
   for (const [input, expected] of candidates) {
     const actual = re.test(input);
     if (actual === expected) {
-      if (expected) tr.push({ call: `${name}.test(${JSON.stringify(input)})`, result: "true" });
-      else fa.push({ call: `${name}.test(${JSON.stringify(input)})`, result: "false" });
+      if (expected)
+        tr.push({
+          call: `${name}.test(${JSON.stringify(input)})`,
+          result: "true",
+        });
+      else
+        fa.push({
+          call: `${name}.test(${JSON.stringify(input)})`,
+          result: "false",
+        });
     }
   }
 
@@ -357,11 +380,12 @@ function generateRegexExamples(pattern: string, name: string): Example[] {
   return out;
 }
 
-function regexCandidates(
-  pattern: string,
-): Array<[string, boolean]> {
+function regexCandidates(pattern: string): Array<[string, boolean]> {
   // strip anchors for analysis
-  const inner = pattern.replace(/^\^/, "").replace(/\$$/, "").replace(/^\(\?:/, "");
+  const inner = pattern
+    .replace(/^\^/, "")
+    .replace(/\$$/, "")
+    .replace(/^\(\?:/, "");
   const out: Array<[string, boolean]> = [];
 
   // digit-count patterns: \d{N}
@@ -442,7 +466,7 @@ function extractFromFile(
     if (ts.isFunctionDeclaration(stmt) && stmt.name) {
       const doc = extractFunction(checker, stmt, ns, mod, file, knownTypes);
       if (doc) docs.push(doc);
-    } else     if (ts.isTypeAliasDeclaration(stmt) && stmt.name) {
+    } else if (ts.isTypeAliasDeclaration(stmt) && stmt.name) {
       const name = stmt.name.text;
       types.push(name);
       docs.push(extractType(checker, stmt, ns, mod, file));
@@ -460,7 +484,14 @@ function extractFromFile(
             ts.isArrowFunction(decl.initializer) ||
             ts.isFunctionExpression(decl.initializer)
           ) {
-            const doc = extractArrowFn(checker, decl, ns, mod, file, knownTypes);
+            const doc = extractArrowFn(
+              checker,
+              decl,
+              ns,
+              mod,
+              file,
+              knownTypes,
+            );
             if (doc) docs.push(doc);
           }
         }
@@ -494,7 +525,7 @@ function extractFunction(
   // fill param types from signature
   const sigParams = sig?.getParameters() ?? [];
   for (const p of params) {
-    const sp = sigParams.find(s => s.name === p.name);
+    const sp = sigParams.find((s) => s.name === p.name);
     if (sp) {
       const t = checker.getTypeOfSymbolAtLocation(sp, node);
       p.type = checker.typeToString(t);
@@ -505,21 +536,22 @@ function extractFunction(
   const options: ParamDoc[] = [];
   if (sig) {
     const optionsDoc =
-      jsDoc?.params.find(p => p.name === "options")?.description ?? "";
+      jsDoc?.params.find((p) => p.name === "options")?.description ?? "";
     const extracted = extractOptions(checker, sig, node, optionsDoc);
     options.push(...extracted.options);
     // remove the options param from flat params (JSDoc name may differ from sig name)
     const rm = extracted.removeParam;
     if (rm) {
-      let idx = params.findIndex(p => p.name === rm);
-      if (idx < 0) idx = params.findIndex(p => p.name === "options");
-      if (idx < 0) idx = params.findIndex(p => p.name.toLowerCase().includes("options"));
+      let idx = params.findIndex((p) => p.name === rm);
+      if (idx < 0) idx = params.findIndex((p) => p.name === "options");
+      if (idx < 0)
+        idx = params.findIndex((p) => p.name.toLowerCase().includes("options"));
       if (idx >= 0) params.splice(idx, 1);
     }
   }
 
   // related types: known type names appearing in the signature string
-  const relatedTypes = [...knownTypes].filter(t => signature.includes(t));
+  const relatedTypes = [...knownTypes].filter((t) => signature.includes(t));
 
   return {
     name,
@@ -561,7 +593,7 @@ function extractArrowFn(
 
   const sigParams = sig?.getParameters() ?? [];
   for (const p of params) {
-    const sp = sigParams.find(s => s.name === p.name);
+    const sp = sigParams.find((s) => s.name === p.name);
     if (sp) {
       const t = checker.getTypeOfSymbolAtLocation(sp, decl);
       p.type = checker.typeToString(t);
@@ -571,19 +603,20 @@ function extractArrowFn(
   const options: ParamDoc[] = [];
   if (sig) {
     const optionsDoc =
-      jsDoc?.params.find(p => p.name === "options")?.description ?? "";
+      jsDoc?.params.find((p) => p.name === "options")?.description ?? "";
     const extracted = extractOptions(checker, sig, decl, optionsDoc);
     options.push(...extracted.options);
     const rm = extracted.removeParam;
     if (rm) {
-      let idx = params.findIndex(p => p.name === rm);
-      if (idx < 0) idx = params.findIndex(p => p.name === "options");
-      if (idx < 0) idx = params.findIndex(p => p.name.toLowerCase().includes("options"));
+      let idx = params.findIndex((p) => p.name === rm);
+      if (idx < 0) idx = params.findIndex((p) => p.name === "options");
+      if (idx < 0)
+        idx = params.findIndex((p) => p.name.toLowerCase().includes("options"));
       if (idx >= 0) params.splice(idx, 1);
     }
   }
 
-  const relatedTypes = [...knownTypes].filter(t => signature.includes(t));
+  const relatedTypes = [...knownTypes].filter((t) => signature.includes(t));
 
   return {
     name,
@@ -614,8 +647,7 @@ function extractType(
   const definition = node.getText().replace(/^export\s*/, "");
   const jsDoc = parseJsDoc(checker, node);
   const lineComment = leadingLineComment(node);
-  const description =
-    jsDoc?.description ?? lineComment ?? `The ${name} type.`;
+  const description = jsDoc?.description ?? lineComment ?? `The ${name} type.`;
 
   return {
     name,
@@ -642,13 +674,14 @@ function extractInterface(
   const definition = node.getText().replace(/^export\s*/, "");
   const jsDoc = parseJsDoc(checker, node);
   const lineComment = leadingLineComment(node);
-  const description =
-    jsDoc?.description ?? lineComment ?? `The ${name} type.`;
+  const description = jsDoc?.description ?? lineComment ?? `The ${name} type.`;
 
   const members: ParamDoc[] = [];
   for (const prop of node.members) {
     if (ts.isPropertySignature(prop) && ts.isIdentifier(prop.name)) {
-      const t = prop.type ? checker.typeToString(checker.getTypeAtLocation(prop)) : "";
+      const t = prop.type
+        ? checker.typeToString(checker.getTypeAtLocation(prop))
+        : "";
       members.push({
         name: prop.name.text + (prop.questionToken ? "?" : ""),
         type: t,
@@ -724,9 +757,7 @@ function extractRegex(
 // Reverse lookup: type -> functions that use it
 // ---------------------------------------------------------------------------
 
-function buildUsedBy(
-  docs: Doc[],
-): Map<string, string[]> {
+function buildUsedBy(docs: Doc[]): Map<string, string[]> {
   const map = new Map<string, string[]>();
   for (const doc of docs) {
     if (doc.kind !== "function") continue;
@@ -781,7 +812,9 @@ function renderFn(doc: FnDoc, docs: Doc[]): string {
     lines.push(`| Parameter | Type | Description |`);
     lines.push(`| --- | --- | --- |`);
     for (const p of doc.params) {
-      lines.push(`| \`${p.name}\` | \`${escapeMd(p.type)}\` | ${escapeMd(p.description)} |`);
+      lines.push(
+        `| \`${p.name}\` | \`${escapeMd(p.type)}\` | ${escapeMd(p.description)} |`,
+      );
     }
     lines.push("");
   }
@@ -841,7 +874,7 @@ function renderFn(doc: FnDoc, docs: Doc[]): string {
 }
 
 function typeUrl(t: string, docs: Doc[]): string {
-  const found = docs.find(d => d.kind === "type" && d.name === t);
+  const found = docs.find((d) => d.kind === "type" && d.name === t);
   if (found) return pageUrl(found.namespace, found.module, found.name);
   return `#${t}`;
 }
@@ -860,7 +893,9 @@ function renderType(doc: TypeDoc, usedBy: Map<string, string[]>): string {
   lines.push("");
 
   if (!doc.isColocated) {
-    lines.push(`> \`${doc.name}\` is a structural type that appears in public signatures. It is not directly importable.`);
+    lines.push(
+      `> \`${doc.name}\` is a structural type that appears in public signatures. It is not directly importable.`,
+    );
     lines.push("");
   }
 
@@ -927,7 +962,7 @@ function renderRegex(doc: RegexDoc): string {
   lines.push("```");
   lines.push("");
   lines.push("```ts");
-  lines.push(`import { ${doc.name } } from "${ip}";`);
+  lines.push(`import { ${doc.name} } from "${ip}";`);
   lines.push("```");
   lines.push("");
   if (doc.description) {
@@ -964,32 +999,94 @@ function escapeMd(s: string): string {
 }
 
 // ---------------------------------------------------------------------------
-// Module indexes
+// Sidebar generation
 // ---------------------------------------------------------------------------
 
-interface ModuleEntry {
+interface SymbolEntry {
   name: string;
-  url: string;
-  signature: string;
+  slug: string;
 }
 
-function renderIndex(
-  ns: string,
-  mod: string,
-  entries: ModuleEntry[],
-): string {
-  const slug = `reference/${ns}/${mod}`;
-  const lines: string[] = [];
-  lines.push(`---`);
-  lines.push(`title: ${JSON.stringify(`${ns}/${mod}`)}`);
-  lines.push(`description: ${JSON.stringify(`Reference for ${ns}/${mod}.`)}`);
-  lines.push(`slug: ${JSON.stringify(slug)}`);
-  lines.push(`---`);
-  lines.push("");
-  for (const e of entries) {
-    lines.push(`- [\`${e.name}\`](${e.url}) — \`${escapeMd(e.signature)}\``);
+/**
+ * Build a Starlight sidebar array from symbol entries grouped by namespace.
+ *
+ * Rules:
+ * - One top-level group per namespace, `collapsed: true`.
+ * - Modules with ≥ 2 symbols → nested collapsible group.
+ * - Modules with exactly 1 symbol → hoisted directly into the namespace
+ *   group (no module-wrapper accordion).
+ * - Ordering inside a namespace: multi-symbol module groups first (alpha),
+ *   then hoisted single-symbol items (alpha by symbol name).
+ */
+function buildSidebar(moduleSymbols: Map<string, SymbolEntry[]>): string {
+  // Group symbols by namespace
+  const byNs = new Map<string, Map<string, SymbolEntry[]>>();
+  for (const [key, syms] of moduleSymbols) {
+    const [ns, mod] = key.split("/");
+    if (!byNs.has(ns)) byNs.set(ns, new Map());
+    byNs.get(ns)!.set(mod, syms);
   }
+
+  const lines: string[] = [];
+  lines.push("// GENERATED FILE — do not edit by hand.");
+  lines.push("// Produced by apps/dox/scripts/build-reference.ts.");
+  lines.push(
+    'import type { StarlightUserConfig } from "@astrojs/starlight/types";',
+  );
   lines.push("");
+  lines.push(
+    'type SidebarItem = NonNullable<StarlightUserConfig["sidebar"]>[number];',
+  );
+  lines.push("");
+  lines.push("export const referenceSidebar: SidebarItem[] = [");
+
+  const sortedNs = [...byNs.keys()].sort();
+  for (const ns of sortedNs) {
+    const mods = byNs.get(ns)!;
+    // Split into multi-symbol modules and single-symbol hoisted items
+    const multiMod: Array<{ mod: string; syms: SymbolEntry[] }> = [];
+    const singleSyms: SymbolEntry[] = [];
+
+    for (const [mod, syms] of mods) {
+      if (syms.length >= 2) {
+        multiMod.push({ mod, syms });
+      } else if (syms.length === 1) {
+        singleSyms.push(syms[0]);
+      }
+    }
+
+    multiMod.sort((a, b) => a.mod.localeCompare(b.mod));
+    singleSyms.sort((a, b) => a.name.localeCompare(b.name));
+
+    lines.push("  {");
+    lines.push(`    label: ${JSON.stringify(ns)},`);
+    lines.push("    collapsed: true,");
+    lines.push("    items: [");
+
+    // Multi-symbol module groups first
+    for (const { mod, syms } of multiMod) {
+      const sortedSyms = [...syms].sort((a, b) => a.name.localeCompare(b.name));
+      lines.push("      {");
+      lines.push(`        label: ${JSON.stringify(mod)},`);
+      lines.push("        collapsed: true,");
+      lines.push("        items: [");
+      for (const sym of sortedSyms) {
+        lines.push(`          { slug: "${sym.slug}" },`);
+      }
+      lines.push("        ],");
+      lines.push("      },");
+    }
+
+    // Then hoisted single-symbol items
+    for (const sym of singleSyms) {
+      lines.push(`      { slug: "${sym.slug}" },`);
+    }
+
+    lines.push("    ],");
+    lines.push("  },");
+  }
+
+  lines.push("];\n");
   return lines.join("\n");
 }
 
@@ -1005,33 +1102,43 @@ function main() {
     join(outGen, "corpus.ts"),
   ];
   for (const out of outputs) {
-    if (!existsSync(out)) { runGeneration(); return; }
+    if (!existsSync(out)) {
+      runGeneration();
+      return;
+    }
   }
   const mdxDir = resolve(appRoot, "src", "content", "docs", "reference");
   // The MDX tree is gitignored, so a fresh checkout (or a manual `rm -rf`) can
   // leave the generated modules in place while this directory is gone.
   // `findMdx` would throw ENOENT on the missing dir — treat it as "regenerate".
-  if (!existsSync(mdxDir)) { runGeneration(); return; }
+  if (!existsSync(mdxDir)) {
+    runGeneration();
+    return;
+  }
   const mdxFiles = findMdx(mdxDir);
-  if (mdxFiles.length === 0) { runGeneration(); return; }
+  if (mdxFiles.length === 0) {
+    runGeneration();
+    return;
+  }
 
-  const allInputs = walk(gmtSrc).filter(f => {
+  const allInputs = walk(gmtSrc).filter((f) => {
     const ext = f.endsWith(".ts");
-    const skipTest = SKIP_EXTS.some(s => f.endsWith(s));
+    const skipTest = SKIP_EXTS.some((s) => f.endsWith(s));
     const rel = relative(gmtSrc, f);
-    const inSkipDir = rel.split("/").some(part => SKIP_DIRS.includes(part));
+    const inSkipDir = rel.split("/").some((part) => SKIP_DIRS.includes(part));
     return ext && !skipTest && !inSkipDir;
   });
 
   const newestInput = allInputs.reduce((a, b) =>
-    statSync(a).mtime > statSync(b).mtime ? a : b
+    statSync(a).mtime > statSync(b).mtime ? a : b,
   );
   const newestOutput = [...outputs, ...mdxFiles].reduce((a, b) =>
-    statSync(a).mtime > statSync(b).mtime ? a : b
+    statSync(a).mtime > statSync(b).mtime ? a : b,
   );
 
   if (statSync(newestOutput).mtime <= statSync(newestInput).mtime) {
-    runGeneration(); return;
+    runGeneration();
+    return;
   }
   console.log("[reference] outputs up-to-date, skipping");
 }
@@ -1097,12 +1204,14 @@ function runGeneration() {
 
   const usedBy = buildUsedBy(dedupedDocs);
 
-  // Write MDX pages
+  // Clean stale output (barrel pages, renamed/removed exports)
+  rmSync(outMdx, { recursive: true, force: true });
   mkdirSync(outMdx, { recursive: true });
-  const moduleEntries = new Map<string, ModuleEntry[]>();
+
+  const moduleSymbols = new Map<string, SymbolEntry[]>();
 
   for (const doc of dedupedDocs) {
-    const url = pageUrl(doc.namespace, doc.module, doc.name);
+    const slug = pageSlug(doc.namespace, doc.module, doc.name);
     const dir = resolve(outMdx, doc.namespace, doc.module);
     mkdirSync(dir, { recursive: true });
 
@@ -1113,31 +1222,21 @@ function runGeneration() {
 
     writeFileSync(join(dir, `${doc.name}.mdx`), mdx);
 
-    // collect for module index
+    // collect for sidebar
     const key = `${doc.namespace}/${doc.module}`;
-    if (!moduleEntries.has(key)) moduleEntries.set(key, []);
-    moduleEntries.get(key)!.push({
-      name: doc.name,
-      url,
-      signature: doc.kind === "function" ? doc.signature : doc.kind === "regex" ? `: RegExp` : `type`,
-    });
+    if (!moduleSymbols.has(key)) moduleSymbols.set(key, []);
+    moduleSymbols.get(key)!.push({ name: doc.name, slug });
   }
 
-  // Write module indexes
-  for (const [key, entries] of moduleEntries) {
-    const [ns, mod] = key.split("/");
-    entries.sort((a, b) => a.name.localeCompare(b.name));
-    const mdx = renderIndex(ns, mod, entries);
-    const dir = resolve(outMdx, ns, mod);
-    mkdirSync(dir, { recursive: true });
-    writeFileSync(join(dir, "index.mdx"), mdx);
-  }
+  // Write generated sidebar
+  const sidebarMd = buildSidebar(moduleSymbols);
+  writeFileSync(join(outGen, "sidebar.ts"), sidebarMd);
 
   // Write artifacts
   mkdirSync(outGen, { recursive: true });
 
   // 1. corpus
-  const corpus = dedupedDocs.map(d => ({
+  const corpus = dedupedDocs.map((d) => ({
     url: pageUrl(d.namespace, d.module, d.name),
     name: d.name,
     namespace: d.namespace,
@@ -1152,16 +1251,19 @@ function runGeneration() {
           : d.description,
     sourcePath: `packages/gmt/src/${d.sourcePath}`,
   }));
-  writeFileSync(join(outGen, "gmt-corpus.json"), JSON.stringify(corpus, null, 2) + "\n");
+  writeFileSync(
+    join(outGen, "gmt-corpus.json"),
+    JSON.stringify(corpus, null, 2) + "\n",
+  );
 
   // 2. route manifest
-  const routes = corpus.map(c => c.url).sort();
+  const routes = corpus.map((c) => c.url).sort();
   const manifestTs = `// GENERATED FILE — do not edit by hand.
 // Produced by apps/dox/scripts/build-reference.ts (\`nx run dox:generate\`).
 import type { RouteManifest } from "~/reference-types";
 
 export const referenceRoutes: RouteManifest = new Set([
-${routes.map(r => `  ${JSON.stringify(r)},`).join("\n")}
+${routes.map((r) => `  ${JSON.stringify(r)},`).join("\n")}
 ]);
 `;
   writeFileSync(join(outGen, "route-manifest.ts"), manifestTs);
@@ -1169,7 +1271,7 @@ ${routes.map(r => `  ${JSON.stringify(r)},`).join("\n")}
   // 3. widget seeds
   const seeds = dedupedDocs
     .filter((d): d is FnDoc => d.kind === "function")
-    .map(d => ({
+    .map((d) => ({
       route: pageUrl(d.namespace, d.module, d.name),
       fnName: d.name,
       examples: d.examples,
