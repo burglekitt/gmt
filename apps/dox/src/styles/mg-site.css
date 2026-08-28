@@ -90,7 +90,6 @@ header {
   border-bottom: 1px solid var(--mg-border);
   color: var(--mg-cyan);
   font-size: 1.3rem;
-  text-transform: uppercase;
   letter-spacing: var(--mg-tracking-wide);
 }
 
@@ -133,11 +132,18 @@ header {
 /* ---- Parameter / options tables ---- */
 .sl-markdown-content table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
+  border-collapse: collapse;
   border: 1px solid var(--mg-border);
   border-radius: var(--mg-radius-md);
   overflow: hidden;
+}
+
+/* ---- Starlight tabs: remove dividers between tab labels ---- */
+.tablist-wrapper [role="tablist"] {
+  border-bottom: none;
+}
+.tab [role="tab"] {
+  box-shadow: none;
 }
 
 .sl-markdown-content thead {
@@ -148,7 +154,6 @@ header {
   color: var(--mg-cyan);
   font-family: var(--mg-font-display);
   font-weight: 600;
-  text-transform: uppercase;
   letter-spacing: var(--mg-tracking-wide);
   font-size: 0.8rem;
   padding: var(--mg-space-3) var(--mg-space-4);

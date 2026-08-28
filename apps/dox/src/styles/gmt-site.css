@@ -1,0 +1,352 @@
+/*
+ * GMT site styling.
+ *
+ * Applies the gmt-token system to Starlight's layout shell and the generated
+ * reference MDX pages. HUD-inspired, restrained.
+ */
+
+/* ---- Global typography ---- */
+body {
+  background-color: var(--gmt-void);
+  color: var(--gmt-ice);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--gmt-font-display);
+  font-weight: 600;
+  letter-spacing: var(--gmt-tracking-tight);
+  color: var(--gmt-ice);
+}
+
+h1 {
+  font-weight: 700;
+  letter-spacing: var(--gmt-tracking-wide);
+  font-size: 32px;
+}
+
+/* ---- Starlight layout shell ---- */
+.page {
+  background-color: var(--gmt-void);
+}
+
+.sidebar-pane,
+#starlight__sidebar {
+  /* background handled by gmt-glass.css (translucent + backdrop-filter) */
+  border-color: var(--gmt-hairline);
+}
+
+@media (min-width: 50rem) {
+  .sidebar-pane {
+    width: fit-content;
+    min-width: var(--sl-sidebar-width);
+    max-width: 35vw;
+  }
+}
+
+.sidebar-pane a {
+  color: var(--gmt-ice-dim);
+  border-radius: var(--gmt-radius-sm);
+  transition: color var(--gmt-duration-fast) var(--gmt-easing);
+}
+
+.sidebar-pane a[aria-current="page"],
+.sidebar-pane a:hover {
+  color: var(--gmt-cyan);
+  background: var(--gmt-accent-wash);
+}
+
+header {
+  /* background handled by gmt-glass.css (translucent + backdrop-filter) */
+  border-bottom: 1px solid var(--gmt-hairline);
+}
+
+.site-title {
+  font-family: var(--gmt-font-display);
+  letter-spacing: var(--gmt-tracking-tight);
+}
+
+/* ---- Reference page content ---- */
+.sl-markdown-content {
+  color: var(--gmt-ice);
+}
+
+.sl-markdown-content h2 {
+  margin-top: var(--gmt-space-8);
+  padding-bottom: var(--gmt-space-2);
+  border-bottom: 1px solid var(--gmt-hairline);
+  color: var(--gmt-cyan);
+  font-size: 1.3rem;
+  letter-spacing: var(--gmt-tracking-wide);
+}
+
+.sl-markdown-content h3 {
+  color: var(--gmt-cyan-bright);
+  font-size: 1.05rem;
+}
+
+/* ---- Code blocks ---- */
+.sl-markdown-content pre {
+  /* background handled by gmt-glass.css (translucent + backdrop-filter) */
+  border: 1px solid var(--gmt-hairline);
+  border-radius: var(--gmt-radius-md);
+  position: relative;
+}
+
+.sl-markdown-content pre code {
+  background: transparent;
+  color: var(--gmt-ice);
+}
+
+/* inline code */
+.sl-markdown-content :not(pre) > code {
+  background: var(--gmt-surface-2);
+  color: var(--gmt-cyan-bright);
+  border: 1px solid var(--gmt-hairline);
+  border-radius: var(--gmt-radius-sm);
+  padding: 0.15em 0.4em;
+  font-size: 0.9em;
+}
+
+/* ---- Parameter / options tables ---- */
+.sl-markdown-content table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--gmt-hairline);
+  border-radius: var(--gmt-radius-md);
+  overflow: hidden;
+}
+
+/* Keep first column compact, let last column fill remaining width */
+.sl-markdown-content th:first-child,
+.sl-markdown-content td:first-child {
+  white-space: nowrap;
+  width: 1%;
+}
+
+/* thead background handled by gmt-glass.css (translucent + backdrop-filter) */
+.sl-markdown-content th {
+  color: var(--gmt-cyan);
+  font-family: var(--gmt-font-display);
+  font-weight: 600;
+  letter-spacing: var(--gmt-tracking-wide);
+  font-size: 0.8rem;
+  padding: var(--gmt-space-3) var(--gmt-space-4);
+  border-bottom: 1px solid var(--gmt-hairline);
+  text-align: left;
+}
+
+.sl-markdown-content td {
+  padding: var(--gmt-space-3) var(--gmt-space-4);
+  border-bottom: 1px solid var(--gmt-hairline);
+  color: var(--gmt-ice);
+}
+
+.sl-markdown-content tr:last-child td {
+  border-bottom: none;
+}
+
+.sl-markdown-content tr:hover td {
+  background: var(--gmt-accent-wash);
+}
+
+/* ---- Behavior bullets ---- */
+.sl-markdown-content ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.sl-markdown-content ul li {
+  position: relative;
+  padding-left: var(--gmt-space-6);
+  margin-bottom: var(--gmt-space-2);
+}
+
+.sl-markdown-content ul li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 8px;
+  height: 1px;
+  background: var(--gmt-cyan);
+  box-shadow: 0 0 6px var(--gmt-cyan);
+}
+
+/* ---- Links ---- */
+.sl-markdown-content a {
+  color: var(--gmt-cyan);
+  text-decoration: none;
+  border-bottom: 1px solid var(--gmt-teal);
+  transition:
+    color var(--gmt-duration-fast) var(--gmt-easing),
+    border-color var(--gmt-duration-fast) var(--gmt-easing);
+}
+
+.sl-markdown-content a:hover {
+  color: var(--gmt-cyan-bright);
+  border-bottom-color: var(--gmt-cyan);
+}
+
+/* ---- Keyboard focus ---- */
+:focus-visible {
+  outline: 2px solid var(--gmt-cyan);
+  outline-offset: 2px;
+  border-radius: var(--gmt-radius-sm);
+}
+
+/* ---- Selection ---- */
+::selection {
+  background: var(--gmt-selection);
+  color: var(--gmt-ice);
+}
+
+/* ---- Scrollbar ---- */
+::-webkit-scrollbar {
+  width: 20px;
+  height: 20px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--gmt-void);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gmt-surface-2);
+  border: 4px solid var(--gmt-void);
+  border-radius: 0.5px;
+}
+
+::-webkit-scrollbar-thumb:hover,
+html.is-scrolling ::-webkit-scrollbar-thumb {
+  background: var(--gmt-teal);
+}
+
+/* ---- Light mode UI components ---- */
+/* Search bar - target Starlight's actual search input */
+[data-theme="light"] header input[type="search"],
+[data-theme="light"] header input[type="text"],
+[data-theme="light"] .search input,
+[data-theme="light"] site-search input {
+  background-color: var(--gmt-void);
+  color: var(--gmt-ice);
+  border-color: var(--gmt-hairline);
+}
+
+[data-theme="light"] header input::placeholder,
+[data-theme="light"] .search input::placeholder,
+[data-theme="light"] site-search input::placeholder {
+  color: var(--gmt-ice-dim);
+}
+
+/* Starlight's search trigger is a button, not an input. */
+[data-theme="light"] site-search > button {
+  background-color: var(--gmt-void);
+  color: var(--gmt-ice);
+  border-color: var(--gmt-hairline);
+}
+
+/* Search popup/dialog - comprehensive targeting */
+[data-theme="light"] [role="dialog"],
+[data-theme="light"] site-search dialog {
+  background-color: var(--gmt-surface);
+  color: var(--gmt-ice);
+  border-color: var(--gmt-hairline);
+}
+
+[data-theme="light"] site-search dialog p,
+[data-theme="light"] site-search dialog button {
+  color: var(--gmt-ice);
+}
+
+/* Search unavailable message */
+[data-theme="light"] [role="status"] {
+  color: var(--gmt-ice);
+}
+
+/* Search results and items */
+[data-theme="light"] [role="option"] {
+  color: var(--gmt-ice);
+}
+
+[data-theme="light"] [role="option"][aria-selected="true"] {
+  background-color: rgba(34, 211, 238, 0.15);
+  color: var(--gmt-cyan);
+}
+
+/* Main CTA buttons (Install, etc.) */
+[data-theme="light"] :is(#starlight__main, main) a.sl-link-button.primary {
+  background-color: var(--gmt-teal);
+  color: var(--gmt-void);
+}
+
+/* Landing page links - hero section */
+[data-theme="light"] .hero a,
+[data-theme="light"] .hero-section a,
+[data-theme="light"] [data-component="page-header"] a,
+[data-theme="light"] .page-header a {
+  color: var(--gmt-cyan);
+}
+
+/* Sidebar accordion and navigation text */
+[data-theme="light"] .sidebar-pane a,
+[data-theme="light"] .sidebar-item a,
+[data-theme="light"] #starlight__sidebar a {
+  color: var(--gmt-ice);
+}
+
+[data-theme="light"] .sidebar-pane a[aria-current="page"],
+[data-theme="light"] #starlight__sidebar a[aria-current="page"] {
+  color: var(--gmt-cyan);
+}
+
+a[rel="prev"] .link-title,
+a[rel="next"] .link-title {
+  font-size: 20px;
+}
+
+/* Inner-page navigation and content rendered by Starlight components. */
+[data-theme="light"] #starlight__sidebar summary,
+[data-theme="light"] #starlight__sidebar summary .group-label,
+[data-theme="light"] #starlight__sidebar summary .group-label > span {
+  color: var(--gmt-ice);
+}
+
+[data-theme="light"] .starlight-aside__content,
+[data-theme="light"] .starlight-aside__content p {
+  color: var(--gmt-ice);
+}
+
+[data-theme="light"] a[rel="prev"] .link-title,
+[data-theme="light"] a[rel="next"] .link-title {
+  color: var(--gmt-ice);
+}
+
+/* Landing page general text */
+[data-theme="light"] main a:not(.sidebar-pane a):not(#starlight__sidebar a),
+[data-theme="light"] .hero a,
+[data-theme="light"] .banner a {
+  color: var(--gmt-cyan);
+}
+
+[data-theme="light"] main a.sl-link-button.primary {
+  color: var(--gmt-void);
+}
+
+/* Reduced motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
