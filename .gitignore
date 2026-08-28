@@ -56,3 +56,6 @@ apps/dox/src/generated/
 apps/dox/src/content/docs/reference/
 apps/dox/.env
 apps/dox/.wrangler/
+
+# Playwright mcp
+.playwright-mcp/
