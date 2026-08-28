@@ -66,6 +66,7 @@
   /* ---- Radii ---- */
   --gmt-radius-sm: 4px;
   --gmt-radius-md: 8px;
+  --gmt-radius-lg: 16px;
 
   /* ---- Starlight variable overrides ---- */
   --sl-color-white: var(--gmt-ice);

@@ -12,7 +12,8 @@
   /* stained glass wash — subtle teal tint, content shows through */
   background: color(from var(--gmt-teal) srgb r g b / 0.12);
   border: 1px solid color(from var(--gmt-cyan) srgb r g b / 0.18);
-  border-radius: var(--gmt-radius-md);
+  border-radius: var(--gmt-radius-lg);
+  /* corner-shape: scoop; */
   padding: var(--gmt-space-4);
 }
 
@@ -151,8 +152,16 @@ header {
 .sl-markdown-content pre {
   background: color(from var(--gmt-teal) srgb r g b / 0.08);
   border: 1px solid color(from var(--gmt-cyan) srgb r g b / 0.18);
-  border-radius: var(--gmt-radius-md);
+  border-radius: var(--gmt-radius-lg);
   position: relative;
+}
+
+[data-theme="light"] .sl-markdown-content pre {
+  background: color(from var(--gmt-teal) srgb r g b / 0.06);
+}
+
+[data-theme="light"] .expressive-code {
+  --ec-codeBg: color(from var(--gmt-teal) srgb r g b / 0.06);
 }
 
 @supports (backdrop-filter: blur(1px)) {
@@ -161,13 +170,21 @@ header {
     backdrop-filter: blur(var(--gmt-blur)) saturate(var(--gmt-saturate));
     -webkit-backdrop-filter: blur(var(--gmt-blur)) saturate(var(--gmt-saturate));
   }
+
+  [data-theme="light"] .sl-markdown-content pre {
+    background: color(from var(--gmt-teal) srgb r g b / 0.06);
+  }
+
+  [data-theme="light"] .expressive-code {
+    --ec-codeBg: color(from var(--gmt-teal) srgb r g b / 0.06);
+  }
 }
 
 /* Tables — stained glass wash */
 .sl-markdown-content table {
   background: color(from var(--gmt-teal) srgb r g b / 0.06);
   border: 1px solid color(from var(--gmt-cyan) srgb r g b / 0.18);
-  border-radius: var(--gmt-radius-md);
+  border-radius: var(--gmt-radius-lg);
   overflow: hidden;
 }
 
@@ -194,7 +211,8 @@ header {
 .starlight-aside {
   background: color(from var(--gmt-teal) srgb r g b / 0.08);
   border: 1px solid color(from var(--gmt-cyan) srgb r g b / 0.18);
-  border-radius: var(--gmt-radius-md);
+  border-radius: var(--gmt-radius-lg);
+  corner-shape: scoop;
 }
 
 @supports (backdrop-filter: blur(1px)) {
@@ -215,7 +233,8 @@ header {
 .comparison-card {
   background: color(from var(--gmt-teal) srgb r g b / 0.06);
   border: 1px solid color(from var(--gmt-cyan) srgb r g b / 0.18);
-  border-radius: var(--gmt-radius-md);
+  border-radius: var(--gmt-radius-lg);
+  corner-shape: scoop;
 }
 
 @supports (backdrop-filter: blur(1px)) {
@@ -253,7 +272,7 @@ site-search input:focus {
 .DocSearch-Modal {
   background: color(from var(--gmt-teal) srgb r g b / 0.15);
   border: 1px solid color(from var(--gmt-cyan) srgb r g b / 0.18);
-  border-radius: var(--gmt-radius-md);
+  border-radius: var(--gmt-radius-lg);
 }
 
 @supports (backdrop-filter: blur(1px)) {
