@@ -13,7 +13,7 @@
   background: color(from var(--gmt-teal) srgb r g b / 0.12);
   border: 1px solid color(from var(--gmt-cyan) srgb r g b / 0.18);
   border-radius: var(--gmt-radius-lg);
-  /* corner-shape: scoop; */
+  corner-shape: scoop;
   padding: var(--gmt-space-4);
 }
 
@@ -212,7 +212,7 @@ header {
   background: color(from var(--gmt-teal) srgb r g b / 0.08);
   border: 1px solid color(from var(--gmt-cyan) srgb r g b / 0.18);
   border-radius: var(--gmt-radius-lg);
-  corner-shape: scoop;
+  corner-shape: bevel;
 }
 
 @supports (backdrop-filter: blur(1px)) {
