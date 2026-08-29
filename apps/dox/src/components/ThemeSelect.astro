@@ -81,24 +81,5 @@
   customElements.define('starlight-theme-select', StarlightThemeSelect);
 </script>
 
-<style>
-  /*
-   * The transparent-at-rest / glass-chip-on-hover treatment comes from
-   * `.gmt-icon-button` (gmt-primitives.css). This block adds the bevelled corner
-   * and overrides the resting icon color: the toggle reads as body text at rest
-   * (it's a control, not an accent), then picks up the shared cyan on hover.
-   */
-  .theme-toggle {
-    corner-shape: bevel;
-    color: var(--sl-color-text);
-  }
-
-  .theme-toggle:hover {
-    color: var(--gmt-cyan);
-  }
-
-  .theme-icon {
-    width: 1em;
-    height: 1em;
-  }
-</style>
+{/* Size, chip, and icon color come entirely from `.gmt-icon-button`
+   (gmt-primitives.css) — this override adds no styles of its own. */}

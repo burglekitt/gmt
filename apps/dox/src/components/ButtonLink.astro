@@ -36,18 +36,12 @@ const mergedRel =
 
 <style>
 	/*
-	 * Icon/text link styled as a button. The transparent-at-rest / glass-chip-on-
-	 * hover treatment comes from `.gmt-icon-button` (gmt-primitives.css); this
-	 * block only carries the deltas for a text+icon link.
+	 * Icon/text link styled as a button. Size, chip, and icon color all come from
+	 * `.gmt-icon-button` (gmt-primitives.css); this block only adds what a link
+	 * with slotted text needs.
 	 */
 	.gmt-button-link {
 		gap: 0.4em;
-		border-radius: var(--gmt-radius-md);
 		text-decoration: none;
-	}
-
-	.gmt-button-link :global(svg) {
-		width: 1.25em;
-		height: 1.25em;
 	}
 </style>

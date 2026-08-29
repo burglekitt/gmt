@@ -11,14 +11,6 @@ const links = config.social ?? [];
 
 {
 	links.map(({ label, href, icon }) => (
-		<ButtonLink href={href} label={label} icon={icon} rel="me" class="social-icon" />
+		<ButtonLink href={href} label={label} icon={icon} rel="me" />
 	))
 }
-
-<style>
-	/* Match Starlight's original hit-area padding. */
-	.social-icon {
-		padding: 0.5em;
-		margin: -0.5em;
-	}
-</style>
