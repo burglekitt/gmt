@@ -10,7 +10,7 @@ const SITE = "https://gmt-dox.northguild.workers.dev";
 
 export default defineConfig({
   site: SITE,
-  vite: { build: { cssTarget: ["chrome107","edge107","firefox104","safari16"] } },
+  vite: { build: { cssTarget: ["chrome107","edge107","firefox104","safari16"], cssMinify: "esbuild" } },
   markdown: {
     shikiConfig: {
       theme: "github-dark",
@@ -83,6 +83,7 @@ export default defineConfig({
         ThemeSelect: "./src/components/ThemeSelect.astro",
         PageTitle: "./src/components/PageTitle.astro",
         Hero: "./src/components/Hero.astro",
+        SocialIcons: "./src/components/SocialIcons.astro",
       },
       customCss: [
         "./src/styles/gmt-tokens.css",

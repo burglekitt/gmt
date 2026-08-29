@@ -39,6 +39,22 @@
   --gmt-saturate: 1.6;
   --gmt-brightness: 1.1;
 
+  /*
+   * Ice-glass fill tiers, so surfaces don't stack tint on tint:
+   *   --gmt-glass-tint         the one tinted layer (panels, modal, cards)
+   *   --gmt-glass-tint-subtle  near-transparent, a whisper of ice — for inner
+   *                            elements sitting ON a tinted panel (search
+   *                            results, nested rows, the search input)
+   *   --gmt-glass-scrim        the faintest ice frost, for behind modals — a
+   *                            hair more than -subtle so it seats the panel,
+   *                            but still barely there; the blur does the work
+   * --gmt-teal is muted (#0e7490) in dark and bright (#22d3ee) in light, so
+   * light gets a little more alpha to compensate (see the light block below).
+   */
+  --gmt-glass-tint: color(from var(--gmt-teal) srgb r g b / 0.1);
+  --gmt-glass-tint-subtle: color(from var(--gmt-teal) srgb r g b / 0.035);
+  --gmt-glass-scrim: color(from var(--gmt-teal) srgb r g b / 0.08);
+
   /* ---- Typography ---- */
   --gmt-font-mono:
     ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
@@ -83,7 +99,9 @@
   --sl-color-text: var(--gmt-ice);
   --sl-color-text-accent: var(--gmt-cyan);
   --sl-color-bg: var(--gmt-void);
-  --sl-color-bg-nav: var(--gmt-surface);
+  /* Match the sidebar's ice-glass wash (see gmt-glass.css) — used by the
+     mobile "On this page" bar. */
+  --sl-color-bg-nav: color(from var(--gmt-teal) srgb r g b / 0.08);
   --sl-color-bg-sidebar: var(--gmt-surface);
   --sl-color-hairline: var(--gmt-hairline);
   --sl-color-hairline-shade: rgba(34, 211, 238, 0.08);
@@ -130,22 +148,37 @@
   ); /* sidebar-active / row-hover tint */
   --gmt-selection: rgba(8, 145, 178, 0.3); /* ::selection background */
 
-  /* ---- Starlight color overrides for light mode ---- */
-  --sl-color-white: var(--gmt-void);
+  /* Bright #22d3ee teal here — a little more alpha to match dark's read. */
+  --gmt-glass-tint: color(from var(--gmt-teal) srgb r g b / 0.16);
+  --gmt-glass-tint-subtle: color(from var(--gmt-teal) srgb r g b / 0.045);
+  --gmt-glass-scrim: color(from var(--gmt-teal) srgb r g b / 0.1);
+
+  /*
+   * ---- Starlight color overrides for light mode ----
+   *
+   * --sl-color-white / --sl-color-black are SEMANTIC, not literal: white =
+   * "highest-contrast text", black = "background extreme". Starlight's own
+   * light theme swaps them (black → #fff, white → near-black), so any
+   * component using `var(--sl-color-black)` as a fill (mobile TOC, search
+   * dialog, badges…) tracks the theme automatically. Map them the same way
+   * here instead of literally, or those surfaces stay dark in light mode.
+   */
+  --sl-color-white: var(--gmt-ice); /* #1a1a1a — contrast text */
   --sl-color-gray-1: var(--gmt-ice);
   --sl-color-gray-2: var(--gmt-ice-dim);
   --sl-color-gray-3: #999999;
   --sl-color-gray-4: #cccccc;
   --sl-color-gray-5: var(--gmt-surface-2);
   --sl-color-gray-6: var(--gmt-surface);
-  --sl-color-black: var(--gmt-ice);
+  --sl-color-black: var(--gmt-void); /* #ffffff — bg extreme */
   --sl-color-accent: var(--gmt-cyan);
   --sl-color-accent-high: var(--gmt-cyan-bright);
   --sl-color-accent-low: var(--gmt-teal);
   --sl-color-text: var(--gmt-ice);
   --sl-color-text-accent: var(--gmt-cyan);
   --sl-color-bg: var(--gmt-void);
-  --sl-color-bg-nav: var(--gmt-surface);
+  /* Match the sidebar's ice-glass wash — used by the mobile "On this page" bar. */
+  --sl-color-bg-nav: color(from var(--gmt-teal) srgb r g b / 0.08);
   --sl-color-bg-sidebar: var(--gmt-surface);
   --sl-color-hairline: var(--gmt-hairline);
   --sl-color-hairline-shade: rgba(8, 145, 178, 0.08);

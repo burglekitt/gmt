@@ -6,19 +6,44 @@
  * stays in-palette without hard-coded rgba values.
  */
 
-/* ---- Base glass surface ---- */
+/* ---- Base glass surface — the one tinted layer ---- */
 .gmt-glass {
   position: relative;
   /* stained glass wash — subtle teal tint, content shows through */
-  background: color(from var(--gmt-teal) srgb r g b / 0.12);
+  background: var(--gmt-glass-tint);
   border: 1px solid color(from var(--gmt-cyan) srgb r g b / 0.18);
   border-radius: var(--gmt-radius-lg);
-  corner-shape: scoop;
+  corner-shape: bevel;
   padding: var(--gmt-space-4);
   backdrop-filter: blur(var(--gmt-blur)) saturate(var(--gmt-saturate))
     brightness(var(--gmt-brightness));
   -webkit-backdrop-filter: blur(var(--gmt-blur)) saturate(var(--gmt-saturate))
     brightness(var(--gmt-brightness));
+}
+
+/* ---- Subtle glass — near-transparent, a whisper of ice ----
+ * For surfaces that sit ON a .gmt-glass panel and must not compound its tint:
+ * nested rows, inset fields, inner cards. Blur + hairline do the work; the
+ * fill is barely there.
+ */
+.gmt-glass-subtle {
+  position: relative;
+  background: var(--gmt-glass-tint-subtle);
+  border: 1px solid var(--gmt-hairline);
+  border-radius: var(--gmt-radius-md);
+  backdrop-filter: blur(var(--gmt-blur)) saturate(var(--gmt-saturate));
+  -webkit-backdrop-filter: blur(var(--gmt-blur)) saturate(var(--gmt-saturate));
+}
+
+/* ---- Clear glass — the faintest ice frost + blur ----
+ * Just a blur and a barely-there ice wash. For modal backdrops and any
+ * full-bleed overlay that should read as light frosted glass, not a dim. No
+ * saturate() — keep it flat so it stays subtle.
+ */
+.gmt-glass-clear {
+  background: var(--gmt-glass-scrim);
+  backdrop-filter: blur(var(--gmt-blur));
+  -webkit-backdrop-filter: blur(var(--gmt-blur));
 }
 
 /* ---- Hairline border gradient on two edges ---- */
@@ -126,6 +151,14 @@ header {
   -webkit-backdrop-filter: blur(var(--gmt-blur));
 }
 
+/* Mobile "On this page" bar — same ice glass as the sidebar (fill comes from
+   --sl-color-bg-nav; add the blur + cyan hairline to match). */
+mobile-starlight-toc nav {
+  border-top: 1px solid color(from var(--gmt-cyan) srgb r g b / 0.18);
+  backdrop-filter: blur(var(--gmt-blur));
+  -webkit-backdrop-filter: blur(var(--gmt-blur));
+}
+
 /* Code blocks — stained glass wash */
 .sl-markdown-content pre {
   background: color(from var(--gmt-teal) srgb r g b / 0.08);
@@ -183,7 +216,7 @@ header {
   background: color(from var(--gmt-teal) srgb r g b / 0.06);
   border: 1px solid color(from var(--gmt-cyan) srgb r g b / 0.18);
   border-radius: var(--gmt-radius-lg);
-  corner-shape: scoop;
+  corner-shape: bevel;
   backdrop-filter: blur(var(--gmt-blur));
   -webkit-backdrop-filter: blur(var(--gmt-blur));
 }

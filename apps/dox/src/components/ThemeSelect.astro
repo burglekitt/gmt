@@ -82,25 +82,33 @@
 </script>
 
 <style>
+  /*
+   * Same treatment as the GitHub / social icon buttons (see the "Unified icon
+   * buttons" rule in gmt-site.css): transparent at rest, glass chip on hover.
+   */
   .theme-toggle {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     padding: 0.25rem;
-    background: color(from var(--gmt-teal) srgb r g b / 0.12);
-    border: 1px solid color(from var(--gmt-cyan) srgb r g b / 0.18);
+    background: transparent;
+    border: 1px solid transparent;
     border-radius: var(--gmt-radius-sm);
-    color: var(--gmt-ice);
+    color: var(--gmt-cyan-bright);
     cursor: pointer;
     transition:
       color var(--gmt-duration-fast) var(--gmt-easing),
-      border-color var(--gmt-duration-fast) var(--gmt-easing);
-    corner-shape: scoop;
+      border-color var(--gmt-duration-fast) var(--gmt-easing),
+      background var(--gmt-duration-fast) var(--gmt-easing);
+    corner-shape: bevel;
   }
 
   .theme-toggle:hover {
-    color: var(--gmt-cyan-bright);
-    border-color: color(from var(--gmt-cyan) srgb r g b / 0.35);
+    color: var(--gmt-cyan);
+    background: color(from var(--gmt-teal) srgb r g b / 0.12);
+    border-color: color(from var(--gmt-cyan) srgb r g b / 0.18);
+    box-shadow: 0 0 8px color(from var(--gmt-cyan) srgb r g b / 0.15);
+    backdrop-filter: blur(var(--gmt-blur)) saturate(var(--gmt-saturate));
   }
 
   .theme-icon {

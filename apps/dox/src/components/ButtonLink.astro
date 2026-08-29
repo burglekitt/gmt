@@ -1,0 +1,74 @@
+---
+import { Icon } from '@astrojs/starlight/components';
+
+interface Props {
+	/** Destination URL. Absolute http(s) URLs open in a new tab automatically. */
+	href: string;
+	/** Accessible label, rendered visually hidden — use for icon-only buttons. */
+	label?: string;
+	/** Starlight icon name rendered before the slotted content. */
+	icon?: string;
+	/** Force new-tab behaviour on/off; auto-detected from `href` otherwise. */
+	external?: boolean;
+	/** Extra `rel` tokens; `noopener noreferrer` is appended when external. */
+	rel?: string;
+	class?: string;
+}
+
+const { href, label, icon, external, rel, class: className, ...attrs } = Astro.props;
+
+const isExternal = external ?? /^(https?:)?\/\//.test(href);
+const mergedRel =
+	[rel, isExternal ? 'noopener noreferrer' : null].filter(Boolean).join(' ') || undefined;
+---
+
+<a
+	href={href}
+	class:list={['gmt-button-link', className]}
+	target={isExternal ? '_blank' : undefined}
+	rel={mergedRel}
+	{...attrs}
+>
+	{label && <span class="sr-only">{label}</span>}
+	{icon && <Icon name={icon} />}
+	<slot />
+</a>
+
+<style>
+	/*
+	 * Icon/text link styled as a button — the same treatment as the "Unified
+	 * icon buttons" rule in gmt-site.css (GitHub link, theme toggle, hamburger):
+	 * transparent at rest, glass chip on hover.
+	 */
+	.gmt-button-link {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.4em;
+		padding: 0.25rem;
+		color: var(--gmt-cyan-bright);
+		background: transparent;
+		border: 1px solid transparent;
+		border-radius: var(--gmt-radius-md);
+		text-decoration: none;
+		cursor: pointer;
+		transition:
+			color var(--gmt-duration-fast) var(--gmt-easing),
+			border-color var(--gmt-duration-fast) var(--gmt-easing),
+			background var(--gmt-duration-fast) var(--gmt-easing);
+	}
+
+	.gmt-button-link:hover {
+		color: var(--gmt-cyan);
+		background: color(from var(--gmt-teal) srgb r g b / 0.12);
+		border-color: color(from var(--gmt-cyan) srgb r g b / 0.18);
+		box-shadow: 0 0 8px color(from var(--gmt-cyan) srgb r g b / 0.15);
+		backdrop-filter: blur(var(--gmt-blur)) saturate(var(--gmt-saturate));
+		-webkit-backdrop-filter: blur(var(--gmt-blur)) saturate(var(--gmt-saturate));
+	}
+
+	.gmt-button-link :global(svg) {
+		width: 1.25em;
+		height: 1.25em;
+	}
+</style>
