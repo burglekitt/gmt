@@ -1,5 +1,5 @@
 ---
-import { Icon } from '@astrojs/starlight/components';
+import Icon from './Icon.astro';
 
 interface Props {
 	/** Destination URL. Absolute http(s) URLs open in a new tab automatically. */
@@ -24,7 +24,7 @@ const mergedRel =
 
 <a
 	href={href}
-	class:list={['gmt-button-link', className]}
+	class:list={['gmt-icon-button', 'gmt-button-link', className]}
 	target={isExternal ? '_blank' : undefined}
 	rel={mergedRel}
 	{...attrs}
@@ -36,35 +36,14 @@ const mergedRel =
 
 <style>
 	/*
-	 * Icon/text link styled as a button — the same treatment as the "Unified
-	 * icon buttons" rule in gmt-site.css (GitHub link, theme toggle, hamburger):
-	 * transparent at rest, glass chip on hover.
+	 * Icon/text link styled as a button. The transparent-at-rest / glass-chip-on-
+	 * hover treatment comes from `.gmt-icon-button` (gmt-primitives.css); this
+	 * block only carries the deltas for a text+icon link.
 	 */
 	.gmt-button-link {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
 		gap: 0.4em;
-		padding: 0.25rem;
-		color: var(--gmt-cyan-bright);
-		background: transparent;
-		border: 1px solid transparent;
 		border-radius: var(--gmt-radius-md);
 		text-decoration: none;
-		cursor: pointer;
-		transition:
-			color var(--gmt-duration-fast) var(--gmt-easing),
-			border-color var(--gmt-duration-fast) var(--gmt-easing),
-			background var(--gmt-duration-fast) var(--gmt-easing);
-	}
-
-	.gmt-button-link:hover {
-		color: var(--gmt-cyan);
-		background: color(from var(--gmt-teal) srgb r g b / 0.12);
-		border-color: color(from var(--gmt-cyan) srgb r g b / 0.18);
-		box-shadow: 0 0 8px color(from var(--gmt-cyan) srgb r g b / 0.15);
-		backdrop-filter: blur(var(--gmt-blur)) saturate(var(--gmt-saturate));
-		-webkit-backdrop-filter: blur(var(--gmt-blur)) saturate(var(--gmt-saturate));
 	}
 
 	.gmt-button-link :global(svg) {

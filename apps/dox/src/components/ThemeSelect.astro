@@ -5,7 +5,7 @@
 <starlight-theme-select>
   <button
     type="button"
-    class="theme-toggle"
+    class="theme-toggle gmt-icon-button"
     aria-label="Toggle color theme"
   >
     <svg
@@ -83,32 +83,18 @@
 
 <style>
   /*
-   * Same treatment as the GitHub / social icon buttons (see the "Unified icon
-   * buttons" rule in gmt-site.css): transparent at rest, glass chip on hover.
+   * The transparent-at-rest / glass-chip-on-hover treatment comes from
+   * `.gmt-icon-button` (gmt-primitives.css). This block adds the bevelled corner
+   * and overrides the resting icon color: the toggle reads as body text at rest
+   * (it's a control, not an accent), then picks up the shared cyan on hover.
    */
   .theme-toggle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.25rem;
-    background: transparent;
-    border: 1px solid transparent;
-    border-radius: var(--gmt-radius-sm);
-    color: var(--gmt-cyan-bright);
-    cursor: pointer;
-    transition:
-      color var(--gmt-duration-fast) var(--gmt-easing),
-      border-color var(--gmt-duration-fast) var(--gmt-easing),
-      background var(--gmt-duration-fast) var(--gmt-easing);
     corner-shape: bevel;
+    color: var(--sl-color-text);
   }
 
   .theme-toggle:hover {
     color: var(--gmt-cyan);
-    background: color(from var(--gmt-teal) srgb r g b / 0.12);
-    border-color: color(from var(--gmt-cyan) srgb r g b / 0.18);
-    box-shadow: 0 0 8px color(from var(--gmt-cyan) srgb r g b / 0.15);
-    backdrop-filter: blur(var(--gmt-blur)) saturate(var(--gmt-saturate));
   }
 
   .theme-icon {

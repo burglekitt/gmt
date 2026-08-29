@@ -1,0 +1,171 @@
+/*
+ * GMT primitives — reusable, Starlight-agnostic recipe classes.
+ *
+ * These compose only from the tokens in gmt-tokens.css and never target a
+ * Starlight selector. Add a class from here to any element (including future
+ * widgets) to get the glass / bracket / icon-button treatment without touching
+ * the Starlight-override sheets.
+ *
+ * Glass fills use CSS relative colors — `color(from <base> … / <alpha>)` — so
+ * every surface stays in-palette with no hard-coded rgba values.
+ */
+
+/* ---- Base glass surface — the one tinted layer ---- */
+.gmt-glass {
+  position: relative;
+  /* stained glass wash — subtle teal tint, content shows through */
+  background: var(--gmt-glass-tint);
+  border: 1px solid var(--gmt-border);
+  border-radius: var(--gmt-radius-lg);
+  corner-shape: bevel;
+  padding: var(--gmt-space-4);
+  backdrop-filter: blur(var(--gmt-blur)) saturate(var(--gmt-saturate))
+    brightness(var(--gmt-brightness));
+  -webkit-backdrop-filter: blur(var(--gmt-blur)) saturate(var(--gmt-saturate))
+    brightness(var(--gmt-brightness));
+}
+
+/* ---- Subtle glass — near-transparent, a whisper of ice ----
+ * For surfaces that sit ON a .gmt-glass panel and must not compound its tint:
+ * nested rows, inset fields, inner cards. Blur + hairline do the work; the
+ * fill is barely there.
+ */
+.gmt-glass-subtle {
+  position: relative;
+  background: var(--gmt-glass-tint-subtle);
+  border: 1px solid var(--gmt-hairline);
+  border-radius: var(--gmt-radius-md);
+  backdrop-filter: blur(var(--gmt-blur)) saturate(var(--gmt-saturate));
+  -webkit-backdrop-filter: blur(var(--gmt-blur)) saturate(var(--gmt-saturate));
+}
+
+/* ---- Clear glass — the faintest ice frost + blur ----
+ * Just a blur and a barely-there ice wash. For modal backdrops and any
+ * full-bleed overlay that should read as light frosted glass, not a dim. No
+ * saturate() — keep it flat so it stays subtle.
+ */
+.gmt-glass-clear {
+  background: var(--gmt-glass-scrim);
+  backdrop-filter: blur(var(--gmt-blur));
+  -webkit-backdrop-filter: blur(var(--gmt-blur));
+}
+
+/* ---- Hairline border gradient on two edges ---- */
+.gmt-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    color(from var(--gmt-cyan) srgb r g b / 0.42) 0%,
+    transparent 40%,
+    transparent 60%,
+    color(from var(--gmt-cyan) srgb r g b / 0.42) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ---- 1px inset top highlight ---- */
+.gmt-glass::after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: var(--gmt-space-4);
+  right: var(--gmt-space-4);
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--gmt-highlight) 30%,
+    var(--gmt-highlight) 70%,
+    transparent
+  );
+  pointer-events: none;
+}
+
+/* ---- L-shaped corner brackets ---- */
+.gmt-brackets {
+  position: relative;
+}
+
+.gmt-brackets::before,
+.gmt-brackets::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-color: var(--gmt-cyan);
+  border-style: solid;
+  border-width: 0;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* top-left + bottom-right */
+.gmt-brackets::before {
+  top: -1px;
+  left: -1px;
+  border-top-width: 2px;
+  border-left-width: 2px;
+}
+
+.gmt-brackets::after {
+  bottom: -1px;
+  right: -1px;
+  border-bottom-width: 2px;
+  border-right-width: 2px;
+}
+
+/* ---- Heavy glass (for hero / elevated surfaces) ---- */
+.gmt-glass-heavy {
+  /* deeper stained glass wash */
+  background: color(from var(--gmt-teal) srgb r g b / 0.18);
+  backdrop-filter: blur(var(--gmt-blur-heavy)) saturate(var(--gmt-saturate))
+    brightness(var(--gmt-brightness));
+  -webkit-backdrop-filter: blur(var(--gmt-blur-heavy))
+    saturate(var(--gmt-saturate)) brightness(var(--gmt-brightness));
+}
+
+/* ---- Icon button ----
+ * Transparent at rest, frosted glass chip on hover. Shared by the theme toggle
+ * and the social links (both add `.gmt-icon-button` in their component markup)
+ * and — listed here because it is Starlight-rendered and can't take a class —
+ * the Expressive Code copy button. The mobile search trigger and the hamburger
+ * reuse this look inline in gmt-shell.css; they carry extra positioning that
+ * doesn't belong in a primitive.
+ */
+.gmt-icon-button,
+.expressive-code .copy button {
+  color: var(--gmt-cyan-bright);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--gmt-radius-sm);
+  padding: 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    color var(--gmt-duration-fast) var(--gmt-easing),
+    border-color var(--gmt-duration-fast) var(--gmt-easing),
+    background var(--gmt-duration-fast) var(--gmt-easing);
+}
+
+.gmt-icon-button:hover,
+.expressive-code .copy button:hover {
+  color: var(--gmt-cyan);
+  background: var(--gmt-fill-strong);
+  border-color: var(--gmt-border);
+  box-shadow: 0 0 8px var(--gmt-glow);
+  backdrop-filter: blur(var(--gmt-blur)) saturate(var(--gmt-saturate));
+}
