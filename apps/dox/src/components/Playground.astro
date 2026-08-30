@@ -1,6 +1,5 @@
 ---
-import { PLAYGROUND_SPECS } from "../lib/playground-spec";
-import type { PlaygroundSpec } from "../lib/playground-spec";
+import { PLAYGROUND_SPECS, type PlaygroundSpec } from "../lib/playground-spec";
 
 interface Props {
   /** Key into PLAYGROUND_SPECS — e.g. "startOfZoned". */
@@ -104,6 +103,6 @@ const specJson = JSON.stringify(spec);
 </gmt-playground>
 
 <script>
-  import { registerPlayground } from "../lib/playground-register";
-  registerPlayground();
+  import { registerGmtPlayground } from "../web-components";
+  registerGmtPlayground();
 </script>

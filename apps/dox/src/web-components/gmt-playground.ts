@@ -1,6 +1,6 @@
-import { GMT_MODULES } from "./gmt-modules";
-import type { PlaygroundSpec } from "./playground-spec";
-import { WidgetStateManager } from "./widget-state";
+import { GMT_MODULES } from "../lib/gmt-modules";
+import type { PlaygroundSpec } from "../lib/playground-spec";
+import { WidgetStateManager } from "../lib/widget-state";
 
 function isSentinel(
   returnType: string,
@@ -22,7 +22,7 @@ function isSentinel(
   }
 }
 
-const connectedPlaygrounds = new Set<PlaygroundElement>();
+const connectedPlaygrounds = new Set<GmtPlaygroundElement>();
 
 function onHashChange() {
   for (const el of connectedPlaygrounds) {
@@ -35,7 +35,7 @@ if (typeof window !== "undefined") {
   window.addEventListener("hashchange", onHashChange);
 }
 
-class PlaygroundElement extends HTMLElement {
+export class GmtPlaygroundElement extends HTMLElement {
   private spec!: PlaygroundSpec;
   private mod: Record<string, unknown> | null = null;
   private resultEl!: HTMLOutputElement;
@@ -84,7 +84,6 @@ class PlaygroundElement extends HTMLElement {
       }
     }
 
-    // Hydrate from URL before computing, so URL state overrides defaults.
     WidgetStateManager.hydrate(this, this.widgetId);
 
     this.querySelectorAll("[data-param], [data-option]").forEach((el) => {
@@ -102,7 +101,6 @@ class PlaygroundElement extends HTMLElement {
 
     this.compute();
 
-    // Start observing changes after first compute so the URL stays in sync.
     this.disposeObserve = WidgetStateManager.observe(this, this.widgetId);
     connectedPlaygrounds.add(this);
   }
@@ -263,8 +261,8 @@ class PlaygroundElement extends HTMLElement {
   }
 }
 
-export function registerPlayground() {
+export function registerGmtPlayground() {
   if (!customElements.get("gmt-playground")) {
-    customElements.define("gmt-playground", PlaygroundElement);
+    customElements.define("gmt-playground", GmtPlaygroundElement);
   }
 }
