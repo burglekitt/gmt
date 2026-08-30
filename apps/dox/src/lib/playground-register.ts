@@ -1,7 +1,12 @@
 import { GMT_MODULES } from "./gmt-modules";
 import type { PlaygroundSpec } from "./playground-spec";
+import { WidgetStateManager } from "./widget-state";
 
-function isSentinel(returnType: string, value: unknown): boolean {
+function isSentinel(
+  returnType: string,
+  value: unknown,
+  allowEmptyArray = false,
+): boolean {
   switch (returnType) {
     case "string":
       return value === "";
@@ -10,10 +15,24 @@ function isSentinel(returnType: string, value: unknown): boolean {
     case "boolean":
       return value === false;
     case "array":
+      if (allowEmptyArray) return false;
       return Array.isArray(value) && value.length === 0;
     default:
       return false;
   }
+}
+
+const connectedPlaygrounds = new Set<PlaygroundElement>();
+
+function onHashChange() {
+  for (const el of connectedPlaygrounds) {
+    WidgetStateManager.hydrate(el, el.getWidgetId());
+    el.compute();
+  }
+}
+
+if (typeof window !== "undefined") {
+  window.addEventListener("hashchange", onHashChange);
 }
 
 class PlaygroundElement extends HTMLElement {
@@ -23,15 +42,38 @@ class PlaygroundElement extends HTMLElement {
   private callCodeEl!: HTMLElement;
   private copyBtn!: HTMLButtonElement;
   private copyLive!: HTMLElement;
+  private permalinkBtn!: HTMLButtonElement;
+  private permalinkLive!: HTMLElement;
+  private widgetId!: string;
+  private disposeObserve: (() => void) | null = null;
+
+  public getWidgetId(): string {
+    return this.widgetId;
+  }
 
   async connectedCallback() {
     const raw = this.dataset.spec;
     if (!raw) return;
     this.spec = JSON.parse(raw) as PlaygroundSpec;
-    this.resultEl = this.querySelector(".gmt-playground-result") as HTMLOutputElement;
-    this.callCodeEl = this.querySelector(".gmt-playground-call-code") as HTMLElement;
-    this.copyBtn = this.querySelector(".gmt-playground-copy") as HTMLButtonElement;
-    this.copyLive = this.querySelector(".gmt-playground-call [aria-live]") as HTMLElement;
+    this.widgetId = this.dataset.widgetId ?? this.spec.module;
+    this.resultEl = this.querySelector(
+      ".gmt-playground-result",
+    ) as HTMLOutputElement;
+    this.callCodeEl = this.querySelector(
+      ".gmt-playground-call-code",
+    ) as HTMLElement;
+    this.copyBtn = this.querySelector(
+      ".gmt-playground-copy",
+    ) as HTMLButtonElement;
+    this.copyLive = this.querySelector(
+      ".gmt-playground-call [aria-live]",
+    ) as HTMLElement;
+    this.permalinkBtn = this.querySelector(
+      ".gmt-playground-permalink",
+    ) as HTMLButtonElement;
+    this.permalinkLive = this.querySelector(
+      ".gmt-playground-call [aria-live]",
+    ) as HTMLElement;
 
     const importer = GMT_MODULES[this.spec.module];
     if (importer) {
@@ -42,6 +84,9 @@ class PlaygroundElement extends HTMLElement {
       }
     }
 
+    // Hydrate from URL before computing, so URL state overrides defaults.
+    WidgetStateManager.hydrate(this, this.widgetId);
+
     this.querySelectorAll("[data-param], [data-option]").forEach((el) => {
       el.addEventListener("input", () => this.compute());
       el.addEventListener("change", () => this.compute());
@@ -51,7 +96,20 @@ class PlaygroundElement extends HTMLElement {
       this.copyBtn.addEventListener("click", () => this.copyCall());
     }
 
+    if (this.permalinkBtn) {
+      this.permalinkBtn.addEventListener("click", () => this.copyPermalink());
+    }
+
     this.compute();
+
+    // Start observing changes after first compute so the URL stays in sync.
+    this.disposeObserve = WidgetStateManager.observe(this, this.widgetId);
+    connectedPlaygrounds.add(this);
+  }
+
+  disconnectedCallback() {
+    connectedPlaygrounds.delete(this);
+    this.disposeObserve?.();
   }
 
   private readArgs(): unknown[] {
@@ -66,9 +124,9 @@ class PlaygroundElement extends HTMLElement {
     if (this.spec.options && this.spec.options.length > 0) {
       const opts: Record<string, string> = {};
       for (const o of this.spec.options) {
-        const el = this.querySelector(`[data-option="${o.name}"]`) as
-          | HTMLSelectElement
-          | null;
+        const el = this.querySelector(
+          `[data-option="${o.name}"]`,
+        ) as HTMLSelectElement | null;
         if (el && o.name) opts[o.name] = el.value;
       }
       args.push(opts);
@@ -131,14 +189,32 @@ class PlaygroundElement extends HTMLElement {
     }
   }
 
-  private compute() {
+  private async copyPermalink() {
+    const url = window.location.href;
+    try {
+      await navigator.clipboard.writeText(url);
+      if (this.permalinkLive) {
+        this.permalinkLive.textContent =
+          this.permalinkBtn.dataset.copied ?? "Copied!";
+        setTimeout(() => {
+          this.permalinkLive.textContent = "";
+        }, 1500);
+      }
+    } catch {
+      /* clipboard unavailable */
+    }
+  }
+
+  public compute() {
     const args = this.readArgs();
     this.renderCall(args);
     if (!this.mod) {
       this.renderError("module failed to load");
       return;
     }
-    const fn = this.mod[this.spec.fn] as ((...a: unknown[]) => unknown) | undefined;
+    const fn = this.mod[this.spec.fn] as
+      | ((...a: unknown[]) => unknown)
+      | undefined;
     if (typeof fn !== "function") {
       this.renderError(`"${this.spec.fn}" is not exported`);
       return;
@@ -166,14 +242,17 @@ class PlaygroundElement extends HTMLElement {
 
   private renderResult(value: unknown) {
     const returnType = this.spec.returnType;
-    if (isSentinel(returnType, value)) {
+    const allowEmptyArray = this.spec.allowEmptyArray ?? false;
+    if (isSentinel(returnType, value, allowEmptyArray)) {
       this.resultEl.classList.add("gmt-playground-sentinel");
       this.resultEl.classList.remove("gmt-playground-live");
-      this.resultEl.textContent = this.spec.sentinelLabel ?? "⟨ NO SIGNAL — invalid input ⟩";
+      this.resultEl.textContent =
+        this.spec.sentinelLabel ?? "⟨ NO SIGNAL — invalid input ⟩";
     } else {
       this.resultEl.classList.remove("gmt-playground-sentinel");
       this.resultEl.classList.add("gmt-playground-live");
-      this.resultEl.textContent = typeof value === "object" ? JSON.stringify(value) : String(value);
+      this.resultEl.textContent =
+        typeof value === "object" ? JSON.stringify(value) : String(value);
     }
   }
 

@@ -266,7 +266,7 @@ dialog > .dialog-frame {
  * block with an inner top highlight.
  */
 .sl-markdown-content [role="tablist"] {
-  gap: var(--gmt-space-2);
+  /* gap: var(--gmt-space-2); */
   border-bottom: none;
   flex-wrap: wrap;
 }
@@ -284,6 +284,8 @@ dialog > .dialog-frame {
   box-shadow: none;
   border: 1px solid var(--gmt-border);
   border-radius: 0;
+  border-top-left-radius: var(--gmt-radius-md);
+  border-top-right-radius: var(--gmt-radius-md);
   background: var(--gmt-fill-subtle);
   color: var(--gmt-ice-dim);
   padding: 0.3rem 1rem;
@@ -309,6 +311,14 @@ dialog > .dialog-frame {
   box-shadow:
     0 0 12px color(from var(--gmt-cyan) srgb r g b / 0.25),
     inset 0 1px 0 color(from var(--gmt-ice) srgb r g b / 0.18);
+}
+.sl-markdown-content [role="tabpanel"] {
+  margin-top: 0;
+  .frame pre {
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 8px !important;
+    border-bottom-left-radius: 8px !important;
+  }
 }
 
 /* CardGrid wrapper — no border or background */

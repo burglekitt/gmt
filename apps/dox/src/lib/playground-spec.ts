@@ -23,6 +23,12 @@ export interface PlaygroundSpec {
   options?: ParamSpec[];
   returnType: "string" | "number" | "boolean" | "array";
   sentinelLabel?: string;
+  /**
+   * When true, an empty array `[]` is treated as a legitimate result,
+   * not as the invalid-input sentinel. Required for interval/map
+   * functions that correctly return `[]` for non-overlapping ranges.
+   */
+  allowEmptyArray?: boolean;
 }
 
 export const PLAYGROUND_SPECS: Record<string, PlaygroundSpec> = {
@@ -82,7 +88,7 @@ export const PLAYGROUND_SPECS: Record<string, PlaygroundSpec> = {
       {
         name: "duration",
         type: "string",
-        value: "{\"days\":7}",
+        value: '{"days":7}',
       },
     ],
     options: [
@@ -452,7 +458,18 @@ export const PLAYGROUND_SPECS: Record<string, PlaygroundSpec> = {
         name: "unit",
         type: "enum",
         value: "hours",
-        options: ["years", "months", "weeks", "days", "hours", "minutes", "seconds", "milliseconds", "microseconds", "nanoseconds"],
+        options: [
+          "years",
+          "months",
+          "weeks",
+          "days",
+          "hours",
+          "minutes",
+          "seconds",
+          "milliseconds",
+          "microseconds",
+          "nanoseconds",
+        ],
       },
     ],
     options: [
@@ -478,7 +495,18 @@ export const PLAYGROUND_SPECS: Record<string, PlaygroundSpec> = {
         name: "unit",
         type: "enum",
         value: "hours",
-        options: ["years", "months", "weeks", "days", "hours", "minutes", "seconds", "milliseconds", "microseconds", "nanoseconds"],
+        options: [
+          "years",
+          "months",
+          "weeks",
+          "days",
+          "hours",
+          "minutes",
+          "seconds",
+          "milliseconds",
+          "microseconds",
+          "nanoseconds",
+        ],
       },
     ],
     returnType: "number",
@@ -687,9 +715,194 @@ export const PLAYGROUND_SPECS: Record<string, PlaygroundSpec> = {
         name: "unit",
         type: "enum",
         value: "day",
-        options: ["year", "month", "week", "day", "hour", "minute", "second", "millisecond", "microsecond", "nanosecond"],
+        options: [
+          "year",
+          "month",
+          "week",
+          "day",
+          "hour",
+          "minute",
+          "second",
+          "millisecond",
+          "microsecond",
+          "nanosecond",
+        ],
       },
     ],
     returnType: "number",
+  },
+
+  formatZonedDateTime: {
+    module: "zoned/format",
+    fn: "formatZonedDateTime",
+    params: [
+      {
+        name: "value",
+        type: "string",
+        value: "2024-03-15T14:30:45-04:00[America/New_York]",
+      },
+      {
+        name: "locale",
+        type: "string",
+        value: "en-US",
+      },
+    ],
+    options: [
+      {
+        name: "calendar",
+        type: "string",
+        value: "gregory",
+      },
+    ],
+    returnType: "string",
+  },
+
+  getZonedNow: {
+    module: "zoned/get",
+    fn: "getZonedNow",
+    params: [
+      {
+        name: "ianaTimezone",
+        type: "string",
+        value: "America/New_York",
+      },
+    ],
+    options: [
+      {
+        name: "smallestUnit",
+        type: "string",
+        value: "second",
+      },
+    ],
+    returnType: "string",
+  },
+
+  areZonedEqual: {
+    module: "zoned/compare",
+    fn: "areZonedEqual",
+    params: [
+      {
+        name: "value1",
+        type: "string",
+        value: "2024-03-15T14:30:45-04:00[America/New_York]",
+      },
+      {
+        name: "value2",
+        type: "string",
+        value: "2024-03-15T14:30:45-04:00[America/New_York]",
+      },
+    ],
+    returnType: "boolean",
+  },
+
+  parseYearFromZoned: {
+    module: "zoned/parse",
+    fn: "parseYearFromZoned",
+    params: [
+      {
+        name: "value",
+        type: "string",
+        value: "2024-03-15T14:30:45-04:00[America/New_York]",
+      },
+    ],
+    returnType: "string",
+  },
+
+  mapZonedDatesInRange: {
+    module: "zoned/map",
+    fn: "mapZonedDatesInRange",
+    params: [
+      {
+        name: "startZonedDateTime",
+        type: "string",
+        value: "2024-03-10T00:00:00-05:00[America/New_York]",
+      },
+      {
+        name: "endZonedDateTime",
+        type: "string",
+        value: "2024-03-20T00:00:00-04:00[America/New_York]",
+      },
+      {
+        name: "stepDays",
+        type: "string",
+        value: "2",
+      },
+    ],
+    returnType: "array",
+    allowEmptyArray: true,
+  },
+
+  convertUtcToZoned: {
+    module: "utc/convert",
+    fn: "convertUtcToZoned",
+    params: [
+      {
+        name: "value",
+        type: "string",
+        value: "2024-03-15T14:30:45Z",
+      },
+      {
+        name: "timeZone",
+        type: "string",
+        value: "America/New_York",
+      },
+    ],
+    returnType: "string",
+  },
+
+  formatUtc: {
+    module: "utc/format",
+    fn: "formatUtc",
+    params: [
+      {
+        name: "value",
+        type: "string",
+        value: "2024-03-15T14:30:45Z",
+      },
+      {
+        name: "locale",
+        type: "string",
+        value: "en-US",
+      },
+    ],
+    options: [
+      {
+        name: "timeZone",
+        type: "string",
+        value: "UTC",
+      },
+      {
+        name: "includeTimeZoneName",
+        type: "string",
+        value: "false",
+      },
+    ],
+    returnType: "string",
+  },
+
+  parseYearFromUnix: {
+    module: "unix/parse",
+    fn: "parseYearFromUnix",
+    params: [
+      {
+        name: "value",
+        type: "string",
+        value: "1710466245000",
+      },
+    ],
+    options: [
+      {
+        name: "epochUnit",
+        type: "enum",
+        value: "milliseconds",
+        options: ["milliseconds", "seconds"],
+      },
+      {
+        name: "timeZone",
+        type: "string",
+        value: "UTC",
+      },
+    ],
+    returnType: "string",
   },
 };

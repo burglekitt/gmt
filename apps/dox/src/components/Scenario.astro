@@ -30,7 +30,11 @@ const fixedSpec = PLAYGROUND_SPECS[fixedSpecId];
   <div class="gmt-scenario-part">
     <h3>Watch it break</h3>
     {brokenSpec ? (
-      <gmt-playground data-spec={JSON.stringify(brokenSpec)} data-module={brokenSpec.module} data-fn={brokenSpec.fn}></gmt-playground>
+      <gmt-playground
+        data-spec={JSON.stringify(brokenSpec)}
+        data-module={brokenSpec.module}
+        data-fn={brokenSpec.fn}
+      ></gmt-playground>
     ) : (
       <p class="gmt-scenario-note">The naive approach silently produces wrong results — there is no GMT equivalent to demonstrate because the failure is <em>not using GMT</em>.</p>
     )}
@@ -48,7 +52,11 @@ const fixedSpec = PLAYGROUND_SPECS[fixedSpecId];
 
   <div class="gmt-scenario-part">
     <h3>Same widget, working</h3>
-    <gmt-playground data-spec={JSON.stringify(fixedSpec)} data-module={fixedSpec.module} data-fn={fixedSpec.fn}></gmt-playground>
+    <gmt-playground
+      data-spec={JSON.stringify(fixedSpec)}
+      data-module={fixedSpec.module}
+      data-fn={fixedSpec.fn}
+    ></gmt-playground>
   </div>
 </div>
 

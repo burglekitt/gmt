@@ -791,7 +791,7 @@ function renderFn(doc: FnDoc, docs: Doc[]): string {
   if (PLAYGROUND_SPECS[doc.name]) {
     lines.push(`import Playground from "~/components/Playground.astro";`);
     lines.push("");
-    lines.push(`<Playground specId=${JSON.stringify(doc.name)} client:visible />`);
+    lines.push(`<Playground specId=${JSON.stringify(doc.name)} />`);
     lines.push("");
   }
 
