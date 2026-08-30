@@ -35,13 +35,17 @@ describe("WidgetStateManager", () => {
     const state = { value: "2024-03-15T14:30:45-05:00[America/New_York]" };
     const hash = WidgetStateManager.serialize("playground", state);
     const restored = WidgetStateManager.deserialize("playground", hash);
-    expect(restored).toEqual({ value: "2024-03-15T14:30:45-05:00[America/New_York]" });
+    expect(restored).toEqual({
+      value: "2024-03-15T14:30:45-05:00[America/New_York]",
+    });
   });
 
   it("round-trips arrays using key[]=val1&key[]=val2", () => {
     const state = { tags: ["a", "b", "c"] };
     const hash = WidgetStateManager.serialize("playground", state);
-    expect(hash).toBe("#widget=playground&tags%5B%5D=a&tags%5B%5D=b&tags%5B%5D=c");
+    expect(hash).toBe(
+      "#widget=playground&tags%5B%5D=a&tags%5B%5D=b&tags%5B%5D=c",
+    );
 
     const restored = WidgetStateManager.deserialize("playground", hash);
     expect(restored).toEqual({ tags: ["a", "b", "c"] });
@@ -78,14 +82,18 @@ describe("WidgetStateManager", () => {
   });
 
   it("does not throw on completely garbled input", () => {
-    expect(() => WidgetStateManager.deserialize("playground", "#%%%")).not.toThrow();
+    expect(() =>
+      WidgetStateManager.deserialize("playground", "#%%%"),
+    ).not.toThrow();
     expect(WidgetStateManager.deserialize("playground", "#%%%")).toBeNull();
   });
 
   // --- hydrate ---
 
   it("hydrate applies state to matching inputs by name", () => {
-    mockLocation("#widget=playground&value=2024-03-15&unit=hour&disambiguation=reject");
+    mockLocation(
+      "#widget=playground&value=2024-03-15&unit=hour&disambiguation=reject",
+    );
 
     const root = document.createElement("div");
     root.innerHTML = `
@@ -97,10 +105,14 @@ describe("WidgetStateManager", () => {
     const hydrated = WidgetStateManager.hydrate(root, "playground");
     expect(hydrated).toBe(true);
 
-    const inputs = root.querySelectorAll<HTMLInputElement | HTMLSelectElement>("input, select");
+    const inputs = root.querySelectorAll<HTMLInputElement | HTMLSelectElement>(
+      "input, select",
+    );
     const valueInput = [...inputs].find((el) => el.dataset.param === "value")!;
     const unitSelect = [...inputs].find((el) => el.dataset.param === "unit")!;
-    const disambigInput = [...inputs].find((el) => el.dataset.option === "disambiguation")!;
+    const disambigInput = [...inputs].find(
+      (el) => el.dataset.option === "disambiguation",
+    )!;
 
     expect(valueInput.value).toBe("2024-03-15");
     expect(unitSelect.value).toBe("hour");
