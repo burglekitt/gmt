@@ -1,4 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
+import type { DateTimeFormatOptions } from "../../types";
 import { normalizeDateTime } from "../../internal";
 import { isValidTime } from "../validate";
 

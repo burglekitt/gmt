@@ -2,7 +2,7 @@ import { Temporal } from "@js-temporal/polyfill";
 import { normalizeDateTime } from "../../internal/normalizeDateTime";
 import { normalizeTimeZone } from "../../internal/normalizeTimeZone";
 import { resolveRelativeRounding } from "../../internal/resolveRelativeRounding";
-import type { RelativeRoundingMethod } from "../../types";
+import type { RelativeTimeFormatOptions, RelativeRoundingMethod } from "../../types";
 import { isValidUtc } from "../../utc/validate";
 
 // Intl.RelativeTimeFormatUnit includes "quarter" which Temporal doesn't support.
@@ -15,16 +15,8 @@ type RelativeUnit =
   | "minute"
   | "second";
 
-export interface FormatRelativeUnixOptions {
-  style?: "long" | "short" | "narrow";
-  numeric?: "always" | "auto";
+export interface FormatRelativeUnixOptions extends RelativeTimeFormatOptions {
   largestUnit?: RelativeUnit;
-  /**
-   * How the computed distance rounds to the display unit: "floor" rounds toward the
-   * earlier boundary, "ceil" toward the later boundary, "round" (default) to the nearest —
-   * matches current behavior when omitted.
-   */
-  roundingMethod?: RelativeRoundingMethod;
   epochUnit?: "milliseconds" | "seconds";
   reference?: string | number;
   timeZone?: string;

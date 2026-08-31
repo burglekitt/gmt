@@ -104,7 +104,8 @@ export default defineConfig({
         "./src/styles/gmt-shell.css", // typography + layout frame
         "./src/styles/gmt-content.css", // .sl-markdown-content + EC + search
         "./src/styles/gmt-controls.css", // buttons, focus, selection, scrollbar
-        "./src/styles/gmt-playground.css", // live playground island (DOX-B1a)
+        "./src/styles/gmt-playground.css", // mistake component styles
+        "./src/styles/gmt-live-playground.css", // textarea editor playground (DOX-B1 POC)
         "./src/styles/gmt-light.css", // floating [data-theme="light"] overrides
       ],
     }),

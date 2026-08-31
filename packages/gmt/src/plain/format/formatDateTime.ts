@@ -1,4 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
+import type { DateTimeFormatOptions } from "../../types";
 import { normalizeDateTime } from "../../internal";
 import { isValidDateTime } from "../validate";
 
@@ -10,7 +11,7 @@ import { isValidDateTime } from "../validate";
  * - Returns "" for invalid input.
  *
  * @param value ISO PlainDateTime string
- * @param locale optional BCP 47 locale identifier
+ * @param locale optional BCP 47 locale identifier (default: runtime default)
  * @param options optional Intl.DateTimeFormatOptions
  * @returns localized date-time string or "" on invalid input
  *

@@ -1,4 +1,5 @@
 import { Temporal, Intl as TemporalIntl } from "@js-temporal/polyfill";
+import type { DateTimeFormatOptions } from "../../types";
 import { normalizeDateTime } from "../../internal";
 import { isValidDate } from "../validate";
 
@@ -12,7 +13,7 @@ import { isValidDate } from "../validate";
  *
  * @param start ISO PlainDate string (range start)
  * @param end ISO PlainDate string (range end)
- * @param locale optional locale tag
+ * @param locale optional locale tag (default: runtime default)
  * @param options optional Intl.DateTimeFormatOptions
  * @returns localized range string or "" when invalid
  *

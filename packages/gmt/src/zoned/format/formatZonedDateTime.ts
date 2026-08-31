@@ -1,4 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
+import type { DateTimeFormatOptions } from "../../types";
 import { normalizeDateTime } from "../../internal";
 import { isValidZonedDateTime } from "../validate";
 
@@ -21,7 +22,7 @@ import { isValidZonedDateTime } from "../validate";
 export function formatZonedDateTime(
   value: string,
   locale?: string,
-  options?: Intl.DateTimeFormatOptions,
+  options?: DateTimeFormatOptions,
 ): string {
   if (!isValidZonedDateTime(value)) {
     return "";
