@@ -24,9 +24,9 @@ import {
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import ts from "typescript";
-import * as BU from "./build-utils/build-utils";
 import type { LivePlaygroundTemplate } from "../src/lib/playground-spec";
 import type { PlaygroundSpec } from "./build-utils/build-utils";
+import * as BU from "./build-utils/build-utils";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const appRoot = resolve(__dirname, "..");
@@ -83,9 +83,7 @@ function pageSlug(ns: string, mod: string, name: string): string {
   return `reference/${ns}/${mod}/${name}`;
 }
 
-function importPath(ns: string, mod: string): string {
-  return `@northguild/gmt/${ns}/${mod}`;
-}
+const ROOT = "@northguild/gmt";
 
 // ---------------------------------------------------------------------------
 // Docs
@@ -381,7 +379,9 @@ function buildPlaygroundSpec(
       {
         classifyParamType: (name) => {
           const sp = sigParams.find((s) => s.name === name);
-          const t = sp ? checker.getTypeOfSymbolAtLocation(sp, node) : undefined;
+          const t = sp
+            ? checker.getTypeOfSymbolAtLocation(sp, node)
+            : undefined;
           return BU.classifyType(checker, t, name);
         },
         optionPropertyType: (name) =>
@@ -414,7 +414,12 @@ export function synthesizeTemplate(spec: PlaygroundSpec): string {
         args.push(JSON.stringify(p.value));
         break;
       case "array":
-        args.push(`[${p.value.split(",").map(v => JSON.stringify(v.trim())).join(", ")}]`);
+        args.push(
+          `[${p.value
+            .split(",")
+            .map((v) => JSON.stringify(v.trim()))
+            .join(", ")}]`,
+        );
         break;
       case "units":
         args.push(`{ ${p.unitValue}: ${p.value} }`);
@@ -434,7 +439,11 @@ export function synthesizeTemplate(spec: PlaygroundSpec): string {
           val = o.value || "0";
           break;
         case "enum":
-          val = o.value ? JSON.stringify(o.value) : (o.options?.[0] ? JSON.stringify(o.options[0]) : JSON.stringify(""));
+          val = o.value
+            ? JSON.stringify(o.value)
+            : o.options?.[0]
+              ? JSON.stringify(o.options[0])
+              : JSON.stringify("");
           break;
         default:
           val = o.value ? JSON.stringify(o.value) : JSON.stringify("");
@@ -475,7 +484,10 @@ function buildLivePlaygroundTemplate(
 // Regex example generation
 // ---------------------------------------------------------------------------
 
-export function generateRegexExamples(pattern: string, name: string): Example[] {
+export function generateRegexExamples(
+  pattern: string,
+  name: string,
+): Example[] {
   let re: RegExp;
   try {
     re = new RegExp(pattern);
@@ -697,7 +709,12 @@ export function extractFnBody(
     sourcePath: relative(gmtSrc, file).split("/").join("/"),
   };
   doc.playgroundSpec = buildPlaygroundSpec(checker, sig, node, doc);
-  doc.livePlaygroundTemplate = buildLivePlaygroundTemplate(checker, sig, doc, node);
+  doc.livePlaygroundTemplate = buildLivePlaygroundTemplate(
+    checker,
+    sig,
+    doc,
+    node,
+  );
   return doc;
 }
 
@@ -869,7 +886,7 @@ function buildUsedBy(docs: Doc[]): Map<string, string[]> {
 
 function renderFn(doc: FnDoc, docs: Doc[]): string {
   const slug = pageSlug(doc.namespace, doc.module, doc.name);
-  const ip = importPath(doc.namespace, doc.module);
+  const ip = ROOT;
   const src = `${GH_BASE}/${doc.sourcePath}`;
 
   const lines: string[] = [];
@@ -883,11 +900,11 @@ function renderFn(doc: FnDoc, docs: Doc[]): string {
   lines.push(`## Signature`);
   lines.push("");
   lines.push("```ts");
-  lines.push(doc.signature);
+  lines.push(`import { ${doc.name} } from "${ip}";`);
   lines.push("```");
   lines.push("");
   lines.push("```ts");
-  lines.push(`import { ${doc.name} } from "${ip}";`);
+  lines.push(doc.signature);
   lines.push("```");
   lines.push("");
 
@@ -924,7 +941,9 @@ function renderFn(doc: FnDoc, docs: Doc[]): string {
       const defaultText = o.description
         ? `\`${escapeMd(o.description)}\``
         : "—";
-      lines.push(`| \`${o.name}\` | \`${escapeMd(o.type)}\` | ${defaultText} |`);
+      lines.push(
+        `| \`${o.name}\` | \`${escapeMd(o.type)}\` | ${defaultText} |`,
+      );
     }
     lines.push("");
   }
@@ -965,7 +984,9 @@ function renderFn(doc: FnDoc, docs: Doc[]): string {
   if (doc.livePlaygroundTemplate) {
     lines.push(`## Playground`);
     lines.push("");
-    lines.push(`import PlaygroundLive from "~/components/PlaygroundLive.astro";`);
+    lines.push(
+      `import PlaygroundLive from "~/components/PlaygroundLive.astro";`,
+    );
     lines.push("");
     lines.push(`<PlaygroundLive specId=${JSON.stringify(doc.name)} />`);
     lines.push("");
@@ -1011,7 +1032,7 @@ function renderType(doc: TypeDoc, usedBy: Map<string, string[]>): string {
   }
 
   if (doc.isColocated && doc.members.length) {
-    const ip = importPath(doc.namespace, doc.module);
+    const ip = ROOT;
     lines.push("```ts");
     lines.push(`import type { ${doc.name} } from "${ip}";`);
     lines.push("```");
@@ -1053,7 +1074,7 @@ function renderType(doc: TypeDoc, usedBy: Map<string, string[]>): string {
 
 function renderRegex(doc: RegexDoc): string {
   const slug = pageSlug(doc.namespace, doc.module, doc.name);
-  const ip = importPath(doc.namespace, doc.module);
+  const ip = ROOT;
   const src = `${GH_BASE}/${doc.sourcePath}`;
 
   const lines: string[] = [];
@@ -1202,10 +1223,10 @@ function buildSidebar(moduleSymbols: Map<string, SymbolEntry[]>): string {
 
 function main() {
   const outputs = [
-      join(outGen, "gmt-corpus.json"),
-      join(outGen, "route-manifest.ts"),
-      join(outGen, "corpus.ts"),
-      join(outGen, "live-playground-templates.ts"),
+    join(outGen, "gmt-corpus.json"),
+    join(outGen, "route-manifest.ts"),
+    join(outGen, "corpus.ts"),
+    join(outGen, "live-playground-templates.ts"),
   ];
   for (const out of outputs) {
     if (!existsSync(out)) {
