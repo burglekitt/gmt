@@ -2496,7 +2496,7 @@
     "module": "calendar-date",
     "kind": "regex",
     "signature": "",
-    "description": "GMT's own calendar-annotated PlainDate string: the calendar-native year/month/day",
+    "description": "true",
     "sourcePath": "packages/gmt/src/regex/calendar-date.ts"
   },
   {
@@ -2506,7 +2506,7 @@
     "module": "calendar-zoned-date-time",
     "kind": "regex",
     "signature": "",
-    "description": "GMT's own calendar-annotated ZonedDateTime string — the zoned sibling of `calendarDate`",
+    "description": "true",
     "sourcePath": "packages/gmt/src/regex/calendar-zoned-date-time.ts"
   },
   {
@@ -2516,7 +2516,7 @@
     "module": "date-time",
     "kind": "regex",
     "signature": "",
-    "description": "ISO 8601 local date-time (extended): <date>T<time>",
+    "description": "true",
     "sourcePath": "packages/gmt/src/regex/date-time.ts"
   },
   {
@@ -2556,7 +2556,7 @@
     "module": "date",
     "kind": "regex",
     "signature": "",
-    "description": "ISO 8601 calendar date (extended): YYYY-MM-DD or ±YYYYYY-MM-DD",
+    "description": "true",
     "sourcePath": "packages/gmt/src/regex/date.ts"
   },
   {
@@ -2566,7 +2566,7 @@
     "module": "http-date",
     "kind": "regex",
     "signature": "",
-    "description": "RFC 7231 §7.1.1.1 IMF-fixdate — the only form GMT's `formatHttp` emits, and",
+    "description": "true",
     "sourcePath": "packages/gmt/src/regex/http-date.ts"
   },
   {
@@ -2586,7 +2586,7 @@
     "module": "rfc-2822",
     "kind": "regex",
     "signature": "",
-    "description": "RFC 5322 §3.3 date-time grammar (obsoletes RFC 2822, same date-time shape).",
+    "description": "true",
     "sourcePath": "packages/gmt/src/regex/rfc-2822.ts"
   },
   {
@@ -2616,7 +2616,7 @@
     "module": "time-zone-like",
     "kind": "regex",
     "signature": "",
-    "description": "",
+    "description": "true",
     "sourcePath": "packages/gmt/src/regex/time-zone-like.ts"
   },
   {
@@ -2626,7 +2626,7 @@
     "module": "time",
     "kind": "regex",
     "signature": "",
-    "description": "regex patterns exported for usage",
+    "description": "true",
     "sourcePath": "packages/gmt/src/regex/time.ts"
   },
   {
@@ -2636,7 +2636,7 @@
     "module": "time",
     "kind": "regex",
     "signature": "",
-    "description": "regex patterns exported for usage",
+    "description": "true",
     "sourcePath": "packages/gmt/src/regex/time.ts"
   },
   {
@@ -2646,7 +2646,7 @@
     "module": "time",
     "kind": "regex",
     "signature": "",
-    "description": "regex patterns exported for usage",
+    "description": "true",
     "sourcePath": "packages/gmt/src/regex/time.ts"
   },
   {
@@ -2656,7 +2656,7 @@
     "module": "time",
     "kind": "regex",
     "signature": "",
-    "description": "regex patterns exported for usage",
+    "description": "true",
     "sourcePath": "packages/gmt/src/regex/time.ts"
   },
   {
@@ -2666,7 +2666,7 @@
     "module": "time",
     "kind": "regex",
     "signature": "",
-    "description": "regex patterns exported for usage",
+    "description": "true",
     "sourcePath": "packages/gmt/src/regex/time.ts"
   },
   {
@@ -2676,7 +2676,7 @@
     "module": "time",
     "kind": "regex",
     "signature": "",
-    "description": "regex patterns exported for usage",
+    "description": "true",
     "sourcePath": "packages/gmt/src/regex/time.ts"
   },
   {
@@ -2686,7 +2686,7 @@
     "module": "unix",
     "kind": "regex",
     "signature": "",
-    "description": "",
+    "description": "true",
     "sourcePath": "packages/gmt/src/regex/unix.ts"
   },
   {
@@ -2696,7 +2696,7 @@
     "module": "unix",
     "kind": "regex",
     "signature": "",
-    "description": "",
+    "description": "true",
     "sourcePath": "packages/gmt/src/regex/unix.ts"
   },
   {
@@ -2706,7 +2706,7 @@
     "module": "utc-date-time",
     "kind": "regex",
     "signature": "",
-    "description": "ISO 8601 UTC datetime: <date>T<time>Z with optional fractional seconds",
+    "description": "true",
     "sourcePath": "packages/gmt/src/regex/utc-date-time.ts"
   },
   {
