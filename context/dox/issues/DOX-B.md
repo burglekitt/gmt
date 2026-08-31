@@ -146,20 +146,25 @@ format bench). The issue stays open until `DOX-B2d` also lands.
 **Title:**
 
 ```
+
 DOX-B2a Auto-embed playgrounds into every generated @example
+
 ```
 
 **Description:**
 
 ```
+
 Part of the Dox epic — see `context/dox/index.md`, Tier 2, item DOX-B2a.
 Depends on DOX-B1a (the component) and DOX-A3a (the generator).
 
 ## Gap
+
 DOX-B1a gives one component. Wiring it in by hand across 504 pages is not viable, and
 hand-authoring would guarantee drift.
 
 ## Scope
+
 - Extend DOX-A3a's `build-reference.ts` to mark up each `@example` so it renders as a
   `<PlaygroundLive>` textarea seeded with that example's own call string (from
   `LIVE_PLAYGROUND_TEMPLATES`).
@@ -176,12 +181,14 @@ hand-authoring would guarantee drift.
   example, or hydrate on interaction) and record it.
 
 ## Before starting
+
 Re-read DOX-A3a's emitted `gmt-corpus.json` structure. If the `call` field is a raw
 string rather than parsed arguments, decide here whether to parse it in the generator
 (better — one place, testable) or in the browser (worse — ships a parser to every
 reader).
 
 ## Definition of done
+
 - Examples across all namespaces render as runnable playgrounds with no per-page
   authoring.
 - With JavaScript disabled, every example is still readable as text.
@@ -189,6 +196,7 @@ reader).
   example and confirm it is found.
 - Page weight on a heavy reference page (e.g. `startOfZoned`, five examples) is measured
   and acceptable.
+
 ```
 
 ---
@@ -200,17 +208,21 @@ reader).
 **Title:**
 
 ```
+
 DOX-B2b Build a DST Transition Inspector widget
+
 ```
 
 **Description:**
 
 ```
+
 Part of the Dox epic — see `context/dox/index.md`, Tier 2, item DOX-B2b. New in the
 2026-08-26 rewrite, promoted out of `appendix-parked.md` §2 by explicit user request.
 Depends on DOX-B1a.
 
 ## Gap
+
 `getDstTransitions` is exported, tested, and correct, but nothing on the site
 demonstrates it — or the one genuinely counter-intuitive fact in the entire library:
 `startOfZoned`'s fifth example states in prose that setting `offset: "prefer"` makes
@@ -218,6 +230,7 @@ demonstrates it — or the one genuinely counter-intuitive fact in the entire li
 same-day field reset. Nothing currently shows this happening.
 
 ## Scope
+
 - A widget: pick an IANA zone and a year, call `getDstTransitions(zone, year)`, and
   render the resulting gap or overlap on a scrubbable local-time axis.
 - Toggle `disambiguation` (`"compatible"` / `"earlier"` / `"later"` / `"reject"`) and
@@ -228,17 +241,20 @@ same-day field reset. Nothing currently shows this happening.
 - No model, no key, no server — this runs entirely on the already-exported functions.
 
 ## Before starting
+
 Read `appendix-parked.md` §2, which is where this widget was first identified as
 buildable without any model, and `startOfZoned.ts`'s fifth example for the exact
 behavior to demonstrate.
 
 ## Definition of done
+
 - The widget correctly renders at least one real gap (spring-forward) and one real
   overlap (fall-back) for a zone/year the reader picks.
 - Toggling `offset` from `"ignore"` to `"prefer"` visibly makes a `"reject"`
   `disambiguation` stop firing, demonstrating the inert-disambiguation behavior.
 - Keyboard-operable: zone, year, and both toggles are reachable and operable without a
   mouse; the scrub axis has a non-drag equivalent.
+
 ```
 
 ---
@@ -250,23 +266,28 @@ behavior to demonstrate.
 **Title:**
 
 ```
+
 DOX-B2c Build an interval algebra visualizer over the 109 interval functions
+
 ```
 
 **Description:**
 
 ```
+
 Part of the Dox epic — see `context/dox/index.md`, Tier 2, item DOX-B2c. New in the
 2026-08-26 rewrite.
 Depends on DOX-B1a.
 
 ## Gap
+
 The library implements **109 interval functions** across four namespaces (plain 53,
 zoned 19, unix 19, utc 18) — essentially Allen's interval algebra, fully built — and
 none of it is illustrated anywhere. This is the largest completely undocumented-by-
 example surface in the library.
 
 ## Scope
+
 - A widget: drag two (and optionally more) intervals on a shared timeline.
 - Live-update results from the real functions as the intervals move: intersection,
   union, difference, xor, abuts, engulfs, overlap — pick the initial set from the
@@ -278,15 +299,18 @@ example surface in the library.
   wrong lesson.
 
 ## Before starting
+
 Read the `zoned/interval/` directory in full to choose which subset of the 109
 functions the first version demonstrates — do not attempt all 109 in one widget.
 
 ## Definition of done
+
 - At least intersection, union, difference, and xor are demonstrated live and correctly
   for a dragged pair of intervals.
 - The distinction between "correct empty result" and "invalid input sentinel" is visibly
   different in the widget.
 - Keyboard-operable: interval endpoints have a typed-input equivalent to dragging.
+
 ```
 
 ---
@@ -298,34 +322,44 @@ functions the first version demonstrates — do not attempt all 109 in one widge
 **Title:**
 
 ```
+
 DOX-B2d Build a zone converter, format bench, and regex tester widget
+
 ```
 
 **Description:**
 
 ```
+
 Part of the Dox epic — see `context/dox/index.md`, Tier 2, item DOX-B2d. New in the
 2026-08-26 rewrite.
 Depends on DOX-B1a.
 
 ## Gap
+
 The "try it on my own input" need is otherwise scattered across many individual
 reference pages with no single place to explore zone conversion, formatting, and the
 library's regex surface together.
 
 ## Scope
+
 - A widget combining: zone-to-zone conversion via `convertZonedToZoned`; live
   `formatZonedToParts` output and relative-time formatting with locale switching; and a
   regex tester running input against the 22 exported `regex` consts.
 - Each sub-panel runs the real exported function or const — no reimplementation.
 
 ## Before starting
+
 Read the `regex/` directory's 13 files (7 with `//` line-comment documentation rather
 than JSDoc, per DOX-A3a's finding) to confirm the regex tester covers the full exported
 set, not a sample.
 
 ## Definition of done
+
 - Zone conversion, format/relative-time output, and the regex tester are each
   independently usable and produce output from the real library.
 - All 22 `regex` consts are selectable in the tester.
+
+```
+
 ```

@@ -3,7 +3,7 @@ import { normalizeDateTime } from "../../internal/normalizeDateTime";
 import { normalizeTimeZone } from "../../internal/normalizeTimeZone";
 import { resolveRelativeRounding } from "../../internal/resolveRelativeRounding";
 import { toInstantFromUtc } from "../../internal/toInstantFromUtc";
-import type { RelativeTimeFormatOptions, RelativeRoundingMethod } from "../../types";
+import type { RelativeTimeFormatOptions } from "../../types";
 import { isValidUtc } from "../validate";
 
 // Intl.RelativeTimeFormatUnit includes "quarter" which Temporal doesn't support.

@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { normalizeDateTime, resolveRelativeRounding } from "../../internal";
-import type { RelativeTimeFormatOptions, RelativeRoundingMethod } from "../../types";
+import type { RelativeTimeFormatOptions } from "../../types";
 import { isValidTime } from "../validate";
 
 // PlainTime has no date component so only sub-day units are meaningful.

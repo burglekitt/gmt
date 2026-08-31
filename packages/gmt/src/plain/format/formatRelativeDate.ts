@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { normalizeDateTime, resolveRelativeRounding } from "../../internal";
-import type { RelativeTimeFormatOptions, RelativeRoundingMethod } from "../../types";
+import type { RelativeTimeFormatOptions } from "../../types";
 import { isValidDate } from "../validate";
 
 // No "hour"/"minute"/"second" — PlainDate has no time component.

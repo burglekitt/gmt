@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { normalizeDateTime, resolveRelativeRounding } from "../../internal";
-import type { RelativeTimeFormatOptions, RelativeRoundingMethod } from "../../types";
+import type { RelativeTimeFormatOptions } from "../../types";
 import { isValidDateTime } from "../validate";
 
 // Intl.RelativeTimeFormatUnit includes "quarter" which Temporal doesn't support.

@@ -2576,7 +2576,7 @@
     "module": "leap-second",
     "kind": "regex",
     "signature": "",
-    "description": "ISO 8601 leap second pattern (second = 60)",
+    "description": "true",
     "sourcePath": "packages/gmt/src/regex/leap-second.ts"
   },
   {
@@ -2596,7 +2596,7 @@
     "module": "rfc-3339",
     "kind": "regex",
     "signature": "",
-    "description": "RFC 3339 §5.6 date-time — the same field grammar as ISO 8601 but with a",
+    "description": "true",
     "sourcePath": "packages/gmt/src/regex/rfc-3339.ts"
   },
   {
@@ -2606,7 +2606,7 @@
     "module": "sql-date-time",
     "kind": "regex",
     "signature": "",
-    "description": "ANSI SQL / ODBC timestamp literal: space-separated (never \"T\"), always",
+    "description": "true",
     "sourcePath": "packages/gmt/src/regex/sql-date-time.ts"
   },
   {

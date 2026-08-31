@@ -28,7 +28,7 @@ import { isValidDate } from "../validate";
 export function formatDateToParts(
   value: string,
   locale?: string,
-  options?: Intl.DateTimeFormatOptions,
+  options?: DateTimeFormatOptions,
 ): Array<{ type: string; value: string }> {
   if (!isValidDate(value)) {
     return [];

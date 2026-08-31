@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "generate": "node ./scripts/generate-version-map.mjs && node ./scripts/ensure-sidebar-order.mjs && tsx ./scripts/build-reference.ts",
+    "predev": "pnpm --filter @northguild/gmt build",
     "dev": "pnpm run generate && astro dev --force",
     "build": "pnpm run generate && astro build",
     "preview": "astro preview",

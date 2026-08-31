@@ -880,13 +880,6 @@ function renderFn(doc: FnDoc, docs: Doc[]): string {
   lines.push(`---`);
   lines.push("");
 
-  if (doc.livePlaygroundTemplate) {
-    lines.push(`import PlaygroundLive from "~/components/PlaygroundLive.astro";`);
-    lines.push("");
-    lines.push(`<PlaygroundLive specId=${JSON.stringify(doc.name)} />`);
-    lines.push("");
-  }
-
   lines.push(`## Signature`);
   lines.push("");
   lines.push("```ts");
@@ -966,6 +959,15 @@ function renderFn(doc: FnDoc, docs: Doc[]): string {
       }
     }
     lines.push("```");
+    lines.push("");
+  }
+
+  if (doc.livePlaygroundTemplate) {
+    lines.push(`## Playground`);
+    lines.push("");
+    lines.push(`import PlaygroundLive from "~/components/PlaygroundLive.astro";`);
+    lines.push("");
+    lines.push(`<PlaygroundLive specId=${JSON.stringify(doc.name)} />`);
     lines.push("");
   }
 
@@ -1399,7 +1401,7 @@ export const LIVE_PLAYGROUND_TEMPLATES: Record<string, LivePlaygroundTemplate> =
   writeFileSync(join(outGen, "live-playground-templates.ts"), templatesTs);
 
   console.log(
-    `[reference] wrote ${allDocs.length} pages, ${routes.length} routes, ${seeds.length} seeds, ${Object.keys(templatesRecord).length} live playground templates`,
+    `[reference] wrote ${allDocs.length} pages, ${routes.length} routes, ${Object.keys(templatesRecord).length} live playground templates`,
   );
 }
 

@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
-import type { DateTimeFormatOptions } from "../../types";
 import { normalizeDateTime } from "../../internal";
+import type { DateTimeFormatOptions } from "../../types";
 import { isValidDate } from "../validate";
 
 /**
@@ -22,7 +22,7 @@ import { isValidDate } from "../validate";
 export function formatDate(
   value: string,
   locale?: string,
-  options?: Intl.DateTimeFormatOptions,
+  options?: DateTimeFormatOptions,
 ): string {
   if (!isValidDate(value)) {
     return "";
