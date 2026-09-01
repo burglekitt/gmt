@@ -1,13 +1,12 @@
 ---
 /**
- * Live Playground — textarea editor for Intl format functions.
+ * Live Playground — textarea editor for GMT functions.
  *
  * Props: specId — key into LIVE_PLAYGROUND_TEMPLATES (generated).
  *
  * Renders a textarea pre-filled with the template's args, a run button, and
- * a live output area. Used by Mistake.astro and Scenario.astro for inline
- * playgrounds. For auto-embed in reference pages, see playground-init.ts
- * (hydrate-on-interaction pattern).
+ * a live output area. Used by reference pages (auto-embedded per function),
+ * Mistake.astro, and Scenario.astro.
  */
 
 import { LIVE_PLAYGROUND_TEMPLATES } from "../lib/playground-spec";
