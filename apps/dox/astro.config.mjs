@@ -79,7 +79,11 @@ export default defineConfig({
       sidebar: [
         {
           label: "Start here",
-          items: [{ slug: "install" }, { slug: "core-rules" }, { slug: "why-gmt" }],
+          items: [
+            { slug: "install" },
+            { slug: "core-rules" },
+            { slug: "why-gmt" },
+          ],
         },
         {
           label: "Guides",

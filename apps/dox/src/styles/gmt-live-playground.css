@@ -33,30 +33,6 @@
   color: var(--gmt-ice-dim);
 }
 
-.gmt-live-playground-call {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gmt-space-2);
-  margin-top: 0;
-  padding: var(--gmt-space-2) var(--gmt-space-3);
-  background: var(--gmt-fill-subtle);
-  border: 1px solid var(--gmt-border);
-  border-radius: var(--gmt-radius-sm);
-  corner-shape: bevel;
-  transition:
-    background var(--gmt-duration-fast) var(--gmt-easing),
-    border-color var(--gmt-duration-fast) var(--gmt-easing);
-}
-
-.gmt-live-playground-call:hover {
-  border-color: var(--gmt-border-strong);
-}
-
-.gmt-live-playground-call:focus-within {
-  background: var(--gmt-fill-2);
-  border-color: var(--gmt-border-strong);
-}
-
 .gmt-live-playground-top-row {
   display: flex;
   align-items: center;
@@ -72,6 +48,37 @@
   user-select: none;
 }
 
+.gmt-live-playground-middle-row {
+  display: flex;
+  margin-top: 0;
+}
+
+.gmt-live-playground-call {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gmt-space-2);
+  margin-top: 0;
+  padding: var(--gmt-space-2) var(--gmt-space-3);
+  background: var(--gmt-fill-subtle);
+  border: 1px solid var(--gmt-border);
+  border-top-left-radius: var(--gmt-radius-md);
+  border-bottom-left-radius: var(--gmt-radius-md);
+  corner-shape: bevel;
+  transition:
+    background var(--gmt-duration-fast) var(--gmt-easing),
+    border-color var(--gmt-duration-fast) var(--gmt-easing);
+}
+
+.gmt-live-playground-call:hover {
+  border-color: var(--gmt-border-strong);
+}
+
+.gmt-live-playground-call:focus-within {
+  background: var(--gmt-fill-2);
+  border-color: var(--gmt-border-strong);
+}
+
 .gmt-live-playground-paren {
   font-family: var(--gmt-font-mono);
   font-size: 0.85rem;
@@ -81,17 +88,18 @@
 }
 
 .gmt-live-playground-run {
-  margin-left: auto;
-  display: inline-flex;
+  display: flex;
+  align-self: stretch;
   align-items: center;
   justify-content: center;
   width: 2.5rem;
-  height: 2.5rem;
   padding: 0;
+  margin-top: 0;
   color: var(--gmt-void);
   background: var(--gmt-cyan);
   border: 1px solid var(--gmt-cyan);
-  border-radius: var(--gmt-radius-sm);
+  border-top-right-radius: var(--gmt-radius-md);
+  border-bottom-right-radius: var(--gmt-radius-md);
   corner-shape: bevel;
   cursor: pointer;
   transition:

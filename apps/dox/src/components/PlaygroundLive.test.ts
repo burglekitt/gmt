@@ -8,10 +8,7 @@ import {
   renderResult,
   sentinelFor,
 } from "../lib/playground-client";
-import {
-  argToValue,
-  parseCallArgs,
-} from "../lib/playground-parsers";
+import { argToValue, parseCallArgs } from "../lib/playground-parsers";
 
 // ---------------------------------------------------------------------------
 // playground-parsers (shared module)

@@ -1402,23 +1402,23 @@ export const corpus: CorpusEntry[] = data as CorpusEntry[];
 `;
   writeFileSync(join(outGen, "corpus.ts"), corpusTs);
 
-// 4. live playground templates — one template per example, plus a fallback
-// per function for functions without examples.
-const templatesRecord: Record<string, LivePlaygroundTemplate> = {};
-for (const d of dedupedDocs) {
-  if (d.kind === "function" && d.examples.length > 0) {
-    const base = d.livePlaygroundTemplate;
-    if (!base) continue;
-    d.examples.forEach((ex, i) => {
-      templatesRecord[`${d.name}-example-${i}`] = {
-        ...base,
-        template: ex.call,
-      };
-    });
-  } else if (d.kind === "function" && d.livePlaygroundTemplate) {
-    templatesRecord[d.name] = d.livePlaygroundTemplate;
+  // 4. live playground templates — one template per example, plus a fallback
+  // per function for functions without examples.
+  const templatesRecord: Record<string, LivePlaygroundTemplate> = {};
+  for (const d of dedupedDocs) {
+    if (d.kind === "function" && d.examples.length > 0) {
+      const base = d.livePlaygroundTemplate;
+      if (!base) continue;
+      d.examples.forEach((ex, i) => {
+        templatesRecord[`${d.name}-example-${i}`] = {
+          ...base,
+          template: ex.call,
+        };
+      });
+    } else if (d.kind === "function" && d.livePlaygroundTemplate) {
+      templatesRecord[d.name] = d.livePlaygroundTemplate;
+    }
   }
-}
   const templatesTs = `// GENERATED FILE — do not edit by hand.
 // Produced by apps/dox/scripts/build-reference.ts (\`nx run dox:generate\`).
 import type { LivePlaygroundTemplate } from "../../lib/playground-spec";
