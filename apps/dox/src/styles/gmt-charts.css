@@ -16,6 +16,13 @@
   --ts-chart-5: var(--gmt-cyan-bright);
   --ts-chart-6: var(--gmt-teal);
 
+  /* ---- Locale matrix family colors ---- */
+  --gmt-family-latin: #22d3ee;
+  --gmt-family-cjk: #4ade80;
+  --gmt-family-arabic-hebrew: #0e7490;
+  --gmt-family-cyrillic: #cfeaf2;
+  --gmt-family-turkic: #67e8f9;
+
   /* ---- Surface tokens — keep charts legible over glass ---- */
   --ts-chart-tooltip-background: var(--gmt-surface);
   --ts-chart-tooltip-color: var(--gmt-ice);
@@ -60,7 +67,12 @@
   display: block;
   width: 100%;
   height: auto;
-  max-width: 640px;
+  max-width: 100%;
+}
+
+.gmt-chart--natural svg {
+  width: var(--gmt-chart-natural-width, auto) !important;
+  max-width: 100% !important;
 }
 
 /* Glass bar treatment — semi-transparent fill + subtle stroke + depth */
@@ -70,6 +82,13 @@
   stroke: var(--gmt-border-strong);
   stroke-width: 1;
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
+}
+
+/* Cell tiles — locale matrix cards */
+.gmt-chart .ts-chart__cell rect {
+  stroke: var(--gmt-border-strong);
+  stroke-width: 1;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
 }
 
 /* GMT highlight bar — spring accent with slightly stronger presence */

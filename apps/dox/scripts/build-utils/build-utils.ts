@@ -10,7 +10,6 @@
  */
 
 import ts from "typescript";
-import type { ParamSpec, ParamType } from "../../src/lib/playground-spec";
 import {
   argToValue,
   parseCallArgs,
@@ -18,6 +17,24 @@ import {
 } from "../../src/lib/playground-parsers";
 
 export type ReturnTypeKind = "string" | "number" | "boolean" | "array";
+
+export type ParamType =
+  | "string"
+  | "number"
+  | "boolean"
+  | "enum"
+  | "units"
+  | "array";
+
+export interface ParamSpec {
+  name: string;
+  label?: string;
+  type: ParamType;
+  value: string;
+  options?: string[];
+  unitValue?: string;
+  arrayType?: "number" | "string";
+}
 
 export interface ClassifiedType {
   type: ParamType;

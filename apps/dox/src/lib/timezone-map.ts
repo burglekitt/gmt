@@ -11,6 +11,7 @@ import { Temporal } from "@js-temporal/polyfill";
 import type { ChartPoint } from "@tanstack/charts";
 import { defineChart } from "@tanstack/charts";
 import { mountChart } from "@tanstack/charts/dom";
+import { whenFocused } from "@tanstack/charts/focus/mark";
 import { geoShape } from "@tanstack/charts/geo";
 import { tooltip } from "@tanstack/charts/tooltip";
 import worldAtlas from "world-atlas/countries-110m.json";
@@ -116,7 +117,7 @@ function buildDefinition(
             key: (f: TimezoneFeature) => f.properties.tzid,
             fill: "color(from var(--gmt-cyan) srgb r g b / 0.25)",
             fillOpacity: 0.01,
-            stroke: "var(--gmt-spring)",
+            stroke: "var(--gmt-cyan)",
             strokeOpacity: 0.5,
             strokeWidth: 0.75,
             className: "gmt-timezone-polygon",
@@ -134,10 +135,31 @@ function buildDefinition(
       projection,
       key: (p: TimezoneDatum) => p.properties.id,
       fill: "var(--gmt-cyan)",
-      stroke: "var(--gmt-spring)",
-      strokeWidth: 2,
+      stroke: "var(--gmt-cyan)",
+      strokeWidth: 1,
       r: 5,
     }),
+    whenFocused(
+      geoShape(points, {
+        projection,
+        key: (p: TimezoneDatum) => p.properties.id,
+        fill: "none",
+        stroke: "var(--gmt-spring)",
+        strokeWidth: 1,
+      }),
+      { retarget: true },
+    ),
+    whenFocused(
+      geoShape(points, {
+        projection,
+        key: (p: TimezoneDatum) => p.properties.id,
+        fill: "none",
+        stroke: "var(--gmt-spring)",
+        strokeWidth: 1,
+        r: 12,
+      }),
+      { retarget: true },
+    ),
   ];
 
   return defineChart({
@@ -217,7 +239,9 @@ export async function initTimezoneMap(
   function focusTimezone(id: string): void {
     const scene = chartHost.getScene();
     const target = scene.points.find((p) => {
-      const d = p.datum as { type?: string; properties?: { id?: string } } | undefined;
+      const d = p.datum as
+        | { type?: string; properties?: { id?: string } }
+        | undefined;
       return d?.type === "Point" && d.properties?.id === id;
     });
     if (!target) return;

@@ -417,7 +417,7 @@ export function synthesizeTemplate(spec: PlaygroundSpec): string {
         args.push(
           `[${p.value
             .split(",")
-            .map((v) => JSON.stringify(v.trim()))
+            .map((v: string) => JSON.stringify(v.trim()))
             .join(", ")}]`,
         );
         break;
@@ -483,8 +483,6 @@ function buildLivePlaygroundTemplate(
     template,
     returnType,
     allowEmptyArray,
-    params: doc.playgroundSpec?.params,
-    options: doc.playgroundSpec?.options,
   };
 }
 
@@ -904,6 +902,8 @@ function renderFn(doc: FnDoc, docs: Doc[]): string {
   lines.push(`slug: ${JSON.stringify(slug)}`);
   lines.push(`---`);
   lines.push("");
+  lines.push(`import PlaygroundLive from "~/components/PlaygroundLive.astro";`);
+  lines.push("");
 
   lines.push(`## Signature`);
   lines.push("");
@@ -976,28 +976,21 @@ function renderFn(doc: FnDoc, docs: Doc[]): string {
   if (doc.examples.length) {
     lines.push(`## Examples`);
     lines.push("");
-    lines.push("```ts");
-    for (const ex of doc.examples) {
+    for (let i = 0; i < doc.examples.length; i++) {
+      const ex = doc.examples[i];
+      lines.push("```ts");
       if (ex.result.includes("\n")) {
         lines.push(ex.call);
         lines.push(ex.result);
       } else {
         lines.push(ex.call + (ex.result ? ` // ${ex.result}` : ""));
       }
+      lines.push("```");
+      lines.push("");
+      const specId = JSON.stringify(`${doc.name}-example-${i}`);
+      lines.push(`<PlaygroundLive specId=${specId} />`);
+      lines.push("");
     }
-    lines.push("```");
-    lines.push("");
-  }
-
-  if (doc.livePlaygroundTemplate) {
-    lines.push(`## Playground`);
-    lines.push("");
-    lines.push(
-      `import PlaygroundLive from "~/components/PlaygroundLive.astro";`,
-    );
-    lines.push("");
-    lines.push(`<PlaygroundLive specId=${JSON.stringify(doc.name)} />`);
-    lines.push("");
   }
 
   lines.push(`## Source`);
@@ -1409,14 +1402,23 @@ export const corpus: CorpusEntry[] = data as CorpusEntry[];
 `;
   writeFileSync(join(outGen, "corpus.ts"), corpusTs);
 
-  // 4. live playground templates — one raw call-string template per function,
-  // for the <PlaygroundLive> textarea editor.
-  const templatesRecord: Record<string, LivePlaygroundTemplate> = {};
-  for (const d of dedupedDocs) {
-    if (d.kind === "function" && d.livePlaygroundTemplate) {
-      templatesRecord[d.name] = d.livePlaygroundTemplate;
-    }
+// 4. live playground templates — one template per example, plus a fallback
+// per function for functions without examples.
+const templatesRecord: Record<string, LivePlaygroundTemplate> = {};
+for (const d of dedupedDocs) {
+  if (d.kind === "function" && d.examples.length > 0) {
+    const base = d.livePlaygroundTemplate;
+    if (!base) continue;
+    d.examples.forEach((ex, i) => {
+      templatesRecord[`${d.name}-example-${i}`] = {
+        ...base,
+        template: ex.call,
+      };
+    });
+  } else if (d.kind === "function" && d.livePlaygroundTemplate) {
+    templatesRecord[d.name] = d.livePlaygroundTemplate;
   }
+}
   const templatesTs = `// GENERATED FILE — do not edit by hand.
 // Produced by apps/dox/scripts/build-reference.ts (\`nx run dox:generate\`).
 import type { LivePlaygroundTemplate } from "../../lib/playground-spec";

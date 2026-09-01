@@ -68,19 +68,14 @@ const argsString =
   import { parseCallArgs } from "../lib/playground-parsers";
   import { evaluateArg, renderResult, sentinelFor } from "../lib/playground-client";
 
-  async function run(): Promise<void> {
-    const container = document.querySelector(".gmt-live-playground");
-    if (!container) return;
-    const textarea = container.querySelector(".gmt-live-playground-textarea") as HTMLTextAreaElement | null;
-    const outputEl = container.querySelector(".gmt-live-playground-result") as HTMLElement | null;
-    if (!textarea || !outputEl) return;
-
-    const modKey = textarea.dataset.module;
-    const fnName = textarea.dataset.fn;
-    const returnType = textarea.dataset.returnType;
-    const allowEmptyArray = outputEl.dataset.allowEmptyArray === "true";
-    if (!modKey || !fnName || !returnType) return;
-
+  async function runFor(
+    textarea: HTMLTextAreaElement,
+    outputEl: HTMLElement,
+    modKey: string,
+    fnName: string,
+    returnType: string,
+    allowEmptyArray: boolean,
+  ): Promise<void> {
     renderResult(outputEl, "", false);
 
     try {
@@ -106,13 +101,24 @@ const argsString =
   }
 
   if (typeof window !== "undefined") {
-    const container = document.querySelector(".gmt-live-playground");
-    if (container) {
+    document.querySelectorAll(".gmt-live-playground").forEach((container) => {
+      const textarea = container.querySelector(".gmt-live-playground-textarea") as HTMLTextAreaElement | null;
+      const outputEl = container.querySelector(".gmt-live-playground-result") as HTMLElement | null;
+      if (!textarea || !outputEl) return;
+
+      const modKey = textarea.dataset.module;
+      const fnName = textarea.dataset.fn;
+      const returnType = textarea.dataset.returnType;
+      const allowEmptyArray = outputEl.dataset.allowEmptyArray === "true";
+      if (!modKey || !fnName || !returnType) return;
+
       const runBtn = container.querySelector(".gmt-live-playground-run");
       if (runBtn) {
-        runBtn.addEventListener("click", run);
+        runBtn.addEventListener("click", () =>
+          runFor(textarea, outputEl, modKey, fnName, returnType, allowEmptyArray),
+        );
       }
-      run();
-    }
+      runFor(textarea, outputEl, modKey, fnName, returnType, allowEmptyArray);
+    });
   }
 </script>
