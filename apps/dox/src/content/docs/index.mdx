@@ -21,6 +21,8 @@ hero:
 import { Card, CardGrid } from "@astrojs/starlight/components";
 
 import { gmtVersion } from "~/generated/versions";
+import { testExecutionSvg } from "../../../scripts/render-charts";
+import ChartContainer from "../../components/ChartContainer.astro";
 
 Current release: **v{gmtVersion}**
 
@@ -62,6 +64,8 @@ to the right GMT namespace (plain, zoned, unix, utc, regex). Then generate code 
 GMT's string-in/string-out API, never `new Date()`.
 ```
 
+## Key features
+
 <CardGrid stagger>
   <Card title="100% Temporal, Temporal-first" icon="star">
     Built directly on the TC39 `Temporal` standard, not a homegrown date/time type system.
@@ -91,5 +95,11 @@ GMT's string-in/string-out API, never `new Date()`.
   >
     Temporal throws `RangeError` / `TypeError` on invalid data. GMT validates,
     normalizes, and prevents crashes, so your app stays robust
-  </Card>
+  </Card  >
 </CardGrid>
+
+<ChartContainer
+  svg={testExecutionSvg}
+  title="CI test execution volume"
+  caption="334,020 GMT executions (16,701 tests × 17 locales × 10 timezones × 2 Node) vs. competitors' combined 20,190."
+/>

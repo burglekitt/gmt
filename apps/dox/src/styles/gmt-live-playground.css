@@ -36,9 +36,9 @@
 .gmt-live-playground-call {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: var(--gmt-space-2);
   margin-top: 0;
-  /* padding: var(--gmt-space-1) var(--gmt-space-3); */
+  padding: var(--gmt-space-2) var(--gmt-space-3);
   background: var(--gmt-fill-subtle);
   border: 1px solid var(--gmt-border);
   border-radius: var(--gmt-radius-sm);
@@ -55,6 +55,90 @@
 .gmt-live-playground-call:focus-within {
   background: var(--gmt-fill-2);
   border-color: var(--gmt-border-strong);
+}
+
+/* ---------------------------------------------------------------------------
+ * Typed input layout
+ * --------------------------------------------------------------------------- */
+
+.gmt-live-playground-params {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gmt-space-2);
+}
+
+.gmt-live-playground-input-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gmt-space-1);
+}
+
+.gmt-live-playground-input-label {
+  font-size: 0.7rem;
+  letter-spacing: var(--gmt-tracking-wide);
+  text-transform: uppercase;
+  color: var(--gmt-ice-dim);
+  font-weight: 500;
+}
+
+.gmt-live-playground-input,
+.gmt-live-playground-select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--gmt-space-1) var(--gmt-space-2);
+  font-family: var(--gmt-font-mono);
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: var(--gmt-ice);
+  background: var(--gmt-fill);
+  border: 1px solid var(--gmt-border);
+  border-radius: var(--gmt-radius-sm);
+  outline: none;
+  transition:
+    border-color var(--gmt-duration-fast) var(--gmt-easing),
+    background var(--gmt-duration-fast) var(--gmt-easing);
+}
+
+.gmt-live-playground-input:hover,
+.gmt-live-playground-select:hover {
+  border-color: var(--gmt-border-strong);
+}
+
+.gmt-live-playground-input:focus,
+.gmt-live-playground-select:focus {
+  border-color: var(--gmt-cyan);
+  background: var(--gmt-fill-2);
+}
+
+.gmt-live-playground-units-pair {
+  display: flex;
+  align-items: center;
+  gap: var(--gmt-space-2);
+}
+
+.gmt-live-playground-units-unit {
+  width: auto;
+  min-width: 8rem;
+}
+
+.gmt-live-playground-units-amount {
+  width: 5rem;
+}
+
+.gmt-live-playground-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gmt-space-2);
+  padding-top: var(--gmt-space-2);
+  border-top: 1px solid var(--gmt-border);
+}
+
+.gmt-live-playground-options-label {
+  font-size: 0.65rem;
+  letter-spacing: var(--gmt-tracking-wide);
+  text-transform: uppercase;
+  color: var(--gmt-ice-dim);
+  font-weight: 600;
 }
 
 .gmt-live-playground-top-row {

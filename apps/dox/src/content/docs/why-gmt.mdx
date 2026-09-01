@@ -1,0 +1,68 @@
+---
+title: "Why GMT?"
+description: "Data-driven comparison of GMT against legacy date libraries — test volume, API surface, locale coverage, and testing rigor."
+template: splash
+---
+
+import {
+  namespaceDistributionSvg,
+  testExecutionSvg,
+} from "../../../scripts/render-charts";
+import ChartContainer from "../../components/ChartContainer.astro";
+import TimezoneMap from "../../components/TimezoneMap.astro";
+
+`@northguild/gmt` is not the latest entry in a crowded field — it is a
+fundamentally different bet about what a date/time library should guarantee.
+The pages below make that concrete with data drawn from the library itself.
+
+## CI test execution volume
+
+The most direct measure of testing rigor is how many times the library is
+actually executed in CI. GMT runs its full suite — every function, every
+locale, every timezone — across 17 locales, 10 timezones, and 2 Node
+versions on every PR.
+
+<ChartContainer
+  svg={testExecutionSvg}
+  title="CI executions per library"
+  caption="GMT: 334,020 executions (16,701 tests × 17 locales × 10 timezones × 2 Node). Competitors: 386–11,703 combined."
+/>
+
+That is not a marginal difference. It is three orders of magnitude more
+execution against a surface area that is itself larger.
+
+## API surface by namespace
+
+GMT exposes 504 public functions across six namespaces — `plain`, `zoned`,
+`unix`, `utc`, `duration`, and `regex` — each generated from the same
+TypeScript source and verified by the same test suite.
+
+<ChartContainer
+  svg={namespaceDistributionSvg}
+  title="Public functions by namespace"
+  caption="504 functions total. Every namespace shares the same implementation contract: ISO 8601 strings in, typed values out, no Date object."
+/>
+
+## Live timezone coverage
+
+<TimezoneMap
+  title="CI timezones under test"
+  caption="GMT tests against all 10 timezones across both Node versions. Hover a dot for the current local time in ISO 8601. Times refresh every second via Temporal."
+/>
+
+## What this means
+
+| Dimension             | GMT                            | Legacy libraries    |
+| --------------------- | ------------------------------ | ------------------- |
+| **CI executions**     | 334,020                        | 386 – 11,703        |
+| **Locales tested**    | 17 (full ICU)                  | None                |
+| **Timezones tested**  | 10 × 2 Node                    | None / partial      |
+| **Node versions**     | 22, 24                         | Single LTS          |
+| **Public functions**  | 504                            | 75 – 223            |
+| **Sentinel contract** | `""` / `null` / `false` / `[]` | Throws `RangeError` |
+
+The table is the point. GMT does not add a few convenience methods to an
+existing `Date` wrapper — it replaces the type system entirely with Temporal,
+then rebuilds the ergonomic surface on top of that guarantee. The testing
+volume exists because the contract is non-negotiable: every function, every
+locale, every timezone, every Node version, every PR.

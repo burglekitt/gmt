@@ -477,7 +477,15 @@ function buildLivePlaygroundTemplate(
     doc.playgroundSpec?.allowEmptyArray ??
     (returnType === "array" &&
       doc.examples.some((e) => e.result.trim() === "[]"));
-  return { module, fn: doc.name, template, returnType, allowEmptyArray };
+  return {
+    module,
+    fn: doc.name,
+    template,
+    returnType,
+    allowEmptyArray,
+    params: doc.playgroundSpec?.params,
+    options: doc.playgroundSpec?.options,
+  };
 }
 
 // ---------------------------------------------------------------------------

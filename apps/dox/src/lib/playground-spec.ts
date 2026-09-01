@@ -12,7 +12,13 @@
  * `.kilo/plans/1788099109759-auto-generate-playground-specs.md`.
  */
 
-export type ParamType = "string" | "number" | "boolean" | "enum" | "units" | "array";
+export type ParamType =
+  | "string"
+  | "number"
+  | "boolean"
+  | "enum"
+  | "units"
+  | "array";
 
 export interface ParamSpec {
   name: string;
@@ -30,6 +36,10 @@ export interface LivePlaygroundTemplate {
   template: string;
   returnType: "string" | "number" | "boolean" | "array";
   allowEmptyArray?: boolean;
+  /** Positional parameters rendered as typed inputs. */
+  params?: ParamSpec[];
+  /** Option-object properties rendered inline after positional params. */
+  options?: ParamSpec[];
 }
 
 export { LIVE_PLAYGROUND_TEMPLATES } from "~/generated/reference/live-playground-templates";
