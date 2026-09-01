@@ -192,3 +192,48 @@
     transition: none;
   }
 }
+
+/* "Try it" trigger button — hydrates playground on click */
+.gmt-playground-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gmt-space-1);
+  margin-top: var(--gmt-space-2);
+  padding: var(--gmt-space-1) var(--gmt-space-3);
+  font-family: var(--gmt-font-mono);
+  font-size: 0.75rem;
+  letter-spacing: var(--gmt-tracking-wide);
+  text-transform: uppercase;
+  color: var(--gmt-cyan);
+  background: transparent;
+  border: 1px solid var(--gmt-border);
+  border-radius: var(--gmt-radius-sm);
+  corner-shape: bevel;
+  cursor: pointer;
+  transition:
+    background var(--gmt-duration-fast) var(--gmt-easing),
+    border-color var(--gmt-duration-fast) var(--gmt-easing);
+}
+
+.gmt-playground-trigger:hover {
+  background: var(--gmt-fill-subtle);
+  border-color: var(--gmt-cyan);
+}
+
+.gmt-playground-trigger:focus {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--gmt-void),
+    0 0 0 4px var(--gmt-cyan);
+}
+
+.gmt-playground-trigger:disabled,
+.gmt-playground-trigger--mounted {
+  opacity: 0.4;
+  cursor: default;
+  pointer-events: none;
+}
+
+.gmt-playground-slot {
+  margin-top: var(--gmt-space-2);
+}

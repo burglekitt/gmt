@@ -1,43 +1,74 @@
-Plan: DOX-B2a-prereq — Param-Input Playground (replace textarea with typed controls)
-TL;DR: The generator already classifies every param into { type, value, options, unitValue } but throws that data away — LIVE_PLAYGROUND_TEMPLATES only stores a raw call-string template. We extend the generated spec to include the full ParamSpec[], then render typed inputs (selects, toggles, number fields) instead of a textarea. On "Run", we serialize inputs back to a call string and execute as before.
+# Plan: DOX-B2a — Auto-embed playgrounds into every generated @example
 
-Steps
+**TL;DR:** Every `@example` in generated MDX renders as a static code block (for
+no-JS fallback and Pagefind indexing) plus a "Try it" button. Clicking the button
+mounts a live playground textarea seeded with that example's own call string.
+Zero islands hydrate on page load — the GMT polyfill is only imported when a
+reader explicitly asks for a playground.
 
-Extend LivePlaygroundTemplate type — add params: ParamSpec[] and options?: ParamSpec[] to the interface in playground-spec.ts
-Update generator to attach specs — modify buildLivePlaygroundTemplate() in build-reference.ts to pass doc.playgroundSpec?.params and doc.playgroundSpec?.options into the generated template record
-Refactor PlaygroundLive.astro markup — replace the single <textarea> with a param-by-param input layout:
-string → <input type="text"> (pre-filled with seed value)
-number → <input type="number">
-boolean → <select> with true/false options
-enum → <select> with seeded default from options[]
-units → <select> for unit name + <input type="number"> for amount (renders as { unit: amount })
-array → <input type="text"> (comma-separated, pre-filled)
-Options rendered inline after positional params, using the same type mapping
-Add client-side serialization — in the <script> block, replace textarea.value with a function that reads all input values and reconstructs the call string: fn(arg1, arg2, { opt1: val1, opt2: val2 }). This replaces parseCallArgs(textarea.value) with serializeInputs(params, options).
-Add CSS — new styles in gmt-live-playground.css for the input fields, labels, and units-pair layout. Keep existing .gmt-live-playground-\* classes; add .gmt-live-playground-input, .gmt-live-playground-units-pair, .gmt-live-playground-option-row.
-Update PlaygroundLive.test.ts — adapt tests for the new input-based DOM structure (inputs instead of textarea).
-Relevant files
+## Steps
 
-playground-spec.ts — extend LivePlaygroundTemplate with params/options fields
-build-reference.ts — buildLivePlaygroundTemplate() (line ~450) to attach doc.playgroundSpec?.params and doc.playgroundSpec?.options; the spec is already built at line 699
-PlaygroundLive.astro — replace textarea markup with param-by-param inputs; replace textarea.value serialization with input-to-call-string logic
-playground-parsers.ts — add serializeInputs(params, options) function (pure string output, zero deps)
-gmt-live-playground.css — new styles for input fields, option rows, units pairs
-PlaygroundLive.test.ts — adapt DOM queries from textarea to inputs
-Verification
+1. Generate per-example templates — `build-reference.ts` emits one template per
+   `@example` tag with key `fnName-example-{i}`, seeded with that example's
+   `call` string. Also emits a function-level key `fnName` (pointing to the
+   first example) for use in `Scenario.astro` and `Mistake.astro`. 1871
+   templates generated across all functions.
+2. Render button + slot — `renderFn()` outputs a `<button data-gmt-playground-trigger>`
+   followed by an empty `<div data-gmt-playground-target>` after each static code
+   block. No Astro island is mounted.
+3. Client initialization — `playground-init.ts` (a plain `.ts` module imported
+   as a side effect in generated MDX) assigns `window.__gmtPlaygroundMount` and
+   sets up a single delegated click handler on `document`. When a trigger button
+   is clicked, it calls `mountPlayground(specId, target)` which builds the
+   playground DOM and initializes it.
+4. Component restored — `PlaygroundLive.astro` is restored as a renderable
+   component (used by `Mistake.astro` and `Scenario.astro`) that renders the
+   playground inline on mount.
+5. CSS — `.gmt-playground-trigger` and `.gmt-playground-slot` styles added to
+   `gmt-live-playground.css`.
 
-pnpm nx run dox:generate — verify generated templates include params[] with correct types (spot-check a function with enum params like durationAs, and one with units like addDate)
-pnpm nx run dox:dev — open a reference page, confirm inputs render with seeded values, edit values, click Run, confirm output updates correctly
-Test edge cases: function with no options (e.g., getDay), function with only options (rare), function with units param, function with array param
-pnpm nx run-many -t lint test typecheck build — all green
-Decisions
+## Relevant files
 
-Keep the textarea as a fallback? No. The textarea was a POC. Typed inputs are strictly better for every param type except array (where a text input is still needed). We replace entirely.
-Web component vs Astro island? Astro island. The param→input mapping works fine in the existing <script> block. A custom element adds shadow DOM complexity for no real gain.
-Backward compat with old generated templates? The generator always regenerates live-playground-templates.ts on source change, so old templates won't persist. But we should handle params being undefined gracefully in the component (fall back to textarea mode) for safety during transition.
-Scope: This is DOX-B2a's prerequisite. B2b/B2c/B2d are separate purpose-built widgets that don't use this component.
-Further Considerations
+- `apps/dox/scripts/build-reference.ts` — `renderFn()` emits button + slot;
+  template collection loop emits per-example + function-level keys
+- `apps/dox/src/lib/playground-init.ts` — client-side init (mount function +
+  click delegation)
+- `apps/dox/src/components/PlaygroundLive.astro` — renderable component for
+  Mistake/Scenario pages
+- `apps/dox/src/lib/playground-spec.ts` — `LivePlaygroundTemplate` type
+- `apps/dox/src/lib/playground-parsers.ts` — `splitTopLevel`, `parseCallArgs`
+- `apps/dox/src/lib/playground-client.ts` — `evaluateArg`, `renderResult`, `sentinelFor`
+- `apps/dox/src/styles/gmt-live-playground.css` — playground + trigger button styles
 
-Array inputs — comma-separated text is the best we can do without a custom multi-value widget. Should we add a "+" button to append values? Probably out of scope for v1; keep it simple.
-Keyboard accessibility — all <input>, <select> elements are naturally keyboard-operable. The Run button already has focus styles. No additional work needed beyond standard HTML semantics.
-What about functions with complex option objects? Some options have nested objects (e.g., { roundingMode: { maximumSignificantDigits: 3 } }). These are rare in GMT — most options are flat. If we encounter nested options, we'd need a sub-object renderer, but that's a future enhancement, not v1.
+## Verification
+
+- `pnpm nx run dox:generate` — verify 1871 templates generated
+- `pnpm nx run dox:dev` — open a reference page (e.g. `/reference/plain/calculate/addBusinessDays`):
+  - Static code blocks visible on load
+  - No playground islands in DOM initially (no textarea/output)
+  - Click "Try it" → playground mounts with correct seed value, runs, shows output
+  - Click second "Try it" → mounts independently
+  - Edit textarea, click Run → output updates
+  - Invalid input → amber "NO SIGNAL"
+- `pnpm nx run-many -t lint test typecheck build` — all green
+
+## Decisions
+
+- **Textarea, not typed inputs.** The generator classifies every param into
+  `{ type, value, options, unitValue }` but a per-param widget system (enum selects,
+  units selects, array inputs) adds significant complexity for marginal gain. A
+  single `<textarea>` where the user types any JS expression calling the real library
+  is simpler, more flexible, and already handles all param types including arrays.
+- **Hydrate on interaction.** Each example renders a "Try it" button instead of
+  auto-mounting an island. The `@js-temporal/polyfill` (~3MB) is only imported when
+  a reader explicitly asks for a playground. This keeps reference pages lightweight
+  — a function with five examples does not load five copies of the polyfill on page
+  load.
+- **Static code blocks remain.** Every `@example` renders as a visible code block
+  for no-JS fallback and Pagefind indexing. The playground is an enhancement, not a
+  replacement.
+- **Plain `.ts` for init, `.astro` for component.** The click-delegation script
+  lives in `playground-init.ts` (not `.astro`) so it can be imported as a side
+  effect without pulling the Astro compiler into the dependency graph. The
+  `PlaygroundLive.astro` component is kept for pages that need an inline playground
+  (Mistake, Scenario).

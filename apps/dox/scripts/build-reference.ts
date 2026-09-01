@@ -892,7 +892,6 @@ function buildUsedBy(docs: Doc[]): Map<string, string[]> {
 
 function renderFn(doc: FnDoc, docs: Doc[]): string {
   const slug = pageSlug(doc.namespace, doc.module, doc.name);
-  const ip = ROOT;
   const src = `${GH_BASE}/${doc.sourcePath}`;
 
   const lines: string[] = [];
@@ -902,7 +901,7 @@ function renderFn(doc: FnDoc, docs: Doc[]): string {
   lines.push(`slug: ${JSON.stringify(slug)}`);
   lines.push(`---`);
   lines.push("");
-  lines.push(`import PlaygroundLive from "~/components/PlaygroundLive.astro";`);
+  lines.push(`import "~/lib/playground-init.ts";`);
   lines.push("");
 
   lines.push(`## Signature`);
@@ -972,24 +971,24 @@ function renderFn(doc: FnDoc, docs: Doc[]): string {
   if (doc.examples.length) {
     lines.push(`## Examples`);
     lines.push("");
-    lines.push("```ts");
-    lines.push(`import { ${doc.name} } from "${ip}";`);
-    lines.push("");
-    for (const ex of doc.examples) {
+    for (let i = 0; i < doc.examples.length; i++) {
+      const ex = doc.examples[i];
+      lines.push("```ts");
       if (ex.result.includes("\n")) {
         lines.push(ex.call);
         lines.push(ex.result);
       } else {
         lines.push(ex.call + (ex.result ? ` // ${ex.result}` : ""));
       }
+      lines.push("```");
+      lines.push("");
+      const specId = `${doc.name}-example-${i}`;
+      lines.push(
+        `<button data-gmt-playground-trigger data-gmt-playground-spec-id=${JSON.stringify(specId)} class="gmt-playground-trigger">Try it</button>`,
+      );
+      lines.push(`<div data-gmt-playground-target class="gmt-playground-slot"></div>`);
+      lines.push("");
     }
-    lines.push("```");
-    lines.push("");
-    lines.push(`## Playground`);
-    lines.push("");
-    const specId = JSON.stringify(`${doc.name}-example-0`);
-    lines.push(`<PlaygroundLive specId=${specId} />`);
-    lines.push("");
   }
 
   lines.push(`## Source`);
@@ -1405,6 +1404,17 @@ export const corpus: CorpusEntry[] = data as CorpusEntry[];
   // per function for functions without examples.
   const templatesRecord: Record<string, LivePlaygroundTemplate> = {};
   for (const d of dedupedDocs) {
+    if (d.kind === "function" && d.livePlaygroundTemplate) {
+      // Function-level entry: for functions with examples, use the first
+      // example's call string; for functions without, use the synthesized
+      // template. This supports <PlaygroundLive specId="fnName" /> usage
+      // in Scenario.astro and Mistake.astro.
+      const base = d.livePlaygroundTemplate;
+      const firstExample = d.examples[0];
+      templatesRecord[d.name] = firstExample
+        ? { ...base, template: firstExample.call }
+        : base;
+    }
     if (d.kind === "function" && d.examples.length > 0) {
       const base = d.livePlaygroundTemplate;
       if (!base) continue;
@@ -1414,8 +1424,6 @@ export const corpus: CorpusEntry[] = data as CorpusEntry[];
           template: ex.call,
         };
       });
-    } else if (d.kind === "function" && d.livePlaygroundTemplate) {
-      templatesRecord[d.name] = d.livePlaygroundTemplate;
     }
   }
   const templatesTs = `// GENERATED FILE — do not edit by hand.
