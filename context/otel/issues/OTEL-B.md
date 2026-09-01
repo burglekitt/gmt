@@ -1,6 +1,6 @@
-# OTEL-B — Duration conversion
+# OTEL-B — Span timezone helpers
 
-**Audited 2026-09-01.** All functions map to existing gmt APIs. No invented types. See [overview.md](../overview.md) for the full corrected spec.
+**Audited 2026-09-01.** All functions wrap OTel's `Span` API using gmt-time for timestamp handling. No invented types. See [overview.md](../overview.md) for the full corrected spec.
 
 Each story below is one logical unit; its sub-stories are nested under it and ordered as
 they should be built. The issue stays open until its last sub-story lands.
@@ -9,80 +9,88 @@ they should be built. The issue stays open until its last sub-story lands.
 
 - `pnpm nx run-many -t lint test typecheck build` stays green, **including the 20-cell
   GMT timezone matrix**. `packages/gmt-otel` must not perturb `packages/gmt`.
-- **Changesets required.** Unlike `apps/dox`, `@northguild/gmt-otel` is published to npm,
-  so every story that modifies source needs a `.changeset/*.md` entry.
+- **Changesets required.** `@northguild/gmt-otel` is published to npm, so every story
+  that modifies source needs a `.changeset/*.md` entry.
 - No `Date` object anywhere. All inputs are ISO 8601 strings; outputs are strings, numbers,
   booleans, or arrays.
 - Wrap all Temporal calls in `try-catch`. Bad input returns sentinels, never throws.
+- OTel API is an optional peer dependency — span functions check for it at runtime and
+  throw a clear `TypeError` if not found.
 
 ---
 
-### OTEL-B1 — Duration conversion (`toOtelDuration` + `fromOtelDuration`)
+### OTEL-B1 — Span timezone helpers (`setSpanTimezone` + `getSpanTimezone` + `withTimezoneSpan`)
 
 **Title:**
 
 ```
-OTEL-B1 Implement toOtelDuration and fromOtelDuration
+OTEL-B1 Implement span timezone helpers: setSpanTimezone, getSpanTimezone, withTimezoneSpan
 ```
 
 **Description:**
 
 ```
-Part of the gmt-otel epic — see `context/otel/index.md`, Phase 2.
-Depends on OTEL-A1 (package skeleton).
+Part of the gmt-time + gmt-otel epic — see `context/otel/overview.md`, Phase 4.
+Depends on OTEL-A2 (re-export gmt-time) and GMTIME-A2 (timestamp conversion).
 
 ## Gap
-OTel stores durations as nanosecond counts (number). gmt works with ISO 8601 duration
-strings (e.g., `"PT1H30M"`). We need to bridge that gap.
+OTel spans have no concept of timezone — they store absolute nanosecond timestamps.
+We need helpers to attach IANA timezone metadata to spans so downstream tools can display
+span times in the user's local timezone.
 
 ## Scope
-- `src/durations.ts`:
-  - `toOtelDuration(durationString: string): number` — converts a gmt-style ISO 8601
-    duration string (e.g., `"PT1H30M"`, `"P1DT2H"`) to nanoseconds as a number.
-    Uses `@northguild/gmt/duration/calculate` internally: parse the duration string,
-    then extract nanoseconds via Temporal.Duration's internal arithmetic.
-  - `fromOtelDuration(nanoseconds: number): string` — converts OTel nanoseconds back to
-    an ISO 8601 duration string.
-- Both functions throw `RangeError` on invalid input.
+- `src/span-timezone.ts`:
+  - `setSpanTimezone(span: Span, timezone: string): void` — sets the `gmt.timezone`
+    attribute on an OTel span. Validates timezone via `@northguild/gmt/zoned/validate`
+    (`isValidTimeZone`) and throws `RangeError` if invalid.
+  - `getSpanTimezone(span: Span): string | undefined` — reads the `gmt.timezone`
+    attribute from a span. Returns `undefined` if not set.
+  - `withTimezoneSpan(tracer: Tracer, name: string, options?: { timezone?: string, attributes?: SpanAttributes }): Span` —
+    convenience wrapper around `tracer.startSpan()` + `setSpanTimezone`. Starts a span and
+    immediately sets its timezone attribute if provided.
+- All functions check for `@opentelemetry/api` at runtime and throw a clear `TypeError`
+  if not found (OTel is an optional peer dependency).
 
-## What gmt provides (do not re-implement)
-- `duration/parse` — parses ISO 8601 duration strings into Temporal.Duration objects.
-- `duration/format` — serializes Temporal.Duration back to ISO 8601 strings.
-- `duration/calculate` — extracts numeric values from durations in various units.
+## What gmt-time provides (do not re-implement)
+- Timestamp conversion from gmt-time: `toNanoseconds`, `fromNanoseconds` for any timestamp-related operations.
+- `zoned/validate` — `isValidTimeZone(tz)` validates IANA timezone strings.
 
 ## Verification
-- Round-trip: `fromOtelDuration(toOtelDuration(dur)) === dur` for valid inputs
-- Invalid input throws `RangeError`
-- Edge cases: zero duration, sub-millisecond precision, multi-day durations
+- `setSpanTimezone` + `getSpanTimezone` round-trip: setting then reading returns the same value
+- Invalid timezone throws `RangeError`
+- `withTimezoneSpan` creates a span with the timezone attribute set
+- Missing OTel API throws clear `TypeError` at runtime (not build time)
 ```
 
 ---
 
-### OTEL-B2 — Duration conversion tests
+### OTEL-B2 — Span timezone helper tests
 
 **Title:**
 
 ```
-OTEL-B2 Add comprehensive tests for duration conversion
+OTEL-B2 Add comprehensive tests for span timezone helpers
 ```
 
 **Description:**
 
 ```
-Part of the gmt-otel epic — see `context/otel/index.md`, Phase 2.
-Depends on OTEL-B1 (duration implementation).
+Part of the gmt-time + gmt-otel epic — see `context/otel/overview.md`, Phase 4.
+Depends on OTEL-B1 (span implementation).
 
 ## Gap
 No tests exist yet for any gmt-otel function.
 
 ## Scope
-- `test/durations.test.ts`:
-  - Round-trip tests: `fromOtelDuration(toOtelDuration(dur)) === dur` for valid inputs
-  - Invalid input throws `RangeError` (not sentinels — gmt-otel is a thin bridge)
-  - Edge cases: zero duration, sub-millisecond precision, multi-day durations
-  - ISO 8601 format variants: `"PT1H"`, `"P1DT2H"`, `"PT30M"`, etc.
+- `test/span-timezone.test.ts`:
+  - `setSpanTimezone` + `getSpanTimezone` round-trip: setting then reading returns the same value
+  - Invalid timezone throws `RangeError`
+  - `withTimezoneSpan` creates a span with the timezone attribute set
+  - Missing OTel API throws clear `TypeError` at runtime (not build time)
+  - Timezone variants: UTC, offset timezones, IANA timezones with DST
+  - No OTel installed: functions throw `TypeError` with clear message
 
 ## Verification
 - All tests pass
-- `pnpm nx run gmt-otel:test` covers all exported duration functions
+- `pnpm nx run gmt-otel:test` covers all exported span functions
 ```

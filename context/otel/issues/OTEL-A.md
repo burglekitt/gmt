@@ -1,6 +1,6 @@
-# OTEL-A — Package skeleton + timestamp conversion
+# OTEL-A — Package skeleton + re-export gmt-time
 
-**Audited 2026-09-01.** All functions map to existing gmt APIs. No `GMTDate`, no invented types, no reimplementation of date logic. See [overview.md](../overview.md) for the full corrected spec.
+**Audited 2026-09-01.** gmt-otel is a thin OTel layer on top of gmt-time. All timestamp/duration functions are re-exported from gmt-time. See [overview.md](../overview.md) for the full corrected spec.
 
 Each story below is one logical unit; its sub-stories are nested under it and ordered as
 they should be built. The issue stays open until its last sub-story lands.
@@ -9,13 +9,13 @@ they should be built. The issue stays open until its last sub-story lands.
 
 - `pnpm nx run-many -t lint test typecheck build` stays green, **including the 20-cell
   GMT timezone matrix**. `packages/gmt-otel` must not perturb `packages/gmt`.
-- **Changesets required.** Unlike `apps/dox`, `@northguild/gmt-otel` is published to npm,
-  so every story that modifies source needs a `.changeset/*.md` entry.
+- **Changesets required.** `@northguild/gmt-otel` is published to npm, so every story
+  that modifies source needs a `.changeset/*.md` entry.
 - No `Date` object anywhere. All inputs are ISO 8601 strings; outputs are strings, numbers,
   booleans, or arrays.
 - Wrap all Temporal calls in `try-catch`. Bad input returns sentinels, never throws.
-- Full IANA timezone coverage for timezone-aware functions (not locale matrix — gmt-otel
-  output is not locale-dependent).
+- OTel API is an optional peer dependency — span/baggage functions check for it at runtime
+  and throw a clear `TypeError` if not found.
 
 ---
 
@@ -30,16 +30,17 @@ OTEL-A1 Create packages/gmt-otel workspace package with pnpm/nx/oxlint wiring
 **Description:**
 
 ```
-Part of the gmt-otel epic — see `context/otel/index.md`, Phase 1.
+Part of the gmt-time + gmt-otel epic — see `context/otel/overview.md`, Phase 3.
+Depends on GMTIME-A1 (gmt-time package skeleton).
 
 ## Gap
 `packages/gmt-otel` does not exist. We need a workspace package that depends on
-`@northguild/gmt` and optionally peers on `@opentelemetry/api`.
+`@northguild/gmt-time` and optionally peers on `@opentelemetry/api`.
 
 ## Scope
 - Create `packages/gmt-otel` as `@northguild/gmt-otel` (`"type": "module"`).
 - `package.json`:
-  - `"dependencies": { "@northguild/gmt": "workspace:*" }`
+  - `"dependencies": { "@northguild/gmt-time": "workspace:*" }`
   - `"peerDependencies": { "@opentelemetry/api": "^1.9 || ^1.10" }`
   - `"peerDependenciesMeta": { "@opentelemetry/api": { "optional": true } }`
   - `"devDependencies"` includes `@opentelemetry/api` (for type checking/tests),
@@ -50,7 +51,7 @@ Part of the gmt-otel epic — see `context/otel/index.md`, Phase 1.
 - `vitest.config.ts` following the repo pattern.
 - `project.json` — **required.** Nx's `@nx/js/typescript` plugin infers build/typecheck
   from `tsconfig.build.json`. Declare `build`, `test`, `typecheck`, and `lint` with
-  `dependsOn: ["^build"]` so `@northguild/gmt` builds first.
+  `dependsOn: ["^build"]` so `@northguild/gmt-time` builds first.
 - Add `packages/gmt-otel/dist` to `.gitignore`.
 - Update root `pnpm-workspace.yaml` — add `packages/gmt-otel` if not already in the
   `packages/*` glob (it should be, but verify).
@@ -77,113 +78,41 @@ scripts don't need updating.
 
 ---
 
-### OTEL-A2 — Timestamp conversion (`toOtelTimestamp` + `fromOtelTimestamp`)
+### OTEL-A2 — Re-export all of gmt-time
 
 **Title:**
 
 ```
-OTEL-A2 Implement toOtelTimestamp and fromOtelTimestamp
+OTEL-A2 Re-export all of @northguild/gmt-time from @northguild/gmt-otel
 ```
 
 **Description:**
 
 ```
-Part of the gmt-otel epic — see `context/otel/index.md`, Phase 1.
-Depends on OTEL-A1 (package skeleton).
+Part of the gmt-time + gmt-otel epic — see `context/otel/overview.md`, Phase 3.
+Depends on OTEL-A1 (package skeleton) and GMTIME-A2 (timestamp conversion).
 
 ## Gap
-OTel stores timestamps as `[seconds, nanoseconds]` tuples. gmt works with ISO 8601 strings.
-We need to bridge that gap.
+gmt-otel is a thin OTel layer on top of gmt-time. Consumers who use gmt-otel should get
+all of gmt-time's functions automatically — they shouldn't need to install both packages.
 
 ## Scope
-- `src/timestamps.ts`:
-  - `toOtelTimestamp(isoString: string): bigint` — converts any ISO 8601 string (plain,
-    zoned, or UTC) to nanoseconds since Unix epoch. Uses `@northguild/gmt/zoned/convert`
-    internally: parse the input via `zoned/fromISO` (which handles all three formats),
-    then convert to nanoseconds using Temporal's internal arithmetic.
-  - `fromOtelTimestamp(nanoseconds: bigint, timezone?: string): string` — converts OTel
-    nanosecond timestamp to an ISO string. If `timezone` is provided, the result is in
-    that timezone; otherwise it's UTC.
-- Both functions throw `RangeError` on invalid input — gmt-otel does not use sentinels
-  for its own API (it's a thin bridge, not a date library).
+- `src/index.ts`:
+  - `export * from '@northguild/gmt-time';` — re-export all timestamp/duration functions
+  - This means consumers get `toNanoseconds`, `fromNanoseconds`, `toNanosecondTuple`,
+    `fromNanosecondTuple`, `toDurationNanoseconds`, `fromDurationNanoseconds` automatically
+  - No duplication — gmt-otel is a thin wrapper, not a reimplementation
 
-## What gmt provides (do not re-implement)
-- `zoned/fromISO` — parses ISO 8601 strings into Temporal.ZonedDateTime (handles plain,
-  zoned, and UTC inputs). Returns sentinel `""` on invalid input.
-- `utc/fromISO` — parses UTC datetime strings.
-- `plain/toISO` / `zoned/toISO` / `utc/toISO` — serialize back to ISO strings.
+## What gmt-time provides (do not re-implement)
+- `toNanoseconds(isoString: string): bigint` — ISO string to nanoseconds
+- `fromNanoseconds(nanoseconds: bigint, timezone?: string): string` — nanoseconds to ISO string
+- `toNanosecondTuple(isoString: string): [number, number]` — ISO string to tuple
+- `fromNanosecondTuple(tuple: [number, number], timezone?: string): string` — tuple to ISO string
+- `toDurationNanoseconds(durationString: string): number` — duration string to nanoseconds
+- `fromDurationNanoseconds(nanoseconds: number): string` — nanoseconds to duration string
 
 ## Verification
-- Round-trip: `fromOtelTimestamp(toOtelTimestamp(iso), tz) === iso` for valid inputs
-- Invalid input throws `RangeError`
-- Edge cases: epoch (0), max safe nanoseconds, DST transition boundaries
-```
-
----
-
-### OTEL-A3 — TimeInput conversion (`toOtelTimeInput` + `fromOtelTimeInput`)
-
-**Title:**
-
-```
-OTEL-A3 Implement toOtelTimeInput and fromOtelTimeInput
-```
-
-**Description:**
-
-```
-Part of the gmt-otel epic — see `context/otel/index.md`, Phase 1.
-Depends on OTEL-A2 (timestamp conversion).
-
-## Gap
-OTel's `hrTime()` API uses `[seconds, nanoseconds]` tuples (called `TimeInput` in OTel's
-type system). This is the same shape as nanosecond timestamps but used in a different
-context — we need explicit wrappers for this pattern.
-
-## Scope
-- `src/timestamps.ts`:
-  - `toOtelTimeInput(isoString: string): [number, number]` — converts ISO string to OTel's
-    `TimeInput` format. Returns a tuple of two numbers (seconds, nanoseconds).
-  - `fromOtelTimeInput(timeInput: [number, number], timezone?: string): string` — converts
-    OTel `TimeInput` tuple back to ISO string.
-- These are thin wrappers around the bigint versions in OTEL-A2 — convert to/from bigint
-  internally.
-
-## Verification
-- Round-trip: `fromOtelTimeInput(toOtelTimeInput(iso), tz) === iso` for valid inputs
-- Invalid input throws `RangeError`
-- Tuple structure is correct: `[seconds, nanoseconds]` where nanoseconds < 1_000_000_000
-```
-
----
-
-### OTEL-A4 — Timestamp conversion tests
-
-**Title:**
-
-```
-OTEL-A4 Add comprehensive tests for timestamp and TimeInput conversion
-```
-
-**Description:**
-
-```
-Part of the gmt-otel epic — see `context/otel/index.md`, Phase 1.
-Depends on OTEL-A2 and OTEL-A3 (timestamp + TimeInput implementation).
-
-## Gap
-No tests exist yet for any gmt-otel function.
-
-## Scope
-- `test/timestamps.test.ts`:
-  - Round-trip tests: `fromOtelTimestamp(toOtelTimestamp(iso)) === iso` for valid inputs
-  - Round-trip tests: `fromOtelTimeInput(toOtelTimeInput(iso)) === iso` for valid inputs
-  - Invalid input throws `RangeError` (not sentinels — gmt-otel is a thin bridge)
-  - Edge cases: epoch (0), max safe nanoseconds, DST transition boundaries
-  - Timezone variants: UTC, offset timezones, IANA timezones with DST
-  - TimeInput tuple validation: nanoseconds < 1_000_000_000
-
-## Verification
-- All tests pass
-- `pnpm nx run gmt-otel:test` covers all exported timestamp functions
+- `import { toNanoseconds } from '@northguild/gmt-otel'` works (re-exported from gmt-time)
+- All re-exported functions behave identically to calling them directly from gmt-time
+- No OTel dependency required for re-exports (gmt-time has zero OTel dependency)
 ```
