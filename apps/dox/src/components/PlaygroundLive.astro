@@ -82,7 +82,7 @@ import { parseCallArgs } from "../lib/playground-parsers";
     returnType: string,
     allowEmptyArray: boolean,
   ): Promise<void> {
-    renderResult(outputEl, "", false);
+    outputEl.classList.add("gmt-playground-loading");
 
     try {
       const mod = await GMT_MODULES[modKey]?.();
@@ -100,6 +100,8 @@ import { parseCallArgs } from "../lib/playground-parsers";
       renderResult(outputEl, result as string, isSentinel);
     } catch {
       renderResult(outputEl, "", true);
+    } finally {
+      outputEl.classList.remove("gmt-playground-loading");
     }
   }
 
