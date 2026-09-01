@@ -95,8 +95,8 @@
   width: 2.5rem;
   padding: 0;
   margin-top: 0;
-  color: var(--gmt-void);
-  background: var(--gmt-cyan);
+  background: var(--gmt-void);
+  color: var(--gmt-cyan);
   border: 1px solid var(--gmt-cyan);
   border-top-right-radius: var(--gmt-radius-md);
   border-bottom-right-radius: var(--gmt-radius-md);
@@ -108,7 +108,7 @@
 }
 
 .gmt-live-playground-run:hover {
-  background: var(--gmt-cyan-bright);
+  color: var(--gmt-cyan-bright);
   border-color: var(--gmt-cyan-bright);
 }
 
@@ -146,6 +146,16 @@
   line-height: 1.4;
   word-break: break-word;
   white-space: pre-wrap;
+}
+
+.gmt-live-playground-result.gmt-playground-loading::before {
+  content: "···";
+  color: var(--gmt-ice-dim);
+  opacity: 0.5;
+}
+
+.gmt-live-playground-result.gmt-playground-loading {
+  color: transparent;
 }
 
 .gmt-playground-live {

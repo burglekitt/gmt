@@ -908,10 +908,6 @@ function renderFn(doc: FnDoc, docs: Doc[]): string {
   lines.push(`## Signature`);
   lines.push("");
   lines.push("```ts");
-  lines.push(`import { ${doc.name} } from "${ip}";`);
-  lines.push("```");
-  lines.push("");
-  lines.push("```ts");
   lines.push(doc.signature);
   lines.push("```");
   lines.push("");
@@ -976,21 +972,24 @@ function renderFn(doc: FnDoc, docs: Doc[]): string {
   if (doc.examples.length) {
     lines.push(`## Examples`);
     lines.push("");
-    for (let i = 0; i < doc.examples.length; i++) {
-      const ex = doc.examples[i];
-      lines.push("```ts");
+    lines.push("```ts");
+    lines.push(`import { ${doc.name} } from "${ip}";`);
+    lines.push("");
+    for (const ex of doc.examples) {
       if (ex.result.includes("\n")) {
         lines.push(ex.call);
         lines.push(ex.result);
       } else {
         lines.push(ex.call + (ex.result ? ` // ${ex.result}` : ""));
       }
-      lines.push("```");
-      lines.push("");
-      const specId = JSON.stringify(`${doc.name}-example-${i}`);
-      lines.push(`<PlaygroundLive specId=${specId} />`);
-      lines.push("");
     }
+    lines.push("```");
+    lines.push("");
+    lines.push(`## Playground`);
+    lines.push("");
+    const specId = JSON.stringify(`${doc.name}-example-0`);
+    lines.push(`<PlaygroundLive specId=${specId} />`);
+    lines.push("");
   }
 
   lines.push(`## Source`);
@@ -1089,16 +1088,16 @@ function renderRegex(doc: RegexDoc): string {
   lines.push(`const ${doc.name}: RegExp = ${doc.pattern};`);
   lines.push("```");
   lines.push("");
-  lines.push("```ts");
-  lines.push(`import { ${doc.name} } from "${ip}";`);
-  lines.push("```");
-  lines.push("");
   if (doc.description) {
     lines.push(escapeMd(doc.description));
     lines.push("");
   }
   if (doc.examples.length) {
     lines.push(`## Examples`);
+    lines.push("");
+    lines.push("```ts");
+    lines.push(`import { ${doc.name} } from "${ip}";`);
+    lines.push("```");
     lines.push("");
     lines.push("```ts");
     for (const ex of doc.examples) {
