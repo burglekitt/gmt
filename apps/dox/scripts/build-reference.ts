@@ -901,8 +901,6 @@ function renderFn(doc: FnDoc, docs: Doc[]): string {
   lines.push(`slug: ${JSON.stringify(slug)}`);
   lines.push(`---`);
   lines.push("");
-  lines.push(`import "~/lib/playground-init.ts";`);
-  lines.push("");
 
   lines.push(`## Signature`);
   lines.push("");
@@ -969,26 +967,24 @@ function renderFn(doc: FnDoc, docs: Doc[]): string {
   }
 
   if (doc.examples.length) {
+    lines.push(`import PlaygroundLive from "~/components/PlaygroundLive.astro";`);
+    lines.push("");
     lines.push(`## Examples`);
     lines.push("");
-    for (let i = 0; i < doc.examples.length; i++) {
-      const ex = doc.examples[i];
-      lines.push("```ts");
-      if (ex.result.includes("\n")) {
-        lines.push(ex.call);
-        lines.push(ex.result);
-      } else {
-        lines.push(ex.call + (ex.result ? ` // ${ex.result}` : ""));
-      }
-      lines.push("```");
-      lines.push("");
-      const specId = `${doc.name}-example-${i}`;
-      lines.push(
-        `<button data-gmt-playground-trigger data-gmt-playground-spec-id=${JSON.stringify(specId)} class="gmt-playground-trigger">Try it</button>`,
-      );
-      lines.push(`<div data-gmt-playground-target class="gmt-playground-slot"></div>`);
-      lines.push("");
+    const ex = doc.examples[0];
+    lines.push("```ts");
+    lines.push(`import { ${doc.name} } from "${ROOT}/${doc.namespace}/${doc.module}";`);
+    lines.push("");
+    if (ex.result.includes("\n")) {
+      lines.push(ex.call);
+      lines.push(ex.result);
+    } else {
+      lines.push(ex.call + (ex.result ? ` // ${ex.result}` : ""));
     }
+    lines.push("```");
+    lines.push("");
+    lines.push(`<PlaygroundLive specId="${doc.name}" />`);
+    lines.push("");
   }
 
   lines.push(`## Source`);
@@ -1400,30 +1396,11 @@ export const corpus: CorpusEntry[] = data as CorpusEntry[];
 `;
   writeFileSync(join(outGen, "corpus.ts"), corpusTs);
 
-  // 4. live playground templates — one template per example, plus a fallback
-  // per function for functions without examples.
+  // 4. live playground templates — one template per function.
   const templatesRecord: Record<string, LivePlaygroundTemplate> = {};
   for (const d of dedupedDocs) {
     if (d.kind === "function" && d.livePlaygroundTemplate) {
-      // Function-level entry: for functions with examples, use the first
-      // example's call string; for functions without, use the synthesized
-      // template. This supports <PlaygroundLive specId="fnName" /> usage
-      // in Scenario.astro and Mistake.astro.
-      const base = d.livePlaygroundTemplate;
-      const firstExample = d.examples[0];
-      templatesRecord[d.name] = firstExample
-        ? { ...base, template: firstExample.call }
-        : base;
-    }
-    if (d.kind === "function" && d.examples.length > 0) {
-      const base = d.livePlaygroundTemplate;
-      if (!base) continue;
-      d.examples.forEach((ex, i) => {
-        templatesRecord[`${d.name}-example-${i}`] = {
-          ...base,
-          template: ex.call,
-        };
-      });
+      templatesRecord[d.name] = d.livePlaygroundTemplate;
     }
   }
   const templatesTs = `// GENERATED FILE — do not edit by hand.

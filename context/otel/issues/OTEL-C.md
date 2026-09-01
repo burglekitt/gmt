@@ -1,144 +1,96 @@
-# Issue #146 — Context propagation: baggage and HTTP headers
+# OTEL-C — Span timezone helpers
 
-**Re-audited 2026-09-01.** The original draft plan referenced OTel's `Context` type for
-timezone propagation. In practice, OTel JS uses **Baggage** (W3C Baggage API) for
-cross-service context propagation, not raw `Context`. This file uses the correct mechanism.
-See [refined-plan.md](../refined-plan.md) for the full spec.
+**Audited 2026-09-01.** All functions wrap OTel's `Span` API using gmt for timestamp handling. No invented types. See [overview.md](../overview.md) for the full corrected spec.
+
+Each story below is one logical unit; its sub-stories are nested under it and ordered as
+they should be built. The issue stays open until its last sub-story lands.
 
 ## Definition of done — binding for every story in this file
 
-- `pnpm nx run-many -t lint test typecheck build` stays green.
-- Changeset required — `@northguild/gmt-otel` is published to npm.
-- Baggage functions gracefully degrade when `@opentelemetry/api` is not installed.
-- No `Date` object anywhere.
+- `pnpm nx run-many -t lint test typecheck build` stays green, **including the 20-cell
+  GMT timezone matrix**. `packages/gmt-otel` must not perturb `packages/gmt`.
+- **Changesets required.** Unlike `apps/dox`, `@northguild/gmt-otel` is published to npm,
+  so every story that modifies source needs a `.changeset/*.md` entry.
+- No `Date` object anywhere. All inputs are ISO 8601 strings; outputs are strings, numbers,
+  booleans, or arrays.
+- Wrap all Temporal calls in `try-catch`. Bad input returns sentinels, never throws.
+- OTel API is an optional peer dependency — span functions check for it at runtime and
+  throw a clear `TypeError` if not found.
 
 ---
 
-### Issue #146 — OTEL-C1
-
-**GitHub Issue:** #146
-
-#### OTEL-C1a — Baggage-based timezone propagation
+### OTEL-C1 — Span timezone helpers (`setSpanTimezone` + `getSpanTimezone` + `withTimezoneSpan`)
 
 **Title:**
 
 ```
-OTEL-C1a Implement baggage-based timezone propagation: setTimezoneInBaggage, getTimezoneFromBaggage
+OTEL-C1 Implement span timezone helpers: setSpanTimezone, getSpanTimezone, withTimezoneSpan
 ```
 
 **Description:**
 
 ```
-Part of the gmt-otel epic — see `context/otel/index.md`, Tier 3.
+Part of the gmt-otel epic — see `context/otel/index.md`, Phase 3.
+Depends on OTEL-A2 (timestamp conversion) and OTEL-A1 (package skeleton).
 
 ## Gap
-In distributed systems, the server timezone needs to propagate across service boundaries.
-OTel JS uses the W3C Baggage API for this purpose. We provide helpers to set and read
-timezone in baggage.
+OTel spans have no concept of timezone — they store absolute nanosecond timestamps.
+We need helpers to attach IANA timezone metadata to spans so downstream tools can display
+span times in the user's local timezone.
 
 ## Scope
-Create `src/baggage.ts` with these functions:
+- `src/span-timezone.ts`:
+  - `setSpanTimezone(span: Span, timezone: string): void` — sets the `gmt.timezone`
+    attribute on an OTel span. Validates timezone via `@northguild/gmt/zoned/validate`
+    (`isValidTimeZone`) and throws `RangeError` if invalid.
+  - `getSpanTimezone(span: Span): string | undefined` — reads the `gmt.timezone`
+    attribute from a span. Returns `undefined` if not set.
+  - `withTimezoneSpan(tracer: Tracer, name: string, options?: { timezone?: string, attributes?: SpanAttributes }): Span` —
+    convenience wrapper around `tracer.startSpan()` + `setSpanTimezone`. Starts a span and
+    immediately sets its timezone attribute if provided.
+- All functions check for `@opentelemetry/api` at runtime and throw a clear `TypeError`
+  if not found (OTel is an optional peer dependency).
 
-### `setTimezoneInBaggage(timezone: string) => void`
-Set the timezone in OTel Baggage.
-- Uses `opentelemetry.propagation.setBaggage('gmt.timezone', { value: timezone })` from
-  `@opentelemetry/api`
-- Validates timezone using `isValidTimezone(timezone)` from gmt before setting
-- Invalid timezone: throws `TypeError` with message "Invalid IANA timezone: ${timezone}"
-- No return value
-
-### `getTimezoneFromBaggage() => string | undefined`
-Read the timezone from OTel Baggage.
-- Uses `opentelemetry.propagation.getBaggage('gmt.timezone')` from `@opentelemetry/api`
-- Returns the value as string, or `undefined` if not set
-- Does NOT validate — returns whatever is stored in baggage
-
-### `getTimezoneFromContext() => string | undefined`
-Alias for `getTimezoneFromBaggage()`. Reads from the active context's baggage.
-- Uses `opentelemetry.context.active()` internally
-- Same behavior as `getTimezoneFromBaggage` but makes the intent explicit
-
-## Tests (`test/baggage.test.ts`)
-- `setTimezoneInBaggage('Europe/Helsinki')` stores the value in baggage
-- `getTimezoneFromBaggage()` retrieves the stored value
-- Round-trip: set → get returns the same value
-- Invalid timezone throws descriptive error
-- `getTimezoneFromContext()` returns the same value as `getTimezoneFromBaggage()`
-- Graceful degradation: calling baggage functions without OTel installed throws a clear
-  message
+## What gmt provides (do not re-implement)
+- `zoned/validate` — `isValidTimeZone(tz)` validates IANA timezone strings.
+- Timestamp conversion from OTEL-A2 for any timestamp-related operations.
 
 ## Verification
-- `pnpm nx run gmt-otel:test` passes all baggage tests
-- `pnpm nx run gmt-otel:typecheck` passes
-- Manual test: set timezone in baggage, verify it's accessible via active context
-
-## Decisions
-- We use the key `'gmt.timezone'` for the baggage item. This is namespaced to avoid
-  collisions with other baggage items.
-- Baggage has a 8KB total size limit per W3C spec. A single timezone string is ~20 bytes,
-  so this is not a concern.
-- We do NOT automatically extract timezone from the incoming request's `Accept-Timezone`
-  header (if it exists). That would be a middleware concern, not a library concern.
+- `setSpanTimezone` + `getSpanTimezone` round-trip: setting then reading returns the same value
+- Invalid timezone throws `RangeError`
+- `withTimezoneSpan` creates a span with the timezone attribute set
+- Missing OTel API throws clear `TypeError` at runtime (not build time)
 ```
 
 ---
 
-#### OTEL-C1b — HTTP header propagation
+### OTEL-C2 — Span timezone helper tests
 
 **Title:**
 
 ```
-OTEL-C1b Implement HTTP header propagation: propagateTimezone, extractTimezoneFromHeaders
+OTEL-C2 Add comprehensive tests for span timezone helpers
 ```
 
 **Description:**
 
 ```
-Part of the gmt-otel epic — see `context/otel/index.md`, Tier 3.
+Part of the gmt-otel epic — see `context/otel/index.md`, Phase 3.
+Depends on OTEL-C1 (span implementation).
 
 ## Gap
-Baggage propagates context within OTel-instrumented services. For non-OTel services
-(or as a fallback), we need HTTP header-based propagation.
+No tests exist yet for any gmt-otel function.
 
 ## Scope
-Create functions in `src/baggage.ts`:
-
-### `propagateTimezone(headers: Record<string, string>, timezone: string) => void`
-Inject timezone into HTTP headers for cross-service propagation.
-- Sets `headers['X-GMT-Timezone'] = timezone`
-- Validates timezone using `isValidTimezone(timezone)` from gmt before setting
-- Invalid timezone: throws `TypeError` with message "Invalid IANA timezone: ${timezone}"
-- Modifies headers object in place
-
-### `extractTimezoneFromHeaders(headers: Record<string, string>) => string | undefined`
-Extract timezone from HTTP headers.
-- Reads `headers['X-GMT-Timezone']`
-- Returns the value as string, or `undefined` if not present
-- Does NOT validate — returns whatever is in the header
-
-### `injectTimezoneIntoBaggageFromHeaders(headers: Record<string, string>) => void`
-Convenience: extract timezone from headers and set it in baggage.
-- Calls `extractTimezoneFromHeaders(headers)` then `setTimezoneInBaggage(result)`
-- If no timezone in headers: no-op (does not throw)
-- If invalid timezone in headers: throws `TypeError`
-
-## Tests (`test/baggage.test.ts`)
-- `propagateTimezone(headers, 'Europe/Helsinki')` sets `X-GMT-Timezone` header
-- `extractTimezoneFromHeaders(headers)` retrieves the header value
-- Round-trip: inject → extract returns the same value
-- `injectTimezoneIntoBaggageFromHeaders(headers)` correctly bridges headers → baggage
-- Invalid timezone in headers throws descriptive error
-- Missing header returns undefined (no throw)
+- `test/span-timezone.test.ts`:
+  - `setSpanTimezone` + `getSpanTimezone` round-trip: setting then reading returns the same value
+  - Invalid timezone throws `RangeError`
+  - `withTimezoneSpan` creates a span with the timezone attribute set
+  - Missing OTel API throws clear `TypeError` at runtime (not build time)
+  - Timezone variants: UTC, offset timezones, IANA timezones with DST
+  - No OTel installed: functions throw `TypeError` with clear message
 
 ## Verification
-- `pnpm nx run gmt-otel:test` passes all header tests
-- `pnpm nx run gmt-otel:typecheck` passes
-
-## Decisions
-- We use the header name `X-GMT-Timezone`. This is a custom header, not a standard one.
-  If the user wants a different header name, they can use `propagateTimezone` directly
-  with a custom headers object.
-- Header-based propagation is a fallback. The primary mechanism is OTel Baggage.
-  In a full OTel-instrumented system, baggage propagates automatically via the
-  TextMapPropagator. Header injection is for non-OTel services or debugging.
+- All tests pass
+- `pnpm nx run gmt-otel:test` covers all exported span functions
 ```
