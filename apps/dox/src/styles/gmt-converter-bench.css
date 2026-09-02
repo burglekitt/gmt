@@ -41,7 +41,8 @@
   display: inline-flex;
   align-items: center;
   padding: 0.2em 0.7em;
-  border-radius: 999px;
+  border-radius: var(--gmt-radius-md);
+  corner-shape: bevel;
   font-family: var(--gmt-font-mono);
   font-size: 0.75rem;
   border: 1px solid var(--gmt-border);
