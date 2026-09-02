@@ -585,8 +585,8 @@ function fieldForParam(
 
 /**
  * Project a `PlaygroundSpec` + its first `@example` into form-control fields for
- * `<PlaygroundForm>`, or `undefined` to fall back to the `<PlaygroundLive>`
- * textarea.
+ * `<PlaygroundForm>`, or `undefined` when the example can't be modelled — the
+ * reference page then shows just the static code block, no widget.
  *
  * Handles four shapes:
  *  - **positional** — `fn(a, b, c)`; each arg must line up with a param and be a
@@ -1191,18 +1191,15 @@ function renderFn(doc: FnDoc, docs: Doc[]): string {
   }
 
   if (doc.examples.length) {
-    // Every function whose args survive `buildPlaygroundFields` gets the
-    // form-control playground; the rest keep the `<PlaygroundLive>` textarea.
-    // `fields` present (even an empty array — a no-arg Run-button form) means
-    // the example survived `buildPlaygroundFields`; everything else keeps the
-    // `<PlaygroundLive>` textarea.
+    // A function gets the interactive `<PlaygroundForm>` when its first
+    // `@example` survives `buildPlaygroundFields` (`fields` present — an empty
+    // array is valid, a no-arg function). The rare function that doesn't just
+    // shows the static code block above with no widget.
     const useForm = doc.livePlaygroundTemplate?.fields !== undefined;
 
-    lines.push(
-      useForm
-        ? `import PlaygroundForm from "~/components/PlaygroundForm.astro";`
-        : `import PlaygroundLive from "~/components/PlaygroundLive.astro";`,
-    );
+    if (useForm) {
+      lines.push(`import PlaygroundForm from "~/components/PlaygroundForm.astro";`);
+    }
     lines.push(`import DstInspector from "~/components/DstInspector.astro";`);
     lines.push(`import IntervalVisualizer from "~/components/IntervalVisualizer.astro";`);
     lines.push(`import ConverterBench from "~/components/ConverterBench.astro";`);
@@ -1221,12 +1218,10 @@ function renderFn(doc: FnDoc, docs: Doc[]): string {
     }
     lines.push("```");
     lines.push("");
-    lines.push(
-      useForm
-        ? `<PlaygroundForm specId="${doc.name}" />`
-        : `<PlaygroundLive specId="${doc.name}" />`,
-    );
-    lines.push("");
+    if (useForm) {
+      lines.push(`<PlaygroundForm specId="${doc.name}" />`);
+      lines.push("");
+    }
 
     if (doc.name === "getDstTransitions") {
       lines.push(`### DST Transition Inspector`);

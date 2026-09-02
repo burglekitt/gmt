@@ -154,7 +154,40 @@
  * (context/dox/overview.md §3): a live value, an invalid-input sentinel, and a
  * result that is legitimately empty — the last is a *correct answer* and must
  * never be dressed as signal-lost.
+ *
+ * The base `.gmt-playground-live` / `.gmt-playground-sentinel` classes below are
+ * toggled by `renderResult()` (src/lib/playground-client.ts) and
+ * `renderWidgetOutput()` (src/lib/widget-ui.ts). They sit above `.gmt-widget-output`
+ * on purpose: the more-specific `.gmt-widget-output.gmt-playground-sentinel` rule
+ * further down wins the box model back.
  * --------------------------------------------------------------------------- */
+
+.gmt-playground-live {
+  color: var(--gmt-spring);
+  text-shadow: 0 0 8px color(from var(--gmt-spring) srgb r g b / 0.4);
+}
+
+.gmt-playground-sentinel {
+  display: inline-block;
+  padding: var(--gmt-space-1) var(--gmt-space-2);
+  color: var(--gmt-signal);
+  background: var(--gmt-signal-fill);
+  border: 1px solid var(--gmt-signal-border);
+  border-radius: var(--gmt-radius-sm);
+  corner-shape: bevel;
+  font-size: 0.8rem;
+  text-shadow: 0 0 6px color(from var(--gmt-signal) srgb r g b / 0.3);
+}
+
+[data-theme="light"] .gmt-playground-live {
+  color: var(--gmt-spring);
+  text-shadow: none;
+}
+
+[data-theme="light"] .gmt-playground-sentinel {
+  background: var(--gmt-signal-fill);
+  color: var(--gmt-signal);
+}
 
 .gmt-widget-output {
   display: block;

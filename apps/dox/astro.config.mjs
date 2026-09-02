@@ -114,7 +114,6 @@ export default defineConfig({
         "./src/styles/gmt-content.css", // .sl-markdown-content + EC + search
         "./src/styles/gmt-controls.css", // buttons, focus, selection, scrollbar
         "./src/styles/gmt-playground.css", // mistake component styles
-        "./src/styles/gmt-live-playground.css", // textarea editor playground (DOX-B1 POC)
         "./src/styles/gmt-form-controls.css", // shared label/input/select styles
         "./src/styles/gmt-widget.css", // shared teaching-widget chrome (card/section/codeframe/output)
         "./src/styles/gmt-dst-inspector.css", // DST Transition Inspector widget (DOX-B2b)

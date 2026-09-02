@@ -173,6 +173,44 @@ describe("buildCall", () => {
 });
 
 // ---------------------------------------------------------------------------
+// playground-client — evaluateArg / sentinelFor / renderResult
+// ---------------------------------------------------------------------------
+
+describe("evaluateArg", () => {
+  it("evaluates literals", () => {
+    expect(evaluateArg("42")).toBe(42);
+    expect(evaluateArg('"hello"')).toBe("hello");
+    expect(evaluateArg("[1, 2, 3]")).toEqual([1, 2, 3]);
+    expect(evaluateArg("{ days: 5 }")).toEqual({ days: 5 });
+  });
+  it("returns empty string for blank and undefined for a syntax error", () => {
+    expect(evaluateArg("   ")).toBe("");
+    expect(evaluateArg("{ oops")).toBeUndefined();
+  });
+});
+
+describe("sentinelFor", () => {
+  it("maps return type → sentinel value", () => {
+    expect(sentinelFor("number", false)).toBeNull();
+    expect(sentinelFor("boolean", false)).toBe(false);
+    expect(sentinelFor("array", false)).toEqual([]);
+    expect(sentinelFor("array", true)).toBe("");
+    expect(sentinelFor("string", false)).toBe("");
+  });
+});
+
+describe("renderResult", () => {
+  it("renders a live value and stringifies objects", () => {
+    const el = document.createElement("output");
+    renderResult(el, "hi", false);
+    expect(el.textContent).toBe("hi");
+    expect(el.classList.contains("gmt-playground-live")).toBe(true);
+    renderResult(el, [1, 2, 3], false);
+    expect(el.textContent).toBe("[1,2,3]");
+  });
+});
+
+// ---------------------------------------------------------------------------
 // run() flow — mocked gmt call → output
 // ---------------------------------------------------------------------------
 

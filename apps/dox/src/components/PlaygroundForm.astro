@@ -2,11 +2,13 @@
 /**
  * Live Playground (form).
  *
- * The same live-evaluation engine as PlaygroundLive.astro, but each argument is
- * a real form control instead of a slice of one textarea. Renders in the newer
- * teaching-widget chrome (.gmt-widget card, .gmt-label / .gmt-select /
- * .gmt-input controls, a CodeFrame call line) so it sits consistently beside
- * DstInspector / IntervalVisualizer.
+ * Auto-embedded on every reference page (and used by Scenario.astro /
+ * Mistake.astro). Each argument is a real form control; the call re-evaluates
+ * against the real gmt function on every edit. Renders in the teaching-widget
+ * chrome (.gmt-widget card, .gmt-label / .gmt-select / .gmt-input controls, a
+ * CodeFrame call line) so it sits consistently beside DstInspector /
+ * IntervalVisualizer. Shares its eval helpers with those widgets via
+ * lib/playground-client.ts + lib/widget-ui.ts.
  *
  * The generator (`buildPlaygroundFields` in scripts/build-reference.ts) decides
  * which functions get this and emits `fields` on the template:
@@ -187,7 +189,7 @@ const isBlock = (kind: string) => kind === "list" || kind === "intervals";
     </div>
 
     <div class="gmt-widget-section">
-      <span class="gmt-live-playground-label">output</span>
+      <span class="gmt-pf-output-label">output</span>
       <output
         class="gmt-widget-output"
         data-role="result"

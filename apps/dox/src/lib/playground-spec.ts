@@ -6,9 +6,8 @@
  *
  * The `LIVE_PLAYGROUND_TEMPLATES` record is generated from the gmt source by
  * `scripts/build-reference.ts` — it is NOT hand-authored. The generator walks
- * every exported function and derives seed values from the function's `@example`
- * tags. See the plan at
- * `.kilo/plans/1788099109759-auto-generate-playground-specs.md`.
+ * every exported function and derives the field schema + seed values from the
+ * function's first `@example`. Consumed by `components/PlaygroundForm.astro`.
  */
 
 /**
@@ -55,10 +54,10 @@ export interface LivePlaygroundTemplate {
   returnType: "string" | "number" | "boolean" | "array";
   allowEmptyArray?: boolean;
   /**
-   * Present only when every positional param is modellable as a form control.
-   * `<PlaygroundForm>` requires it (an empty array is valid — a no-arg function
-   * with just a Run button); when absent the function falls back to the
-   * `<PlaygroundLive>` textarea.
+   * The form-control schema `<PlaygroundForm>` renders from. Present whenever the
+   * first `@example` survived `buildPlaygroundFields` — an empty array is valid
+   * (a no-arg function: call line + live result, nothing to edit). When absent
+   * the reference page shows the static code block with no interactive widget.
    */
   fields?: PlaygroundField[];
   /**

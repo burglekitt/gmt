@@ -3,15 +3,16 @@
  *
  * Most of the look is inherited: the card / section / code-frame / output
  * chrome from gmt-widget.css, the controls from gmt-form-controls.css. Only the
- * form-playground-specific pieces live here — the field row, the repeatable
- * list/interval editors, and the Run button.
+ * form-playground-specific pieces live here — the field row and the repeatable
+ * list / interval editors. Companion logic: PlaygroundForm.astro, and the
+ * shared helpers in src/lib/playground-*.ts.
  */
 
 .gmt-playground-form {
   font-family: var(--gmt-font-mono);
 }
 
-.gmt-playground-form .gmt-live-playground-label {
+.gmt-pf-output-label {
   font-size: 0.65rem;
   letter-spacing: var(--gmt-tracking-wide);
   text-transform: uppercase;
