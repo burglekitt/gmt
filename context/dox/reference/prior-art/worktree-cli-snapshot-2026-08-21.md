@@ -2,7 +2,7 @@
 > location as part of the progressive-disclosure rework.
 >
 > **Reviewed 2026-08-21; the take/reject verdicts were captured into
-> [`context/dox/overview.md` §2 "Reviewed prior art"](../../../overview.md) on
+> [`context/dox/overview.md` §2 "Reviewed prior art"](../../overview.md) on
 > 2026-08-26 and are not re-derived here. Read the verdicts there; read this file only
 > when the rationale for a specific rejection needs to be re-checked.**
 

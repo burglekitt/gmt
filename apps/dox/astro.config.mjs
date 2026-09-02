@@ -120,6 +120,7 @@ export default defineConfig({
         "./src/styles/gmt-dst-inspector.css", // DST Transition Inspector widget (DOX-B2b)
         "./src/styles/gmt-interval-visualizer.css", // Interval Algebra Visualizer widget (DOX-B2c)
         "./src/styles/gmt-converter-bench.css", // Converter + format bench + regex tester widget
+        "./src/styles/gmt-playground-form.css", // form-control playground (POC, chore/136)
         "./src/styles/gmt-charts.css", // chart theme variables + container styles
         "./src/styles/gmt-map.css", // timezone map layout + clock panel
         "./src/styles/gmt-light.css", // floating [data-theme="light"] overrides

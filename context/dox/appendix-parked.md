@@ -1,7 +1,7 @@
 # Appendix — parked work
 
 Researched, specified, and **deliberately unscheduled**. Nothing here has a story ID or
-a place in [tracker.md](../tracker.md).
+a place in [tracker.md](tracker.md).
 
 This file exists so the findings below are not re-derived — they cost real
 investigation, and parking them is a recorded decision rather than a silent omission.
@@ -9,16 +9,16 @@ investigation, and parking them is a recorded decision rather than a silent omis
 **Trimmed 2026-09-02.** Most of the audio / voice work, the full-bleed 3D staging, and
 the declined-candidates list moved to:
 
-- [reference/findings/speech-synthesis-capture.md](../reference/findings/speech-synthesis-capture.md)
+- [reference/findings/speech-synthesis-capture.md](reference/findings/speech-synthesis-capture.md)
   — the one hard technical finding worth keeping
-- [reference/rejected-candidates.md](../reference/rejected-candidates.md) — the three
+- [reference/rejected-candidates.md](reference/rejected-candidates.md) — the three
   declined items and one-line reasons
 - The reactive-3D staging argument is now folded into
-  [`issues/DOX-E.md`](../issues/DOX-E.md) (`DOX-E1a`'s scope: landing-page hero only,
+  [`issues/DOX-E.md`](issues/DOX-E.md) (`DOX-E1a`'s scope: landing-page hero only,
   not behind every panel).
 
 **Read this before proposing any of it.** If something here is picked up later, promote
-it into a numbered story in [tracker.md](../tracker.md) and `issues/DOX-<letter>.md`
+it into a numbered story in [tracker.md](tracker.md) and `issues/DOX-<letter>.md`
 rather than working from this file directly.
 
 ---
@@ -26,7 +26,7 @@ rather than working from this file directly.
 ## 1. Generative-UI widget registry — PROMOTED to DOX-C3b (2026-08-26)
 
 **No longer parked.** By explicit user decision, this is now story `DOX-C3b` (issue
-#139, Tier 6) — see [`issues/DOX-C.md`](../issues/DOX-C.md). It became viable to
+#139, Tier 6) — see [`issues/DOX-C.md`](issues/DOX-C.md). It became viable to
 schedule for the same reason it was parked in the first place: Tier 2 now ships the
 real widgets (the playground and the DST, interval, and converter inspectors,
 `DOX-B1a`/`DOX-B2a`–`d`) _before_ the chat is built, so `DOX-C3b` is a typed registry
