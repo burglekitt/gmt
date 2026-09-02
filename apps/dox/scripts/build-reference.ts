@@ -968,6 +968,9 @@ function renderFn(doc: FnDoc, docs: Doc[]): string {
 
   if (doc.examples.length) {
     lines.push(`import PlaygroundLive from "~/components/PlaygroundLive.astro";`);
+    lines.push(`import DstInspector from "~/components/DstInspector.astro";`);
+    lines.push(`import IntervalVisualizer from "~/components/IntervalVisualizer.astro";`);
+    lines.push(`import ConverterBench from "~/components/ConverterBench.astro";`);
     lines.push("");
     lines.push(`## Examples`);
     lines.push("");
@@ -985,6 +988,32 @@ function renderFn(doc: FnDoc, docs: Doc[]): string {
     lines.push("");
     lines.push(`<PlaygroundLive specId="${doc.name}" />`);
     lines.push("");
+
+    if (doc.name === "getDstTransitions") {
+      lines.push(`### DST Transition Inspector`);
+      lines.push("");
+      lines.push(`<DstInspector />`);
+      lines.push("");
+    }
+
+    if (
+      doc.name === "intervalIntersectionZoned" ||
+      doc.name === "intervalUnionZoned" ||
+      doc.name === "intervalDifferenceZoned" ||
+      doc.name === "intervalXorZoned"
+    ) {
+      lines.push(`### Interval algebra visualizer`);
+      lines.push("");
+      lines.push(`<IntervalVisualizer />`);
+      lines.push("");
+    }
+
+    if (doc.name === "convertZonedToZoned") {
+      lines.push(`### Converter + format bench`);
+      lines.push("");
+      lines.push(`<ConverterBench />`);
+      lines.push("");
+    }
   }
 
   lines.push(`## Source`);
