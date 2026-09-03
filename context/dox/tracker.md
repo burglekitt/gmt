@@ -39,7 +39,7 @@ normal repo convention and does need a changeset.
 | 6     | DOX-B1 (DOX-B1a)                            | #135         | Done        |
 | 7     | DOX-B2 (DOX-B2a, DOX-B2b, DOX-B2c, DOX-B2d) | #136         | Done        |
 | 8     | DOX-D1                                      | #140         | Done        |
-| 9     | DOX-D2                                      | #141         | In Progress |
+| 9     | DOX-D2                                      | #141         | Done        |
 | 10    | DOX-E1 (DOX-E1a, DOX-E1b)                   | #142         | Not started |
 | 11    | DOX-C0                                      | #171         | Not started |
 | 12    | DOX-C1                                      | #137         | Not started |

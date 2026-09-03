@@ -259,3 +259,106 @@ job for its personality.
   sequence that delays first readable text is a regression regardless of how it looks.
 - Keyboard-only pass still clean — motion must not steal or trap focus.
 ```
+
+#### DOX-D2 — what shipped
+
+DOX-D2 is done. The spec above is retained for context; this section is what actually
+shipped and why it diverges. Cut items are not scheduled follow-ups unless a later story
+picks them up.
+
+##### Boot sequence
+
+- Pure CSS animation (`@keyframes gmt-boot-in`, `gmt-motion.css`) on **shell chrome
+  only** — `header`, `.sidebar-pane` / `#starlight__sidebar`, `mobile-starlight-toc nav`,
+  each with a `--gmt-motion-boot-stagger` (60ms) delay. Never on a prose container, so
+  first contentful paint of body text is byte-for-byte unchanged.
+- Gated in `ThemeProvider.astro`'s existing inline `<head>` script (before `<body>`
+  paints): a returning reader (`sessionStorage['dox-booted']`) or anyone with
+  `prefers-reduced-motion` never gets the `.dox-boot` class, so the animation rules never
+  match. The class is removed ~1.2s after `load`.
+- No `boot-sequence.ts` module — the gate is ~10 lines inline; the stagger is CSS.
+
+##### Reveal primitive
+
+- `apps/dox/src/lib/reveal-primitive.ts` kept the spec's blessed shape — an
+  `IntersectionObserver` toggling `.revealed` on `.gmt-reveal`. Rewritten: **one export**
+  (`initRevealPrimitive`), one-shot (unobserve on first intersection, never reset), a
+  `typeof window` guard, no scroll listener, no `destroy` (every navigation is a full
+  load — no ClientRouter). `data-reveal-delay` (ms, clamped 0–1000) still honoured.
+- **No text / chunk / `push()` API** — asserted by `reveal-primitive.test.ts`, which
+  reads the export list, not just behaviour.
+- Wired to the teaching widgets (`IntervalVisualizer`, `DstInspector`, `ConverterBench`),
+  `ChartContainer`, `TimezoneMap`, and the landing `WhyNotDate` sections. Animates
+  `opacity` + `transform` only — no reflow.
+- Initialised from a **bundled** (module) `<script>` in `ThemeProvider.astro` — the
+  earlier `<script is:inline>` could not see frontmatter imports and threw on every page.
+
+##### View-transition morphs
+
+- **CSS only, cross-document**: `@view-transition { navigation: auto }` +
+  `view-transition-name` on `header`, `.site-title`, and (desktop only, to avoid a name
+  collision) `.sidebar-pane`. Chromium / Safari 18.2+ morph the shell between page loads;
+  Firefox and older Safari fall back to today's plain navigation. **No `<ClientRouter />`
+  was added** — an SPA router would have needed every widget `<script>` re-wired for
+  `astro:page-load` and changed the whole site's navigation model, for a motion story.
+- **The one JS `startViewTransition`**: the light/dark toggle in `ThemeSelect.astro`
+  cross-fades through it. A `busy` boolean guards it — that **is** the "debounce
+  `startViewTransition`" DoD line; there is no other call site to thrash. Widget
+  slider/preset changes stay CSS-only, deliberately.
+- `@starting-style` / `transition-behavior: allow-discrete` and the Popover API: **not
+  used** — the site has no custom `display: none` → visible surfaces or custom tooltips
+  (Starlight owns its own). Nothing to convert.
+
+##### Glitch / RGB-split — cut
+
+- The earlier build ran a `MutationObserver` on every panel + `document.body` watching
+  `characterData`, so any widget-output change triggered a glitch, and applied a
+  `text-shadow` RGB split to every descendant. That is "idle" glitching and glitching
+  "over text being read" — both forbidden — and `text-shadow` on copy is called out by
+  name in §Motion. **Deleted** (`glitch-transition.ts`, the glitch keyframes, and
+  `--gmt-motion-glitch-duration`). Not scheduled; the frost + sonar carry the identity.
+
+##### Scanline sweep
+
+- Kept, but rebuilt as a **one-shot** sweep fired when a panel *reveals* (folded into
+  `reveal-primitive.ts`; `scanline-sweep.ts` and its `focusin`/`click` observer deleted).
+  One pass as the panel arrives, never over a panel being read. `::after` layer,
+  `overflow: hidden` on the panel only while `.scanline-active` is set.
+
+##### Frost grain — tried, cut
+
+- D1's optional static SVG grain was attempted here for the "ice sheet" feel — a tiled
+  noise asset over the glass panels. Every placement (header, sidebar, home cards, chart
+  panels, then just `.gmt-widget-card` via `background-blend-mode`) read as a grey film
+  that dulled the fill colour and sat on the reading surface. Tuned progressively fainter
+  until it was invisible, then **removed entirely**. The panel backgrounds are exactly
+  D1's. Not scheduled; the sonar ping carries the HUD identity.
+
+##### Sonar ping on tabs
+
+- The install-page tab triggers got a directional variant, `@keyframes gmt-tab-sonar`
+  (`gmt-content.css`) — the echo radiates up and out to the sides and pulls back from the
+  bottom, where the tab meets the code panel. `.tablist-wrapper` + `[role="tablist"]`
+  set `overflow: visible` (we wrap the tab row, never scroll it) and the focused tab gets
+  `position: relative; z-index: 10` so the ping isn't clipped or drawn under its
+  neighbours. The buttons/inputs keep D1's `gmt-focus-sonar` unchanged.
+
+##### Accessibility gates
+
+- `prefers-reduced-motion`: a dedicated block in `gmt-motion.css` neutralises boot,
+  reveal, scanline, and `::view-transition-*`, on top of the global animation reset in
+  `gmt-controls.css`.
+- `prefers-reduced-transparency`: frost dropped (`gmt-a11y.css`).
+- `prefers-contrast`: frost is faint soft-light on one surface — left in place; D1's
+  contrast block already strips decorative shadows.
+- `matchMedia` is read at init only (no live `change` listener) — matches D1.
+
+##### Verification run
+
+- `pnpm --filter @gmt/dox build` / `check` / `lint` / `test` (245 tests incl. the new
+  `reveal-primitive.test.ts`) — **green**.
+- Console clean on real pages (no `ReferenceError` — the inline-script wiring bug is
+  fixed). Boot plays once per session; reveal + one sweep on scroll; tab ping radiates
+  unclipped.
+- Keyboard-only pass, `prefers-reduced-*` devtools emulation, real Firefox/Safari, and a
+  full screenshot diff — **carried as the same follow-up verification task D1 opened.**
