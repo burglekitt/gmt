@@ -156,6 +156,10 @@ jobs:
         if: steps.check-non-gmt.outputs.run_tests == 'true'
         run: pnpm install --frozen-lockfile
 
+      - name: Build @northguild/gmt
+        if: steps.check-non-gmt.outputs.run_tests == 'true'
+        run: pnpm --filter @northguild/gmt run build
+
       # Mirrors the old `nx affected -t test --exclude=@northguild/gmt,@northguild/gmt-oxlint`.
       # gmt has its own TZ matrix (gmt-matrix job); gmt-oxlint is excluded as before.
       # `!root` keeps the root `vitest run` (which globs the gmt suite) out of this job.
