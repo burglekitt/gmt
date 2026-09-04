@@ -158,6 +158,56 @@ export function renderNamespaceChart(): string {
   return svg;
 }
 
+// Family key + base tile opacity. TanStack's static renderer doesn't evaluate
+// mark `states`, so every cell rect comes out with the same flat fill. We give
+// the matrix its heatmap read by post-processing the SVG: each tile gets its own
+// diagonal gradient in its family hue, dimming slightly down each column so the
+// grid looks tiled rather than a single wash of color.
+const localeFamilyStyle: Record<string, { key: string; base: number }> = {
+  Latin: { key: "latin", base: 0.2 },
+  CJK: { key: "cjk", base: 0.2 },
+  "Arabic/Hebrew": { key: "arabic-hebrew", base: 0.32 },
+  Cyrillic: { key: "cyrillic", base: 0.16 },
+  Turkic: { key: "turkic", base: 0.18 },
+};
+
+function styleLocaleMatrixCells(
+  svg: string,
+  cells: readonly { family: string; row: number }[],
+): string {
+  const clamp = (n: number) => Math.max(0.03, Math.round(n * 1000) / 1000);
+  const defs: string[] = [];
+  let index = 0;
+
+  const styled = svg.replace(
+    /<rect data-ts-key="rect-0:[^"]*"[^>]*\/>/g,
+    (rect) => {
+      const cell = cells[index];
+      if (!cell) return rect;
+      const id = `locale-matrix-cell-${index}`;
+      const { key, base } = localeFamilyStyle[cell.family];
+      const top = clamp(base - cell.row * 0.014);
+      const bottom = clamp(top - 0.09);
+      defs.push(
+        `<linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1">` +
+          `<stop offset="0" stop-color="var(--gmt-family-${key})" stop-opacity="${top}"/>` +
+          `<stop offset="1" stop-color="var(--gmt-family-${key})" stop-opacity="${bottom}"/>` +
+          `</linearGradient>`,
+      );
+      index += 1;
+      return rect
+        .replace(/ fill="[^"]*"/, ` fill="url(#${id})"`)
+        .replace(/ fill-opacity="[^"]*"/, "");
+    },
+  );
+
+  if (!defs.length) return styled;
+  return styled.replace(
+    '<g data-ts-key="marks" class="ts-chart__marks">',
+    `<g data-ts-key="marks" class="ts-chart__marks"><defs>${defs.join("")}</defs>`,
+  );
+}
+
 export function renderLocaleMatrixChart(): string {
   const familyVar: Record<string, string> = {
     Latin: "var(--gmt-family-latin)",
@@ -330,7 +380,7 @@ export function renderLocaleMatrixChart(): string {
     idPrefix: "locale-matrix",
   });
   runtime.destroy();
-  return svg;
+  return styleLocaleMatrixCells(svg, data);
 }
 
 export const testExecutionSvg = renderTestExecutionChart();
