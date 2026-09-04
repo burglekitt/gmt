@@ -21,8 +21,8 @@ importers:
         specifier: ^5.3.0
         version: 5.3.0
       '@tanstack/intent':
-        specifier: ^0.3.6
-        version: 0.3.6
+        specifier: ^0.3.8
+        version: 0.3.8
       '@types/node':
         specifier: ^22.13.10
         version: 22.19.17
@@ -110,8 +110,8 @@ importers:
         specifier: workspace:*
         version: link:../gmt-oxlint
       '@tanstack/intent':
-        specifier: ^0.3.6
-        version: 0.3.6
+        specifier: ^0.3.8
+        version: 0.3.8
       oxfmt:
         specifier: ^0.62.0
         version: 0.62.0
@@ -126,8 +126,8 @@ importers:
         version: 2.4.11
     devDependencies:
       '@tanstack/intent':
-        specifier: ^0.3.6
-        version: 0.3.6
+        specifier: ^0.3.8
+        version: 0.3.8
 
   packages/gmt-eslint:
     dependencies:
@@ -139,8 +139,8 @@ importers:
         version: 9.39.4
     devDependencies:
       '@tanstack/intent':
-        specifier: ^0.3.6
-        version: 0.3.6
+        specifier: ^0.3.8
+        version: 0.3.8
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -148,8 +148,8 @@ importers:
   packages/gmt-oxlint:
     devDependencies:
       '@tanstack/intent':
-        specifier: ^0.3.6
-        version: 0.3.6
+        specifier: ^0.3.8
+        version: 0.3.8
       oxlint:
         specifier: ^1.0.0
         version: 1.59.0
@@ -2522,8 +2522,8 @@ packages:
       vue:
         optional: true
 
-  '@tanstack/intent@0.3.6':
-    resolution: {integrity: sha512-ylew/4T3layUXSfE/SDGUSAi1B3U/wuoNUE0adC3j/s6wzX7omV6e6hAv0WyMC52Inren8kqvwpHj+G/ZBbQHQ==}
+  '@tanstack/intent@0.3.8':
+    resolution: {integrity: sha512-5KXhk+dPqzVHcETuf0Q6l1jasjFS2BJvG4Vw1dakuHEaQ85kZ3oSsOMROsad5w/DsEsQ9q1F00cQzIrk9jPzsQ==}
     hasBin: true
 
   '@tybys/wasm-util@0.10.3':
@@ -7803,7 +7803,7 @@ snapshots:
     optionalDependencies:
       lit: 3.3.3
 
-  '@tanstack/intent@0.3.6':
+  '@tanstack/intent@0.3.8':
     dependencies:
       cac: 6.7.14
       jsonc-parser: 3.3.1
