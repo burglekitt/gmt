@@ -99,9 +99,7 @@ export function mountZoneClockList(
   function writeReading(row: HTMLButtonElement, id: string): void {
     const reading = readZoneNow(id);
     const timeEl = row.querySelector<HTMLElement>("[data-tz-field='time']");
-    const offsetEl = row.querySelector<HTMLElement>(
-      "[data-tz-field='offset']",
-    );
+    const offsetEl = row.querySelector<HTMLElement>("[data-tz-field='offset']");
     if (timeEl) timeEl.textContent = reading.ok ? reading.time : "— — —";
     if (offsetEl) {
       offsetEl.textContent = reading.ok ? `UTC${reading.offset}` : "no signal";

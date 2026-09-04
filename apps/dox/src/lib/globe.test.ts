@@ -1,7 +1,7 @@
 /// <reference types="vitest/globals" />
 
+import { convertUtcToUnix } from "@northguild/gmt";
 import { describe, expect, it } from "vitest";
-import { convertUtcToUnix } from "@northguild/gmt/utc/convert";
 import { CURATED_TIMEZONES } from "../../scripts/build-utils/build-utils";
 import {
   antisolarPoint,

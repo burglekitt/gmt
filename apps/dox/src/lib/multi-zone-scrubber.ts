@@ -16,25 +16,24 @@
  * mount pattern so DOX-C3a's `/dox` rail can adopt it unchanged.
  */
 
-import { getUnixNow } from "@northguild/gmt/unix/get";
-import { convertUnixToUtc } from "@northguild/gmt/unix/convert";
-import { convertUtcToUnix } from "@northguild/gmt/utc/convert";
 import {
+  convertUnixToUtc,
+  convertUtcToUnix,
+  getDstTransitions,
+  getSystemTimeZone,
+  getTimeZoneOffset,
+  getUnixNow,
   parseDayFromUtc,
   parseDayOfWeekFromUtc,
   parseHourFromUtc,
   parseMinuteFromUtc,
   parseMonthFromUtc,
   parseYearFromUtc,
-} from "@northguild/gmt/utc/parse";
-import {
-  getDstTransitions,
-  getSystemTimeZone,
-  getTimeZoneOffset,
-} from "@northguild/gmt/zoned/get";
+} from "@northguild/gmt";
+
 import { COORDINATES_BY_ID } from "./globe-zones";
-import { createZoneCombobox } from "./zone-combobox";
 import { readZoneAt } from "./zone-clock";
+import { createZoneCombobox } from "./zone-combobox";
 
 export interface ScrubberHost {
   destroy: () => void;
