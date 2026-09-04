@@ -13,23 +13,23 @@
  */
 
 const SONAR_SELECTOR = [
-  '.gmt-sonar-focus',
-  '.gmt-icon-button',
-  '.expressive-code .copy button',
-  '.sl-link-button',
-  '.pagination-links a',
-  '.gmt-input',
-  '.gmt-select',
+  ".gmt-sonar-focus",
+  ".gmt-icon-button",
+  ".expressive-code .copy button",
+  ".sl-link-button",
+  ".pagination-links a",
+  ".gmt-input",
+  ".gmt-select",
   '.sl-markdown-content .tab > [role="tab"]',
-].join(',');
+].join(",");
 
 function restartPing(el: HTMLElement): void {
   // Suppress the stylesheet animation, force the browser to register the
   // removal, then hand `animation` back to the `:focus` rule — the name flips
   // none -> gmt-focus-sonar and a fresh iteration starts.
-  el.style.animation = 'none';
+  el.style.animation = "none";
   void el.offsetWidth;
-  el.style.removeProperty('animation');
+  el.style.removeProperty("animation");
 }
 
 function onActivate(event: Event): void {
@@ -40,4 +40,4 @@ function onActivate(event: Event): void {
   if (el && el === document.activeElement) restartPing(el);
 }
 
-document.addEventListener('click', onActivate);
+document.addEventListener("click", onActivate);

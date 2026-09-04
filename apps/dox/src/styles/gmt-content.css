@@ -343,8 +343,7 @@ dialog > .dialog-frame {
   box-shadow:
     0 0 0 2px color(from var(--gmt-cyan) srgb r g b / 0.95),
     0 0 0 5px color(from var(--gmt-cyan) srgb r g b / 0.25);
-  animation: gmt-tab-sonar var(--gmt-motion-sonar-duration) var(--gmt-easing)
-    1;
+  animation: gmt-tab-sonar var(--gmt-motion-sonar-duration) var(--gmt-easing) 1;
 }
 
 .sl-markdown-content [role="tabpanel"] {
