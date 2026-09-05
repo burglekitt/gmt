@@ -394,8 +394,9 @@
     flex-direction: column;
     flex: 1 1 100%;
     min-height: 0;
-    width:100%;
-    overflow-y:auto;
+    width: 100%;
+    overflow-y: auto;
+    max-height: 30rem;
   }
 
   .gmt-globe-embedded .gmt-globe-clocks {
